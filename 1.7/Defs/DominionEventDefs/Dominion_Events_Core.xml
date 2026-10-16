@@ -310,4 +310,59 @@
     <newsRules>Dominion_News_EnvoyCaptured</newsRules>
     <headline>{0} seizes an envoy of {1}</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_CouncilConvened</defName>
+    <label>Rim Council convened</label>
+    <description>The Rim Council has been called to session.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_CouncilConvened</newsRules>
+    <headline>The Rim Council will meet at {0} in {2} days</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DecreePassed</defName>
+    <label>decree passed</label>
+    <description>The Rim Council has passed a decree that binds all members.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_DecreePassed</newsRules>
+    <headline>Rim Council decree: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_MotionRejected</defName>
+    <label>motion rejected</label>
+    <description>The Rim Council voted down a motion.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_MotionRejected</newsRules>
+    <headline>Rim Council rejects: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DecreeViolated</defName>
+    <label>decree violated</label>
+    <description>A member of the Rim Council has broken a decree. Every member thinks less of it.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.85</newsworthiness>
+    <newsRules>Dominion_News_DecreeViolated</newsRules>
+    <headline>{0} violates a Rim Council decree</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DecreeExpired</defName>
+    <label>decree expired</label>
+    <description>A Rim Council decree has run its course.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <newsRules>Dominion_News_DecreeExpired</newsRules>
+    <headline>Rim Council decree expires: {2}</headline>
+  </Dominion.DominionEventDef>
 </Defs>

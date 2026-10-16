@@ -280,6 +280,28 @@ namespace Dominion
             return nodes;
         }
 
+        [DebugAction(Category, "Council: announce session (in 1 day)", allowedGameStates = AllowedGameStates.Playing)]
+        private static void CouncilAnnounce()
+        {
+            CouncilState c = WorldComponent_Dominion.Instance?.Council;
+            if (c == null) return;
+            c.phase = CouncilPhase.Idle;
+            CouncilSystem.Announce(GenDate.TicksPerDay);
+        }
+
+        [DebugAction(Category, "Council: everyone arrives, open session now", allowedGameStates = AllowedGameStates.Playing)]
+        private static void CouncilOpenNow()
+        {
+            CouncilState c = WorldComponent_Dominion.Instance?.Council;
+            if (c == null) return;
+            if (c.phase != CouncilPhase.Announced) CouncilSystem.Announce(GenDate.TicksPerHour);
+            foreach (Faction f in CouncilUtility.Members())
+                if (!f.IsPlayer && !c.attending.Contains(f)) c.attending.Add(f);
+            if (c.host != null && !c.host.IsPlayer && c.playerDelegate == null && LeadershipUtility.HeadOfState() != null)
+                c.playerDelegate = LeadershipUtility.HeadOfState();
+            c.nextSessionTick = Find.TickManager.TicksGame;
+        }
+
         [DebugAction(Category, "Integration self-test")]
         private static void SelfTest() => DLog.Message(IntegrationRegistry.SelfTestReport());
 

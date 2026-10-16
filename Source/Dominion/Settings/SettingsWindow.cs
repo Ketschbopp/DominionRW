@@ -109,6 +109,7 @@ namespace Dominion
 
         private static void DrawCouncil(Listing_Standard l, DominionSettings s)
         {
+            l.CheckboxLabeled("Dominion_Setting_CouncilEnabled".Translate(), ref s.councilEnabled);
             l.Label("Dominion_Setting_CouncilInterval".Translate(s.councilIntervalDays));
             s.councilIntervalDays = (int)l.Slider(s.councilIntervalDays, 15, 240);
             l.Gap();

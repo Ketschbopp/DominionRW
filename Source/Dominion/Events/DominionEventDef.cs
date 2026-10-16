@@ -110,6 +110,11 @@ namespace Dominion
         public static DominionEventDef Dominion_HostagesExchanged;
         public static DominionEventDef Dominion_EnvoyMission;
         public static DominionEventDef Dominion_EnvoyCaptured;
+        public static DominionEventDef Dominion_CouncilConvened;
+        public static DominionEventDef Dominion_DecreePassed;
+        public static DominionEventDef Dominion_MotionRejected;
+        public static DominionEventDef Dominion_DecreeViolated;
+        public static DominionEventDef Dominion_DecreeExpired;
 
         static DominionEventDefOf()
         {

@@ -394,4 +394,72 @@
   <Dominion_SummitIncident_3>An interpreter mangles a key phrase, and it takes a while to clear up the misunderstanding.</Dominion_SummitIncident_3>
   <Dominion_SummitIncident_4>A shared meal between rounds goes well. Even {0} laughs once.</Dominion_SummitIncident_4>
 
+  <!-- M5: Rim Council -->
+  <Dominion_Tab_Council>Rim Council</Dominion_Tab_Council>
+  <Dominion_Setting_CouncilEnabled>Rim Council sessions</Dominion_Setting_CouncilEnabled>
+  <Dominion_Council_Title>The Rim Council</Dominion_Council_Title>
+  <Dominion_Council_YouAreMember>Your colony has a seat. Your vote weight: {0}.</Dominion_Council_YouAreMember>
+  <Dominion_Council_YouAreNotMember>Your colony has no seat yet. Members must be at least {0} in technology, or have researched {1}.</Dominion_Council_YouAreNotMember>
+  <Dominion_Council_Disabled>Council sessions are switched off in the mod settings.</Dominion_Council_Disabled>
+  <Dominion_Council_SessionAnnounced>Next session: at the capital of {0}, in {1}.</Dominion_Council_SessionAnnounced>
+  <Dominion_Council_NextSession>The next session will be announced; it meets in about {0}.</Dominion_Council_NextSession>
+  <Dominion_Council_Present>Delegations present: {0}</Dominion_Council_Present>
+  <Dominion_Council_Agenda>Agenda:</Dominion_Council_Agenda>
+  <Dominion_Council_ProposeMotion>Propose a motion</Dominion_Council_ProposeMotion>
+  <Dominion_Council_Decrees>Decrees in force:</Dominion_Council_Decrees>
+  <Dominion_Council_Violators>violated by: {0}</Dominion_Council_Violators>
+  <Dominion_Council_Members>Members (vote weight):</Dominion_Council_Members>
+  <Dominion_Council_Weight>weight {0}</Dominion_Council_Weight>
+  <Dominion_Council_ViolationCount>{0} violation(s)</Dominion_Council_ViolationCount>
+  <Dominion_Council_Attend_NotMember>You have no seat, so you cannot attend.</Dominion_Council_Attend_NotMember>
+  <Dominion_Council_Attend_YouHost>You are hosting. Delegates will arrive at your capital. Have your head of state (or a diplomat) there when the session opens.</Dominion_Council_Attend_YouHost>
+  <Dominion_Council_Attend_Registered>Your delegate {0} is registered and will speak for you.</Dominion_Council_Attend_Registered>
+  <Dominion_Council_Attend_Travel>To vote, send your head of state or a diplomat by caravan to the capital of {0} and choose "Attend the Rim Council" there before the session opens.</Dominion_Council_Attend_Travel>
+  <Dominion_Council_NoMotions>No motions on the agenda.</Dominion_Council_NoMotions>
+  <Dominion_Council_ProposedBy>proposed by {0}</Dominion_Council_ProposedBy>
+  <Dominion_Council_NoTargets>(no valid targets)</Dominion_Council_NoTargets>
+  <Dominion_Council_MotionAdded>Motion added to the agenda: {0}</Dominion_Council_MotionAdded>
+  <Dominion_Council_NoSessionAnnounced>No session has been announced yet.</Dominion_Council_NoSessionAnnounced>
+  <Dominion_Council_NotMember>Your colony has no seat on the council.</Dominion_Council_NotMember>
+  <Dominion_Council_AgendaFull>The agenda is full.</Dominion_Council_AgendaFull>
+  <Dominion_Council_AlreadyOnAgenda>That motion is already on the agenda.</Dominion_Council_AlreadyOnAgenda>
+  <Dominion_Council_WrongTargets>not valid for this motion</Dominion_Council_WrongTargets>
+  <Dominion_Council_NotForOutlaws>outlaws are beyond the council</Dominion_Council_NotForOutlaws>
+  <Dominion_Council_NotAtWar>they are not at war</Dominion_Council_NotAtWar>
+  <Dominion_Council_AlreadyInForce>already in force</Dominion_Council_AlreadyInForce>
+  <Dominion_Council_AnnounceLabel>Rim Council convened</Dominion_Council_AnnounceLabel>
+  <Dominion_Council_AnnounceText>The Rim Council will meet at the capital of {0} in {1} days.\n\nOn the agenda:\n{2}</Dominion_Council_AnnounceText>
+  <Dominion_Council_Announce_PlayerHosts>It is your turn to host. Delegates will travel to your capital. Have your head of state there when the session opens.</Dominion_Council_Announce_PlayerHosts>
+  <Dominion_Council_Announce_Attend>Only members present can vote. Send your head of state or a diplomat by caravan to the capital of {0} and register there before the session.</Dominion_Council_Announce_Attend>
+  <Dominion_Council_Announce_NotMember>Your colony has no seat on the council.</Dominion_Council_Announce_NotMember>
+  <Dominion_Council_Registered>{0} is registered as your delegate to the Rim Council.</Dominion_Council_Registered>
+  <Dominion_Council_ResultsLabel>Rim Council results</Dominion_Council_ResultsLabel>
+  <Dominion_Council_ResultsText>The Rim Council met at the capital of {0}. {1} delegations attended.\n\n{2}</Dominion_Council_ResultsText>
+  <Dominion_Council_VoteResult>(yes {0}, no {1})</Dominion_Council_VoteResult>
+  <Dominion_Council_Vetoed>[vetoed in dev mode]</Dominion_Council_Vetoed>
+  <Dominion_Council_SessionTitle>Session of the Rim Council at the capital of {0}</Dominion_Council_SessionTitle>
+  <Dominion_Council_SessionInfo>{0} speaks for your colony. {1} delegations present. Your vote weight: {2}. Influence: {3}.</Dominion_Council_SessionInfo>
+  <Dominion_Council_Projected>If voted now: yes {0}, no {1}</Dominion_Council_Projected>
+  <Dominion_Council_Yes>Yes</Dominion_Council_Yes>
+  <Dominion_Council_No>No</Dominion_Council_No>
+  <Dominion_Council_Abstain>Abstain</Dominion_Council_Abstain>
+  <Dominion_Council_Lobby>Lobby ({0} influence)</Dominion_Council_Lobby>
+  <Dominion_Council_LobbyNeedsVote>Cast a yes or no vote first; lobbying pushes members toward your vote.</Dominion_Council_LobbyNeedsVote>
+  <Dominion_Council_LobbyOption>{0}: leaning {1} (chance {2})</Dominion_Council_LobbyOption>
+  <Dominion_Council_LobbySuccess>{0} has been persuaded.</Dominion_Council_LobbySuccess>
+  <Dominion_Council_LobbyFail>{0} was not persuaded, and did not appreciate the attempt.</Dominion_Council_LobbyFail>
+  <Dominion_Council_NoOneToLobby>No other delegations present.</Dominion_Council_NoOneToLobby>
+  <Dominion_Council_DevVeto>Dev: veto</Dominion_Council_DevVeto>
+  <Dominion_Council_CloseSession>Close the session and count the votes</Dominion_Council_CloseSession>
+  <Dominion_Decree_DutyLabel>Council decree</Dominion_Decree_DutyLabel>
+  <Dominion_Decree_Refuse>Refuse (violates the decree)</Dominion_Decree_Refuse>
+  <Dominion_Decree_Sanctions_Duty>The Rim Council has imposed sanctions on {0}. As a member you must embargo them within {1} days (Diplomacy tab), or you will be in violation.</Dominion_Decree_Sanctions_Duty>
+  <Dominion_Decree_Slavery_Duty>The Rim Council has banned slavery. You have {0} days to free your slaves, or you will be in violation.</Dominion_Decree_Slavery_Duty>
+  <Dominion_Decree_Ceasefire_Ask>The Rim Council has ordered a ceasefire between you and {0}. Will you make peace?</Dominion_Decree_Ceasefire_Ask>
+  <Dominion_Decree_Ceasefire_Accept>Accept the ceasefire</Dominion_Decree_Ceasefire_Accept>
+  <Dominion_Decree_Defense_Ask>The Rim Council has called on all members to stand together against {0}. Will you declare war on them?</Dominion_Decree_Defense_Ask>
+  <Dominion_Decree_Defense_Accept>Declare war on {0}</Dominion_Decree_Defense_Accept>
+  <Dominion_Mission_AttendCouncil>Attend the Rim Council at the capital of {0}</Dominion_Mission_AttendCouncil>
+  <Dominion_MissionShort_AttendCouncil>the Rim Council</Dominion_MissionShort_AttendCouncil>
+
 </LanguageData>

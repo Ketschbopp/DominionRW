@@ -33,6 +33,7 @@ namespace Dominion
         public Dictionary<EventCategory, NewsNotifyMode> notifyModes = new Dictionary<EventCategory, NewsNotifyMode>();
 
         // Rim Council
+        public bool councilEnabled = true;
         public int councilIntervalDays = 60;
         public TechLevel councilMinTechLevel = TechLevel.Medieval;
 
@@ -79,6 +80,7 @@ namespace Dominion
             Scribe_Values.Look(ref colonistNewsThoughts, "colonistNewsThoughts", true);
             Scribe_Values.Look(ref letterForMajorNews, "letterForMajorNews", true);
             Scribe_Collections.Look(ref notifyModes, "notifyModes", LookMode.Value, LookMode.Value);
+            Scribe_Values.Look(ref councilEnabled, "councilEnabled", true);
             Scribe_Values.Look(ref councilIntervalDays, "councilIntervalDays", 60);
             Scribe_Values.Look(ref councilMinTechLevel, "councilMinTechLevel", TechLevel.Medieval);
             Scribe_Values.Look(ref headOfStateMode, "headOfStateMode", HeadOfStateMode.IdeoLeader);
@@ -107,6 +109,7 @@ namespace Dominion
             colonistNewsThoughts = true;
             letterForMajorNews = true;
             notifyModes.Clear();
+            councilEnabled = true;
             councilIntervalDays = 60;
             councilMinTechLevel = TechLevel.Medieval;
             headOfStateMode = HeadOfStateMode.IdeoLeader;

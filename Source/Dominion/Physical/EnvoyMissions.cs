@@ -6,7 +6,7 @@ using Verse;
 
 namespace Dominion
 {
-    public enum EnvoyMission { ImproveRelations, NegotiateTreaty, PeaceTalks, GatherIntel, ExchangeHostages, AttendSummit }
+    public enum EnvoyMission { ImproveRelations, NegotiateTreaty, PeaceTalks, GatherIntel, ExchangeHostages, AttendSummit, AttendCouncil }
 
     public class WorldObjectCompProperties_Diplomacy : WorldObjectCompProperties
     {
@@ -125,6 +125,8 @@ namespace Dominion
                     return HostageUtility.AnyHostages(f);
                 case EnvoyMission.AttendSummit:
                     return SummitSystem.SummitAbroadAt(s) != null;
+                case EnvoyMission.AttendCouncil:
+                    return CouncilSystem.CanRegisterAt(s);
                 default:
                     return false;
             }
@@ -190,6 +192,11 @@ namespace Dominion
             if (m == EnvoyMission.AttendSummit)
             {
                 SummitSystem.AttendAbroad(s, caravan, envoy);
+                return;
+            }
+            if (m == EnvoyMission.AttendCouncil)
+            {
+                if (CouncilSystem.CanRegisterAt(s)) CouncilSystem.RegisterPlayer(envoy);
                 return;
             }
 

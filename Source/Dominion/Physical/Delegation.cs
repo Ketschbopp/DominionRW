@@ -15,6 +15,8 @@ namespace Dominion
         OfferToPlayer,
         /// <summary>A faction leader travels to a summit hosted by the player.</summary>
         SummitToPlayer,
+        /// <summary>A member's delegates travel to the Rim Council session.</summary>
+        CouncilDelegate,
     }
 
     public enum AgreementKind { Peace, Alliance, Treaty }

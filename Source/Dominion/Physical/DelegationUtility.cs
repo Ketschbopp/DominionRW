@@ -81,6 +81,9 @@ namespace Dominion
                 case DelegationPurpose.SummitToPlayer:
                     SummitSystem.DelegationArrived(d.summitId, from);
                     break;
+                case DelegationPurpose.CouncilDelegate:
+                    CouncilSystem.DelegateArrived(from);
+                    break;
             }
         }
 

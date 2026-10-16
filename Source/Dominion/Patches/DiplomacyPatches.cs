@@ -58,6 +58,7 @@ namespace Dominion
             float bonus = 0f;
             foreach (Treaty t in comp.Treaties.All)
                 if (t.def.tradeBonus > 0f && t.Between(player, trader)) bonus += t.def.tradeBonus;
+            bonus += CouncilUtility.TradeBonus(player, trader);
             buy *= 1f - bonus;
             sell *= 1f + bonus;
         }

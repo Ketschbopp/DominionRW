@@ -353,7 +353,7 @@ Debug category **Dominion** includes:
 | **M2: News** ✅ | News feed tab, visibility and intel, grammar headlines, radio, research tree, colony thoughts |
 | **M3: Diplomacy UI** ✅ | Dominion tab, dossiers, actions, treaties, embargo and border rights, Leadership Desk |
 | **M4: Physical diplomacy** ✅ | Envoys, delegations, summits plus the dialogue system, hostage exchange |
-| **M5: Rim Council** | Sessions, motions, voting, decrees, violations |
+| **M5: Rim Council** ✅ | Sessions, motions, voting, decrees, violations |
 | **M6: Espionage** | Operations (abstract first, then physical maps), counter-intel, exposure |
 | **M7: War** | War goals, war score, warbands and interception, occupation, cold war, joint wars |
 | **M8: Broadcast and culture** | Broadcast Center, programs, TV and newspaper hooks, ideo influence |
@@ -454,6 +454,41 @@ Each mission has a 10-day cooldown per faction.
 Attendance chance is 50% + opinion/150 + leadership bonus; hostile factions come only for peace (25% + weariness/120 + 0.4 × doves).
 
 The **dialogue** runs three rounds. Each round offers up to four approaches drawn from: common ground, flattery, concession (300 silver or 10 influence), threat, apology, leverage (prisoners), shared enemies, shared beliefs, and plain speaking. Each has a success chance and a rapport effect set by the head of state's Social skill and the other leader's personality: the honourable resent threats and blackmail, the greedy like concessions, and the paranoid distrust flattery. There is a 15% chance per round of something happening at the table. Final chance = agenda base + rapport/150 + in-person bonus. Walking out costs favour and adds grievance.
+
+## 9e. M5 implementation notes
+
+**Membership:** every simulated humanlike faction at or above the tech threshold (default Medieval, so tribals are out), except outlaws (permanent enemies). The player joins when above the threshold or after researching Diplomatic Corps. *Tribal vassals sitting in through their overlord waits for faction-level vassalage (M7/M9).*
+
+**Cycle:**
+- A session every *council interval* days (default 60, one year).
+- Fifteen days before, it is announced. The host rotates by load id among members with a capital; the player can host only with a Leadership Desk.
+- AI members put up to six motions on the agenda, and every AI member sends a real delegation to the host capital.
+- Only members present vote. A delegation that is intercepted, or too far to arrive in time, means that member is absent.
+
+**The player attends** by registering an envoy at the host capital (caravan mission "Attend the Rim Council"). When the player hosts, delegates walk into the capital and stay, and the head of state or a diplomat must be on that map when the session opens.
+
+**Voting:**
+- Vote weight = 1 + population/100 + economy/200 + military/300 + 0.25 per allied member present. The player's weight is 1 + colonists/10 + strength/300.
+- AI leaning = the motion's own utility + opinion of the sponsor/200 (+0.3 if allied, −0.4 if hostile) + lobbying. Above 0.1 votes yes, below −0.1 votes no.
+- A motion passes if yes outweighs no.
+- The player can lobby each member once per motion: 10 influence, success chance 40% + 3% per Social, moving that member's leaning by 0.35 toward the player's vote.
+- No vetoes; a dev-mode veto exists for testing.
+
+**Motions** (`CouncilMotionDef`, data plus a worker):
+
+| Motion | Decree |
+|---|---|
+| Sanctions on X | Members must embargo X within 5 days, for 60 days; X's economy −5% |
+| Censure of X | Every member's opinion of X −15; X loses legitimacy and stability |
+| Ceasefire X–Y | Peace within 7 days, kept for 60; restarting the war is a violation |
+| Collective defense against X | Members must be at war with X within 10 days |
+| Trade standard | 120 days: 5% better prices between members, +2% economy |
+| Diplomatic immunity | 180 days: intercepting delegations or seizing envoys is a violation |
+| Ban on slavery | 180 days: the player must free their slaves within 10 days |
+
+AI members comply by honour (and war weariness or hawkishness, as relevant); the player gets letters and dialogs.
+
+**Violations:** every other member's opinion of the violator falls (6 + 8 × honour), the player loses 5 goodwill with each member, and an AI violator loses legitimacy. Violations make sanctions and censure motions against the violator more likely.
 
 ## 10. Decisions log
 

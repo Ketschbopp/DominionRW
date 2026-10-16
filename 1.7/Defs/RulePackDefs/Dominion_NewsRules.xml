@@ -380,4 +380,61 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_CouncilConvened</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;The Rim Council will convene at [FACTION_A]</li>
+        <li>headline-&gt;Rim Council called to session</li>
+        <li>story-&gt;[LEAD] the Rim Council will meet at the capital of [FACTION_A] in [DETAIL] days. Delegations from member factions are expected to set out shortly. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_DecreePassed</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Rim Council decree: [DETAIL]</li>
+        <li>headline-&gt;Council passes motion: [DETAIL]</li>
+        <li>story-&gt;[LEAD] the Rim Council has passed a decree: [DETAIL]. The motion was brought by [FACTION_A]. All members are now bound by it. [decree_detail] [closing]</li>
+        <li>decree_detail-&gt;The vote was closer than many expected.</li>
+        <li>decree_detail-&gt;Not every delegation was pleased with the outcome.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_MotionRejected</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Council rejects motion: [DETAIL]</li>
+        <li>story-&gt;[LEAD] the Rim Council has voted down a motion brought by [FACTION_A]: [DETAIL]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_DecreeViolated</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] defies the Rim Council</li>
+        <li>headline-&gt;[FACTION_A] violates council decree</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has broken a decree of the Rim Council: [DETAIL]. [violated_detail] [closing]</li>
+        <li>violated_detail-&gt;Other members are said to be discussing a response.</li>
+        <li>violated_detail-&gt;[observers] say it undermines the council itself.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_DecreeExpired</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Council decree expires: [DETAIL]</li>
+        <li>story-&gt;The Rim Council decree "[DETAIL]" has run its course. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>
