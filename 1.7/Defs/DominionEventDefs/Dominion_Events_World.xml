@@ -43,7 +43,7 @@
     <secrecy>Public</secrecy>
     <newsworthiness>0.5</newsworthiness>
     <newsRules>Dominion_News_OfficialDefects</newsRules>
-    <headline>{0} official defects to {1}</headline>
+    <headline>Senior official of {0} defects to {1}</headline>
     <world>
       <mtbDays>700</mtbDays>
       <partner>Rival</partner>

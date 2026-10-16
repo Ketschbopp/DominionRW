@@ -2,7 +2,7 @@
 <Defs>
   <ThingDef ParentName="BuildingBase">
     <defName>Dominion_LeadershipDesk</defName>
-    <label>leadership desk</label>
+    <label>Leadership Desk</label>
     <description>The seat of your government. Your head of state works here on affairs of state, earning the influence that diplomacy costs. Without a desk you can only use simple diplomacy through a comms console.\n\nWood is the basic desk. Steel speeds up the work. Gold speeds it up as well and impresses foreign envoys, making them more likely to accept your proposals.</description>
     <thingClass>Dominion.Building_LeadershipDesk</thingClass>
     <graphicData>

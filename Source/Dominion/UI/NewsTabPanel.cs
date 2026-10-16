@@ -39,7 +39,7 @@ namespace Dominion
             if (selected != null)
                 DrawStory(storyRect.ContractedBy(10f), selected, log);
             else
-                Widgets.Label(storyRect.ContractedBy(10f), shown.Count == 0 ? "Dominion_News_Empty".Translate() : "Dominion_News_SelectReport".Translate());
+                Widgets.Label(storyRect.ContractedBy(10f), shown.Count == 0 ? (log.Delivered.Count > 0 ? "Dominion_News_NoMatch" : "Dominion_News_Empty").Translate() : "Dominion_News_SelectReport".Translate());
         }
 
         private void DrawFilters(Rect rect, NewsLog log)

@@ -19,7 +19,20 @@ namespace Dominion
         /// <summary>
         /// The charter passes at the Rim Council. With the council switched off, finishing the research is enough.
         /// </summary>
-        public static bool CharterInForce => State.CharterInForce || (!DominionMod.Settings.councilEnabled && ResearchDone);
+        public static bool CharterInForce => State.CharterInForce
+            || (ResearchDone && (!DominionMod.Settings.councilEnabled || !CouncilCanMeet));
+
+        /// <summary>The council needs two members to meet; in a mostly tribal world it never can.</summary>
+        private static bool CouncilCanMeet
+        {
+            get
+            {
+                int n = 0;
+                foreach (Faction f in CouncilUtility.Members())
+                    if (++n >= 2) return true;
+                return false;
+            }
+        }
 
         /// <summary>Major factions: visible, humanlike, with a settlement. Outlaws only if the setting says so.</summary>
         public static bool IsMajor(Faction f)

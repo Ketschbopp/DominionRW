@@ -146,7 +146,7 @@ namespace Dominion
         private static void AskPlayer(Obligation o)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            var node = new DiaNode("Dominion_Obligation_Text".Translate(o.victim.Name, o.aggressor.Name, o.treaty.def.label));
+            var node = new DiaNode("Dominion_Obligation_Text".Translate(o.victim.Name, o.aggressor.Name, Find.ActiveLanguageWorker.WithIndefiniteArticle(o.treaty.def.label)));
             var honour = new DiaOption("Dominion_Obligation_Honour".Translate(o.aggressor.Name))
             {
                 action = () =>

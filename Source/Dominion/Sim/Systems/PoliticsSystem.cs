@@ -40,7 +40,7 @@ namespace Dominion
 
             // War weariness
             if (s.activeWars > 0)
-                s.warWeariness += 0.5f * s.activeWars * (1.2f - hawks);
+                s.warWeariness += 0.5f * s.activeWars * (1.2f - hawks) * (1f - s.warWeariness / 120f); // tapers near the top
             else
                 s.warWeariness -= 1f;
             s.warWeariness = Mathf.Clamp(s.warWeariness, 0f, 100f);
@@ -142,10 +142,26 @@ namespace Dominion
             Faction f = ev.primary;
             if (f == null) return;
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            // Only factions the sim tracks; never create state for the player or hidden factions on every event.
-            if (!DominionScheduler.IsSimulated(f) || !comp.TryGetState(f, out FactionState s)) return;
             int now = Find.TickManager.TicksGame;
             DominionEventDef def = ev.def;
+
+            // Effects on the other side apply even when the player is the one acting.
+            Faction g = ev.secondary;
+            bool gSimulated = g != null && DominionScheduler.IsSimulated(g);
+            if (def == DominionEventDefOf.Dominion_WarDeclared && gSimulated)
+            {
+                // Rally around the flag for the side that was attacked.
+                FactionState defender = comp.GetState(g);
+                defender.stability = Mathf.Min(100f, defender.stability + 3f);
+            }
+            else if (def == DominionEventDefOf.Dominion_PeaceMade && gSimulated)
+            {
+                FactionState other = comp.GetState(g);
+                other.warWeariness = Mathf.Max(0f, other.warWeariness - 20f);
+            }
+
+            // Only factions the sim tracks; never create state for the player or hidden factions on every event.
+            if (!DominionScheduler.IsSimulated(f) || !comp.TryGetState(f, out FactionState s)) return;
 
             if (def == DominionEventDefOf.Dominion_LeaderDied)
             {
@@ -192,20 +208,9 @@ namespace Dominion
                 s.stability = Mathf.Max(0f, s.stability - 20f * ev.magnitude);
                 s.legitimacy = Mathf.Max(0f, s.legitimacy - 15f * ev.magnitude);
             }
-            else if (def == DominionEventDefOf.Dominion_WarDeclared && ev.secondary != null)
-            {
-                // Rally around the flag for the side that was attacked.
-                FactionState defender = comp.GetState(ev.secondary);
-                defender.stability = Mathf.Min(100f, defender.stability + 3f);
-            }
             else if (def == DominionEventDefOf.Dominion_PeaceMade)
             {
                 s.warWeariness = Mathf.Max(0f, s.warWeariness - 20f);
-                if (ev.secondary != null)
-                {
-                    FactionState other = comp.GetState(ev.secondary);
-                    other.warWeariness = Mathf.Max(0f, other.warWeariness - 20f);
-                }
             }
         }
 

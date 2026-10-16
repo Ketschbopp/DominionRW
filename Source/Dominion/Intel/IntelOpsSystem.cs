@@ -43,6 +43,8 @@ namespace Dominion
             if (target == null || target.IsPlayer || target.defeated) return "Dominion_Ops_NoTarget".Translate();
             if (agents.Count == 0) return "Dominion_Ops_NoAgents".Translate();
             if (agents.Count > def.maxAgents) return "Dominion_Ops_TooManyAgents".Translate(def.maxAgents);
+            // Agents abroad are not on any map; sending everyone would end the game.
+            if (!AnyColonistLeftBehind(agents)) return "Dominion_Ops_LastColonists".Translate();
             PlayerState p = WorldComponent_Dominion.Instance.Player;
             if (p.influence < def.influenceCost) return "Dominion_Action_NeedsInfluence".Translate(def.influenceCost.ToString("F0"));
             if (def.silverCost > 0 && DiplomacyHelpers.AvailableSilver() < def.silverCost) return "Dominion_Action_NeedsSilver".Translate(def.silverCost);
@@ -50,10 +52,24 @@ namespace Dominion
             return def.Worker.CannotTargetReason(target);
         }
 
+        private static bool AnyColonistLeftBehind(List<Pawn> agents)
+        {
+            foreach (Pawn p in PawnsFinder.AllMaps_FreeColonistsSpawned)
+                if (!agents.Contains(p) && !p.Downed) return true;
+            foreach (Caravan c in Find.WorldObjects.Caravans)
+                if (c.IsPlayerControlled && c.PawnsListForReading.Any(p => p.IsColonist && !agents.Contains(p))) return true;
+            return false;
+        }
+
         /// <summary>Agents leave the colony for the length of the operation.</summary>
         public static void Launch(OperationDef def, Faction target, List<Pawn> agents)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (def.silverCost > 0 && DiplomacyHelpers.AvailableSilverFresh() < def.silverCost)
+            {
+                Messages.Message("Dominion_Action_NeedsSilver".Translate(def.silverCost), MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
             comp.Player.AddInfluence(-def.influenceCost);
             if (def.silverCost > 0) DiplomacyHelpers.TakeSilver(def.silverCost);
             int now = Find.TickManager.TicksGame;
@@ -68,7 +84,8 @@ namespace Dominion
             };
             foreach (Pawn p in agents)
             {
-                if (p.Spawned) p.DeSpawn();
+                // Leaving the map (rather than despawning) releases beds, lords and jobs properly.
+                if (p.Spawned) p.ExitMap(false, Rot4.Invalid);
                 if (!Find.WorldPawns.Contains(p)) Find.WorldPawns.PassToWorld(p, PawnDiscardDecideMode.KeepForever);
             }
             Svc.operations.Add(op);
@@ -113,7 +130,7 @@ namespace Dominion
                 view.favour -= 20f;
                 view.grievance += 15f;
                 EventBus.Raise(DominionEventDefOf.Dominion_AgentsExposed, op.target, Faction.OfPlayer, detail: op.def.label);
-                text += "\n\n" + "Dominion_Ops_Exposed".Translate(op.target.Name);
+                text += "\n\n" + (success ? "Dominion_Ops_ExposedAfterSuccess" : "Dominion_Ops_Exposed").Translate(op.target.Name);
                 if (Rand.Chance(0.4f))
                 {
                     Pawn detained = agents.RandomElement();

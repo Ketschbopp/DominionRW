@@ -12,6 +12,9 @@ namespace Dominion
         /// <summary>Political capital, earned by the head of state at the Leadership Desk and spent on diplomacy.</summary>
         public float influence = 20f;
 
+        /// <summary>Statecraft has been switched on for existing colonists (once per game).</summary>
+        public bool statecraftEnabled;
+
         /// <summary>Head of state picked at the desk (used when the setting says so).</summary>
         public Pawn chosenHeadOfState;
 
@@ -48,6 +51,7 @@ namespace Dominion
                 chosenDiplomats?.RemoveAll(p => p == null || p.Discarded);
             }
             Scribe_Values.Look(ref influence, "influence", 20f);
+            Scribe_Values.Look(ref statecraftEnabled, "statecraftEnabled");
             Scribe_References.Look(ref chosenHeadOfState, "chosenHeadOfState");
             Scribe_References.Look(ref capital, "capital");
             Scribe_Collections.Look(ref chosenDiplomats, "chosenDiplomats", LookMode.Reference);

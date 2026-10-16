@@ -315,16 +315,36 @@ namespace Dominion
         public override void DailyCheck(Decree d)
         {
             Faction x = d.targets[0];
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             foreach (Faction m in CouncilUtility.Members())
             {
-                if (m == x || m.IsPlayer || d.violators.Contains(m) || m.HostileTo(x)) continue;
-                FactionState s = WorldComponent_Dominion.Instance.GetState(m);
-                if (d.InGrace && Rand.Chance(P(m).honour * 0.25f + s.Bloc(Bloc.Hawks) * 0.3f))
+                if (m == x || m.IsPlayer || d.violators.Contains(m) || d.complied.Contains(m)) continue;
+                // An embargo counts as standing with the council; war is not the only way to comply.
+                if (m.HostileTo(x) || comp.GetRelation(m, x).embargo)
                 {
                     d.complied.Add(m);
-                    DiplomacyUtility.SetRelationKind(m, x, FactionRelationKind.Hostile, m, d.def.label);
+                    continue;
                 }
-                else if (!d.InGrace)
+                // Excused: allies and pact partners of the aggressor, and members already fighting two wars.
+                FactionState s = comp.GetState(m);
+                if (Ally(m, x) || comp.Treaties.AnyNonAggression(m, x) || s.activeWars >= 2) continue;
+                if (d.InGrace)
+                {
+                    float join = 0.04f + P(m).honour * 0.05f + s.Bloc(Bloc.Hawks) * 0.1f;
+                    if (Rand.Chance(join))
+                    {
+                        d.complied.Add(m);
+                        DiplomacyUtility.SetRelationKind(m, x, FactionRelationKind.Hostile, m, d.def.label);
+                    }
+                    else if (Rand.Chance(0.1f))
+                    {
+                        comp.GetRelation(m, x).embargo = true;
+                        d.complied.Add(m);
+                        d.imposed.Add(m);
+                        EventBus.Raise(DominionEventDefOf.Dominion_EmbargoDeclared, m, x);
+                    }
+                }
+                else
                     CouncilSystem.Violate(d, m);
             }
         }

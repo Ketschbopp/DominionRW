@@ -80,7 +80,7 @@ namespace Dominion
 
                 case FactionRelationKind.Neutral:
                 {
-                    if (r.opinion > 55f && back.opinion > 50f && (r.sharedEnemies > 0 || p.honour > 0.6f) && Rand.Chance(0.03f))
+                    if (r.opinion > 40f && back.opinion > 35f && (r.sharedEnemies > 0 || p.honour > 0.6f) && Rand.Chance(0.03f))
                     {
                         DelegationUtility.DispatchAgreement(f, other, AgreementKind.Alliance);
                         return true;
@@ -93,7 +93,7 @@ namespace Dominion
                         DelegationUtility.DispatchAgreement(f, other, AgreementKind.Treaty, DominionTreatyDefOf.Dominion_TradeAgreement);
                         return true;
                     }
-                    if (r.opinion > 5f && back.opinion > 0f && r.distance >= 0f && r.distance < RelationsSystem.NeighbourDistance
+                    if (r.opinion > -20f && back.opinion > -25f && r.distance >= 0f && r.distance < RelationsSystem.NeighbourDistance
                         && p.paranoia > 0.5f && !treaties.Has(f, other, DominionTreatyDefOf.Dominion_NonAggressionPact) && Rand.Chance(0.02f))
                     {
                         DelegationUtility.DispatchAgreement(f, other, AgreementKind.Treaty, DominionTreatyDefOf.Dominion_NonAggressionPact);
@@ -116,12 +116,6 @@ namespace Dominion
 
                 case FactionRelationKind.Ally:
                 {
-                    if (r.opinion > 60f && back.opinion > 50f && !comp.Treaties.Has(f, other, DominionTreatyDefOf.Dominion_DefensivePact)
-                        && Rand.Chance(0.02f))
-                    {
-                        DelegationUtility.DispatchAgreement(f, other, AgreementKind.Treaty, DominionTreatyDefOf.Dominion_DefensivePact);
-                        return true;
-                    }
                     if (r.opinion >= 5f) return false;
                     float chance = (5f - r.opinion) / 100f * (1f - p.honour) * 0.5f;
                     if (!Rand.Chance(chance)) return false;

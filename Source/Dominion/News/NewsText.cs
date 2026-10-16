@@ -61,9 +61,10 @@ namespace Dominion
             string unknown = "Dominion_News_UnknownParty".Translate();
             req.Rules.Add(new Rule_String("FACTION_" + suffix, f?.Name ?? unknown));
             req.Rules.Add(new Rule_String("LEADER_" + suffix, f?.leader?.LabelShort ?? "Dominion_News_ItsLeadership".Translate()));
+            req.Rules.Add(new Rule_String("LEADER_" + suffix + "_APPOS", f?.leader != null ? ", " + f.leader.LabelShort + "," : ""));
 
             string gov = unknown;
-            string capital = unknown;
+            string capital = "Dominion_News_UnknownCapital".Translate();
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (f != null && comp != null && comp.TryGetState(f, out FactionState s))
             {
@@ -71,6 +72,8 @@ namespace Dominion
                 if (s.capital != null) capital = s.capital.Label;
             }
             req.Rules.Add(new Rule_String("GOV_" + suffix, gov));
+            req.Rules.Add(new Rule_String("GOV_" + suffix + "_INDEF", gov == unknown
+                ? "Dominion_News_NewGovernment".Translate().ToString() : Find.ActiveLanguageWorker.WithIndefiniteArticle(gov)));
             req.Rules.Add(new Rule_String("CAPITAL_" + suffix, capital));
         }
 

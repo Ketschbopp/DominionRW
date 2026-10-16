@@ -154,7 +154,7 @@ namespace Dominion
                 if (IntelUtility.IntelOn(f) < 40f)
                     rumorCandidates.Add(f);
             if (rumorCandidates.Count == 0) return null;
-            if (!force && !Rand.Chance(0.02f * rumorCandidates.Count)) return null;
+            if (!force && !Rand.Chance(Mathf.Min(0.1f, 0.01f * rumorCandidates.Count))) return null;
 
             Faction a = rumorCandidates.RandomElement();
             Faction b = null;

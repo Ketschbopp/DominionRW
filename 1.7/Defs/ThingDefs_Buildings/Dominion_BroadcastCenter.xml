@@ -2,7 +2,7 @@
 <Defs>
   <ThingDef ParentName="BuildingBase">
     <defName>Dominion_BroadcastCenter</defName>
-    <label>broadcast center</label>
+    <label>broadcast centre</label>
     <description>A studio desk, mixing console and transmitter. Choose a programme (and, for some, a target faction); a colonist doing research work runs the broadcasts. Social skill makes better programmes. Airtime takes effect once a day.</description>
     <thingClass>Dominion.Building_BroadcastCenter</thingClass>
     <graphicData>

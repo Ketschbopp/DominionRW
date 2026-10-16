@@ -75,7 +75,7 @@ namespace Dominion
             this.treaty = treaty;
         }
 
-        public override string Label => ("Dominion_Mission_" + mission).Translate(settlement?.Faction?.Name ?? "?", treaty?.label ?? "");
+        public override string Label => ("Dominion_Mission_" + mission).Translate(settlement?.Faction?.Name ?? "?", treaty != null ? Find.ActiveLanguageWorker.WithIndefiniteArticle(treaty.label) : "");
 
         public override string ReportString => "Dominion_Mission_Report".Translate(settlement?.Label ?? "?");
 
@@ -188,7 +188,7 @@ namespace Dominion
 
         public static string Label(EnvoyMission m, Faction f, TreatyDef treaty, Pawn envoy)
         {
-            string label = ("Dominion_Mission_" + m).Translate(f.Name, treaty?.label ?? "");
+            string label = ("Dominion_Mission_" + m).Translate(f.Name, treaty != null ? Find.ActiveLanguageWorker.WithIndefiniteArticle(treaty.label) : "");
             float? chance = Chance(m, f, treaty, envoy);
             float cost = Cost(m, treaty);
             if (cost > 0f) label += " (" + "Dominion_Dip_Cost".Translate(cost.ToString("F0")) + ")";

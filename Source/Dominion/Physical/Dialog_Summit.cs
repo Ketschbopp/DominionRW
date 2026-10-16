@@ -137,7 +137,7 @@ namespace Dominion
             if (m == SummitMove.Concession)
             {
                 // Recheck: silver or influence may have gone since the round began.
-                if (DiplomacyHelpers.AvailableSilver() >= ConcessionSilver) DiplomacyHelpers.TakeSilver(ConcessionSilver);
+                if (DiplomacyHelpers.AvailableSilverFresh() >= ConcessionSilver) DiplomacyHelpers.TakeSilver(ConcessionSilver);
                 else if (WorldComponent_Dominion.Instance.Player.influence >= ConcessionInfluence)
                     WorldComponent_Dominion.Instance.Player.AddInfluence(-ConcessionInfluence);
                 else

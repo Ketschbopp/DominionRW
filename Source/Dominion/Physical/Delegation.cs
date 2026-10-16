@@ -53,7 +53,8 @@ namespace Dominion
         public bool SetRoute(PlanetTile from, PlanetTile to)
         {
             destination = to.tileId;
-            WorldPath wp = Find.WorldGrid.Surface.Pather.FindPath(from, to, null, null);
+            if (from.Layer != to.Layer) return false;
+            WorldPath wp = from.Layer.Pather.FindPath(from, to, null, null);
             if (wp == null || !wp.Found)
             {
                 wp?.ReleaseToPool();
@@ -141,7 +142,7 @@ namespace Dominion
         {
             foreach (FloatMenuOption o in base.GetFloatMenuOptions(caravan))
                 yield return o;
-            if (!caravan.IsPlayerControlled || Faction == null || Faction.IsPlayer) yield break;
+            if (!caravan.IsPlayerControlled || Faction == null || Faction.IsPlayer || !VisibleToPlayer) yield break;
             if (caravan.Tile == Tile)
                 yield return new FloatMenuOption("Dominion_Delegation_Intercept".Translate(Faction.Name), () => DelegationUtility.Intercept(this, caravan));
             else

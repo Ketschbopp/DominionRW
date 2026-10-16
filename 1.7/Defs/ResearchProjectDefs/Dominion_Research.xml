@@ -52,7 +52,7 @@
   <ResearchProjectDef>
     <defName>Dominion_IntelligenceAgency</defName>
     <label>intelligence agency</label>
-    <description>Organise analysts, informants and archives into a proper intelligence service. Raises intel further; espionage operations build on it.</description>
+    <description>Organise analysts, informants and archives into a proper intelligence service. Raises intel further, makes your operations more likely to succeed and foreign agents easier to catch.</description>
     <baseCost>3000</baseCost>
     <techLevel>Industrial</techLevel>
     <prerequisites>

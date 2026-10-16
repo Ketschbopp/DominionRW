@@ -22,6 +22,12 @@ namespace Dominion
 
         public override void DailyGlobal()
         {
+            ComputeWorldAverage();
+            WorldComponent_Dominion.Instance.PruneMissingFactions();
+        }
+
+        private void ComputeWorldAverage()
+        {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             float wealth = 0f;
             int living = 0;
@@ -32,7 +38,6 @@ namespace Dominion
                 living += s.totalLiving;
             }
             worldWealthPerHead = living > 0 ? wealth / living : -1f;
-            comp.PruneMissingFactions();
         }
 
         public override void DailyFaction(Faction faction)
@@ -58,8 +63,10 @@ namespace Dominion
             // Embargoes cost real goods: a small share of the stockpile is lost each day while they last.
             int embargoes = EmbargoesAgainst(faction, comp);
             if (embargoes > 0 && ed != null && DominionMod.Settings.embargoDrain)
-                ed.TryConsumeWealth(faction, s.wealth * Mathf.Min(0.01f, 0.002f * embargoes));
+                ed.TryConsumeWealth(faction, s.wealth * Mathf.Min(0.004f, 0.001f * embargoes));
 
+            // After a load the world average is unknown until midnight; work it out now rather than drift toward 100.
+            if (worldWealthPerHead < 0f) ComputeWorldAverage();
             float perHead = s.totalLiving > 0 ? s.wealth / s.totalLiving : 0f;
             float raw = worldWealthPerHead > 0f ? 100f * perHead / worldWealthPerHead : 100f;
             raw *= 1f + TreatyEconomyBonus(faction, comp) + CouncilUtility.EconomyBonus(faction) - 0.04f * embargoes

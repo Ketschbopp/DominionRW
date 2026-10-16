@@ -3,7 +3,7 @@
   <MainButtonDef>
     <defName>Dominion</defName>
     <label>dominion</label>
-    <description>World news, factions, diplomacy and intelligence.</description>
+    <description>World news, factions, diplomacy, intelligence, the Rim Council and your Federation.</description>
     <tabWindowClass>Dominion.MainTabWindow_Dominion</tabWindowClass>
     <workerClass>Dominion.MainButtonWorker_Dominion</workerClass>
     <order>55</order>

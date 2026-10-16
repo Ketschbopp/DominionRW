@@ -115,7 +115,9 @@ namespace Dominion
                 string label = "Dominion_Council_LobbyOption".Translate(f.Name, LeaningLabel(leaning), chance.ToStringPercent());
                 if (lobbied.Contains(key) || WorldComponent_Dominion.Instance.Player.influence < LobbyCost)
                 {
-                    options.Add(new FloatMenuOption(label, null));
+                    string why = lobbied.Contains(key) ? "Dominion_Council_AlreadyLobbied".Translate().ToString()
+                        : "Dominion_Action_NeedsInfluence".Translate(LobbyCost.ToString("F0")).ToString();
+                    options.Add(new FloatMenuOption(label + " (" + why + ")", null));
                     continue;
                 }
                 Faction captured = f;
@@ -140,6 +142,6 @@ namespace Dominion
         }
 
         public static string LeaningLabel(int vote) =>
-            (vote > 0 ? "Dominion_Council_Yes" : vote < 0 ? "Dominion_Council_No" : "Dominion_Council_Abstain").Translate();
+            (vote > 0 ? "Dominion_Council_Leaning_Yes" : vote < 0 ? "Dominion_Council_Leaning_No" : "Dominion_Council_Leaning_Abstain").Translate();
     }
 }

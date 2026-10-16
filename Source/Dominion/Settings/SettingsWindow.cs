@@ -163,11 +163,7 @@ namespace Dominion
         private static void DrawCulture(Listing_Standard l, DominionSettings s)
         {
             l.CheckboxLabeled("Dominion_Setting_AllowIdeoReforms".Translate(), ref s.allowIdeoReforms, "Dominion_Setting_AllowIdeoReforms_Desc".Translate());
-            if (s.allowIdeoReforms)
-            {
-                l.Label("Dominion_Setting_IdeoReformMinDays".Translate(s.ideoReformMinDays));
-                s.ideoReformMinDays = (int)l.Slider(s.ideoReformMinDays, 30, 600);
-            }
+            // Precept reforms themselves are not implemented yet (see the design doc); no interval to set.
         }
 
         private static void DrawEvents(Listing_Standard l, DominionSettings s)

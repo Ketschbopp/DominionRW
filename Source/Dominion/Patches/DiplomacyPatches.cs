@@ -14,11 +14,25 @@ namespace Dominion
     [HarmonyPatch(typeof(Tradeable), nameof(Tradeable.GetPriceFor))]
     public static class Patch_Tradeable_GetPriceFor
     {
-        public static void Postfix(TradeAction action, ref float __result)
+        private static bool inner;
+
+        public static void Postfix(Tradeable __instance, TradeAction action, ref float __result)
         {
+            if (inner) return;
             Faction trader = TradeSession.trader?.Faction;
             if (trader == null || trader.IsPlayer) return;
             __result *= DominionPricing.Multiplier(trader, action);
+            // Bonuses on both sides must never let you sell for more than you would pay: no buy-and-resell loop.
+            if (action == TradeAction.PlayerSells && DominionPricing.Multiplier(trader, TradeAction.PlayerSells) > 1f)
+            {
+                inner = true;
+                try
+                {
+                    float buyPrice = __instance.GetPriceFor(TradeAction.PlayerBuys) * DominionPricing.Multiplier(trader, TradeAction.PlayerBuys);
+                    if (__result > buyPrice * 0.95f) __result = buyPrice * 0.95f;
+                }
+                finally { inner = false; }
+            }
         }
     }
 

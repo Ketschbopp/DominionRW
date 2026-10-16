@@ -175,7 +175,13 @@ namespace Dominion
             {
                 // Delegates to a council at your capital walk in and stay until the session.
                 int stay = Mathf.Max(GenDate.TicksPerHour * 6, c.nextSessionTick - Find.TickManager.TicksGame + GenDate.TicksPerHour * 6);
-                VisitorUtility.SpawnVisitors(member, VisitorUtility.PlayerCapitalMap(), VisitorUtility.MakeEnvoyParty(member, null, 1), stay);
+                Map map = VisitorUtility.PlayerCapitalMap();
+                if (VisitorUtility.CanHostVisitors(map))
+                {
+                    List<Pawn> party = VisitorUtility.MakeEnvoyParty(member, null, 1);
+                    if (!VisitorUtility.SpawnVisitors(member, map, party, stay))
+                        foreach (Pawn p in party) if (!p.Spawned && !p.Discarded) p.Discard();
+                }
             }
         }
 
@@ -244,13 +250,14 @@ namespace Dominion
             {
                 if (m.def.Worker.InvalidReason(m.targets) != null)
                 {
-                    report.AppendLine("✗ " + m.Summary + "  " + "Dominion_Council_MotionVoid".Translate().ToString());
+                    report.AppendLine("Dominion_Council_Rejected".Translate().ToString() + " " + m.Summary + "  " + "Dominion_Council_MotionVoid".Translate().ToString());
                     continue;
                 }
                 Tally(m, playerVotes, out float yes, out float no);
-                bool passed = !m.vetoed && yes > no && yes > 0f && m.def.Worker.InvalidReason(m.targets) == null;
+                // A motion needs real support: more yes than no, and yes from at least a third of the weight in the room.
+                bool passed = !m.vetoed && yes > no && yes >= 0.34f * TotalWeight() && m.def.Worker.InvalidReason(m.targets) == null;
                 string vetoNote = m.vetoed ? " " + "Dominion_Council_Vetoed".Translate().ToString() : "";
-                report.AppendLine((passed ? "✓ " : "✗ ") + m.Summary + "  "
+                report.AppendLine((passed ? "Dominion_Council_Passed" : "Dominion_Council_Rejected").Translate().ToString() + " " + m.Summary + "  "
                                   + "Dominion_Council_VoteResult".Translate(yes.ToString("F1"), no.ToString("F1")).ToString() + vetoNote);
                 if (passed) Pass(m);
                 else EventBus.Raise(DominionEventDefOf.Dominion_MotionRejected, m.sponsor, m.targets.FirstOrDefault(), detail: m.Summary);
@@ -260,6 +267,13 @@ namespace Dominion
 
         // The session window tallies every frame; weights barely move during a session.
         private static readonly UICache<Faction, float> weightCache = new UICache<Faction, float>(f => CouncilUtility.VoteWeight(f, State.attending), 2f);
+
+        private static float TotalWeight()
+        {
+            float total = 0f;
+            foreach (Faction f in State.attending) total += weightCache.Get(f);
+            return Mathf.Max(0.01f, total);
+        }
 
         public static void Tally(Motion m, Dictionary<Motion, int> playerVotes, out float yes, out float no)
         {
@@ -332,6 +346,9 @@ namespace Dominion
         {
             CouncilState c = State;
             c.decrees.Remove(d);
+            // Old violations are forgiven over time: each expiry halves the record before adding the new ones.
+            foreach (int id in c.pastViolations.Keys.ToList())
+                c.pastViolations[id] /= 2;
             foreach (Faction v in d.violators)
                 c.pastViolations[v.loadID] = (c.pastViolations.TryGetValue(v.loadID, out int n) ? n : 0) + 1;
             d.def.Worker.OnExpired(d);

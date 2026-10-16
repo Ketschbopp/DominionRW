@@ -319,7 +319,7 @@
     <secrecy>Public</secrecy>
     <newsworthiness>0.7</newsworthiness>
     <newsRules>Dominion_News_CouncilConvened</newsRules>
-    <headline>The Rim Council will meet at {0} in {2} days</headline>
+    <headline>The Rim Council will meet in the lands of {0}</headline>
   </Dominion.DominionEventDef>
 
   <Dominion.DominionEventDef>

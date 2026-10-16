@@ -49,8 +49,19 @@ namespace Dominion
                 if (!hostile) EventBus.Raise(DominionEventDefOf.Dominion_EmbargoLifted, f, player);
             }
 
-            // Offers
             int now = Find.TickManager.TicksGame;
+
+            // A war-weary enemy sues for peace. Without this, a war with you could only end on your initiative.
+            if (hostile && !f.def.permanentEnemy && s.warWeariness > 50f
+                && now - comp.Player.LastOfferTick(f.loadID) > OfferCooldownDays * GenDate.TicksPerDay
+                && Rand.Chance(0.02f + (s.warWeariness - 50f) / 1000f))
+            {
+                comp.Player.SetLastOffer(f.loadID, now);
+                OfferPeace(f);
+                return;
+            }
+
+            // Offers
             if (!hostile && op > 35f && now - comp.Player.LastOfferTick(f.loadID) > OfferCooldownDays * GenDate.TicksPerDay
                 && Rand.Chance(0.05f))
             {
@@ -78,10 +89,26 @@ namespace Dominion
             if (ally && view.opinion > 60f) wanted.Add(DominionTreatyDefOf.Dominion_DefensivePact);
             if (!ally && view.opinion > 70f && f.PlayerGoodwill >= 60) wanted.Add(DominionTreatyDefOf.Dominion_Alliance);
             // Close friends ask to join your Federation once its charter is in force.
-            if (view.opinion > 70f && FederationUtility.CharterInForce && FederationUtility.IsMajor(f))
+            if (view.opinion > 80f && FederationUtility.CharterInForce && FederationUtility.IsMajor(f))
                 wanted.Add(DominionTreatyDefOf.Dominion_FederationMembership);
             wanted.RemoveAll(t => comp.Treaties.CannotSignReason(t, f, player) != null);
             return wanted.Count > 0 ? wanted.RandomElement() : null;
+        }
+
+        private static void OfferPeace(Faction f)
+        {
+            var node = new DiaNode("Dominion_PeaceOffer_Text".Translate(f.Name));
+            node.options.Add(new DiaOption("Dominion_Offer_Accept".Translate())
+            {
+                action = () =>
+                {
+                    if (f.HostileTo(Faction.OfPlayer))
+                        DiplomacyUtility.SetRelationKind(f, Faction.OfPlayer, FactionRelationKind.Neutral, f, "Dominion_Reason_Peace".Translate());
+                },
+                resolveTree = true,
+            });
+            node.options.Add(new DiaOption("Dominion_Offer_Decline".Translate()) { resolveTree = true });
+            Find.WindowStack.Add(new Dialog_NodeTree(node, true, false, "Dominion_PeaceOffer_Title".Translate(f.Name)));
         }
 
         /// <summary>The envoy reaches the colony: they walk in, and the offer is made.</summary>
@@ -104,7 +131,7 @@ namespace Dominion
         private static void Offer(Faction f, TreatyDef treaty, Pawn envoy)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            string text = "Dominion_Offer_Text".Translate(f.Name, treaty.label, treaty.description);
+            string text = "Dominion_Offer_Text".Translate(f.Name, Find.ActiveLanguageWorker.WithIndefiniteArticle(treaty.label), treaty.description);
             if (envoy != null) text = "Dominion_Offer_EnvoyArrived".Translate(envoy.LabelShortCap, f.Name) + "\n\n" + text;
             var node = new DiaNode(text);
             node.options.Add(new DiaOption("Dominion_Offer_Accept".Translate())

@@ -99,7 +99,7 @@ namespace Dominion
                 Pawn captured = p;
                 bool isDiplomat = chosen.Contains(p);
                 int social = p.skills?.GetSkill(SkillDefOf.Social)?.Level ?? 0;
-                string label = (isDiplomat ? "✓ " : "") + p.LabelShortCap + " (" + SkillDefOf.Social.LabelCap + " " + social + ")";
+                string label = (isDiplomat ? "Dominion_Desk_DiplomatTag".Translate().ToString() + " " : "") + p.LabelShortCap + " (" + SkillDefOf.Social.LabelCap + " " + social + ")";
                 options.Add(new FloatMenuOption(label, () =>
                 {
                     if (chosen.Contains(captured)) chosen.Remove(captured);
@@ -119,6 +119,12 @@ namespace Dominion
             Pawn hos = LeadershipUtility.HeadOfState();
             sb.AppendLine();
             sb.Append("Dominion_Desk_HeadOfState".Translate(hos != null ? hos.LabelShortCap : LeadershipUtility.NoHeadOfStateReason()));
+            string cannot = LeadershipUtility.CannotGovernReason(hos);
+            if (cannot != null)
+            {
+                sb.AppendLine();
+                sb.Append(cannot);
+            }
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (comp != null)
             {
@@ -142,6 +148,7 @@ namespace Dominion
     public static class DominionMainButtonDefOf
     {
         public static MainButtonDef Dominion;
+        public static WorkTypeDef Dominion_Statecraft;
 
         static DominionMainButtonDefOf()
         {

@@ -43,15 +43,15 @@
 
   <Dominion.CouncilMotionDef>
     <defName>Dominion_Motion_CollectiveDefense</defName>
-    <label>collective defense</label>
-    <description>Names an aggressor. Every member must be at war with it within 10 days, or be in violation.</description>
+    <label>collective defence</label>
+    <description>Names an aggressor. Within 10 days every member must stand against it, by war or by embargo, or be in violation. Allies and pact partners of the aggressor, and members already fighting two wars, are excused.</description>
     <workerClass>Dominion.CouncilMotion_CollectiveDefense</workerClass>
     <targetCount>1</targetCount>
     <durationDays>60</durationDays>
     <graceDays>10</graceDays>
     <proposeCost>25</proposeCost>
     <aiProposeChance>0.35</aiProposeChance>
-    <summary>Collective defense against {0}</summary>
+    <summary>Collective defence against {0}</summary>
   </Dominion.CouncilMotionDef>
 
   <Dominion.CouncilMotionDef>

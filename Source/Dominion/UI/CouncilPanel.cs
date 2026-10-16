@@ -81,7 +81,8 @@ namespace Dominion
                 if (f == null || f.defeated) continue;
                 Rect row = l.GetRect(Line);
                 FactionUIUtility.DrawFactionIconWithTooltip(new Rect(row.x, row.y + 2f, 20f, 20f), f);
-                string present = c.phase == CouncilPhase.Announced ? (c.attending.Contains(f) ? "  ✓" : "  …") : "";
+                string present = c.phase == CouncilPhase.Announced
+                    ? "  " + (c.attending.Contains(f) ? "Dominion_Council_Present_Tag" : "Dominion_Council_Expected_Tag").Translate().ToString() : "";
                 int violations = c.ViolationsBy(f);
                 Widgets.Label(new Rect(row.x + 24f, row.y, row.width - 24f, Line),
                     f.Name + "  " + "Dominion_Council_Weight".Translate(weight.ToString("F1")) + present

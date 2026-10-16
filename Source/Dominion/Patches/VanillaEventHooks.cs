@@ -69,12 +69,13 @@ namespace Dominion
     [HarmonyPatch(typeof(SettlementDefeatUtility), nameof(SettlementDefeatUtility.CheckDefeated))]
     public static class Patch_SettlementDefeated
     {
-        public static void Prefix(Settlement factionBase, out Faction __state) => __state = factionBase?.Faction;
-
-        public static void Postfix(Settlement factionBase, Faction __state)
+        // Postfix only: it runs even if another mod's prefix (FTV intercepts settlement defeat) skips the original.
+        // A destroyed settlement keeps its faction.
+        public static void Postfix(Settlement factionBase)
         {
-            if (__state == null || __state.IsPlayer || factionBase == null || !factionBase.Destroyed) return;
-            WorldComponent_Dominion.Instance?.Unification.beatenByPlayer.Add(__state.loadID);
+            Faction f = factionBase?.Faction;
+            if (f == null || f.IsPlayer || !factionBase.Destroyed) return;
+            WorldComponent_Dominion.Instance?.Unification.beatenByPlayer.Add(f.loadID);
         }
     }
 }

@@ -158,7 +158,7 @@ namespace Dominion
                 if (r == null || r.distance < 0f || r.distance > BroadcastUtility.ReachTiles) continue;
                 float reach = 1f - r.distance / BroadcastUtility.ReachTiles;
                 BroadcastSystem.AddCulture(f, airtime * 0.5f * reach);
-                r.favour += Mathf.Min(2f, airtime * 0.1f * reach);
+                r.favour += Mathf.Min(0.75f, airtime * 0.05f * reach);
             }
         }
     }
@@ -169,7 +169,7 @@ namespace Dominion
         public override void ApplyDaily(float airtime, Faction target)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            comp.GetRelation(target, Faction.OfPlayer).favour += Mathf.Min(5f, airtime * 0.5f);
+            comp.GetRelation(target, Faction.OfPlayer).favour += Mathf.Min(2f, airtime * 0.2f);
             BroadcastSystem.AddCulture(target, airtime);
         }
     }

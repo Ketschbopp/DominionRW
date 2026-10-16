@@ -11,7 +11,7 @@ namespace Dominion
         private const int Duration = GenDate.TicksPerHour * 2;
 
         /// <summary>Influence per hour for Social 5 at a wood desk.</summary>
-        public const float BaseInfluencePerHour = 1.5f;
+        public const float BaseInfluencePerHour = 0.6f;
 
         private Building_LeadershipDesk Desk => job.targetA.Thing as Building_LeadershipDesk;
 

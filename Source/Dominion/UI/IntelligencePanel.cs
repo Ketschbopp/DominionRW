@@ -96,6 +96,7 @@ namespace Dominion
 
         public Dialog_PlanOperation()
         {
+            candidateCache.Invalidate(); // pawns just sent away must not be offered again
             doCloseX = true;
             forcePause = true;
             absorbInputAroundWindow = true;
@@ -119,8 +120,10 @@ namespace Dominion
 
             if (op != null)
             {
-                string info = op.description + "\n\n" + "Dominion_Ops_Terms".Translate(op.durationDays, op.influenceCost.ToString("F0"),
-                    op.silverCost, op.skill?.label ?? "-", op.maxAgents);
+                string cost = op.silverCost > 0
+                    ? "Dominion_Ops_CostWithSilver".Translate(op.influenceCost.ToString("F0"), op.silverCost).ToString()
+                    : "Dominion_Ops_CostInfluence".Translate(op.influenceCost.ToString("F0")).ToString();
+                string info = op.description + "\n\n" + "Dominion_Ops_Terms".Translate(op.durationDays, cost, op.skill?.label ?? "-", op.maxAgents);
                 float h = Text.CalcHeight(info, inRect.width);
                 Widgets.Label(new Rect(inRect.x, y, inRect.width, h), info);
                 y += h + 8f;
@@ -148,7 +151,7 @@ namespace Dominion
             }
             Widgets.EndScrollView();
 
-            List<Pawn> team = agents.Where(p => candidates.Contains(p)).ToList();
+            List<Pawn> team = agents.Where(p => p.Spawned && candidates.Contains(p)).ToList();
             string reason = op == null ? "-" : IntelOpsSystem.CannotLaunchReason(op, target, team);
             float y2 = inRect.yMax - 84f;
             if (op != null && target != null && team.Count > 0)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-  <!-- News grammar. Symbols from code: FACTION_A/B, LEADER_A/B, GOV_A/B, CAPITAL_A/B, LEAD, SOURCE, DETAIL, DETAIL_INDEF. -->
+  <!-- News grammar. Symbols from code: FACTION_A/B, LEADER_A/B (falls back to "its leaders"), LEADER_A_APPOS/B_APPOS (", Name," or empty), GOV_A/B, GOV_A_INDEF/B_INDEF (with article), CAPITAL_A/B (falls back to "the capital"), LEAD, SOURCE, DETAIL, DETAIL_INDEF. -->
 
   <RulePackDef>
     <defName>Dominion_NewsCommon</defName>
@@ -75,7 +75,7 @@
         <li>story-&gt;[LEAD] [FACTION_A] and [FACTION_B] have become allies. [alliance_detail] [closing]</li>
         <li>alliance_detail-&gt;The two are expected to coordinate against common enemies.</li>
         <li>alliance_detail-&gt;[observers] see it as a response to growing threats in the region.</li>
-        <li>alliance_detail-&gt;[LEADER_A] and [LEADER_B] are said to have sealed the pact in person.</li>
+        <li>alliance_detail-&gt;The two leaders are said to have sealed the pact in person.</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
@@ -129,7 +129,7 @@
       <rulesStrings>
         <li>headline-&gt;Coup in [FACTION_A]</li>
         <li>headline-&gt;[FACTION_A]: power seized by force</li>
-        <li>story-&gt;[LEAD] a coup has toppled the government of [FACTION_A]. A new leader, [LEADER_A], now rules as head of a [GOV_A]. [coup_detail] [closing]</li>
+        <li>story-&gt;[LEAD] a coup has toppled the government of [FACTION_A]. A new leader[LEADER_A_APPOS] now rules at the head of [GOV_A_INDEF]. [coup_detail] [closing]</li>
         <li>coup_detail-&gt;Armed men were seen around [CAPITAL_A] before dawn.</li>
         <li>coup_detail-&gt;The fate of the previous leader is unknown.</li>
         <li>coup_detail-&gt;[observers] say the plotters had support among the military.</li>
@@ -143,7 +143,7 @@
       <rulesStrings>
         <li>headline-&gt;Revolution in [FACTION_A]</li>
         <li>headline-&gt;[FACTION_A]: the old order falls</li>
-        <li>story-&gt;[LEAD] a revolution has overthrown the government of [FACTION_A]. The new regime is a [GOV_A] led by [LEADER_A]. [revolution_detail] [closing]</li>
+        <li>story-&gt;[LEAD] a revolution has overthrown the government of [FACTION_A]. The new regime is [GOV_A_INDEF]. [revolution_detail] [closing]</li>
         <li>revolution_detail-&gt;Crowds filled the streets of [CAPITAL_A] for days.</li>
         <li>revolution_detail-&gt;[observers] expect old alliances to be reconsidered.</li>
         <li>revolution_detail-&gt;Supporters of the former government are said to be fleeing.</li>
@@ -180,10 +180,10 @@
     <rulePack>
       <rulesStrings>
         <li>headline-&gt;Correction: earlier reports about [FACTION_A] were false</li>
-        <li>headline-&gt;Rumors about [FACTION_A] proven baseless</li>
+        <li>headline-&gt;Rumours about [FACTION_A] proven baseless</li>
         <li>story-&gt;Earlier reports concerning [FACTION_A] have turned out to be false. [correction_detail]</li>
         <li>correction_detail-&gt;Better information has since reached us.</li>
-        <li>correction_detail-&gt;The rumors appear to have been spread by traders.</li>
+        <li>correction_detail-&gt;The rumours appear to have been spread by traders.</li>
         <li>correction_detail-&gt;Some suspect deliberate disinformation.</li>
       </rulesStrings>
     </rulePack>
@@ -364,7 +364,7 @@
     <rulePack>
       <rulesStrings>
         <li>headline-&gt;Envoys of [FACTION_A] visit [FACTION_B]</li>
-        <li>story-&gt;[LEAD] an envoy of [FACTION_A] has visited [FACTION_B] on a mission of [DETAIL]. [closing]</li>
+        <li>story-&gt;[LEAD] an envoy of [FACTION_A] has visited [FACTION_B] for [DETAIL]. [closing]</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
@@ -385,9 +385,9 @@
     <defName>Dominion_News_CouncilConvened</defName>
     <rulePack>
       <rulesStrings>
-        <li>headline-&gt;The Rim Council will convene at [FACTION_A]</li>
+        <li>headline-&gt;The Rim Council will convene in the lands of [FACTION_A]</li>
         <li>headline-&gt;Rim Council called to session</li>
-        <li>story-&gt;[LEAD] the Rim Council will meet at the capital of [FACTION_A] in [DETAIL] days. Delegations from member factions are expected to set out shortly. [closing]</li>
+        <li>story-&gt;[LEAD] the Rim Council will meet at the capital of [FACTION_A] soon. Delegations from member factions are expected to set out shortly. [closing]</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
@@ -397,7 +397,7 @@
     <rulePack>
       <rulesStrings>
         <li>headline-&gt;Rim Council decree: [DETAIL]</li>
-        <li>headline-&gt;Council passes motion: [DETAIL]</li>
+        <li>headline-&gt;Rim Council passes motion: [DETAIL]</li>
         <li>story-&gt;[LEAD] the Rim Council has passed a decree: [DETAIL]. The motion was brought by [FACTION_A]. All members are now bound by it. [decree_detail] [closing]</li>
         <li>decree_detail-&gt;The vote was closer than many expected.</li>
         <li>decree_detail-&gt;Not every delegation was pleased with the outcome.</li>
@@ -409,7 +409,7 @@
     <defName>Dominion_News_MotionRejected</defName>
     <rulePack>
       <rulesStrings>
-        <li>headline-&gt;Council rejects motion: [DETAIL]</li>
+        <li>headline-&gt;Rim Council rejects motion: [DETAIL]</li>
         <li>story-&gt;[LEAD] the Rim Council has voted down a motion brought by [FACTION_A]: [DETAIL]. [closing]</li>
       </rulesStrings>
     </rulePack>
@@ -420,10 +420,10 @@
     <rulePack>
       <rulesStrings>
         <li>headline-&gt;[FACTION_A] defies the Rim Council</li>
-        <li>headline-&gt;[FACTION_A] violates council decree</li>
+        <li>headline-&gt;[FACTION_A] violates Rim Council decree</li>
         <li>story-&gt;[LEAD] [FACTION_A] has broken a decree of the Rim Council: [DETAIL]. [violated_detail] [closing]</li>
         <li>violated_detail-&gt;Other members are said to be discussing a response.</li>
-        <li>violated_detail-&gt;[observers] say it undermines the council itself.</li>
+        <li>violated_detail-&gt;[observers] say it undermines the Rim Council itself.</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
@@ -432,7 +432,7 @@
     <defName>Dominion_News_DecreeExpired</defName>
     <rulePack>
       <rulesStrings>
-        <li>headline-&gt;Council decree expires: [DETAIL]</li>
+        <li>headline-&gt;Rim Council decree expires: [DETAIL]</li>
         <li>story-&gt;The Rim Council decree "[DETAIL]" has run its course. [closing]</li>
       </rulesStrings>
     </rulePack>
@@ -466,7 +466,7 @@
     <rulePack>
       <rulesStrings>
         <li>headline-&gt;Power struggle in [FACTION_A]</li>
-        <li>headline-&gt;[LEADER_A] faces rivals at home</li>
+        <li>headline-&gt;Leadership of [FACTION_A] faces rivals at home</li>
         <li>story-&gt;[LEAD] rivals are challenging [LEADER_A] for control of [FACTION_A]. [ps_detail] [closing]</li>
         <li>ps_detail-&gt;Observers expect the government to be distracted for some time.</li>
         <li>ps_detail-&gt;Officials in [CAPITAL_A] refused to comment.</li>
@@ -521,7 +521,7 @@
       <rulesStrings>
         <li>headline-&gt;Rim Council adopts the Federation Charter</li>
         <li>headline-&gt;A federation for the whole planet: Charter passes</li>
-        <li>story-&gt;[LEAD] the Rim Council has adopted the Federation Charter put forward by [FACTION_A]. Any faction may now join. [fc_detail] [closing]</li>
+        <li>story-&gt;[LEAD] the Rim Council has adopted the Federation Charter put forward by [FACTION_A]. Any major faction may now join. [fc_detail] [closing]</li>
         <li>fc_detail-&gt;Supporters call it the end of an age of feuding powers.</li>
         <li>fc_detail-&gt;Sceptics warn it puts too much power in one capital.</li>
       </rulesStrings>

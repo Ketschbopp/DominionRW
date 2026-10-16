@@ -2,6 +2,7 @@
 <Defs>
   <ThingDef ParentName="BuildingBase">
     <defName>Dominion_RadioReceiver</defName>
+    <rotatable>false</rotatable>
     <label>radio receiver</label>
     <description>A powered receiver with a listening desk. A colonist doing research work can monitor it, which raises your radio coverage. Higher coverage brings news faster and more reliably, and raises your intel on every faction. Coverage fades each day unless someone keeps listening.</description>
     <graphicData>

@@ -104,5 +104,29 @@ namespace Dominion
         }
 
         public static float InfluenceRateMultiplier(DeskTier tier) => tier == DeskTier.Wood ? 1f : 1.25f;
+
+        /// <summary>Why the head of state never sits at the desk (Statecraft disabled or switched off), or null.</summary>
+        public static string CannotGovernReason(Pawn hos)
+        {
+            WorkTypeDef statecraft = DominionMainButtonDefOf.Dominion_Statecraft;
+            if (hos == null || statecraft == null || hos.workSettings == null) return null;
+            if (hos.WorkTypeIsDisabled(statecraft)) return "Dominion_Desk_CannotGovern".Translate(hos.LabelShortCap);
+            if (!hos.workSettings.WorkIsActive(statecraft)) return "Dominion_Desk_StatecraftOff".Translate(hos.LabelShortCap);
+            return null;
+        }
+
+        /// <summary>
+        /// Statecraft is new to existing saves, where colonists start with it switched off. Switch it on once,
+        /// for colonists who can do it.
+        /// </summary>
+        public static void EnableStatecraftOnce(PlayerState state)
+        {
+            if (state.statecraftEnabled) return;
+            state.statecraftEnabled = true;
+            WorkTypeDef statecraft = DominionMainButtonDefOf.Dominion_Statecraft;
+            foreach (Pawn p in PawnsFinder.AllMaps_FreeColonists)
+                if (p.workSettings != null && p.workSettings.EverWork && !p.WorkTypeIsDisabled(statecraft) && !p.workSettings.WorkIsActive(statecraft))
+                    p.workSettings.SetPriority(statecraft, 3);
+        }
     }
 }

@@ -12,7 +12,15 @@ namespace Dominion
         // Read by action buttons every frame; counting walks every silver stack on every home map.
         private static readonly UICache<int> silverCache = new UICache<int>(CountSilver);
 
+        /// <summary>Silver on home maps, cached for UI (up to half a second old).</summary>
         public static int AvailableSilver() => silverCache.Value;
+
+        /// <summary>Silver on home maps, counted now. Use before actually spending.</summary>
+        public static int AvailableSilverFresh()
+        {
+            silverCache.Invalidate();
+            return silverCache.Value;
+        }
 
         private static int CountSilver()
         {

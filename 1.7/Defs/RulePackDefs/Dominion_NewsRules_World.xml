@@ -6,7 +6,7 @@
     <rulePack>
       <rulesStrings>
         <li>headline-&gt;Scandal rocks [FACTION_A]</li>
-        <li>headline-&gt;[GOV_A] of [FACTION_A] embroiled in scandal</li>
+        <li>headline-&gt;Government of [FACTION_A] embroiled in scandal</li>
         <li>story-&gt;[LEAD] a scandal has engulfed the government of [FACTION_A]. [sc_detail] [closing]</li>
         <li>sc_detail-&gt;Officials are accused of selling favours.</li>
         <li>sc_detail-&gt;Leaked letters have embarrassed [LEADER_A].</li>
@@ -20,7 +20,7 @@
     <rulePack>
       <rulesStrings>
         <li>headline-&gt;Succession crisis in [FACTION_A]</li>
-        <li>story-&gt;[LEAD] with [LEADER_A]&apos;s authority in doubt, rival claimants in [FACTION_A] are openly disputing the succession. [closing]</li>
+        <li>story-&gt;[LEAD] with the authority of [LEADER_A] in doubt, rival claimants in [FACTION_A] are openly disputing the succession. [closing]</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
@@ -29,7 +29,7 @@
     <defName>Dominion_News_OfficialDefects</defName>
     <rulePack>
       <rulesStrings>
-        <li>headline-&gt;[FACTION_A] official defects to [FACTION_B]</li>
+        <li>headline-&gt;Senior official of [FACTION_A] defects to [FACTION_B]</li>
         <li>story-&gt;[LEAD] a senior official of [FACTION_A] has fled to [FACTION_B] and asked for protection. [FACTION_A] demands their return. [closing]</li>
       </rulesStrings>
     </rulePack>
@@ -40,7 +40,7 @@
     <rulePack>
       <rulesStrings>
         <li>headline-&gt;Reformers march in [FACTION_A]</li>
-        <li>story-&gt;[LEAD] crowds in [CAPITAL_A] are demanding reform of [GOV_A]. [closing]</li>
+        <li>story-&gt;[LEAD] crowds in [CAPITAL_A] are demanding political reform. [closing]</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>

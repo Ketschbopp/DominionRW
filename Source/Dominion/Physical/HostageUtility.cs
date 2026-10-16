@@ -3,6 +3,8 @@ using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse;
+using Verse.AI;
+using Verse.AI.Group;
 
 namespace Dominion
 {
@@ -67,10 +69,22 @@ namespace Dominion
             acceptCache.Invalidate();
             List<Pawn> theirs = HeldByThem(f), ours = HeldByUs(f);
             released = 0;
+            var leaving = new Dictionary<Map, List<Pawn>>();
             foreach (Pawn p in ours)
             {
                 GenGuest.PrisonerRelease(p);
                 released++;
+                // Released prisoners walk home rather than linger in their cells.
+                if (p.Spawned && !p.Downed && !p.Dead)
+                {
+                    if (!leaving.TryGetValue(p.Map, out List<Pawn> list)) leaving[p.Map] = list = new List<Pawn>();
+                    list.Add(p);
+                }
+            }
+            foreach (KeyValuePair<Map, List<Pawn>> kv in leaving)
+            {
+                foreach (Pawn p in kv.Value) p.GetLord()?.Notify_PawnLost(p, PawnLostCondition.ForcedByPlayerAction);
+                LordMaker.MakeNewLord(f, new LordJob_ExitMapBest(LocomotionUrgency.Walk, false, true), kv.Key, kv.Value);
             }
 
             returned = 0;
@@ -83,9 +97,17 @@ namespace Dominion
                 foreach (Pawn p in theirs)
                 {
                     f.kidnapped.RemoveKidnappedPawn(p);
-                    if (Find.WorldPawns.Contains(p)) Find.WorldPawns.RemovePawn(p);
-                    if (toCaravan) caravan.AddPawn(p, true);
-                    else walkers.Add(p);
+                    // Caravan members stay world pawns; only pawns about to be spawned leave the world.
+                    if (toCaravan)
+                    {
+                        caravan.AddPawn(p, true);
+                        if (!Find.WorldPawns.Contains(p)) Find.WorldPawns.PassToWorld(p, PawnDiscardDecideMode.KeepForever);
+                    }
+                    else
+                    {
+                        if (Find.WorldPawns.Contains(p)) Find.WorldPawns.RemovePawn(p);
+                        walkers.Add(p);
+                    }
                     returned++;
                 }
             }
@@ -123,7 +145,7 @@ namespace Dominion
         public override void Execute(Faction f)
         {
             Commit(f);
-            if (Rand.Chance(AcceptanceChance(f).Value))
+            if (Rand.Chance(HostageUtility.ExchangeAcceptance(f, LeadershipUtility.AcceptanceBonus())))
             {
                 HostageUtility.Exchange(f, out int returned, out int released);
                 Report("Dominion_Hostages_Done".Translate(f.Name, returned, released), true);

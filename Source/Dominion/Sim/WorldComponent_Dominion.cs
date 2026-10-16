@@ -72,6 +72,8 @@ namespace Dominion
                 catch (System.Exception e) { DLog.Warning($"{s.Name}.OnWorldLoaded failed: {e}"); }
             }
             IntegrationRegistry.NotifyWorldLoaded();
+            try { LeadershipUtility.EnableStatecraftOnce(player); }
+            catch (System.Exception e) { DLog.Warning("Could not switch on Statecraft: " + e.Message); }
         }
 
         public override void WorldComponentTick()

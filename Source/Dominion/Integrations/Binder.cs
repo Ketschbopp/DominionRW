@@ -83,7 +83,7 @@ namespace Dominion
         private void Record(bool ok, string what)
         {
             if (!ok) failures++;
-            report.Add((ok ? "  ✓ " : "  ✗ ") + what);
+            report.Add((ok ? "  [ok] " : "  [missing] ") + what);
         }
     }
 }

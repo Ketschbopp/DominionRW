@@ -62,7 +62,7 @@ namespace Dominion
             if (sb.Length > 0) sb.AppendLine();
             sb.Append("Dominion_Broadcast_Inspect".Translate(program?.label ?? "-"));
             if (program != null && program.needsTarget)
-                sb.Append(" → " + (target?.Name ?? "Dominion_Broadcast_NoTarget".Translate().ToString()));
+                sb.Append(": " + (target?.Name ?? "Dominion_Broadcast_NoTarget".Translate().ToString()));
             return sb.ToString();
         }
 

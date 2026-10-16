@@ -32,6 +32,8 @@ namespace Dominion
             PlanetTile start = HomeTile(from);
             PlanetTile end = HomeTile(to);
             if (!start.Valid || !end.Valid || start == end) return null;
+            // Delegations walk the surface; a home in orbit (Odyssey) has no road to anywhere.
+            if (start.Layer != end.Layer || start.Layer != Find.WorldGrid.Surface) return null;
 
             var d = (Delegation)WorldObjectMaker.MakeWorldObject(DominionWorldObjectDefOf.Dominion_Delegation);
             d.SetFaction(from);
@@ -175,7 +177,8 @@ namespace Dominion
         /// <summary>A faction leader who is free in the world: not in a caravan, not anyone's prisoner, not on a map.</summary>
         public static bool LeaderIsFree(Pawn leader) =>
             leader != null && !leader.Dead && !leader.Spawned && !leader.Discarded && !leader.IsPrisoner && leader.GetCaravan() == null
-            && Find.WorldPawns.Contains(leader) && Find.WorldPawns.GetSituation(leader) == WorldPawnSituation.Free;
+            && Find.WorldPawns.Contains(leader)
+            && Find.WorldPawns.GetSituation(leader) is WorldPawnSituation.Free or WorldPawnSituation.FactionLeader;
 
         public static bool SpawnVisitors(Faction f, Map map, List<Pawn> pawns, int durationTicks)
         {
@@ -200,8 +203,16 @@ namespace Dominion
                 PawnKindDef kind = f.def.basicMemberKind ?? f.RandomPawnKind();
                 if (kind != null) pawns.Add(PawnGenerator.GeneratePawn(kind, f, null));
             }
-            var parms = new PawnGroupMakerParms { groupKind = PawnGroupKindDefOf.Combat, faction = f, points = 150f * guards, generateFightersOnly = true };
-            pawns.AddRange(PawnGroupMakerUtility.GeneratePawns(parms, false).Take(guards));
+            if (guards <= 0) return pawns;
+            float points = Mathf.Max(150f * guards, f.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat));
+            var parms = new PawnGroupMakerParms { groupKind = PawnGroupKindDefOf.Combat, faction = f, points = points, generateFightersOnly = true };
+            if (f.def.pawnGroupMakers == null || !f.def.pawnGroupMakers.Any(m => m.kindDef == PawnGroupKindDefOf.Combat)) return pawns;
+            List<Pawn> generated = PawnGroupMakerUtility.GeneratePawns(parms, false).ToList();
+            for (int i = 0; i < generated.Count; i++)
+            {
+                if (i < guards) pawns.Add(generated[i]);
+                else generated[i].Discard(); // more than we need
+            }
             return pawns;
         }
     }

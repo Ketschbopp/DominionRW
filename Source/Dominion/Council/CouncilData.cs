@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using RimWorld;
@@ -123,7 +124,8 @@ namespace Dominion
             Scribe_Collections.Look(ref imposed, "imposed", LookMode.Reference);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                imposed ??= new List<Faction>();
+                // Saves from before this list existed: the members who complied are the best guess.
+                imposed ??= complied.Where(m => m != null && !m.IsPlayer).ToList();
                 imposed.RemoveAll(t => t == null);
                 targets ??= new List<Faction>();
                 violators ??= new List<Faction>();

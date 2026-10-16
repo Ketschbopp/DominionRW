@@ -58,7 +58,10 @@ namespace Dominion
                 settlementCountSeen = settlementCount;
                 recomputeDistancesUntil = Find.TickManager.TicksGame + GenDate.TicksPerDay;
             }
-            bool recomputeDistance = Find.TickManager.TicksGame <= recomputeDistancesUntil;
+            // Also refresh every few days (staggered by faction), since settlements can change hands without the count changing.
+            int every = DominionMod.Settings.simulationDetail == SimulationDetail.High ? 1
+                : DominionMod.Settings.simulationDetail == SimulationDetail.Low ? 7 : 3;
+            bool recomputeDistance = Find.TickManager.TicksGame <= recomputeDistancesUntil || (day + faction.loadID) % every == 0;
             int wars = 0;
 
             for (int i = 0; i < others.Count; i++)
@@ -74,9 +77,10 @@ namespace Dominion
                 if (!sharedEnemiesToday.TryGetValue(pair, out int shared))
                     sharedEnemiesToday[pair] = shared = CountSharedEnemies(faction, other, cache.Simulated);
                 r.sharedEnemies = shared;
-                r.grievance *= 0.98f;
+                // Bounded so gifts and broadcasts cannot pin opinion at the cap forever.
+                r.grievance = Mathf.Min(100f, r.grievance * 0.98f);
                 if (r.grievance < 0.5f) r.grievance = 0f;
-                r.favour *= 0.98f;
+                r.favour = Mathf.Clamp(r.favour * 0.98f, -40f, 40f);
                 if (Mathf.Abs(r.favour) < 0.5f) r.favour = 0f;
 
                 // Hostility that ended outside Dominion (vanilla, other mods) ends the war record too.

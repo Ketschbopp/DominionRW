@@ -70,7 +70,7 @@ namespace Dominion
             Summit s = Registry.Get(summitId);
             if (s == null) return;
             Map map = VisitorUtility.PlayerCapitalMap();
-            if (f.defeated || !VisitorUtility.CanHostVisitors(map))
+            if (f.defeated || f.HostileTo(Faction.OfPlayer) || !VisitorUtility.CanHostVisitors(map))
             {
                 Cancel(s.id, "Dominion_Summit_CancelledNoRoute".Translate());
                 return;
@@ -161,7 +161,8 @@ namespace Dominion
                 Messages.Message("Dominion_Summit_NeedsHeadOfState".Translate(), caravan, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
-            Open(s, hos, settlement.Faction.leader);
+            Pawn theirs = settlement.Faction.leader;
+            Open(s, hos, theirs != null && !theirs.Dead && !theirs.IsPrisoner ? theirs : null);
         }
 
         private static void Open(Summit s, Pawn hos, Pawn theirs)
@@ -239,8 +240,11 @@ namespace Dominion
                 Report("Dominion_Action_NeedsInfluence".Translate((def.influenceCost + extra).ToString("F0")), false);
                 return;
             }
-            Commit(f, extra);
-            if (SummitSystem.Arrange(f, agenda, treaty, venue, out string reason))
+            Commit(f);
+            bool arranged = SummitSystem.Arrange(f, agenda, treaty, venue, out string reason);
+            // The treaty's share is only paid when the summit actually goes ahead.
+            if (arranged && extra > 0f) WorldComponent_Dominion.Instance.Player.AddInfluence(-extra);
+            if (arranged)
                 Find.LetterStack.ReceiveLetter("Dominion_Summit_ArrangedLabel".Translate(), ("Dominion_Summit_Arranged_" + venue).Translate(f.Name,
                     SummitSystem.AbroadWindowDays), LetterDefOf.NeutralEvent, null, f);
             else if (!reason.NullOrEmpty())
