@@ -138,6 +138,7 @@ namespace Dominion
                 if (f == selected) Widgets.DrawHighlightSelected(row);
                 else if (i % 2 == 1) Widgets.DrawLightHighlight(row);
                 Widgets.DrawHighlightIfMouseover(row);
+                TooltipHandler.TipRegion(row, "Dominion_Tip_SelectFaction".Translate(f.Name));
                 if (Widgets.ButtonInvisible(row))
                 {
                     selected = f;

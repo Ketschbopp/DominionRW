@@ -30,6 +30,7 @@ namespace Dominion
             else
             {
                 Rect buttons = l.GetRect(32f);
+                TooltipHandler.TipRegion(buttons.LeftPart(0.32f), "Dominion_Tip_PlanOp".Translate());
                 if (Widgets.ButtonText(buttons.LeftPart(0.32f), "Dominion_Ops_Plan".Translate()))
                     Find.WindowStack.Add(new Dialog_PlanOperation());
                 string ciLabel = svc.CounterIntelActive
@@ -65,6 +66,7 @@ namespace Dominion
                 string line = "  " + "Dominion_Ops_RunningPhysical".Translate(op.def.LabelCap, op.settlement?.Label ?? op.target.Name, PhysicalOps.Status(op));
                 Widgets.Label(row.LeftPart(0.8f), line.Truncate(row.width * 0.8f));
                 Thing look = op.objective != null && op.objective.Spawned ? op.objective : op.agents.FirstOrDefault(a => a.Spawned);
+                if (look != null) TooltipHandler.TipRegion(row.RightPart(0.18f), "Dominion_Tip_ShowTarget".Translate());
                 if (look != null && Widgets.ButtonText(row.RightPart(0.18f), "Dominion_Ops_ShowTarget".Translate()))
                     CameraJumper.TryJumpAndSelect(look);
             }
@@ -122,9 +124,11 @@ namespace Dominion
             Text.Font = GameFont.Small;
             float y = inRect.y + 40f;
 
+            TooltipHandler.TipRegion(new Rect(inRect.x, y, inRect.width / 2f - 4f, 32f), op != null ? op.LabelCap + "\n\n" + op.description : "Dominion_Tip_ChooseOp".Translate().ToString());
             if (Widgets.ButtonText(new Rect(inRect.x, y, inRect.width / 2f - 4f, 32f), op?.LabelCap ?? "-"))
                 Find.WindowStack.Add(new FloatMenu(DefDatabase<OperationDef>.AllDefsListForReading
                     .Select(d => new FloatMenuOption(d.LabelCap, () => op = d)).ToList()));
+            TooltipHandler.TipRegion(new Rect(inRect.x + inRect.width / 2f + 4f, y, inRect.width / 2f - 4f, 32f), "Dominion_Tip_ChooseTarget".Translate());
             if (Widgets.ButtonText(new Rect(inRect.x + inRect.width / 2f + 4f, y, inRect.width / 2f - 4f, 32f), target?.Name ?? "Dominion_Ops_ChooseTarget".Translate().ToString()))
                 Find.WindowStack.Add(new FloatMenu(WorldComponent_Dominion.Instance.Cache.Simulated
                     .Select(f => new FloatMenuOption(f.Name, () => target = f)).ToList()));
@@ -132,6 +136,7 @@ namespace Dominion
 
             if (op != null && op.needsThirdParty)
             {
+                TooltipHandler.TipRegion(new Rect(inRect.x + inRect.width / 2f + 4f, y, inRect.width / 2f - 4f, 32f), "Dominion_Tip_ChooseBlame".Translate());
                 if (Widgets.ButtonText(new Rect(inRect.x + inRect.width / 2f + 4f, y, inRect.width / 2f - 4f, 32f),
                         thirdParty != null ? "Dominion_Ops_Blame".Translate(thirdParty.Name).ToString() : "Dominion_Ops_ChooseBlame".Translate().ToString()))
                     Find.WindowStack.Add(new FloatMenu(WorldComponent_Dominion.Instance.Cache.Simulated
@@ -188,6 +193,7 @@ namespace Dominion
                 TooltipHandler.TipRegion(reasonRect, reason);
                 GUI.color = Color.white;
             }
+            TooltipHandler.TipRegion(new Rect(inRect.center.x - 100f, inRect.yMax - 36f, 200f, 34f), "Dominion_Tip_Launch".Translate() + (reason != null ? "\n\n" + reason : ""));
             if (Widgets.ButtonText(new Rect(inRect.center.x - 100f, inRect.yMax - 36f, 200f, 34f), "Dominion_Ops_Launch".Translate(), active: reason == null)
                 && reason == null)
             {

@@ -49,7 +49,7 @@ namespace Dominion
                     RelationState r = comp.TryGetRelation(a, b);
                     // The aggressor's side opens the record; for dormant hostility (no start tick) there is no war to adopt.
                     if (r == null || !r.AtWar || !r.wasAggressor) continue;
-                    try { OpenWar(a, b, comp.Wars); }
+                    try { OpenWar(a, b, comp.Wars, opening: false); }
                     catch (System.Exception e) { DLog.Warning("Could not adopt the war between " + a.Name + " and " + b.Name + ": " + e.Message); }
                 }
         }
@@ -70,7 +70,7 @@ namespace Dominion
                 WarUtility.AddScore(b, a, 20f);
         }
 
-        private static void OpenWar(Faction a, Faction b, WarRegistry reg)
+        private static void OpenWar(Faction a, Faction b, WarRegistry reg, bool opening = true)
         {
             if (!WarUtility.CanWage(a) || !WarUtility.CanWage(b) || reg.Find(a, b) != null) return;
             var w = new War
@@ -94,6 +94,14 @@ namespace Dominion
                 w.goalSettlement = b.IsPlayer ? null : WarUtility.NearestSettlement(b, DelegationUtility.HomeTile(a), avoidCapital: true);
             if (w.startTick > 0 && Comp.TryGetRelation(a, b) is RelationState r && r.warSince >= 0) w.startTick = r.warSince;
             reg.wars.Add(w);
+
+            // The opening move: the aggressor marches at once, and the defender often answers in kind.
+            if (opening && DominionMod.Settings.warbands)
+            {
+                WorldComponent_Dominion comp = Comp;
+                if (!a.IsPlayer) TryLaunch(a, b, w, comp, force: true);
+                if (!b.IsPlayer && Rand.Chance(0.5f)) TryLaunch(b, a, w, comp, force: true);
+            }
         }
 
         private static void CloseWar(Faction a, Faction b, WarRegistry reg)
@@ -130,6 +138,20 @@ namespace Dominion
 
         public override void Hourly()
         {
+            // Intercepted warbands: score the battle once it is decided.
+            List<WarbandFight> fights = Comp.Wars.fights;
+            for (int i = fights.Count - 1; i >= 0; i--)
+            {
+                bool done;
+                try { done = fights[i].Check(); }
+                catch (System.Exception e)
+                {
+                    DLog.WarningOnce("Scoring a warband fight failed: " + e.Message, 0x7A55);
+                    done = true;
+                }
+                if (done) fights.RemoveAt(i);
+            }
+
             if (pendingPeace.Count == 0) return;
             var todo = new List<(Faction a, Faction b)>(pendingPeace);
             pendingPeace.Clear();
@@ -296,11 +318,15 @@ namespace Dominion
 
         // ---------------------------------------------------------------- warbands
 
-        private static void TryLaunch(Faction f, Faction enemy, War w, WorldComponent_Dominion comp)
+        /// <summary>Early in a war both sides are eager: launches are this much likelier in the first days.</summary>
+        private const int EagerDays = 10;
+
+        private static void TryLaunch(Faction f, Faction enemy, War w, WorldComponent_Dominion comp, bool force = false)
         {
-            if (WarbandUtility.CountActive(f) >= WarbandUtility.MaxPerFaction) return;
+            if (WarbandUtility.CountActive(f) >= WarbandUtility.MaxFor(f)) return;
             FactionState s = comp.GetState(f);
             float chance = (0.05f + 0.12f * s.effectiveAggression) * DominionMod.Settings.warbandFrequency * (1f - s.warWeariness / 150f);
+            if (w.DurationTicks < EagerDays * GenDate.TicksPerDay) chance *= 3f;
             WarbandMission mission;
             if (enemy.IsPlayer)
             {
@@ -316,7 +342,7 @@ namespace Dominion
                 mission = Rand.Chance(0.15f) && !WarbandUtility.All().Any(x => x.Faction == f && x.mission == WarbandMission.Blockade)
                     ? WarbandMission.Blockade : WarbandMission.Siege;
             }
-            if (!Rand.Chance(chance)) return;
+            if (!force && !Rand.Chance(chance)) return;
 
             Settlement target = null;
             if (mission == WarbandMission.Siege)
@@ -343,7 +369,7 @@ namespace Dominion
                 Faction ally = sim[i];
                 if (ally == f || ally == enemy || ally.HostileTo(enemy) || f.RelationKindWith(ally) != FactionRelationKind.Ally) continue;
                 FactionState s = comp.GetState(ally);
-                if (s.activeWars > 0 || WarbandUtility.CountActive(ally) >= WarbandUtility.MaxPerFaction) continue;
+                if (s.activeWars > 0 || WarbandUtility.CountActive(ally) >= WarbandUtility.MaxFor(ally)) continue;
                 if (!Rand.Chance(0.02f * (0.3f + s.personality.honour) * DominionMod.Settings.warbandFrequency)) continue;
                 WarbandUtility.Launch(ally, enemy, WarbandMission.Reinforce, null, f);
                 return;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -15,7 +16,7 @@ namespace Dominion
         private const float RowHeight = 54f;
         private const float FilterHeight = 28f;
         private const float MastheadHeight = 96f;
-        private const float StopPressNewsworthiness = 0.9f;
+        private const float FrontPageNewsworthiness = 0.9f;
 
         private Vector2 listScroll;
         private Vector2 storyScroll;
@@ -91,22 +92,25 @@ namespace Dominion
             if (upset > 0)
                 DominionTheme.InkLabel(new Rect(left.x, left.y + 43f, left.width, 16f), "Dominion_Radio_Upset".Translate(upset), DominionTheme.InkRed, GameFont.Tiny);
 
+            // The ADVISORY stamp opens the menu of colony advisories; below it, what is queued or in force.
             Rect stamp = new Rect(rect.xMax - StampW - 4f, rect.y + 10f, StampW, StampH);
-            string tip = "Dominion_Radio_IssueAdvisory_Desc".Translate(RadioOrders.AdvisoryDays, upset);
-            if (orders.AdvisoryQueued)
-            {
-                if (DominionTheme.StampButton(stamp, DominionTheme.StampQueued, DominionTheme.InkAmber, 4f, tip + "\n\n" + "Dominion_Radio_ClickToCancel".Translate(), null, true))
-                    RadioOrderUtility.OrderAdvisory();
-            }
-            else if (orders.AdvisoryInForce)
-            {
-                string left2 = (orders.advisoryUntilTick - Find.TickManager.TicksGame).ToStringTicksToPeriod();
-                DominionTheme.DrawStamp(stamp, DominionTheme.StampInForce, DominionTheme.InkGreen, -5f);
-                TooltipHandler.TipRegion(stamp, "Dominion_Radio_AdvisoryInForce".Translate(left2));
-            }
-            else if (DominionTheme.StampButton(stamp, DominionTheme.StampAdvisory, DominionTheme.InkRed, -4f, tip, cannot))
-                RadioOrderUtility.OrderAdvisory();
-            DominionTheme.InkLabel(new Rect(stamp.x - 20f, stamp.yMax + 2f, stamp.width + 24f, 16f), "Dominion_Radio_AdvisoryCaption".Translate(), DominionTheme.InkFaded, GameFont.Tiny, TextAnchor.UpperCenter);
+            bool anyQueued = RadioOrderSpec.Advisories.Any(k => orders.Queued(k));
+            if (DominionTheme.StampButton(stamp, anyQueued ? DominionTheme.StampQueued : DominionTheme.StampAdvisory,
+                    anyQueued ? DominionTheme.InkAmber : DominionTheme.InkRed, anyQueued ? 4f : -4f,
+                    "Dominion_Radio_AdvisoryMenu_Desc".Translate(upset), cannot, anyQueued))
+                Find.WindowStack.Add(new FloatMenu(RadioOrderUtility.AdvisoryMenu()));
+            DominionTheme.InkLabel(new Rect(stamp.x - 30f, stamp.yMax + 2f, stamp.width + 34f, 16f), AdvisoryStatus(orders), DominionTheme.InkFaded, GameFont.Tiny, TextAnchor.UpperCenter);
+        }
+
+        private static string AdvisoryStatus(RadioOrders orders)
+        {
+            int now = Find.TickManager.TicksGame;
+            if (orders.AdvisoryInForce)
+                return "Dominion_Radio_Status_CalmInForce".Translate((orders.advisoryUntilTick - now).ToStringTicksToPeriod());
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp.Broadcast.CounterProgrammingActive)
+                return "Dominion_Radio_Status_CounterInForce".Translate((comp.Broadcast.counterProgrammingUntil - now).ToStringTicksToPeriod());
+            return "Dominion_Radio_AdvisoryCaption".Translate();
         }
 
         // ------------------------------------------------------------------ filters
@@ -116,6 +120,7 @@ namespace Dominion
             float x = rect.x;
             Rect r = new Rect(x, rect.y, 160f, rect.height);
             string catLabel = categoryFilter.HasValue ? ("Dominion_EventCategory_" + categoryFilter.Value).Translate() : "Dominion_News_AllCategories".Translate();
+            TooltipHandler.TipRegion(r, "Dominion_Tip_NewsCategory".Translate());
             if (Widgets.ButtonText(r, catLabel))
             {
                 var options = new List<FloatMenuOption> { new FloatMenuOption("Dominion_News_AllCategories".Translate(), () => categoryFilter = null) };
@@ -130,6 +135,7 @@ namespace Dominion
             x = r.xMax + 6f;
 
             r = new Rect(x, rect.y, 190f, rect.height);
+            TooltipHandler.TipRegion(r, "Dominion_Tip_NewsFaction".Translate());
             if (Widgets.ButtonText(r, factionFilter?.Name.Truncate(180f) ?? "Dominion_News_AllFactions".Translate()))
             {
                 var options = new List<FloatMenuOption> { new FloatMenuOption("Dominion_News_AllFactions".Translate(), () => factionFilter = null) };
@@ -143,10 +149,13 @@ namespace Dominion
             x = r.xMax + 12f;
 
             // Checkboxes: ink labels on paper.
+            TooltipHandler.TipRegion(new Rect(x, rect.y + 2f, 140f, 24f), "Dominion_Tip_ShowRumors".Translate());
             x = InkCheckbox(new Rect(x, rect.y + 2f, 140f, 24f), "Dominion_News_ShowRumors".Translate(), ref showRumors) + 10f;
+            TooltipHandler.TipRegion(new Rect(x, rect.y + 2f, 130f, 24f), "Dominion_Tip_UnreadOnly".Translate());
             InkCheckbox(new Rect(x, rect.y + 2f, 130f, 24f), "Dominion_News_UnreadOnly".Translate(), ref unreadOnly);
 
             r = new Rect(rect.xMax - 140f, rect.y, 140f, rect.height);
+            TooltipHandler.TipRegion(r, "Dominion_Tip_MarkAllRead".Translate());
             if (Widgets.ButtonText(r, "Dominion_News_MarkAllRead".Translate()))
                 log.MarkAllRead();
         }
@@ -218,9 +227,9 @@ namespace Dominion
                     GUI.DrawTexture(new Rect(right - 20f, row.y + 4f, 20f, 20f), DominionTheme.Pin);
                     right -= 22f;
                 }
-                if (n.def != null && n.def.newsworthiness >= StopPressNewsworthiness && n.confidence == NewsConfidence.Confirmed)
+                if (n.def != null && n.def.newsworthiness >= FrontPageNewsworthiness && n.confidence == NewsConfidence.Confirmed)
                 {
-                    DominionTheme.InkLabel(new Rect(right - 74f, row.y + 2f, 74f, 16f), "Dominion_News_StopPressTag".Translate(),
+                    DominionTheme.InkLabel(new Rect(right - 74f, row.y + 2f, 74f, 16f), "Dominion_News_FrontPageTag".Translate(),
                         DominionTheme.InkRed, GameFont.Tiny, TextAnchor.UpperRight);
                     right -= 78f; // the headline stops short of the tag
                 }
@@ -229,7 +238,7 @@ namespace Dominion
                 DominionTheme.InkLabel(text, n.headline.Truncate(text.width), n.read ? DominionTheme.InkFaded : DominionTheme.Ink);
                 DominionTheme.InkLabel(new Rect(text.x, text.yMax, row.xMax - text.x - 4f, 18f), Meta(n, now).Truncate(row.xMax - text.x - 4f),
                     DominionTheme.InkFaded, GameFont.Tiny);
-                TooltipHandler.TipRegion(row, n.headline);
+                TooltipHandler.TipRegion(row, n.headline + "\n\n" + "Dominion_Tip_Clipping".Translate());
 
                 if (Widgets.ButtonInvisible(row))
                     Open(n, log);
@@ -359,28 +368,31 @@ namespace Dominion
             return box.yMax + 10f;
         }
 
-        /// <summary>For unverified rumours: a stamp to send the story to the radio desk for checking.</summary>
+        /// <summary>
+        /// The RESPOND stamp: a menu of what the radio desk can do about this story (investigate, debunk, spread the
+        /// word, keep it off the air). While an order for it is queued, the stamp shows that instead.
+        /// </summary>
         private static float DrawInvestigation(NewsItem n, float y, float w)
         {
-            if (!RadioOrderUtility.CanInvestigate(n)) return y;
-            RadioOrders orders = WorldComponent_Dominion.Instance.RadioOrders;
+            if (!RadioOrderUtility.AnyResponse(n)) return y;
+            RadioOrder order = WorldComponent_Dominion.Instance.RadioOrders.For(n);
             Rect stamp = new Rect(4f, y, 128f, 46f);
-            bool queued = orders.Investigating(n);
-            string cannot = queued ? null : RadioOrderUtility.CannotOrderReason();
-            string tip = "Dominion_Radio_Investigate_Desc".Translate();
-            if (queued)
+            string note;
+            if (order != null)
             {
-                if (DominionTheme.StampButton(stamp, DominionTheme.StampInquiry, DominionTheme.InkAmber, 3f, tip + "\n\n" + "Dominion_Radio_ClickToCancel".Translate(), null, true))
-                    RadioOrderUtility.OrderInvestigation(n);
+                Texture2D tex = order.kind == RadioOrderKind.Investigate ? DominionTheme.StampInquiry : DominionTheme.StampQueued;
+                if (DominionTheme.StampButton(stamp, tex, DominionTheme.InkAmber, 3f, order.Spec.Desc + "\n\n" + "Dominion_Radio_ClickToCancel".Translate(), null, true))
+                    Find.WindowStack.Add(new FloatMenu(RadioOrderUtility.StoryMenu(n)));
+                note = "Dominion_Radio_OrderNote".Translate(order.Spec.Label, (order.progress / order.WorkNeeded).ToStringPercent());
             }
-            else if (DominionTheme.StampButton(stamp, DominionTheme.StampInvestigate, DominionTheme.InkRed, -3f, tip, cannot))
-                RadioOrderUtility.OrderInvestigation(n);
-            RadioOrder order = null;
-            foreach (RadioOrder o in orders.Orders)
-                if (o.kind == RadioOrderKind.Investigate && o.newsId == n.id) order = o;
-            string note = queued && order != null
-                ? "Dominion_Radio_InquiryNote".Translate((order.progress / order.WorkNeeded).ToStringPercent())
-                : "Dominion_Radio_InvestigateNote".Translate();
+            else
+            {
+                if (DominionTheme.StampButton(stamp, DominionTheme.StampRespond, DominionTheme.InkRed, -3f, "Dominion_Radio_RespondMenu_Desc".Translate(), RadioOrderUtility.CannotOrderReason()))
+                    Find.WindowStack.Add(new FloatMenu(RadioOrderUtility.StoryMenu(n)));
+                string options = string.Join(", ", RadioOrderSpec.StoryResponses
+                    .Where(k => RadioOrderUtility.CannotRespondReason(k, n) == null).Select(k => RadioOrderSpec.Of(k).Label.ToLower()));
+                note = "Dominion_Radio_RespondNote".Translate(options);
+            }
             DominionTheme.InkLabel(new Rect(stamp.xMax + 10f, y + 4f, w - stamp.xMax - 12f, 40f), note, DominionTheme.InkFaded, GameFont.Tiny);
             return y + 54f;
         }
@@ -404,10 +416,10 @@ namespace Dominion
             }
             if (n.confidence == NewsConfidence.Confirmed)
             {
-                if (n.def != null && n.def.newsworthiness >= StopPressNewsworthiness)
+                if (n.def != null && n.def.newsworthiness >= FrontPageNewsworthiness)
                 {
                     color = DominionTheme.InkRed;
-                    return DominionTheme.StampStopPress;
+                    return DominionTheme.StampFrontPage;
                 }
                 color = DominionTheme.InkGreen;
                 return DominionTheme.StampConfirmed;

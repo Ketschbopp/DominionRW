@@ -23,7 +23,13 @@ namespace Dominion
         public static readonly Texture2D StampConfirmed = Tex("Stamp_Confirmed");
         public static readonly Texture2D StampRumor = Tex("Stamp_Rumor");
         public static readonly Texture2D StampDisproved = Tex("Stamp_Disproved");
-        public static readonly Texture2D StampStopPress = Tex("Stamp_StopPress");
+        public static readonly Texture2D StampFrontPage = Tex("Stamp_FrontPage");
+        public static readonly Texture2D StampRespond = Tex("Stamp_Respond");
+        public static readonly Texture2D IconMorale = Tex("Gizmo_Morale");
+        public static readonly Texture2D IconCounter = Tex("Gizmo_Counter");
+        public static readonly Texture2D IconDebunk = Tex("Gizmo_Debunk");
+        public static readonly Texture2D IconSpread = Tex("Gizmo_Spread");
+        public static readonly Texture2D IconSuppress = Tex("Gizmo_Suppress");
         public static readonly Texture2D StampClassified = Tex("Stamp_Classified");
         public static readonly Texture2D StampInvestigate = Tex("Stamp_Investigate");
         public static readonly Texture2D StampInquiry = Tex("Stamp_Inquiry");

@@ -25,7 +25,7 @@ namespace Dominion
         {
             RadioOrder o = Order;
             if (o == null) return base.GetReport();
-            return (o.kind == RadioOrderKind.Advisory ? "Dominion_Radio_ReportAdvisory" : "Dominion_Radio_ReportInvestigate").Translate();
+            return "Dominion_Radio_Report".Translate(o.Spec.Label.ToLower());
         }
 
         protected override IEnumerable<Toil> MakeNewToils()

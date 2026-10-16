@@ -26,7 +26,9 @@ namespace Dominion
         public static void Decorate(NewsItem n, GrammarRequest baseReq)
         {
             RulePackDef vox = DefDatabase<RulePackDef>.GetNamedSilentFail("Dominion_NewsVox");
-            if (vox == null || n.story.NullOrEmpty()) return;
+            RulePackDef voxEvents = DefDatabase<RulePackDef>.GetNamedSilentFail("Dominion_NewsVoxEvents");
+            if (vox == null || n.story.NullOrEmpty() || n.def == null) return;
+            string ev = n.def.defName.StartsWith("Dominion_") ? n.def.defName.Substring("Dominion_".Length) : n.def.defName;
 
             Rand.PushState(n.id * 31337 + 5);
             try
@@ -34,15 +36,18 @@ namespace Dominion
                 GrammarRequest req = default;
                 req.Includes.AddRange(baseReq.Includes);
                 req.Includes.Add(vox);
+                if (voxEvents != null) req.Includes.Add(voxEvents);
                 req.Rules.AddRange(baseReq.Rules);
                 req.Constants["CAT"] = n.Category.ToString();
+                req.Constants["US"] = IntelUtility.InvolvesPlayer(n.primary, n.secondary) ? "yes" : "no";
+                req.Constants["RUMOUR"] = n.confidence == NewsConfidence.Rumor ? "yes" : "no";
                 req.Rules.Add(new Rule_String("COLONY", ColonyName()));
 
                 var sb = new StringBuilder(n.story);
                 if (Rand.Chance(AsideChance))
                 {
                     req.Constants["TONE"] = "plain";
-                    string aside = GrammarResolver.Resolve("aside", req, "Dominion news aside", false, null, null, null, true);
+                    string aside = Fresh(req, Root("aside", ev, voxEvents), "Dominion news aside");
                     if (!aside.NullOrEmpty()) sb.Append(" ").Append(aside);
                 }
 
@@ -51,7 +56,7 @@ namespace Dominion
                 {
                     req.Constants["TONE"] = ToneOf(speaker);
                     req.Rules.Add(new Rule_String("COLONIST", speaker.LabelShort));
-                    string quote = GrammarResolver.Resolve("vox", req, "Dominion news vox", false, null, null, null, true);
+                    string quote = Fresh(req, Root("vox", ev, voxEvents), "Dominion news vox");
                     if (!quote.NullOrEmpty())
                         sb.Append("\n\n").Append("Dominion_News_Vox".Translate(quote, speaker.LabelShort, RoleOf(speaker), ColonyName()).Resolve());
                 }
@@ -65,6 +70,56 @@ namespace Dominion
             {
                 Rand.PopState();
             }
+        }
+
+        /// <summary>
+        /// The event's own lines ("vox_WarDeclared") most of the time when it has any, so quotes fit the story;
+        /// otherwise the shared lines by category and temper.
+        /// </summary>
+        private static string Root(string root, string ev, RulePackDef voxEvents)
+        {
+            string specific = root + "_" + ev;
+            if (voxEvents == null || !HasRoot(voxEvents, specific)) return root;
+            return Rand.Chance(0.8f) ? specific : root;
+        }
+
+        private static readonly Dictionary<string, bool> rootCache = new Dictionary<string, bool>();
+
+        private static bool HasRoot(RulePackDef pack, string root)
+        {
+            if (rootCache.TryGetValue(root, out bool has)) return has;
+            has = false;
+            foreach (Rule r in pack.RulesPlusIncludes)
+                if (r.keyword == root)
+                {
+                    has = true;
+                    break;
+                }
+            rootCache[root] = has;
+            return has;
+        }
+
+        /// <summary>Recently printed lines, so the same quote does not turn up story after story.</summary>
+        private static readonly Queue<string> recent = new Queue<string>();
+        private static readonly HashSet<string> recentSet = new HashSet<string>();
+        private const int RecentMemory = 60;
+
+        private static string Fresh(GrammarRequest req, string root, string debugLabel)
+        {
+            string line = null;
+            for (int attempt = 0; attempt < 8; attempt++)
+            {
+                line = GrammarResolver.Resolve(root, req, debugLabel, false, null, null, null, true);
+                if (line.NullOrEmpty() || !recentSet.Contains(line)) break;
+                // Fall back to the shared pool after a few repeats from a small event pool.
+                if (attempt == 3 && root.Contains("_")) root = root.Substring(0, root.IndexOf('_'));
+            }
+            if (!line.NullOrEmpty() && recentSet.Add(line))
+            {
+                recent.Enqueue(line);
+                if (recent.Count > RecentMemory) recentSet.Remove(recent.Dequeue());
+            }
+            return line;
         }
 
         private static Pawn PickSpeaker()

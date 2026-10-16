@@ -120,6 +120,7 @@ namespace Dominion
             Rect b1 = new Rect(termsRow.x + termsRow.width * 0.63f, termsRow.y, termsRow.width * 0.18f - 2f, Line);
             Rect b2 = new Rect(b1.xMax + 4f, termsRow.y, termsRow.width * 0.18f - 2f, Line);
             if (peace != null) ActionButton(b1, peace, enemy);
+            if (call != null) TooltipHandler.TipRegion(b2, call.description);
             if (call != null && Widgets.ButtonText(b2, call.LabelCap))
             {
                 var options = new List<FloatMenuOption>();
@@ -146,7 +147,7 @@ namespace Dominion
             string label = def.LabelCap + (chance.HasValue ? " (" + chance.Value.ToStringPercent() + ")" : "");
             if (Widgets.ButtonText(r, label.Truncate(r.width), active: why == null) && why == null)
                 def.Worker.Execute(f);
-            if (why != null) TooltipHandler.TipRegion(r, why);
+            TooltipHandler.TipRegion(r, def.description + (why != null ? "\n\n" + why.Colorize(ColorLibrary.RedReadable) : ""));
         }
 
         /// <summary>Red to the left (defender winning), green to the right (attacker winning).</summary>
@@ -201,6 +202,7 @@ namespace Dominion
                 string text = "  " + w.Label + ": " + w.MissionText + "  " + (w.Blockading ? "" : "Dominion_Warband_Arrives".Translate(
                     w.TicksToArrival.ToStringTicksToPeriod(allowSeconds: false)).ToString());
                 Widgets.Label(row.LeftPart(0.84f), text.Truncate(row.width * 0.84f));
+                TooltipHandler.TipRegion(row.RightPart(0.14f), "Dominion_Tip_ShowOnMap".Translate());
                 if (Widgets.ButtonText(row.RightPart(0.14f), "Dominion_WarTab_Show".Translate()))
                     CameraJumper.TryJumpAndSelect(w);
             }

@@ -48,8 +48,12 @@ namespace Dominion
 
             if (st.proclaimed)
                 l.Label("Dominion_Federation_Proclaimed".Translate((Find.TickManager.TicksGame - st.proclaimedTick).ToStringTicksToPeriod(allowSeconds: false)));
-            else if (DominionMod.Settings.endingEnabled && progress.Complete && l.ButtonText("Dominion_Federation_Proclaim".Translate()))
-                UnificationSystem.OfferProclamation(progress);
+            else if (DominionMod.Settings.endingEnabled && progress.Complete)
+            {
+                Rect proclaim = l.GetRect(30f);
+                TooltipHandler.TipRegion(proclaim, "Dominion_Tip_Proclaim".Translate());
+                if (Widgets.ButtonText(proclaim, "Dominion_Federation_Proclaim".Translate())) UnificationSystem.OfferProclamation(progress);
+            }
 
             l.GapLine();
             foreach ((Faction f, UnifyPath status) in rows)

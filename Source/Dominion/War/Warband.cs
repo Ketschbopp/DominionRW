@@ -28,7 +28,10 @@ namespace Dominion
     /// </summary>
     public class Warband : WorldObject, IInterceptable
     {
-        public const int TicksPerTile = 2500;
+        /// <summary>Ticks per tile at speed 1 (an hour a tile). The warband speed setting divides it (default 2x).</summary>
+        public const int BaseTicksPerTile = 2500;
+
+        public static int TicksPerTile => Mathf.Max(250, Mathf.RoundToInt(BaseTicksPerTile / Mathf.Max(0.1f, DominionMod.Settings.warbandSpeed)));
         public const float NearPlayerTiles = 8f;
         public const int BlockadeDays = 6;
 
@@ -230,9 +233,140 @@ namespace Dominion
         }
     }
 
+    /// <summary>
+    /// A fight on a caravan map between the player and an intercepted warband. Checked hourly: when the warband's
+    /// fighters are all dead, downed or gone, the player won; when no colonist is left standing, the warband did.
+    /// </summary>
+    public class WarbandFight : IExposable
+    {
+        public Faction faction;
+        public List<Pawn> enemies = new List<Pawn>();
+        public int tile = -1;
+        public float points;
+
+        public void ExposeData()
+        {
+            if (Scribe.mode == LoadSaveMode.Saving) enemies.RemoveAll(p => p == null || p.Discarded);
+            Scribe_References.Look(ref faction, "faction");
+            Scribe_Collections.Look(ref enemies, "enemies", LookMode.Reference);
+            Scribe_Values.Look(ref tile, "tile", -1);
+            Scribe_Values.Look(ref points, "points");
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                enemies ??= new List<Pawn>();
+                enemies.RemoveAll(p => p == null);
+            }
+        }
+
+        /// <summary>True when decided (and scored).</summary>
+        public bool Check()
+        {
+            Map map = Find.Maps.FirstOrDefault(m => m.Tile.tileId == tile && DominionGeo.OnSurface(m.Tile));
+            int dead = enemies.Count(p => p.Dead);
+            if (map == null)
+            {
+                // The map closed (the caravan left): whoever still has most fighters on their feet carried the day.
+                int alive = enemies.Count(p => !p.Dead && !p.Downed);
+                Resolve(alive <= enemies.Count / 3, dead);
+                return true;
+            }
+            // Fighters that fled the map count as beaten.
+            int standing = enemies.Count(p => !p.Dead && !p.Downed && p.Spawned && p.Map == map && p.Faction == faction);
+            if (standing == 0)
+            {
+                Resolve(true, dead);
+                return true;
+            }
+            if (!map.mapPawns.FreeColonistsSpawned.Any(p => !p.Downed))
+            {
+                Resolve(false, dead);
+                return true;
+            }
+            return false;
+        }
+
+        private void Resolve(bool playerWon, int dead)
+        {
+            Faction player = Faction.OfPlayer;
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (faction == null || faction.defeated) return;
+            // Bigger warbands are worth more: 6 to 25 points for beating one, 5 to 15 for the warband winning.
+            if (playerWon)
+            {
+                float score = Mathf.Clamp(6f + points / 250f, 6f, 25f);
+                WarUtility.AddScore(player, faction, score);
+                if (DominionScheduler.IsSimulated(faction))
+                {
+                    FactionState s = comp.GetState(faction);
+                    s.warWeariness = Mathf.Min(100f, s.warWeariness + 5f);
+                    s.stability = Mathf.Max(0f, s.stability - 2f);
+                }
+                if (dead > 0) IntegrationRegistry.Get<Integration_EconomicsDemography>()?.ModifyPopulation(faction, -dead);
+                EventBus.Raise(DominionEventDefOf.Dominion_BattleFought, player, faction, tile, detail: "Dominion_Warband_FieldBattle".Translate());
+                Messages.Message("Dominion_Warband_Defeated".Translate(faction.Name, score.ToString("F0")), MessageTypeDefOf.PositiveEvent);
+            }
+            else
+            {
+                float score = Mathf.Clamp(5f + points / 400f, 5f, 15f);
+                WarUtility.AddScore(faction, player, score);
+                EventBus.Raise(DominionEventDefOf.Dominion_BattleFought, faction, player, tile, detail: "Dominion_Warband_FieldBattle".Translate());
+                Messages.Message("Dominion_Warband_Won".Translate(faction.Name, score.ToString("F0")), MessageTypeDefOf.NegativeEvent);
+            }
+        }
+    }
+
     public static class WarbandUtility
     {
-        public const int MaxPerFaction = 2;
+        /// <summary>Hard ceiling on warbands one faction keeps in the field.</summary>
+        public const int MaxPerFaction = 6;
+
+        /// <summary>
+        /// How many warbands a faction can field at once: 1 for a small or weak one, up to 6 for a large, strong,
+        /// aggressive one (one per three towns, plus one for being stronger than the world average, plus aggression).
+        /// </summary>
+        public static int MaxFor(Faction f)
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            FactionState s = comp.GetState(f);
+            float n = 1f + comp.Cache.SettlementsOf(f).Count / 3f + (RelativeStrength(f) > 1.2f ? 1f : 0f) + s.effectiveAggression;
+            return Mathf.Clamp(Mathf.FloorToInt(n), 1, MaxPerFaction);
+        }
+
+        /// <summary>A faction's military strength against the average of all simulated factions (1 = average).</summary>
+        public static float RelativeStrength(Faction f)
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            float total = 0f;
+            int n = 0;
+            foreach (Faction g in comp.Cache.Simulated)
+            {
+                total += comp.GetState(g).militaryStrength;
+                n++;
+            }
+            float avg = n > 0 ? total / n : 0f;
+            return avg > 0f ? comp.GetState(f).militaryStrength / avg : 1f;
+        }
+
+        /// <summary>
+        /// The faction's town nearest to <paramref name="to"/>, so a warband marches from the front, not the capital.
+        /// Falls back to the capital (or any town).
+        /// </summary>
+        public static PlanetTile LaunchTile(Faction f, PlanetTile to)
+        {
+            PlanetTile best = PlanetTile.Invalid;
+            float bestDist = float.MaxValue;
+            if (to.Valid)
+                foreach (Settlement s in WorldComponent_Dominion.Instance.Cache.SettlementsOf(f))
+                {
+                    float d = DominionGeo.Distance(s.Tile, to);
+                    if (d >= 0f && d < bestDist && s.Tile != to)
+                    {
+                        bestDist = d;
+                        best = s.Tile;
+                    }
+                }
+            return best.Valid ? best : DelegationUtility.HomeTile(f);
+        }
 
         /// <summary>Within <paramref name="range"/> tiles of a player settlement or caravan.</summary>
         public static bool NearPlayerAssets(PlanetTile tile, float range)
@@ -262,17 +396,23 @@ namespace Dominion
         }
 
         /// <summary>The force a faction puts in the field: a share of its strength, in combat points.</summary>
-        public static float FieldPoints(Faction f)
+        /// <summary>A warband's size for this faction, with the luck of the levy (±25%).</summary>
+        public static float FieldPoints(Faction f) => Mathf.Clamp(ExpectedPoints(f) * Rand.Range(0.75f, 1.3f), 200f, 5000f);
+
+        /// <summary>A typical warband's size for this faction, without the luck of the levy.</summary>
+        public static float ExpectedPoints(Faction f)
         {
             FactionState s = WorldComponent_Dominion.Instance.GetState(f);
-            float pts = s.militaryStrength * 5f * (1f - s.warWeariness / 200f);
-            return Mathf.Clamp(pts, 250f, 3000f);
+            // Strength sets the size; tech, temperament and the luck of the levy vary it.
+            float tech = f.def.techLevel >= TechLevel.Spacer ? 1.25f : f.def.techLevel <= TechLevel.Neolithic ? 0.8f : 1f;
+            float pts = s.militaryStrength * 5f * (1f - s.warWeariness / 200f) * tech * (0.85f + s.effectiveAggression * 0.3f);
+            return Mathf.Clamp(pts, 200f, 5000f);
         }
 
         /// <summary>Sends a warband. Returns null if there is no route (surface only).</summary>
         public static Warband Launch(Faction from, Faction to, WarbandMission mission, Settlement targetSettlement = null, Faction ally = null)
         {
-            PlanetTile start = DelegationUtility.HomeTile(from);
+            PlanetTile home = DelegationUtility.HomeTile(from);
             PlanetTile end;
             if (mission == WarbandMission.Reinforce) end = DelegationUtility.HomeTile(ally);
             else if (mission == WarbandMission.RaidPlayer)
@@ -282,9 +422,11 @@ namespace Dominion
             }
             else
             {
-                targetSettlement ??= WarUtility.NearestSettlement(to, start);
+                targetSettlement ??= WarUtility.NearestSettlement(to, home);
                 end = targetSettlement?.Tile ?? PlanetTile.Invalid;
             }
+            // March from the town nearest the target.
+            PlanetTile start = LaunchTile(from, end);
             if (!start.Valid || !end.Valid || start == end) return null;
             PlanetLayer surface = Find.WorldGrid.Surface;
             if (start.Layer != surface || end.Layer != surface) return null;
@@ -442,7 +584,10 @@ namespace Dominion
             Map map = VisitorUtility.PlayerCapitalMap();
             if (map == null || map.Tile != w.Tile) map = Find.Maps.FirstOrDefault(m => m.IsPlayerHome && m.Tile == w.Tile) ?? map;
             if (map == null) return;
-            float points = StorytellerUtility.DefaultThreatPointsNow(map) * Rand.Range(0.8f, 1.2f);
+            // Sized like a normal raid on the colony, then scaled by how strong this faction is and how big the warband was.
+            float strength = Mathf.Clamp(RelativeStrength(w.Faction), 0.6f, 1.8f);
+            float size = Mathf.Clamp(w.points / Mathf.Max(200f, ExpectedPoints(w.Faction)), 0.7f, 1.4f);
+            float points = StorytellerUtility.DefaultThreatPointsNow(map) * strength * size * Rand.Range(0.85f, 1.15f);
             var parms = new IncidentParms
             {
                 target = map,
@@ -450,8 +595,16 @@ namespace Dominion
                 points = Mathf.Max(points, w.Faction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat)),
                 forced = true,
             };
+            var before = new HashSet<Pawn>(map.mapPawns.SpawnedPawnsInFaction(w.Faction));
             if (!IncidentDefOf.RaidEnemy.Worker.TryExecute(parms))
                 DLog.Verbose("Warband raid on the player could not start: " + w.Faction.Name);
+            else
+            {
+                // Beating the raid is beating the warband: it is scored like an interception.
+                List<Pawn> raiders = map.mapPawns.SpawnedPawnsInFaction(w.Faction).Where(p => !before.Contains(p)).ToList();
+                if (raiders.Count > 0)
+                    WarUtility.Registry.fights.Add(new WarbandFight { faction = w.Faction, enemies = raiders, tile = map.Tile.tileId, points = w.points });
+            }
             WorldComponent_Dominion.Instance.GetState(w.Faction).lastRaidOnPlayerTick = Find.TickManager.TicksGame;
         }
 
@@ -469,11 +622,14 @@ namespace Dominion
 
             List<Pawn> enemies = InterceptUtility.GenerateFighters(f, Mathf.Min(w.points, 3000f), caravan.Tile);
             EventBus.Raise(DominionEventDefOf.Dominion_WarbandIntercepted, player, f, caravan.Tile.tileId, detail: w.target?.Name);
-            WarUtility.AddScore(player, f, 6f);
+            // Catching them on the road is worth a little; beating them is scored when the fight is decided.
+            WarUtility.AddScore(player, f, 2f);
+            float points = w.points;
             w.Destroy();
 
             if (enemies.Count == 0) return;
             Map map = CaravanIncidentUtility.SetupCaravanAttackMap(caravan, enemies, true);
+            WarUtility.Registry.fights.Add(new WarbandFight { faction = f, enemies = new List<Pawn>(enemies), tile = map.Tile.tileId, points = points });
             LordMaker.MakeNewLord(f, new LordJob_AssaultColony(f, true, true, false, false, true, false, true), map, enemies);
             Find.LetterStack.ReceiveLetter("Dominion_Warband_InterceptedLabel".Translate(), "Dominion_Warband_InterceptedText".Translate(f.Name),
                 LetterDefOf.ThreatBig, new LookTargets(enemies), f);

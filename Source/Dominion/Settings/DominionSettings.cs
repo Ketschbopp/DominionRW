@@ -37,6 +37,7 @@ namespace Dominion
         // War
         public bool warbands = true;
         public float warbandFrequency = 1f;
+        public float warbandSpeed = 2f;
         public bool warbandRaidsOnPlayer = true;
         public bool warOccupation = true;
         public float capitulationScore = 75f;
@@ -111,6 +112,7 @@ namespace Dominion
             Scribe_Values.Look(ref physicalDetection, "physicalDetection", 1f);
             Scribe_Values.Look(ref warbands, "warbands", true);
             Scribe_Values.Look(ref warbandFrequency, "warbandFrequency", 1f);
+            Scribe_Values.Look(ref warbandSpeed, "warbandSpeed", 2f);
             Scribe_Values.Look(ref warbandRaidsOnPlayer, "warbandRaidsOnPlayer", true);
             Scribe_Values.Look(ref warOccupation, "warOccupation", true);
             Scribe_Values.Look(ref capitulationScore, "capitulationScore", 75f);
@@ -161,6 +163,7 @@ namespace Dominion
             physicalDetection = 1f;
             warbands = true;
             warbandFrequency = 1f;
+            warbandSpeed = 2f;
             warbandRaidsOnPlayer = true;
             warOccupation = true;
             capitulationScore = 75f;

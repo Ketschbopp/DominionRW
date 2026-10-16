@@ -50,40 +50,41 @@ namespace Dominion
                 yield return g;
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (comp == null || parent.Faction != Faction.OfPlayer) yield break;
-            RadioOrders orders = comp.RadioOrders;
-            var advisory = new Command_Action
-            {
-                defaultLabel = (orders.AdvisoryQueued ? "Dominion_Radio_CancelAdvisory" : "Dominion_Radio_IssueAdvisory").Translate(),
-                defaultDesc = "Dominion_Radio_IssueAdvisory_Desc".Translate(RadioOrders.AdvisoryDays, RadioOrderUtility.UpsetColonists.Value),
-                icon = DominionTheme.GizmoAdvisory,
-                action = RadioOrderUtility.OrderAdvisory,
-            };
-            if (orders.AdvisoryInForce && !orders.AdvisoryQueued)
-                advisory.Disable("Dominion_Radio_AdvisoryInForce".Translate((orders.advisoryUntilTick - Find.TickManager.TicksGame).ToStringTicksToPeriod()));
-            yield return advisory;
             yield return new Command_Action
             {
-                defaultLabel = "Dominion_Radio_Investigate".Translate(),
-                defaultDesc = "Dominion_Radio_Investigate_Desc".Translate(),
+                defaultLabel = "Dominion_Radio_IssueAdvisory".Translate(),
+                defaultDesc = "Dominion_Radio_AdvisoryMenu_Desc".Translate(RadioOrderUtility.UpsetColonists.Value),
+                icon = DominionTheme.GizmoAdvisory,
+                action = () => Find.WindowStack.Add(new FloatMenu(RadioOrderUtility.AdvisoryMenu())),
+            };
+            yield return new Command_Action
+            {
+                defaultLabel = "Dominion_Radio_Respond".Translate(),
+                defaultDesc = "Dominion_Radio_RespondMenu_Desc".Translate(),
                 icon = DominionTheme.GizmoInvestigate,
-                action = () => Find.WindowStack.Add(new FloatMenu(RumourOptions(comp))),
+                action = () => Find.WindowStack.Add(new FloatMenu(StoryOptions(comp))),
             };
         }
 
-        private static List<FloatMenuOption> RumourOptions(WorldComponent_Dominion comp)
+        /// <summary>Recent stories the radio desk can act on, each with the responses that apply to it.</summary>
+        private static List<FloatMenuOption> StoryOptions(WorldComponent_Dominion comp)
         {
             var options = new List<FloatMenuOption>();
             IReadOnlyList<NewsItem> news = comp.News.Delivered;
-            for (int i = news.Count - 1; i >= 0 && options.Count < 15; i--)
+            int stories = 0;
+            for (int i = news.Count - 1; i >= 0 && stories < 10; i--)
             {
                 NewsItem n = news[i];
-                if (!RadioOrderUtility.CanInvestigate(n)) continue;
-                bool queued = comp.RadioOrders.Investigating(n);
-                string label = (queued ? "Dominion_Radio_InvestigateCancelOption" : "Dominion_Radio_InvestigateOption").Translate(n.headline.Truncate(320f));
-                options.Add(new FloatMenuOption(label, () => RadioOrderUtility.OrderInvestigation(n)));
+                if (!RadioOrderUtility.AnyResponse(n)) continue;
+                stories++;
+                foreach (FloatMenuOption o in RadioOrderUtility.StoryMenu(n))
+                {
+                    o.Label = o.Label + ": " + n.headline.Truncate(300f);
+                    options.Add(o);
+                }
             }
             if (options.Count == 0)
-                options.Add(new FloatMenuOption("Dominion_Radio_NoRumours".Translate(), null));
+                options.Add(new FloatMenuOption("Dominion_Radio_NoStories".Translate(), null));
             return options;
         }
 

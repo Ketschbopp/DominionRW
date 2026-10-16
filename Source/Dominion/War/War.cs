@@ -129,6 +129,9 @@ namespace Dominion
         /// <summary>Caravans chasing a delegation or warband.</summary>
         public List<Pursuit> pursuits = new List<Pursuit>();
 
+        /// <summary>Battles with a player-intercepted warband, scored when they are decided.</summary>
+        public List<WarbandFight> fights = new List<WarbandFight>();
+
         /// <summary>
         /// Occupied settlements: world tile → load id of the faction that held it before the first occupation. Keyed by tile,
         /// because other mods (FTV invasions) replace the settlement object when it changes hands.
@@ -180,6 +183,7 @@ namespace Dominion
             Scribe_Collections.Look(ref blockades, "blockades", LookMode.Deep);
             if (Scribe.mode == LoadSaveMode.Saving) pursuits.RemoveAll(x => x == null || x.caravan == null || x.caravan.Destroyed || x.target == null || x.target.Destroyed);
             Scribe_Collections.Look(ref pursuits, "pursuits", LookMode.Deep);
+            Scribe_Collections.Look(ref fights, "warbandFights", LookMode.Deep);
             Scribe_Collections.Look(ref originalOwner, "originalOwnerByTile", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref siegePoints, "siegePoints", LookMode.Value, LookMode.Value);
             Scribe_Values.Look(ref pendingPlayerGoal, "pendingPlayerGoal");
@@ -190,6 +194,8 @@ namespace Dominion
                 wars ??= new List<War>();
                 blockades ??= new List<Blockade>();
                 pursuits ??= new List<Pursuit>();
+                fights ??= new List<WarbandFight>();
+                fights.RemoveAll(x => x == null || x.faction == null);
                 pursuits.RemoveAll(x => x == null || x.caravan == null || x.target == null);
                 originalOwner ??= new Dictionary<int, int>();
                 siegePoints ??= new Dictionary<int, float>();
