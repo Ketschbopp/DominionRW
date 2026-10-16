@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- News grammar. Symbols from code: FACTION_A/B, LEADER_A/B, GOV_A/B, CAPITAL_A/B, LEAD, SOURCE. -->
+
+  <RulePackDef>
+    <defName>Dominion_NewsCommon</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>observers-&gt;observers</li>
+        <li>observers-&gt;analysts</li>
+        <li>observers-&gt;diplomats</li>
+        <li>observers-&gt;traders on the caravan routes</li>
+        <li>observers-&gt;local sources</li>
+        <li>closing-&gt;What happens next remains to be seen.</li>
+        <li>closing-&gt;Neighbouring powers are watching closely.</li>
+        <li>closing-&gt;The situation is developing.</li>
+        <li>closing-&gt;Caravan masters are already adjusting their routes.</li>
+        <li>closing-&gt;[observers] expect the consequences to be felt for some time.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_DebugTest</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Test report concerning [FACTION_A]</li>
+        <li>story-&gt;[LEAD] this is a test report about [FACTION_A]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_WarDeclared</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] declares war on [FACTION_B]</li>
+        <li>headline-&gt;War between [FACTION_A] and [FACTION_B]</li>
+        <li>headline-&gt;[FACTION_A] takes up arms against [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has gone to war with [FACTION_B]. [war_cause] [war_outlook] [closing]</li>
+        <li>war_cause-&gt;Tensions between the two had been building for some time.</li>
+        <li>war_cause-&gt;[observers] point to long-standing grievances on both sides.</li>
+        <li>war_cause-&gt;[LEADER_A] is said to have made the decision personally.</li>
+        <li>war_cause-&gt;Border disputes are thought to lie behind the decision.</li>
+        <li>war_outlook-&gt;Settlements near the frontier are preparing for raids.</li>
+        <li>war_outlook-&gt;Trade along the shared routes is expected to collapse.</li>
+        <li>war_outlook-&gt;[observers] doubt the conflict will end quickly.</li>
+        <li>war_outlook-&gt;Both sides are believed to be calling up fighters.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_PeaceMade</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] and [FACTION_B] lay down arms</li>
+        <li>headline-&gt;Peace between [FACTION_A] and [FACTION_B]</li>
+        <li>headline-&gt;Hostilities end between [FACTION_A] and [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] and [FACTION_B] have ended hostilities. [peace_detail] [closing]</li>
+        <li>peace_detail-&gt;Exhaustion on both sides is thought to have forced the agreement.</li>
+        <li>peace_detail-&gt;[observers] describe the peace as fragile.</li>
+        <li>peace_detail-&gt;Envoys are said to have met in secret before the announcement.</li>
+        <li>peace_detail-&gt;Caravans are expected to return to the old routes soon.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_RelationsWarmed</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] and [FACTION_B] form an alliance</li>
+        <li>headline-&gt;New alliance: [FACTION_A] and [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] and [FACTION_B] have become allies. [alliance_detail] [closing]</li>
+        <li>alliance_detail-&gt;The two are expected to coordinate against common enemies.</li>
+        <li>alliance_detail-&gt;[observers] see it as a response to growing threats in the region.</li>
+        <li>alliance_detail-&gt;[LEADER_A] and [LEADER_B] are said to have sealed the pact in person.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_AllianceBroken</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] ends its alliance with [FACTION_B]</li>
+        <li>headline-&gt;Alliance between [FACTION_A] and [FACTION_B] collapses</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has broken off its alliance with [FACTION_B]. [broken_detail] [closing]</li>
+        <li>broken_detail-&gt;Relations between the two had been cooling for months.</li>
+        <li>broken_detail-&gt;[observers] speak of mutual accusations of betrayal.</li>
+        <li>broken_detail-&gt;[FACTION_B] is said to be furious.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_LeaderDied</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;The leader of [FACTION_A] is dead</li>
+        <li>headline-&gt;[FACTION_A] mourns its leader</li>
+        <li>story-&gt;[LEAD] the leader of [FACTION_A] has died. [death_detail] [closing]</li>
+        <li>death_detail-&gt;A struggle over the succession is feared.</li>
+        <li>death_detail-&gt;The circumstances of the death remain unclear.</li>
+        <li>death_detail-&gt;[observers] expect a period of instability.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Riots</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Riots break out in [FACTION_A]</li>
+        <li>headline-&gt;Unrest spreads through [FACTION_A]</li>
+        <li>story-&gt;[LEAD] riots have broken out across [FACTION_A]. [riot_detail] [closing]</li>
+        <li>riot_detail-&gt;Crowds are said to be demanding the removal of [LEADER_A].</li>
+        <li>riot_detail-&gt;Shortages and hardship are blamed for the anger.</li>
+        <li>riot_detail-&gt;Guards were reportedly sent to restore order near [CAPITAL_A].</li>
+        <li>riot_detail-&gt;Trade in the affected settlements has stopped.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Coup</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Coup in [FACTION_A]</li>
+        <li>headline-&gt;[FACTION_A]: power seized by force</li>
+        <li>story-&gt;[LEAD] a coup has toppled the government of [FACTION_A]. A new leader, [LEADER_A], now rules as head of a [GOV_A]. [coup_detail] [closing]</li>
+        <li>coup_detail-&gt;Armed men were seen around [CAPITAL_A] before dawn.</li>
+        <li>coup_detail-&gt;The fate of the previous leader is unknown.</li>
+        <li>coup_detail-&gt;[observers] say the plotters had support among the military.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Revolution</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Revolution in [FACTION_A]</li>
+        <li>headline-&gt;[FACTION_A]: the old order falls</li>
+        <li>story-&gt;[LEAD] a revolution has overthrown the government of [FACTION_A]. The new regime is a [GOV_A] led by [LEADER_A]. [revolution_detail] [closing]</li>
+        <li>revolution_detail-&gt;Crowds filled the streets of [CAPITAL_A] for days.</li>
+        <li>revolution_detail-&gt;[observers] expect old alliances to be reconsidered.</li>
+        <li>revolution_detail-&gt;Supporters of the former government are said to be fleeing.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_CapitalLost</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] loses its capital</li>
+        <li>headline-&gt;Capital of [FACTION_A] has fallen</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has lost its capital. [capital_detail] [closing]</li>
+        <li>capital_detail-&gt;The blow to its leadership is severe.</li>
+        <li>capital_detail-&gt;[FACTION_B] is believed to be responsible.</li>
+        <li>capital_detail-&gt;Refugees are reported on the roads.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_CapitalEstablished</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] proclaims [CAPITAL_A] its new capital</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has moved its seat of government to [CAPITAL_A]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Correction</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Correction: earlier reports about [FACTION_A] were false</li>
+        <li>headline-&gt;Rumors about [FACTION_A] proven baseless</li>
+        <li>story-&gt;Earlier reports concerning [FACTION_A] have turned out to be false. [correction_detail]</li>
+        <li>correction_detail-&gt;Better information has since reached us.</li>
+        <li>correction_detail-&gt;The rumors appear to have been spread by traders.</li>
+        <li>correction_detail-&gt;Some suspect deliberate disinformation.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+</Defs>

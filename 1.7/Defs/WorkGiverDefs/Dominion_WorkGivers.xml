@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <WorkGiverDef>
+    <defName>Dominion_MonitorRadio</defName>
+    <label>monitor radio receiver</label>
+    <giverClass>Dominion.WorkGiver_MonitorRadio</giverClass>
+    <workType>Research</workType>
+    <priorityInType>40</priorityInType>
+    <verb>monitor</verb>
+    <gerund>monitoring</gerund>
+    <requiredCapacities>
+      <li>Manipulation</li>
+      <li>Hearing</li>
+    </requiredCapacities>
+    <canBeDoneByMechs>false</canBeDoneByMechs>
+  </WorkGiverDef>
+</Defs>

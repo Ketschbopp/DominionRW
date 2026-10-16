@@ -11,11 +11,12 @@ namespace Dominion
     /// </summary>
     public class MainTabWindow_Dominion : MainTabWindow
     {
-        private enum Tab { Overview, Events, Integrations }
+        private enum Tab { News, Overview, Events, Integrations }
 
         private const float RowHeight = 26f;
 
-        private Tab current = Tab.Overview;
+        private Tab current = Tab.News;
+        private readonly NewsTabPanel newsPanel = new NewsTabPanel();
         private Vector2 scroll;
         private Vector2 dossierScroll;
         private Faction selected;
@@ -24,12 +25,18 @@ namespace Dominion
 
         public override void DoWindowContents(Rect inRect)
         {
+            // The raw event log shows everything, including events the player has no intel on, so it is dev-only.
+            if (current == Tab.Events && !Prefs.DevMode) current = Tab.News;
+            int unread = WorldComponent_Dominion.Instance?.News.UnreadCount ?? 0;
+            string newsLabel = "Dominion_Tab_News".Translate() + (unread > 0 ? " (" + unread + ")" : "");
             var tabs = new List<TabRecord>
             {
+                new TabRecord(newsLabel, () => Select(Tab.News), current == Tab.News),
                 new TabRecord("Dominion_Tab_Overview".Translate(), () => Select(Tab.Overview), current == Tab.Overview),
-                new TabRecord("Dominion_Tab_Events".Translate(), () => Select(Tab.Events), current == Tab.Events),
-                new TabRecord("Dominion_Tab_Integrations".Translate(), () => Select(Tab.Integrations), current == Tab.Integrations),
             };
+            if (Prefs.DevMode)
+                tabs.Add(new TabRecord("Dominion_Tab_Events".Translate(), () => Select(Tab.Events), current == Tab.Events));
+            tabs.Add(new TabRecord("Dominion_Tab_Integrations".Translate(), () => Select(Tab.Integrations), current == Tab.Integrations));
 
             Rect body = inRect;
             body.yMin += TabDrawer.TabHeight;
@@ -39,6 +46,9 @@ namespace Dominion
 
             switch (current)
             {
+                case Tab.News:
+                    if (WorldComponent_Dominion.Instance != null) newsPanel.Draw(body, WorldComponent_Dominion.Instance);
+                    break;
                 case Tab.Overview: DrawOverview(body); break;
                 case Tab.Events: DrawEvents(body); break;
                 case Tab.Integrations: DrawIntegrations(body); break;
@@ -88,6 +98,7 @@ namespace Dominion
             {
                 Faction f = shown[i];
                 comp.TryGetState(f, out FactionState s);
+                bool known = IntelUtility.Knows(f, IntelUtility.RestrictedIntel);
                 Rect row = new Rect(0f, i * RowHeight, view.width, RowHeight);
                 if (f == selected) Widgets.DrawHighlightSelected(row);
                 else if (i % 2 == 1) Widgets.DrawLightHighlight(row);
@@ -102,11 +113,11 @@ namespace Dominion
                 x += row.width * widths[0];
                 Widgets.Label(new Rect(x, row.y, row.width * widths[1], RowHeight), s != null && s.governmentInitialized ? DominionUI.GovernmentLabel(s.government) : "-");
                 x += row.width * widths[1];
-                Widgets.Label(new Rect(x, row.y, row.width * widths[2], RowHeight), s != null ? DominionUI.Colored(s.stability.ToString("F0"), DominionUI.StabilityColor(s.stability)) : "-");
+                Widgets.Label(new Rect(x, row.y, row.width * widths[2], RowHeight), s == null ? "-" : known ? DominionUI.Colored(s.stability.ToString("F0"), DominionUI.StabilityColor(s.stability)) : "?");
                 x += row.width * widths[2];
-                Widgets.Label(new Rect(x, row.y, row.width * widths[3], RowHeight), s != null ? s.economyIndex.ToString("F0") : "-");
+                Widgets.Label(new Rect(x, row.y, row.width * widths[3], RowHeight), s == null ? "-" : known ? s.economyIndex.ToString("F0") : "?");
                 x += row.width * widths[3];
-                Widgets.Label(new Rect(x, row.y, row.width * widths[4], RowHeight), s != null ? s.militaryStrength.ToString("F0") : "-");
+                Widgets.Label(new Rect(x, row.y, row.width * widths[4], RowHeight), s == null ? "-" : known ? s.militaryStrength.ToString("F0") : "?");
                 x += row.width * widths[4];
                 FactionRelationKind kind = f.RelationKindWith(Faction.OfPlayer);
                 GUI.color = kind.GetColor();

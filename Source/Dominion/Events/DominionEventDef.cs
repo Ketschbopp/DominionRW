@@ -26,6 +26,9 @@ namespace Dominion
         [MustTranslate]
         public string headline;
 
+        /// <summary>Grammar for news reports about this event: needs "headline" and "story" roots. Optional.</summary>
+        public RulePackDef newsRules;
+
         /// <summary>Hidden from the dev-menu event list.</summary>
         public bool debugHidden;
 
@@ -90,6 +93,7 @@ namespace Dominion
         public static DominionEventDef Dominion_Revolution;
         public static DominionEventDef Dominion_CapitalLost;
         public static DominionEventDef Dominion_CapitalEstablished;
+        public static DominionEventDef Dominion_NewsCorrection;
 
         static DominionEventDefOf()
         {

@@ -350,7 +350,7 @@ Debug category **Dominion** includes:
 |---|---|
 | **M0: Skeleton** ✅ | About/LoadFolders, csproj (Krafs ref), Harmony bootstrap, settings shell, dev menu shell, `WorldComponent_Dominion`, scheduler, event bus, integration loader with self-test |
 | **M1: World sim** ✅ | FactionState, RelationState, stability, economy index, AI personalities, daily AI diplomacy (abstract), capitals, E&D and FTV core bindings |
-| **M2: News** | News feed tab, visibility and intel, grammar headlines, radio, research tree, colony thoughts |
+| **M2: News** ✅ | News feed tab, visibility and intel, grammar headlines, radio, research tree, colony thoughts |
 | **M3: Diplomacy UI** | Dominion tab, dossiers, actions, treaties, embargo and border rights, Leadership Desk |
 | **M4: Physical diplomacy** | Envoys, delegations, summits plus the dialogue system, hostage exchange |
 | **M5: Rim Council** | Sessions, motions, voting, decrees, violations |
@@ -379,6 +379,31 @@ How the world simulation works as built (tunable values in brackets are code con
 | AI diplomacy (30) | Daily per faction | Goodwill between AI factions follows their opinions without crossing kind thresholds. With an 8–15 day cooldown, an AI may make peace, ally, declare war (needs hatred, aggression, relative strength, proximity, stability; max 2 wars; respects 30-day truces) or break an alliance. Relations with the player are never changed here. |
 
 Relation changes go through vanilla base goodwill and `SetRelationDirect` on both sides, so vanilla and other mods see the same state. The Harmony hook on `Notify_RelationKindChanged` turns every change into a Dominion event and names the aggressor when Dominion caused it.
+
+## 9b. M2 implementation notes
+
+**Intel** (player → each faction, 0–100) moves 10% per day toward a target: 5 base, +8/+8/+12/+10 for the four intel research projects, up to +25 from radio coverage, +25 if allied (+3 to +8 if neutral), +15/+8 if the faction is within 15/40 tiles, minus up to 10 for a paranoid faction and 5 for juntas and autocracies. Espionage (M6) and IRBM satellites (M9) will add to it.
+
+**Visibility.** Secrecy needs intel: Public 0, Restricted 25, Secret 50, BlackOps 80 (the best intel on either faction involved counts). Events involving the player are always known at once.
+
+**Delivery.**
+
+| Route | When | Delay |
+|---|---|---|
+| Radio intercept | Public event, radio researched, coverage > 10 | 1–6 h |
+| Diplomatic dispatch | An ally of the player is involved | 6–24 h |
+| Intelligence report | Restricted or higher | 12–48 h |
+| Traveler gossip | Everything else | 1–4 days |
+
+A report is *Confirmed* if it came by radio or dispatch or intel is 30+ above what was needed, otherwise a *Rumor*. Events the player cannot see stay hidden for up to 30 days and surface if intel grows, or leak (4% / 2% / 0.5% per day for Restricted / Secret / BlackOps).
+
+**False rumors.** Each day, each faction the player has under 40 intel on adds a 2% chance of a baseless rumor (war, riots, coup, leader's death). Once intel on that faction reaches 50 a correction is published, and the original report is marked as false.
+
+**Radio.** Radio coverage (0–100) rises while a colonist monitors a powered receiver (Research work; about 4 per hour, scaled by Intellectual skill and hearing) and decays 30% per day. Colonists stop monitoring at 90.
+
+**Text.** Headlines and stories come from vanilla grammar (`RulePackDef` per event, plus the shared `Dominion_NewsCommon`) and are resolved once at delivery, then saved.
+
+**Dossier gating.** Leader, capital and government are always known; stability, population, economy and military need 25; wealth, war weariness, personality and blocs need 50; a faction's opinions of others need 80. The raw event log is dev-mode only, since it shows everything.
 
 ## 10. Decisions log
 

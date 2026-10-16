@@ -4,7 +4,9 @@ Rim World Dominion, a 1.7 RimWorld mod that expands and overhauls diplomacy and 
 
 ## Status
 
-**M0 (framework)** and **M1 (world simulation)** are in place: faction politics (stability, legitimacy, governments, blocs, riots, coups, revolutions), economy and military from Economics & Demography, territory and vassal outposts from FTV, capitals, opinions between all factions, and AI-to-AI diplomacy (wars, peace, alliances). The Dominion tab shows every faction with a full dossier. See [docs/DESIGN.md](docs/DESIGN.md) for the architecture, feature spec, integration plan and roadmap.
+**M0 (framework)** and **M1 (world simulation)** are in place: faction politics (stability, legitimacy, governments, blocs, riots, coups, revolutions), economy and military from Economics & Demography, territory and vassal outposts from FTV, capitals, opinions between all factions, and AI-to-AI diplomacy (wars, peace, alliances). The Dominion tab shows every faction with a full dossier.
+
+**M2 (news)** adds the news feed: events reach you late, as rumors or confirmed reports, depending on your intel on the factions involved. There is a Dominion research tab, a radio receiver to monitor, false rumors and corrections, colonist mood reactions, and per-category letters or messages. Faction dossiers only show what your intel allows. See [docs/DESIGN.md](docs/DESIGN.md) for the architecture, feature spec, integration plan and roadmap.
 
 ## Requirements
 
@@ -38,4 +40,4 @@ The DLL is written to `1.7/Assemblies/Dominion.dll` (committed, so the repo fold
 
 ## Testing in game
 
-Enable dev mode, then use the dev menu category **Dominion**: raise any event (including coups, revolutions and riots), force a relation between any two factions, set a faction's stability, run a simulated day, log faction states, the scheduler and the event log, run the integration self-test, and read the profiler. The **Dominion** tab shows factions, the event log and which integrations are active.
+Enable dev mode, then use the dev menu category **Dominion**: raise any event (including coups, revolutions and riots), force a relation between any two factions, set a faction's stability, run a simulated day, log faction states, the scheduler and the event log, reveal all intel or set intel per faction, deliver pending news, spread a false rumor, run the integration self-test, and read the profiler. The **Dominion** tab shows factions, the event log and which integrations are active.

@@ -3,8 +3,9 @@
   <MainButtonDef>
     <defName>Dominion</defName>
     <label>dominion</label>
-    <description>Factions, diplomacy, intelligence and world events.</description>
+    <description>World news, factions, diplomacy and intelligence.</description>
     <tabWindowClass>Dominion.MainTabWindow_Dominion</tabWindowClass>
+    <workerClass>Dominion.MainButtonWorker_Dominion</workerClass>
     <order>55</order>
     <validWithoutMap>true</validWithoutMap>
   </MainButtonDef>

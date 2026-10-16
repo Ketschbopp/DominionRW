@@ -38,8 +38,10 @@ namespace Dominion
             Rect relations = new Rect(politics.xMax + 10f, rect.y, colWidth, rect.height);
 
             DrawProfile(profile, f, s);
-            DrawPolitics(politics, s);
-            DrawRelations(relations, f, comp, ref scroll);
+            if (IntelUtility.Knows(f, IntelUtility.SecretIntel)) DrawPolitics(politics, s);
+            else Locked(politics, "Dominion_Dossier_Personality".Translate(), IntelUtility.SecretIntel);
+            if (IntelUtility.Knows(f, IntelUtility.BlackOpsIntel)) DrawRelations(relations, f, comp, ref scroll);
+            else Locked(relations, "Dominion_Dossier_Opinions".Translate(), IntelUtility.BlackOpsIntel);
         }
 
         private static void DrawProfile(Rect rect, Faction f, FactionState s)
@@ -53,21 +55,27 @@ namespace Dominion
             string leader = f.leader != null
                 ? f.leader.LabelShortCap + (s.leaderSinceTick >= 0 ? " (" + (now - s.leaderSinceTick).ToStringTicksToPeriod(allowSeconds: false) + ")" : "")
                 : "-";
+            float intel = IntelUtility.IntelOn(f);
+            Row(l, "Dominion_Dossier_Intel".Translate(), intel.ToString("F0"));
             Row(l, "Dominion_Dossier_Leader".Translate(), leader);
             Row(l, "Dominion_Dossier_Capital".Translate(), s.capital?.LabelCap ?? "Dominion_None".Translate());
             Row(l, "Dominion_Col_Government".Translate(), DominionUI.GovernmentLabel(s.government));
-            Row(l, "Dominion_Col_Stability".Translate(), DominionUI.Colored(s.stability.ToString("F0"), DominionUI.StabilityColor(s.stability)));
-            Row(l, "Dominion_Dossier_Legitimacy".Translate(), s.legitimacy.ToString("F0"));
-            Row(l, "Dominion_Dossier_WarWeariness".Translate(), s.warWeariness.ToString("F0"));
-            Row(l, "Dominion_Dossier_ActiveWars".Translate(), s.activeWars.ToString());
-            Row(l, "Dominion_Dossier_Population".Translate(), s.population + " / " + s.totalLiving);
-            Row(l, "Dominion_Dossier_Wealth".Translate(), s.wealth.ToStringMoney());
-            Row(l, "Dominion_Col_Economy".Translate(), s.economyIndex.ToString("F0"));
-            Row(l, "Dominion_Col_Military".Translate(), s.militaryStrength.ToString("F0"));
+            Row(l, "Dominion_Col_Stability".Translate(), f, IntelUtility.RestrictedIntel, () => DominionUI.Colored(s.stability.ToString("F0"), DominionUI.StabilityColor(s.stability)));
+            Row(l, "Dominion_Dossier_Legitimacy".Translate(), f, IntelUtility.RestrictedIntel, () => s.legitimacy.ToString("F0"));
+            Row(l, "Dominion_Dossier_WarWeariness".Translate(), f, IntelUtility.SecretIntel, () => s.warWeariness.ToString("F0"));
+            Row(l, "Dominion_Dossier_ActiveWars".Translate(), f, IntelUtility.RestrictedIntel, () => s.activeWars.ToString());
+            Row(l, "Dominion_Dossier_Population".Translate(), f, IntelUtility.RestrictedIntel, () => s.population + " / " + s.totalLiving);
+            Row(l, "Dominion_Dossier_Wealth".Translate(), f, IntelUtility.SecretIntel, () => s.wealth.ToStringMoney());
+            Row(l, "Dominion_Col_Economy".Translate(), f, IntelUtility.RestrictedIntel, () => s.economyIndex.ToString("F0"));
+            Row(l, "Dominion_Col_Military".Translate(), f, IntelUtility.RestrictedIntel, () => s.militaryStrength.ToString("F0"));
             Row(l, "Dominion_Dossier_Territory".Translate(), s.territoryTiles + " / " + s.settlementCount);
             Row(l, "Dominion_Dossier_VassalOutposts".Translate(), s.vassalOutposts.ToString());
             l.End();
         }
+
+        /// <summary>A row whose value is only shown with at least <paramref name="needed"/> intel on the faction.</summary>
+        private static void Row(Listing_Standard l, string label, Faction f, float needed, System.Func<string> value) =>
+            Row(l, label, IntelUtility.Knows(f, needed) ? value() : IntelUtility.Unknown(needed));
 
         private static void Row(Listing_Standard l, string label, string value)
         {
@@ -76,6 +84,14 @@ namespace Dominion
             Widgets.Label(r.LeftPart(0.48f), label);
             GUI.color = Color.white;
             Widgets.Label(r.RightPart(0.52f), value);
+        }
+
+        private static void Locked(Rect rect, string title, float needed)
+        {
+            Widgets.Label(new Rect(rect.x, rect.y, rect.width, Line), title);
+            GUI.color = Color.gray;
+            Widgets.Label(new Rect(rect.x, rect.y + Line + 4f, rect.width, Line * 3f), "Dominion_Dossier_Locked".Translate(needed.ToString("F0")));
+            GUI.color = Color.white;
         }
 
         private static void DrawPolitics(Rect rect, FactionState s)

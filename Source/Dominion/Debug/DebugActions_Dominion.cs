@@ -135,6 +135,77 @@ namespace Dominion
             DLog.Message(sb.ToString());
         }
 
+        [DebugAction(Category, "Toggle reveal all intel")]
+        private static void ToggleRevealIntel()
+        {
+            IntelUtility.RevealAll = !IntelUtility.RevealAll;
+            Messages.Message("Dominion: reveal all intel " + (IntelUtility.RevealAll ? "ON" : "OFF"), MessageTypeDefOf.NeutralEvent, historical: false);
+        }
+
+        [DebugAction(Category, "Set intel on faction...", allowedGameStates = AllowedGameStates.Playing)]
+        private static List<DebugActionNode> SetIntel()
+        {
+            var nodes = new List<DebugActionNode>();
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp == null) return nodes;
+            foreach (Faction f in comp.Cache.Simulated)
+            {
+                var node = new DebugActionNode(f.Name);
+                foreach (float v in new[] { 0f, 10f, 25f, 50f, 80f, 100f })
+                {
+                    Faction cf = f;
+                    float cv = v;
+                    node.AddChild(new DebugActionNode(v.ToString("F0"), DebugActionType.Action, () => comp.GetState(cf).playerIntel = cv));
+                }
+                nodes.Add(node);
+            }
+            return nodes;
+        }
+
+        [DebugAction(Category, "Deliver all pending news now", allowedGameStates = AllowedGameStates.Playing)]
+        private static void DeliverAllNews()
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp == null) return;
+            foreach (NewsItem n in comp.News.Pending.ToList())
+            {
+                if (n.Hidden)
+                {
+                    n.source = NewsSource.Leak;
+                    n.confidence = NewsConfidence.Rumor;
+                }
+                n.arrivesTick = Find.TickManager.TicksGame;
+                NewsSystem.Deliver(n, comp);
+            }
+        }
+
+        [DebugAction(Category, "Log pending and hidden news", allowedGameStates = AllowedGameStates.Playing)]
+        private static void LogPendingNews()
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp == null) return;
+            int now = Find.TickManager.TicksGame;
+            DLog.Message($"{comp.News.Pending.Count} pending/hidden news:\n" + string.Join("\n", comp.News.Pending.Select(n =>
+                $"#{n.id} {n.def.defName} [{n.primary?.Name} / {n.secondary?.Name}] secrecy={n.secrecy} " +
+                (n.Hidden ? "HIDDEN" : $"arrives in {(n.arrivesTick - now).ToStringTicksToPeriod()}") + $" truthful={n.truthful}")));
+        }
+
+        [DebugAction(Category, "Add 50 radio coverage", allowedGameStates = AllowedGameStates.Playing)]
+        private static void AddCoverage()
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp != null) comp.radioCoverage = System.Math.Min(100f, comp.radioCoverage + 50f);
+        }
+
+        [DebugAction(Category, "Spread a false rumor", allowedGameStates = AllowedGameStates.Playing)]
+        private static void FalseRumor()
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp == null) return;
+            if (NewsSystem.TryCreateFalseRumor(comp, force: true) == null)
+                Messages.Message("Dominion: no faction with low enough intel for a rumor.", MessageTypeDefOf.RejectInput, historical: false);
+        }
+
         [DebugAction(Category, "Integration self-test")]
         private static void SelfTest() => DLog.Message(IntegrationRegistry.SelfTestReport());
 

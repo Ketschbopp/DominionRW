@@ -42,6 +42,9 @@ namespace Dominion
 
         public Settlement capital;
 
+        /// <summary>0..100. How much the player knows about this faction. Gates news and the dossier.</summary>
+        public float playerIntel;
+
         // Timers, in ticks
         public int leaderSinceTick = -1;
         public int lastRiotTick = -999999;
@@ -129,6 +132,7 @@ namespace Dominion
             Scribe_Values.Look(ref vassalOutposts, "vassalOutposts");
             Scribe_Values.Look(ref settlementCount, "settlementCount");
             Scribe_References.Look(ref capital, "capital");
+            Scribe_Values.Look(ref playerIntel, "playerIntel");
             Scribe_Values.Look(ref leaderSinceTick, "leaderSinceTick", -1);
             Scribe_Values.Look(ref lastRiotTick, "lastRiotTick", -999999);
             Scribe_Values.Look(ref lastCoupTick, "lastCoupTick", -999999);

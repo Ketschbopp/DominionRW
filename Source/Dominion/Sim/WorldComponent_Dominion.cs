@@ -11,6 +11,10 @@ namespace Dominion
         public static WorldComponent_Dominion Instance { get; private set; }
 
         private EventLog eventLog = new EventLog();
+        private NewsLog newsLog = new NewsLog();
+
+        /// <summary>0..100. How well the player's radio receivers cover the airwaves; raised by monitoring, decays daily.</summary>
+        public float radioCoverage;
         private Dictionary<int, FactionState> factionStates = new Dictionary<int, FactionState>();
         private Dictionary<long, RelationState> relations = new Dictionary<long, RelationState>();
 
@@ -22,6 +26,7 @@ namespace Dominion
         private List<RelationState> relationsList;
 
         public EventLog EventLog => eventLog;
+        public NewsLog News => newsLog;
         public DominionScheduler Scheduler => scheduler;
 
         /// <summary>Lookups refreshed at most once a day. Always call through here.</summary>
@@ -111,6 +116,8 @@ namespace Dominion
         {
             base.ExposeData();
             Scribe_Deep.Look(ref eventLog, "eventLog");
+            Scribe_Deep.Look(ref newsLog, "newsLog");
+            Scribe_Values.Look(ref radioCoverage, "radioCoverage");
 
             if (Scribe.mode == LoadSaveMode.Saving)
             {
@@ -123,6 +130,7 @@ namespace Dominion
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 eventLog ??= new EventLog();
+                newsLog ??= new NewsLog();
                 factionStates = new Dictionary<int, FactionState>();
                 if (statesList != null)
                     foreach (FactionState s in statesList)

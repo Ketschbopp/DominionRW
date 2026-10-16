@@ -9,7 +9,7 @@ namespace Dominion
     /// <summary>Tabbed mod settings. New modules add a tab here.</summary>
     public static class SettingsWindow
     {
-        private enum Tab { General, Simulation, Council, Leadership, Culture, Integrations, Performance }
+        private enum Tab { General, Simulation, News, Council, Leadership, Culture, Integrations, Performance }
 
         private static Tab current = Tab.General;
         private static Vector2 scroll;
@@ -39,6 +39,7 @@ namespace Dominion
             {
                 case Tab.General: DrawGeneral(l, s); break;
                 case Tab.Simulation: DrawSimulation(l, s); break;
+                case Tab.News: DrawNews(l, s); break;
                 case Tab.Council: DrawCouncil(l, s); break;
                 case Tab.Leadership: DrawLeadership(l, s); break;
                 case Tab.Culture: DrawCulture(l, s); break;
@@ -76,6 +77,34 @@ namespace Dominion
             l.CheckboxLabeled("Dominion_Setting_PoliticalEvents".Translate(), ref s.politicalEventsEnabled, "Dominion_Setting_PoliticalEvents_Desc".Translate());
             l.Label("Dominion_Setting_StabilityDrift".Translate(s.stabilityDriftSpeed.ToStringPercent()));
             s.stabilityDriftSpeed = l.Slider(s.stabilityDriftSpeed, 0.1f, 3f);
+        }
+
+        private static void DrawNews(Listing_Standard l, DominionSettings s)
+        {
+            l.Label("Dominion_Setting_NewsLogCap".Translate(s.newsLogCap));
+            s.newsLogCap = (int)l.Slider(s.newsLogCap, 50, 2000);
+            l.CheckboxLabeled("Dominion_Setting_FalseRumors".Translate(), ref s.falseRumors, "Dominion_Setting_FalseRumors_Desc".Translate());
+            l.CheckboxLabeled("Dominion_Setting_NewsThoughts".Translate(), ref s.colonistNewsThoughts, "Dominion_Setting_NewsThoughts_Desc".Translate());
+            l.CheckboxLabeled("Dominion_Setting_LetterForMajor".Translate(), ref s.letterForMajorNews, "Dominion_Setting_LetterForMajor_Desc".Translate());
+            l.GapLine();
+            l.Label("Dominion_Setting_NotifyHeader".Translate());
+            foreach (EventCategory c in Enum.GetValues(typeof(EventCategory)))
+            {
+                Rect row = l.GetRect(28f);
+                Widgets.Label(row.LeftPart(0.5f), ("Dominion_EventCategory_" + c).Translate());
+                NewsNotifyMode mode = s.NotifyModeFor(c);
+                if (Widgets.ButtonText(row.RightPart(0.45f), ("Dominion_NotifyMode_" + mode).Translate()))
+                {
+                    EventCategory captured = c;
+                    var options = new List<FloatMenuOption>();
+                    foreach (NewsNotifyMode m in Enum.GetValues(typeof(NewsNotifyMode)))
+                    {
+                        NewsNotifyMode cm = m;
+                        options.Add(new FloatMenuOption(("Dominion_NotifyMode_" + m).Translate(), () => s.notifyModes[captured] = cm));
+                    }
+                    Find.WindowStack.Add(new FloatMenu(options));
+                }
+            }
         }
 
         private static void DrawCouncil(Listing_Standard l, DominionSettings s)

@@ -9,6 +9,7 @@
     <category>General</category>
     <secrecy>Public</secrecy>
     <newsworthiness>0.1</newsworthiness>
+    <newsRules>Dominion_News_DebugTest</newsRules>
     <headline>Test event involving {0}</headline>
   </Dominion.DominionEventDef>
 
@@ -19,6 +20,7 @@
     <category>War</category>
     <secrecy>Public</secrecy>
     <newsworthiness>0.9</newsworthiness>
+    <newsRules>Dominion_News_WarDeclared</newsRules>
     <headline>{0} and {1} are now at war</headline>
   </Dominion.DominionEventDef>
 
@@ -29,6 +31,7 @@
     <category>Diplomacy</category>
     <secrecy>Public</secrecy>
     <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_PeaceMade</newsRules>
     <headline>{0} and {1} end hostilities</headline>
   </Dominion.DominionEventDef>
 
@@ -39,6 +42,7 @@
     <category>Diplomacy</category>
     <secrecy>Public</secrecy>
     <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_RelationsWarmed</newsRules>
     <headline>{0} and {1} become allies</headline>
   </Dominion.DominionEventDef>
 
@@ -49,6 +53,7 @@
     <category>Politics</category>
     <secrecy>Public</secrecy>
     <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_LeaderDied</newsRules>
     <headline>The leader of {0} has died</headline>
   </Dominion.DominionEventDef>
 
@@ -59,6 +64,7 @@
     <category>Diplomacy</category>
     <secrecy>Public</secrecy>
     <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_AllianceBroken</newsRules>
     <headline>{0} ends its alliance with {1}</headline>
   </Dominion.DominionEventDef>
 
@@ -69,6 +75,7 @@
     <category>Politics</category>
     <secrecy>Public</secrecy>
     <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_Riots</newsRules>
     <headline>Riots break out in {0}</headline>
   </Dominion.DominionEventDef>
 
@@ -79,6 +86,7 @@
     <category>Politics</category>
     <secrecy>Public</secrecy>
     <newsworthiness>0.9</newsworthiness>
+    <newsRules>Dominion_News_Coup</newsRules>
     <headline>Coup in {0}: a new leader seizes power</headline>
   </Dominion.DominionEventDef>
 
@@ -89,6 +97,7 @@
     <category>Politics</category>
     <secrecy>Public</secrecy>
     <newsworthiness>1</newsworthiness>
+    <newsRules>Dominion_News_Revolution</newsRules>
     <headline>Revolution in {0}: the government falls</headline>
   </Dominion.DominionEventDef>
 
@@ -99,6 +108,7 @@
     <category>War</category>
     <secrecy>Public</secrecy>
     <newsworthiness>0.95</newsworthiness>
+    <newsRules>Dominion_News_CapitalLost</newsRules>
     <headline>{0} loses its capital</headline>
   </Dominion.DominionEventDef>
 
@@ -109,6 +119,19 @@
     <category>Politics</category>
     <secrecy>Public</secrecy>
     <newsworthiness>0.4</newsworthiness>
+    <newsRules>Dominion_News_CapitalEstablished</newsRules>
     <headline>{0} proclaims a new capital</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_NewsCorrection</defName>
+    <label>news correction</label>
+    <description>Earlier reports have turned out to be false.</description>
+    <category>General</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <debugHidden>true</debugHidden>
+    <newsRules>Dominion_News_Correction</newsRules>
+    <headline>Earlier reports about {0} were false</headline>
   </Dominion.DominionEventDef>
 </Defs>

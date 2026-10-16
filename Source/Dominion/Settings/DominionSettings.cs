@@ -25,6 +25,13 @@ namespace Dominion
         public bool politicalEventsEnabled = true;
         public float stabilityDriftSpeed = 1f;
 
+        // News
+        public int newsLogCap = 300;
+        public bool falseRumors = true;
+        public bool colonistNewsThoughts = true;
+        public bool letterForMajorNews = true;
+        public Dictionary<EventCategory, NewsNotifyMode> notifyModes = new Dictionary<EventCategory, NewsNotifyMode>();
+
         // Rim Council
         public int councilIntervalDays = 60;
         public TechLevel councilMinTechLevel = TechLevel.Medieval;
@@ -46,6 +53,9 @@ namespace Dominion
         /// <summary>How many days the AI waits between its own diplomatic moves, scaled by simulation detail.</summary>
         public float AiCooldownFactor => simulationDetail == SimulationDetail.Low ? 2f : simulationDetail == SimulationDetail.High ? 0.75f : 1f;
 
+        public NewsNotifyMode NotifyModeFor(EventCategory c) =>
+            notifyModes.TryGetValue(c, out NewsNotifyMode m) ? m : NewsNotifyMode.Message;
+
         public bool IntegrationEnabled(string packageId) => !disabledIntegrations.Contains(packageId);
 
         public void SetIntegrationEnabled(string packageId, bool enabled)
@@ -64,6 +74,11 @@ namespace Dominion
             Scribe_Values.Look(ref aiAggression, "aiAggression", 1f);
             Scribe_Values.Look(ref politicalEventsEnabled, "politicalEventsEnabled", true);
             Scribe_Values.Look(ref stabilityDriftSpeed, "stabilityDriftSpeed", 1f);
+            Scribe_Values.Look(ref newsLogCap, "newsLogCap", 300);
+            Scribe_Values.Look(ref falseRumors, "falseRumors", true);
+            Scribe_Values.Look(ref colonistNewsThoughts, "colonistNewsThoughts", true);
+            Scribe_Values.Look(ref letterForMajorNews, "letterForMajorNews", true);
+            Scribe_Collections.Look(ref notifyModes, "notifyModes", LookMode.Value, LookMode.Value);
             Scribe_Values.Look(ref councilIntervalDays, "councilIntervalDays", 60);
             Scribe_Values.Look(ref councilMinTechLevel, "councilMinTechLevel", TechLevel.Medieval);
             Scribe_Values.Look(ref headOfStateMode, "headOfStateMode", HeadOfStateMode.IdeoLeader);
@@ -74,6 +89,8 @@ namespace Dominion
             Scribe_Collections.Look(ref disabledIntegrations, "disabledIntegrations", LookMode.Value);
             if (Scribe.mode == LoadSaveMode.PostLoadInit && disabledIntegrations == null)
                 disabledIntegrations = new HashSet<string>();
+            if (Scribe.mode == LoadSaveMode.PostLoadInit && notifyModes == null)
+                notifyModes = new Dictionary<EventCategory, NewsNotifyMode>();
         }
 
         public void ResetToDefaults()
@@ -85,6 +102,11 @@ namespace Dominion
             aiAggression = 1f;
             politicalEventsEnabled = true;
             stabilityDriftSpeed = 1f;
+            newsLogCap = 300;
+            falseRumors = true;
+            colonistNewsThoughts = true;
+            letterForMajorNews = true;
+            notifyModes.Clear();
             councilIntervalDays = 60;
             councilMinTechLevel = TechLevel.Medieval;
             headOfStateMode = HeadOfStateMode.IdeoLeader;

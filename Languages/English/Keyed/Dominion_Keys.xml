@@ -139,4 +139,51 @@
   <Dominion_Setting_PoliticalEvents_Desc>Unstable factions can suffer riots, coups and revolutions. Revolutions change a faction's government and leader; factions are never split.</Dominion_Setting_PoliticalEvents_Desc>
   <Dominion_Setting_StabilityDrift>Stability change speed: {0}</Dominion_Setting_StabilityDrift>
 
+  <!-- M2: news and intel -->
+  <Dominion_Tab_News>News</Dominion_Tab_News>
+  <Dominion_SettingsTab_News>News</Dominion_SettingsTab_News>
+  <Dominion_News_Empty>No news has reached the colony yet. Research radio monitoring and build a radio receiver to hear more, and sooner.</Dominion_News_Empty>
+  <Dominion_News_SelectReport>Select a report to read it.</Dominion_News_SelectReport>
+  <Dominion_News_AllCategories>All categories</Dominion_News_AllCategories>
+  <Dominion_News_AllFactions>All factions</Dominion_News_AllFactions>
+  <Dominion_News_ShowRumors>Show rumors</Dominion_News_ShowRumors>
+  <Dominion_News_UnreadOnly>Unread only</Dominion_News_UnreadOnly>
+  <Dominion_News_MarkAllRead>Mark all read</Dominion_News_MarkAllRead>
+  <Dominion_News_Reported>Reached us: {0}</Dominion_News_Reported>
+  <Dominion_News_LetterFooter>Source: {0}. Confidence: {1}.</Dominion_News_LetterFooter>
+  <Dominion_News_Message>News: {0}</Dominion_News_Message>
+  <Dominion_News_LaterFalse>Later reports showed this was false.</Dominion_News_LaterFalse>
+  <Dominion_News_Corrects>This corrects: "{0}"</Dominion_News_Corrects>
+  <Dominion_News_LeadConfirmed>It has been confirmed that</Dominion_News_LeadConfirmed>
+  <Dominion_News_LeadRumor>Unconfirmed reports suggest that</Dominion_News_LeadRumor>
+  <Dominion_News_UnknownParty>an unknown party</Dominion_News_UnknownParty>
+  <Dominion_News_ItsLeadership>its leadership</Dominion_News_ItsLeadership>
+
+  <Dominion_NewsConfidence_Rumor>Rumor</Dominion_NewsConfidence_Rumor>
+  <Dominion_NewsConfidence_Confirmed>Confirmed</Dominion_NewsConfidence_Confirmed>
+  <Dominion_NewsSource_TravelerGossip>traveler gossip</Dominion_NewsSource_TravelerGossip>
+  <Dominion_NewsSource_RadioIntercept>radio intercept</Dominion_NewsSource_RadioIntercept>
+  <Dominion_NewsSource_DiplomaticDispatch>diplomatic dispatch</Dominion_NewsSource_DiplomaticDispatch>
+  <Dominion_NewsSource_IntelReport>intelligence report</Dominion_NewsSource_IntelReport>
+  <Dominion_NewsSource_Leak>leak</Dominion_NewsSource_Leak>
+  <Dominion_NewsSource_Correction>correction</Dominion_NewsSource_Correction>
+
+  <Dominion_NotifyMode_Silent>Silent</Dominion_NotifyMode_Silent>
+  <Dominion_NotifyMode_Message>Message</Dominion_NotifyMode_Message>
+  <Dominion_NotifyMode_Letter>Letter</Dominion_NotifyMode_Letter>
+
+  <Dominion_Dossier_Intel>Your intel</Dominion_Dossier_Intel>
+  <Dominion_Dossier_Locked>You need intel {0} on this faction to see this.</Dominion_Dossier_Locked>
+  <Dominion_Intel_Unknown>unknown (intel {0})</Dominion_Intel_Unknown>
+  <Dominion_Radio_Coverage>Radio coverage: {0}%</Dominion_Radio_Coverage>
+
+  <Dominion_Setting_NewsLogCap>Reports kept in the news feed: {0}</Dominion_Setting_NewsLogCap>
+  <Dominion_Setting_FalseRumors>False rumors</Dominion_Setting_FalseRumors>
+  <Dominion_Setting_FalseRumors_Desc>Little-known factions attract baseless rumors, reported as unconfirmed. They are corrected once you learn enough about the faction.</Dominion_Setting_FalseRumors_Desc>
+  <Dominion_Setting_NewsThoughts>Colonists react to news</Dominion_Setting_NewsThoughts>
+  <Dominion_Setting_NewsThoughts_Desc>Wars and unrest near the colony, peace, and attacks on allies affect your colonists' mood.</Dominion_Setting_NewsThoughts_Desc>
+  <Dominion_Setting_LetterForMajor>Letters for major news</Dominion_Setting_LetterForMajor>
+  <Dominion_Setting_LetterForMajor_Desc>Major news (wars, coups, revolutions, lost capitals) arrives as a letter even in categories set to Message.</Dominion_Setting_LetterForMajor_Desc>
+  <Dominion_Setting_NotifyHeader>How each kind of news reaches you:</Dominion_Setting_NotifyHeader>
+
 </LanguageData>
