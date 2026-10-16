@@ -79,14 +79,20 @@ namespace Dominion
             try
             {
                 IList list = Events;
-                int before = list?.Count ?? 0;
+                // SL may end the target's running events before adding the new one, so compare contents, not counts.
+                var snapshot = new HashSet<object>();
+                if (list != null)
+                    foreach (object e in list)
+                        snapshot.Add(e);
                 startPowerEvent.Invoke(t, new object[] { def, new object[] { target } });
                 // Whatever it added is ours: Dominion already applied its own effects.
+                list = Events;
                 if (list != null)
-                    for (int i = before; i < list.Count; i++)
+                    foreach (object e in list)
                     {
-                        ours.Add(list[i]);
-                        known.Add(list[i]);
+                        if (e == null || snapshot.Contains(e)) continue;
+                        ours.Add(e);
+                        known.Add(e);
                     }
             }
             catch (Exception e)
@@ -165,6 +171,8 @@ namespace Dominion
             ours.IntersectWith(alive);
             primed = true;
 
+            // SL starts a power struggle in every town of a faction when its leader dies: count that once per faction.
+            var struggles = new HashSet<Faction>();
             foreach ((object _, string defName, Faction f, Settlement s) in fresh)
             {
                 FactionState st = comp.GetState(f);
@@ -172,6 +180,7 @@ namespace Dominion
                 {
                     case "SL_PowerStruggle":
                     case "SL_PowerVoid":
+                        if (!struggles.Add(f)) break;
                         st.stability = Mathf.Max(0f, st.stability - 4f);
                         st.legitimacy = Mathf.Max(0f, st.legitimacy - 5f);
                         EventBus.Raise(DominionEventDefOf.Dominion_PowerStruggle, f, tile: s?.Tile.tileId ?? -1, detail: s?.Label, source: PackageId);

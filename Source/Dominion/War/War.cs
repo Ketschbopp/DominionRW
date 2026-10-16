@@ -41,7 +41,7 @@ namespace Dominion
         public int lastOfferTick = -999999;
 
         /// <summary>Set just before a forced peace so the terms are applied as a capitulation.</summary>
-        public Faction capitulating;
+        [Unsaved] public Faction capitulating;
 
         // Kill score is capped per day so one bloody raid cannot decide a war. Not saved.
         [Unsaved] public int killDay = -1;

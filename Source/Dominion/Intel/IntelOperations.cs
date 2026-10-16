@@ -127,6 +127,7 @@ namespace Dominion
             Scribe_Values.Look(ref physical, "physical");
             Scribe_References.Look(ref settlement, "settlement");
             Scribe_References.Look(ref objective, "objective");
+            if (Scribe.mode == LoadSaveMode.Saving && hostage != null && hostage.Discarded) hostage = null;
             Scribe_References.Look(ref hostage, "hostage");
             Scribe_Values.Look(ref targetIsLeader, "targetIsLeader");
             Scribe_Values.Look(ref alerted, "alerted");

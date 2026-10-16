@@ -106,15 +106,21 @@ namespace Dominion
         /// FTV decides an invasion it resolves off-map from tech level alone; between factions Dominion simulates, the
         /// odds come from the attacking force (a Dominion warband's, if one started it) against the garrison.
         /// </summary>
-        public static bool RollWinnerPrefix(RimWorld.Faction attacker, RimWorld.Faction defender, int tile, ref RimWorld.Faction __result)
+        public static bool RollWinnerPrefix(RimWorld.Faction attacker, RimWorld.Faction defender, float attackerWeight, float defenderWeight, int tile, ref RimWorld.Faction __result)
         {
             try
             {
                 if (WorldComponent_Dominion.Instance == null || attacker == null || defender == null) return true;
                 if (!DominionScheduler.IsSimulated(attacker) || !DominionScheduler.IsSimulated(defender)) return true;
                 Settlement s = Find.WorldObjects.SettlementAt(new PlanetTile(tile));
+                // A battle fought out on a real map is decided by who is left standing: leave that to FTV.
+                if (s != null && s.HasMap) return true;
                 float points = WarbandUtility.SiegePointsAt(tile, attacker);
-                __result = Rand.Chance(WarbandUtility.SiegeChance(points, attacker, defender, s)) ? attacker : defender;
+                float chance = WarbandUtility.SiegeChance(points, attacker, defender, s);
+                // Blend with FTV's own weighting so its numbers still matter.
+                if (attackerWeight + defenderWeight > 0f)
+                    chance = 0.6f * chance + 0.4f * attackerWeight / (attackerWeight + defenderWeight);
+                __result = Rand.Chance(chance) ? attacker : defender;
                 return false;
             }
             catch (Exception e)
@@ -235,7 +241,10 @@ namespace Dominion
             if (!IsActive || s == null) return false;
             try
             {
-                return (bool)tryPurchase.Invoke(null, new object[] { s });
+                RimWorld.Faction before = s.Faction;
+                bool ok = (bool)tryPurchase.Invoke(null, new object[] { s });
+                if (ok) WarUtility.SettlementChangedHands(before, RimWorld.Faction.OfPlayer);
+                return ok;
             }
             catch (Exception e)
             {
@@ -268,14 +277,18 @@ namespace Dominion
                     else if (t.IsValueType) args[i] = Activator.CreateInstance(t);
                 }
                 object result = executeVassalisation.Invoke(null, args);
-                if (result is bool ok && !ok) return false;
+                // FTV removes the settlement from the world (not Destroy) and puts an outpost in its place.
+                bool changed = result is bool ok ? ok : s.Destroyed || !Find.WorldObjects.Contains(s) || s.Faction != before;
+                if (!changed) return false;
             }
             catch (Exception e)
             {
                 DLog.WarningOnce("FTV cession failed: " + e, 0x0F74);
                 return false;
             }
-            return s.Destroyed || s.Faction != before;
+            // The town's people and goods leave the old owner's books (E&D never sees FTV's Remove).
+            WarUtility.SettlementChangedHands(before, RimWorld.Faction.OfPlayer);
+            return true;
         }
 
         /// <summary>Land and vassals count in the Rim Council: up to +2 for territory, +0.2 per vassal outpost (max +2).</summary>

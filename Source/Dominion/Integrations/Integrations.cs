@@ -77,7 +77,8 @@ namespace Dominion
             object s = instance?.GetValue(null);
             if (s == null) return 0f;
             float resentment = (float)resentmentFor.Invoke(s, new object[] { f });
-            return -Mathf.Clamp(resentment * 0.2f, 0f, 20f);
+            // Resentment runs about 0..1 ("bitter" from 0.6) and fades 0.15 a day.
+            return -Mathf.Clamp(resentment * 15f, 0f, 15f);
         }
     }
 
@@ -90,6 +91,7 @@ namespace Dominion
         private PropertyInfo instance;
         private PropertyInfo reputation;
         private MethodInfo scoreOf;
+        private PropertyInfo stage;
 
         protected internal override void Bind(Binder b)
         {
@@ -98,10 +100,12 @@ namespace Dominion
             reputation = b.Property(court, "Reputation");
             Type rep = b.Type("RimCourt.Court.JudgeReputation");
             scoreOf = b.Method(rep, "ScoreOf", new[] { typeof(int) });
+            stage = b.Property(rep, "Stage");
             b.Type("RimCourt.Court.Betrothal");
         }
 
         private float cachedScore;
+        private int cachedStage;
         private int cachedTick = -1;
 
         public override float OpinionModifier(Faction f, Faction toward)
@@ -113,9 +117,27 @@ namespace Dominion
                 cachedTick = now;
                 object c = instance?.GetValue(null);
                 object rep = c != null ? reputation.GetValue(c) : null;
-                cachedScore = rep != null ? (float)scoreOf.Invoke(rep, new object[] { 0 }) : 0f;
+                cachedScore = 0f;
+                cachedStage = 0;
+                if (rep != null)
+                {
+                    cachedStage = (int)stage.GetValue(rep);
+                    cachedScore = (float)scoreOf.Invoke(rep, new object[] { cachedStage });
+                }
             }
-            return Mathf.Clamp(cachedScore * 0.1f, -8f, 8f);
+            // Stages: 0 just, 1 harsh, 2 venal, 3 weak. A just judge is respected, a corrupt or weak one is not;
+            // harshness impresses the proud and puts off the gentle.
+            float sign;
+            switch (cachedStage)
+            {
+                case 0: sign = 1f; break;
+                case 1:
+                    WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+                    sign = comp != null && comp.TryGetState(f, out FactionState s) ? (s.personality.aggression - 0.5f) * 2f : 0f;
+                    break;
+                default: sign = -1f; break;
+            }
+            return Mathf.Clamp(sign * cachedScore * 0.1f, -8f, 8f);
         }
     }
 
@@ -244,6 +266,10 @@ namespace Dominion
                 Faction victim = target?.Faction;
                 if (attacker == null || victim == null || attacker == victim || victim.Hidden) return;
                 object warhead = Traverse.Create(t.Property("MissileComp").GetValue()).Field("warheadDef").GetValue();
+                // Only warheads that do damage count: satellites, recon and anti-air payloads are not strikes.
+                if (warhead != null && Traverse.Create(warhead).Field("payloadComps").GetValue() is System.Collections.IEnumerable payloads
+                    && !payloads.Cast<object>().Any(c => c != null && (c.GetType().Name.Contains("Tactical") || c.GetType().Name.Contains("Strategic"))))
+                    return;
                 bool strategic = warhead != null && (Traverse.Create(warhead).Field("doomsdayAdvanceMinutes").GetValue<float>() > 0f
                     || (Traverse.Create(warhead).Field("payloadComps").GetValue() is System.Collections.IEnumerable comps
                         && comps.Cast<object>().Any(c => c != null && c.GetType().Name.Contains("Strategic"))));
@@ -255,9 +281,23 @@ namespace Dominion
             }
         }
 
+        /// <summary>Last strike tick per (attacker, victim): a salvo is one act of war, not ten.</summary>
+        private static readonly Dictionary<long, int> lastStrike = new Dictionary<long, int>();
+
         private static void MissileStrike(Faction attacker, Faction victim, MapParent target, bool strategic)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            long key = ((long)attacker.loadID << 32) | (uint)victim.loadID;
+            int now = Find.TickManager.TicksGame;
+            if (lastStrike.TryGetValue(key, out int last) && now - last < GenDate.TicksPerDay && now >= last)
+            {
+                // Further missiles of the same salvo: a little more damage, no new diplomatic fallout.
+                WarUtility.AddScore(attacker, victim, strategic ? 4f : 1f);
+                if (!victim.IsPlayer && DominionScheduler.IsSimulated(victim))
+                    EconomyEffects.Shock(victim, strategic ? -0.03f : -0.01f);
+                return;
+            }
+            lastStrike[key] = now;
             if (!attacker.HostileTo(victim) && WarUtility.CanWage(attacker) && WarUtility.CanWage(victim))
                 DiplomacyUtility.SetRelationKind(attacker, victim, FactionRelationKind.Hostile, attacker, "Dominion_Reason_MissileStrike".Translate());
             WarUtility.AddScore(attacker, victim, strategic ? 25f : 8f);

@@ -18,8 +18,6 @@
           <li Class="Dominion.WorldObjectCompProperties_Diplomacy"/>
           <li Class="Dominion.WorldObjectCompProperties_CovertOps"/>
           <li Class="Dominion.WorldObjectCompProperties_Blockade"/>
-        <li Class="Dominion.WorldObjectCompProperties_CovertOps"/>
-        <li Class="Dominion.WorldObjectCompProperties_Blockade"/>
         </comps>
       </value>
     </nomatch>

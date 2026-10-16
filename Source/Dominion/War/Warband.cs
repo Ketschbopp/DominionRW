@@ -430,8 +430,9 @@ namespace Dominion
             else
             {
                 // Their last stronghold holds out, but barely; with Pillage & Plunder, it is sacked.
-                if (war != null) war.AddScore(attacker, 10f);
-                IntegrationRegistry.Get<Integration_PillageAndPlunder>()?.TryPlunder(attacker, s);
+                // A sack is scored by the Pillage & Plunder hook; without it, the near-miss still counts for something.
+                bool sacked = IntegrationRegistry.Get<Integration_PillageAndPlunder>()?.TryPlunder(attacker, s) ?? false;
+                if (!sacked && war != null) war.AddScore(attacker, 10f);
             }
         }
 

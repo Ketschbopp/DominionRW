@@ -222,7 +222,7 @@ namespace Dominion
         {
             if (from == null || to == null || from.IsPlayer || !Comp.TryGetState(from, out FactionState fs)) return;
             int towns = Mathf.Max(1, fs.settlementCount);
-            IntegrationRegistry.Get<Integration_EconomicsDemography>()?.MovePopulation(from, to, Mathf.RoundToInt(fs.population / (float)towns * 0.6f));
+            IntegrationRegistry.Get<Integration_EconomicsDemography>()?.MovePopulation(from, to, Mathf.RoundToInt(Mathf.Max(fs.totalLiving, fs.population) / (float)towns * 0.6f));
             int stores = Mathf.RoundToInt(Mathf.Clamp(fs.wealth / towns * 0.3f, 0f, 5000f));
             if (stores > 0 && !to.IsPlayer) EconomyEffects.Transfer(from, to, stores);
             EconomyEffects.Shock(from, -0.03f, destroyGoods: false);

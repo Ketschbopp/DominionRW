@@ -163,6 +163,11 @@ namespace Dominion
             Scribe_Values.Look(ref territoryTiles, "territoryTiles");
             Scribe_Values.Look(ref vassalOutposts, "vassalOutposts");
             Scribe_Values.Look(ref settlementCount, "settlementCount");
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                if (capital != null && capital.Destroyed) capital = null;
+                if (lastKnownLeader != null && lastKnownLeader.Discarded) lastKnownLeader = null;
+            }
             Scribe_References.Look(ref capital, "capital");
             Scribe_Values.Look(ref capitalTile, "capitalTile", -1);
             Scribe_Values.Look(ref playerIntel, "playerIntel");

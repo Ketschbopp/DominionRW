@@ -44,7 +44,8 @@ namespace Dominion
             {
                 DominionMod.Harmony.Patch(tryNpcPlunder,
                     prefix: new HarmonyLib.HarmonyMethod(typeof(Integration_PillageAndPlunder), nameof(NpcPlunderPrefix)),
-                    postfix: new HarmonyLib.HarmonyMethod(typeof(Integration_PillageAndPlunder), nameof(NpcPlunderPostfix)));
+                    postfix: new HarmonyLib.HarmonyMethod(typeof(Integration_PillageAndPlunder), nameof(NpcPlunderPostfix)),
+                    finalizer: new HarmonyLib.HarmonyMethod(typeof(Integration_PillageAndPlunder), nameof(NpcPlunderFinalizer)));
                 DominionMod.Harmony.Patch(notifyPlundered,
                     postfix: new HarmonyLib.HarmonyMethod(typeof(Integration_PillageAndPlunder), nameof(PlunderedPostfix)));
             }
@@ -60,6 +61,13 @@ namespace Dominion
         {
             npcAttacker = null;
             if (__result) Safe(() => Plundered(attacker, victim));
+        }
+
+        /// <summary>Clears the NPC flag even if P&amp;P throws, so later player plunders are still seen.</summary>
+        public static Exception NpcPlunderFinalizer(Exception __exception)
+        {
+            npcAttacker = null;
+            return __exception;
         }
 
         public static void PlunderedPostfix(Settlement settlement)
@@ -121,6 +129,6 @@ namespace Dominion
         }
 
         /// <summary>Towns still recovering from a plunder hold the economy back.</summary>
-        public override float EconomyModifier(Faction f) => recovering.TryGetValue(f.loadID, out int n) ? -0.05f * n : 0f;
+        public override float EconomyModifier(Faction f) => recovering.TryGetValue(f.loadID, out int n) ? Mathf.Max(-0.2f, -0.05f * n) : 0f;
     }
 }
