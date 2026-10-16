@@ -73,7 +73,7 @@ namespace Dominion
                 Rect head2 = new Rect(ticker.x + lw, ticker.y, ticker.width - lw, ticker.height);
                 if (Mouse.IsOver(ticker)) Widgets.DrawBoxSolid(ticker, DominionTheme.PaperShade);
                 DominionTheme.InkLabel(head2, latest.headline.Truncate(head2.width), latest.read ? DominionTheme.InkFaded : DominionTheme.Ink);
-                TooltipHandler.TipRegion(ticker, latest.headline);
+                TooltipHandler.TipRegion(ticker, latest.headline + "\n\n" + "Dominion_Tip_Ticker".Translate());
                 if (Widgets.ButtonInvisible(ticker)) openNews?.Invoke(latest);
             }
         }

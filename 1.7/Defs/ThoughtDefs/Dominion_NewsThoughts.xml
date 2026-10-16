@@ -117,6 +117,62 @@
   </ThoughtDef>
 
   <ThoughtDef>
+    <defName>Dominion_Advisory_Morale</defName>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <durationDays>1</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>morale broadcast</label>
+        <description>The colony radio played some decent music and someone told a joke that was almost funny. It helped.</description>
+        <baseMoodEffect>2</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>Dominion_Advisory_GoodNews</defName>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <durationDays>1</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>good news on the radio</label>
+        <description>The radio keeps repeating the good news. Hard not to smile.</description>
+        <baseMoodEffect>3</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>Dominion_Advisory_Misled</defName>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <durationDays>2</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>misled by the radio</label>
+        <description>The radio said it was a lie. It was not. What else are they not telling us?</description>
+        <baseMoodEffect>-3</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>Dominion_Advisory_Censored</defName>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <durationDays>1</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>news hushed up</label>
+        <description>Someone tried to keep a story quiet. I found out anyway. I do not like being managed.</description>
+        <baseMoodEffect>-2</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
     <defName>Dominion_TV_News</defName>
     <thoughtClass>Thought_Memory</thoughtClass>
     <durationDays>1</durationDays>

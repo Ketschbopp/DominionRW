@@ -47,8 +47,12 @@ namespace Dominion
                 l.Gap(6f);
                 l.Label("Dominion_Council_Agenda".Translate());
                 l.Label(CouncilSystem.AgendaText(c));
-                if (member && l.ButtonText("Dominion_Council_ProposeMotion".Translate()))
-                    ProposeMenu();
+                if (member)
+                {
+                    Rect propose = l.GetRect(30f);
+                    TooltipHandler.TipRegion(propose, "Dominion_Tip_ProposeMotion".Translate());
+                    if (Widgets.ButtonText(propose, "Dominion_Council_ProposeMotion".Translate())) ProposeMenu();
+                }
             }
             else if (c.nextSessionTick >= 0)
                 l.Label("Dominion_Council_NextSession".Translate(Mathf.Max(0, c.nextSessionTick - now).ToStringTicksToPeriod(allowSeconds: false)));

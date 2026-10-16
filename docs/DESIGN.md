@@ -316,7 +316,7 @@ Daily rolls weighted by world state include border skirmishes, defections, scand
 
 ## 6. UI style
 
-*As built:* the news tab is a colony newspaper, **The Rimward Courier**: a masthead with the edition number (one a day), date, current weather and a cover price that follows E&D inflation, a different motto each day; clippings with category pictograms, red pins for unread and a STOP PRESS tag for confirmed big news; articles with the desk that filed them, a generated reporter's byline matching how the news travelled (caravan fire, radio, dispatch, a redacted agent report, a leak), a dateline at the settlement or capital involved, a crooked rubber stamp (CONFIRMED, RUMOUR, DISPROVED, STOP PRESS, CLASSIFIED), and a classified ad at the bottom of the page. News letters carry the same desk, byline and signature. The Dominion window has a letterhead (seal, title, head of state, capital, date, an influence gauge, the realm in numbers and a ticker with the latest headline that opens the paper), and the War, Council, Intelligence and Federation tabs use ornamental section headings. All of it is drawn from textures made by `tools/textures/make_ui.py`; reporters, mottos and ads come from the `Dominion_NewsFlavor` grammar, so they are easy to extend or translate.
+*As built:* the news tab is a colony newspaper, **The Rimward Courier**: a masthead with the edition number (one a day), date, current weather and a cover price that follows E&D inflation, a different motto each day; clippings with category pictograms, red pins for unread and a FRONT PAGE tag for confirmed big news; articles with the desk that filed them, a generated reporter's byline matching how the news travelled (caravan fire, radio, dispatch, a redacted agent report, a leak), a dateline at the settlement or capital involved, a crooked rubber stamp (CONFIRMED, RUMOUR, DISPROVED, FRONT PAGE, CLASSIFIED), and a classified ad at the bottom of the page. News letters carry the same desk, byline and signature. The Dominion window has a letterhead (seal, title, head of state, capital, date, an influence gauge, the realm in numbers and a ticker with the latest headline that opens the paper), and the War, Council, Intelligence and Federation tabs use ornamental section headings. All of it is drawn from textures made by `tools/textures/make_ui.py`; reporters, mottos and ads come from the `Dominion_NewsFlavor` grammar, so they are easy to extend or translate.
 
 
 The UI follows **RimToll and RimCourt**: windows look like **paper documents** (sheet background, typed text, ink stamps), and dossiers show a **photo** of the leader with stamped verdicts and seals. Assets mirror their `Sheet`, `Stamp` and `Photo` texture approach, with new art for Dominion seals, treaty paper and newspaper mastheads. **All textures are made in this repo** (generated from scripts in `tools/textures/`, so they can be regenerated and tweaked). All windows are resizable and readable at UI scale 1.0–2.0.
@@ -406,12 +406,17 @@ With vanilla's **Tube television** researched, every report that is not hidden a
 
 **Large radio antenna** (research *World communications protocols*, 2×2, 250 W): built touching a radio receiver, it links to it. While both are powered, radio coverage stays at 100% with nobody monitoring, and Restricted events can also arrive by radio intercept (1–6 h). Modded buildings of at least 2×2 called "antenna" count too. A setting, *News travels instantly*, delivers every report the player has the intel for the moment it happens.
 
-**Radio desk.** With a receiver built, the player can queue two radio orders (rubber-stamp buttons on the newspaper, or gizmos on the receiver). Research-work colonists take them before plain monitoring, in two-hour shifts that also feed coverage; progress is kept on the order.
+**Radio desk.** With a receiver built, the player gives radio orders through two rubber-stamp menus: **ADVISORY** in the newspaper's masthead (colony advisories) and **RESPOND** on a story (only the responses that fit it are offered). The receiver has the same two menus as gizmos. Research-work colonists take orders before plain monitoring, in two-hour shifts that also feed coverage; progress is kept on the order. Every option shows what it does on hover.
 
-| Order | Work | Success chance | Effect |
+| Order | For | Work, skill | Effect |
 |---|---|---|---|
-| Colony advisory | 1500 ticks, speed 0.5 + Social/10 | (0.4 + 0.05 × Social) × Talking, 20–97% | Clears bad-news and propaganda moods, *reassured* (+3, 2 days), and new bad news gives no mood for 2 days. On failure: *unconvincing advisory* (−1, 1 day) |
-| Investigate rumour | 3000 ticks, speed 0.5 + Intellectual/10 | 0.35 + 0.035 × Intellectual + 0.003 × coverage, 25–97% | True: the rumour becomes Confirmed and is stamped VERIFIED. False: a correction runs at once and the mood it caused is cleared. Inconclusive: may be retried |
+| Keep calm | colony | 1500, Social | Chance (0.4 + 0.05 × Social) × Talking, 20–97%: clears bad-news and propaganda moods, *reassured* +3 (2 days), new bad news gives no mood for 2 days. Failure: −1 (1 day) |
+| Morale broadcast | colony | 800, Social | Never fails: +2 for a day |
+| Counter-propaganda | colony | 1500, Social | Same chance as Keep calm: clears propaganda moods, no foreign propaganda for 5 days |
+| Investigate | unconfirmed rumour | 3000, Intellectual | 0.35 + 0.035 × Intellectual + 0.003 × coverage: true → rewritten as confirmed, stamped VERIFIED; false → correction now, its worry cleared; else retry |
+| Debunk on air | unconfirmed rumour | 600, Social | No roll. False → correction, worry cleared. True → story confirmed, colony *misled* −3 (2 days) |
+| Spread the word | good news (peace near us, an enemy's misfortune) | 800, Social | +3 for a day |
+| Keep it off the air | news that upsets the colony | 400, Social | Its mood is cleared; 25% chance it leaks: −2 for a day |
 
 **Text.** Headlines and stories come from vanilla grammar (`RulePackDef` per event, plus the shared `Dominion_NewsCommon`) and are resolved once at delivery, then saved.
 

@@ -69,6 +69,10 @@ namespace Dominion
         public static ThoughtDef Dominion_Broadcast_Informed;
         public static ThoughtDef Dominion_Advisory_Reassured;
         public static ThoughtDef Dominion_Advisory_Unconvincing;
+        public static ThoughtDef Dominion_Advisory_Morale;
+        public static ThoughtDef Dominion_Advisory_GoodNews;
+        public static ThoughtDef Dominion_Advisory_Misled;
+        public static ThoughtDef Dominion_Advisory_Censored;
 
         static DominionThoughtDefOf()
         {

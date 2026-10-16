@@ -81,6 +81,7 @@ namespace Dominion
                 GUI.color = f.RelationKindWith(Faction.OfPlayer).GetColor();
                 Widgets.Label(new Rect(row.x + 26f, row.y, row.width - 26f, Line), f.Name.Truncate(row.width - 26f));
                 GUI.color = Color.white;
+                TooltipHandler.TipRegion(row, "Dominion_Tip_SelectFaction".Translate(f.Name));
                 if (Widgets.ButtonInvisible(row))
                 {
                     selected = f;
@@ -128,6 +129,7 @@ namespace Dominion
                 Rect labelRect = row.LeftPart(0.75f);
                 Widgets.Label(labelRect, ("  " + t.Label + "  (" + expires + ")").Truncate(labelRect.width));
                 TooltipHandler.TipRegion(row, t.def.description);
+                TooltipHandler.TipRegion(row.RightPart(0.22f), "Dominion_Tip_CancelTreaty".Translate());
                 if (Widgets.ButtonText(row.RightPart(0.22f), "Dominion_Dip_Cancel".Translate()))
                 {
                     Treaty captured = t;

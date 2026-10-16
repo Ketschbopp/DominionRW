@@ -233,7 +233,7 @@
 
   <!-- The Rimward Courier (news tab) -->
   <Dominion_News_EditionLine>Edition No. {0}  ·  {1}  ·  Weather: {2}  ·  Price: {3} silver</Dominion_News_EditionLine>
-  <Dominion_News_StopPressTag>STOP PRESS</Dominion_News_StopPressTag>
+  <Dominion_News_FrontPageTag>FRONT PAGE</Dominion_News_FrontPageTag>
   <Dominion_News_Ago>{0} ago</Dominion_News_Ago>
   <Dominion_News_Dateline>{0} — {1}</Dominion_News_Dateline>
   <Dominion_News_PlaceRim>Somewhere on the rim</Dominion_News_PlaceRim>
@@ -357,4 +357,65 @@ Success is likelier with high Intellectual and good radio coverage. An inconclus
   <Dominion_Advice_Peace>Trade along their routes should pick up again.</Dominion_Advice_Peace>
   <Dominion_Advice_Mood>This will rattle the colony ({0}). A colony advisory on the radio can calm people down.</Dominion_Advice_Mood>
   <Dominion_Advice_MoodShielded>A colony advisory is in force, so nobody will lose sleep over it.</Dominion_Advice_MoodShielded>
+
+  <!-- Radio desk: the menu of orders -->
+  <Dominion_Radio_Order_Advisory>Keep calm</Dominion_Radio_Order_Advisory>
+  <Dominion_Radio_Order_Advisory_Desc>A calm, sensible talk through the latest news. If it lands (Social), it clears moods from bad news and foreign propaganda, everyone feels reassured (+3), and for 2 days new bad news does not upset anyone. A clumsy one makes people a little more nervous (-1).</Dominion_Radio_Order_Advisory_Desc>
+  <Dominion_Radio_Order_Morale>Morale broadcast</Dominion_Radio_Order_Morale>
+  <Dominion_Radio_Order_Morale_Desc>An hour of music, bad jokes and the weather. Quick, and it never fails: everyone gets a small lift (+2 for a day). It does not touch moods from bad news.</Dominion_Radio_Order_Morale_Desc>
+  <Dominion_Radio_Order_CounterPropaganda>Counter-propaganda</Dominion_Radio_Order_CounterPropaganda>
+  <Dominion_Radio_Order_CounterPropaganda_Desc>Answer the pamphlets and whispers from abroad. If it lands (Social), foreign propaganda moods are cleared and enemy propaganda gets no hold on the colony for 5 days.</Dominion_Radio_Order_CounterPropaganda_Desc>
+  <Dominion_Radio_Order_Investigate>Investigate</Dominion_Radio_Order_Investigate>
+  <Dominion_Radio_Order_Investigate_Desc>Call around on the radio (contacts, traders, other stations) until the rumour is confirmed or exposed as false. Slow; success is likelier with high Intellectual and good radio coverage, and an inconclusive result can be retried. Exposing a false rumour runs a correction at once and clears the worry it caused.</Dominion_Radio_Order_Investigate_Desc>
+  <Dominion_Radio_Order_Debunk>Debunk on air</Dominion_Radio_Order_Debunk>
+  <Dominion_Radio_Order_Debunk_Desc>Declare the rumour false on air, without checking. Quick. If it really was false, a correction runs and the worry goes. If it was true, the colony feels lied to (-3 for 2 days) and the story stands confirmed.</Dominion_Radio_Order_Debunk_Desc>
+  <Dominion_Radio_Order_Spread>Spread the word</Dominion_Radio_Order_Spread>
+  <Dominion_Radio_Order_Spread_Desc>Make sure everyone hears the good news, and hears it often. Everyone gets a lift (+3 for a day).</Dominion_Radio_Order_Spread_Desc>
+  <Dominion_Radio_Order_Suppress>Keep it off the air</Dominion_Radio_Order_Suppress>
+  <Dominion_Radio_Order_Suppress_Desc>Quietly make sure this story is not repeated. Quick: the mood it caused is cleared at once. But there is a 1 in 4 chance word gets out that it was hushed up (-2 for a day).</Dominion_Radio_Order_Suppress_Desc>
+  <Dominion_Radio_CancelOrder>Cancel: {0}</Dominion_Radio_CancelOrder>
+  <Dominion_Radio_Queued>Sent to the radio desk: {0}. The next colonist free for research work will take it.</Dominion_Radio_Queued>
+  <Dominion_Radio_NoStory>The story is no longer in the paper.</Dominion_Radio_NoStory>
+  <Dominion_Radio_StoryBusy>The radio desk is already working on this story.</Dominion_Radio_StoryBusy>
+  <Dominion_Radio_NotRumour>only for unconfirmed rumours</Dominion_Radio_NotRumour>
+  <Dominion_Radio_NotGoodNews>only for good news</Dominion_Radio_NotGoodNews>
+  <Dominion_Radio_NotBadNews>only for news that upsets the colony</Dominion_Radio_NotBadNews>
+  <Dominion_Radio_CounterInForce>counter-propaganda already in force</Dominion_Radio_CounterInForce>
+  <Dominion_Radio_MoraleDone>{PAWN_nameDef} spun some records and told some jokes on the colony radio. Spirits are up.</Dominion_Radio_MoraleDone>
+  <Dominion_Radio_CounterFailed>{PAWN_nameDef}'s counter-propaganda broadcast fell flat. The pamphlets keep circulating.</Dominion_Radio_CounterFailed>
+  <Dominion_Radio_CounterDone>{PAWN_nameDef} took the foreign propaganda apart on air. It will get no hold on the colony for {1} days.</Dominion_Radio_CounterDone>
+  <Dominion_Radio_DebunkRight>{PAWN_nameDef} called it a lie on air, and it was: "{1}". A correction is going out.</Dominion_Radio_DebunkRight>
+  <Dominion_Radio_DebunkWrong>{PAWN_nameDef} called it a lie on air, but it was true: "{1}". The colony feels misled.</Dominion_Radio_DebunkWrong>
+  <Dominion_Radio_SpreadDone>{PAWN_nameDef} made sure everyone heard the good news: "{1}".</Dominion_Radio_SpreadDone>
+  <Dominion_Radio_SuppressDone>{PAWN_nameDef} kept "{1}" off the colony radio. Nobody is talking about it any more.</Dominion_Radio_SuppressDone>
+  <Dominion_Radio_SuppressLeaked>{PAWN_nameDef} tried to keep "{1}" quiet, but word got out that it was hushed up.</Dominion_Radio_SuppressLeaked>
+  <Dominion_Radio_AdvisoryMenu_Desc>Choose a colony advisory for the radio desk: keep calm, a morale broadcast, or counter-propaganda. A colonist with research work enabled reads it at a radio receiver.\n\nColonists currently upset by the news: {0}.</Dominion_Radio_AdvisoryMenu_Desc>
+  <Dominion_Radio_RespondMenu_Desc>Choose what the radio desk does about this story: investigate or debunk a rumour, spread good news, or keep bad news off the air. Only what applies to the story is offered.</Dominion_Radio_RespondMenu_Desc>
+  <Dominion_Radio_Status_CalmInForce>keep-calm advisory: {0} left</Dominion_Radio_Status_CalmInForce>
+  <Dominion_Radio_Status_CounterInForce>counter-propaganda: {0} left</Dominion_Radio_Status_CounterInForce>
+  <Dominion_Radio_OrderNote>Radio desk: {0}, {1} done. Press the stamp to cancel.</Dominion_Radio_OrderNote>
+  <Dominion_Radio_RespondNote>The radio desk can respond to this story: {0}.</Dominion_Radio_RespondNote>
+  <Dominion_Radio_Respond>Respond to a story</Dominion_Radio_Respond>
+  <Dominion_Radio_NoStories>No recent story the radio desk can act on</Dominion_Radio_NoStories>
+  <Dominion_Radio_Report>working the radio desk ({0}).</Dominion_Radio_Report>
+
+  <!-- Tooltips for buttons -->
+  <Dominion_Tip_NewsCategory>Show only stories from one desk (war, diplomacy, economy...). Choose "All" to see every story.</Dominion_Tip_NewsCategory>
+  <Dominion_Tip_NewsFaction>Show only stories about one faction.</Dominion_Tip_NewsFaction>
+  <Dominion_Tip_ShowRumors>Include unconfirmed rumours. Rumours may be false; the radio desk can investigate them.</Dominion_Tip_ShowRumors>
+  <Dominion_Tip_UnreadOnly>Show only stories you have not opened yet.</Dominion_Tip_UnreadOnly>
+  <Dominion_Tip_MarkAllRead>Mark every story as read (removes the red pins).</Dominion_Tip_MarkAllRead>
+  <Dominion_Tip_Clipping>Click to read the full story.</Dominion_Tip_Clipping>
+  <Dominion_Tip_Ticker>The latest story to reach the colony. Click to open it in the newspaper.</Dominion_Tip_Ticker>
+  <Dominion_Tip_PlanOp>Plan a covert operation against a faction: choose the operation, the target and how your agents go in.</Dominion_Tip_PlanOp>
+  <Dominion_Tip_ShowTarget>Jump to the objective or your agents on the map.</Dominion_Tip_ShowTarget>
+  <Dominion_Tip_ChooseOp>Choose which operation to run.</Dominion_Tip_ChooseOp>
+  <Dominion_Tip_ChooseTarget>Choose the faction to target.</Dominion_Tip_ChooseTarget>
+  <Dominion_Tip_ChooseBlame>Choose the faction to frame. If the operation works, they take the blame.</Dominion_Tip_ChooseBlame>
+  <Dominion_Tip_Launch>Launch the operation with the chosen agents. It costs influence, and your agents may be caught.</Dominion_Tip_Launch>
+  <Dominion_Tip_ProposeMotion>Put a motion on the council's agenda. Members vote on it at the next session.</Dominion_Tip_ProposeMotion>
+  <Dominion_Tip_Proclaim>Proclaim the planetary federation. This is the end of the Dominion story for this colony.</Dominion_Tip_Proclaim>
+  <Dominion_Tip_ShowOnMap>Jump to it on the world map.</Dominion_Tip_ShowOnMap>
+  <Dominion_Tip_SelectFaction>Click to see {0}'s details and what you can do with them.</Dominion_Tip_SelectFaction>
+  <Dominion_Tip_CancelTreaty>Cancel this treaty. The other side will not be pleased, and it may count as breaking your word.</Dominion_Tip_CancelTreaty>
 </LanguageData>

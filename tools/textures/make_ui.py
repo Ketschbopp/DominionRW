@@ -145,6 +145,39 @@ def glyph_investigate(d, ink):  # a magnifying glass over a scrap of newsprint
     d.line([(80, 68), (98, 90)], fill=ink, width=10)
 
 
+def glyph_morale(d, ink):  # a sun with rays
+    d.ellipse([46, 46, 82, 82], fill=ink)
+    for i in range(10):
+        a = i * math.pi / 5
+        d.line([(64 + math.cos(a) * 24, 64 + math.sin(a) * 24), (64 + math.cos(a) * 36, 64 + math.sin(a) * 36)], fill=ink, width=5)
+
+
+def glyph_counter(d, ink):  # a shield with a crossed-out speech bubble
+    d.polygon([(34, 30), (94, 30), (94, 62), (64, 100), (34, 62)], outline=ink, width=6)
+    d.rounded_rectangle([46, 44, 82, 66], radius=6, outline=ink, width=4)
+    d.polygon([(54, 66), (50, 76), (62, 66)], fill=ink)
+    d.line([(42, 80), (86, 38)], fill=ink, width=5)
+
+
+def glyph_debunk(d, ink):  # a big X over a scrap of paper
+    d.rectangle([38, 34, 90, 94], outline=ink, width=4)
+    d.line([(36, 32), (92, 96)], fill=ink, width=9)
+    d.line([(92, 32), (36, 96)], fill=ink, width=9)
+
+
+def glyph_spread(d, ink):  # a megaphone with sound lines
+    d.polygon([(30, 54), (58, 54), (88, 34), (88, 94), (58, 74), (30, 74)], fill=ink)
+    d.rectangle([40, 74, 50, 92], fill=ink)
+    for r in (12, 22):
+        d.arc([88 - r, 64 - r, 88 + r + 8, 64 + r], 300, 60, fill=ink, width=4)
+
+
+def glyph_suppress(d, ink):  # redacted lines of text
+    for y, w in ((40, 52), (56, 44), (72, 54), (88, 36)):
+        d.rectangle([38, y - 5, 38 + w, y + 5], fill=ink)
+    d.line([(34, 98), (94, 30)], fill=ink, width=4)
+
+
 # ---------------------------------------------------------------- category icons (64 px, white glyphs)
 
 def icon(name, draw):
@@ -235,7 +268,7 @@ if __name__ == "__main__":
     stamp("CONFIRMED", "Confirmed", 11)
     stamp("RUMOUR", "Rumor", 12)
     stamp("DISPROVED", "Disproved", 13)
-    stamp("STOP PRESS", "StopPress", 14)
+    stamp("FRONT PAGE", "FrontPage", 14)
     stamp("CLASSIFIED", "Classified", 15)
     stamp("INVESTIGATE", "Investigate", 16)
     stamp("UNDER INQUIRY", "Inquiry", 17)
@@ -245,6 +278,12 @@ if __name__ == "__main__":
     stamp("QUEUED", "Queued", 21)
     round_stamp("Advisory", glyph_advisory, 22)
     round_stamp("Investigate", glyph_investigate, 23)
+    stamp("RESPOND", "Respond", 24)
+    round_stamp("Morale", glyph_morale, 25)
+    round_stamp("Counter", glyph_counter, 26)
+    round_stamp("Debunk", glyph_debunk, 27)
+    round_stamp("Spread", glyph_spread, 28)
+    round_stamp("Suppress", glyph_suppress, 29)
     rule()
     seal_small()
     pin()
