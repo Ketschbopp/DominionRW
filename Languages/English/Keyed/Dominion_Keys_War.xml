@@ -418,4 +418,11 @@ Success is likelier with high Intellectual and good radio coverage. An inconclus
   <Dominion_Tip_ShowOnMap>Jump to it on the world map.</Dominion_Tip_ShowOnMap>
   <Dominion_Tip_SelectFaction>Click to see {0}'s details and what you can do with them.</Dominion_Tip_SelectFaction>
   <Dominion_Tip_CancelTreaty>Cancel this treaty. The other side will not be pleased, and it may count as breaking your word.</Dominion_Tip_CancelTreaty>
+
+  <Dominion_Setting_WarbandSpeed>Warband speed: {0}x</Dominion_Setting_WarbandSpeed>
+  <Dominion_Setting_WarbandSpeed_Desc>How fast warbands march across the world map. At 1x a warband covers a tile an hour; the default 2x is half an hour a tile.</Dominion_Setting_WarbandSpeed_Desc>
+
+  <Dominion_Warband_FieldBattle>a road in the wilds</Dominion_Warband_FieldBattle>
+  <Dominion_Warband_Defeated>You defeated {0}'s warband. War score +{1}.</Dominion_Warband_Defeated>
+  <Dominion_Warband_Won>{0}'s warband beat your caravan. War score +{1} for them.</Dominion_Warband_Won>
 </LanguageData>

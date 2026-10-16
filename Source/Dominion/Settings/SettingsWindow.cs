@@ -108,6 +108,8 @@ namespace Dominion
             {
                 l.Label("Dominion_Setting_WarbandFrequency".Translate(s.warbandFrequency.ToStringPercent()));
                 s.warbandFrequency = l.Slider(s.warbandFrequency, 0.1f, 3f);
+                l.Label("Dominion_Setting_WarbandSpeed".Translate(s.warbandSpeed.ToString("0.0")), tooltip: "Dominion_Setting_WarbandSpeed_Desc".Translate());
+                s.warbandSpeed = Mathf.Round(l.Slider(s.warbandSpeed, 0.5f, 5f) * 10f) / 10f;
                 l.CheckboxLabeled("Dominion_Setting_WarbandRaids".Translate(), ref s.warbandRaidsOnPlayer, "Dominion_Setting_WarbandRaids_Desc".Translate());
                 l.CheckboxLabeled("Dominion_Setting_Occupation".Translate(), ref s.warOccupation, "Dominion_Setting_Occupation_Desc".Translate());
             }
