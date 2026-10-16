@@ -92,23 +92,40 @@ namespace Dominion
         public static FloatMenuAcceptanceReport CanStart(OperationDef def, Settlement s, Caravan caravan)
         {
             if (def == null || s == null || s.Destroyed || s.Faction == null || s.Faction.IsPlayer) return false;
+            // A settlement you are visiting through Visit Settlements is fine: the caravan joins the visit.
+            if (s.HasMap && s.Map.mapPawns.FreeColonistsSpawnedCount > 0 && VisitSettlements?.IsVisit(s.Map) != true)
+                return FloatMenuAcceptanceReport.WithFailReason("Dominion_Ops_AlreadyThere".Translate());
+            return Validate(def, s, Agents(caravan), CaravanSilver(caravan) + DiplomacyHelpers.AvailableSilver());
+        }
+
+        /// <summary>Colonists already on a visited map (Visit Settlements) can run the operation there and then.</summary>
+        public static FloatMenuAcceptanceReport CanStartOnVisit(OperationDef def, Settlement s, Map map)
+        {
+            if (def == null || !def.allowPhysical || s == null || s.Destroyed || s.Faction == null || map == null) return false;
+            return Validate(def, s, VisitAgents(map), DiplomacyHelpers.AvailableSilver());
+        }
+
+        private static FloatMenuAcceptanceReport Validate(OperationDef def, Settlement s, List<Pawn> agents, int silver)
+        {
             Faction f = s.Faction;
             if (Svc.ActivePhysical != null) return FloatMenuAcceptanceReport.WithFailReason("Dominion_Ops_PhysicalBusy".Translate());
-            List<Pawn> agents = Agents(caravan);
             if (agents.Count == 0) return FloatMenuAcceptanceReport.WithFailReason("Dominion_Ops_NoAgents".Translate());
             PlayerState p = WorldComponent_Dominion.Instance.Player;
             if (p.influence < def.influenceCost)
                 return FloatMenuAcceptanceReport.WithFailReason("Dominion_Action_NeedsInfluence".Translate(def.influenceCost.ToString("F0")));
-            if (def.silverCost > 0 && CaravanSilver(caravan) + DiplomacyHelpers.AvailableSilver() < def.silverCost)
+            if (def.silverCost > 0 && silver < def.silverCost)
                 return FloatMenuAcceptanceReport.WithFailReason("Dominion_Action_NeedsSilver".Translate(def.silverCost));
             if (Svc.Network(f) < def.minNetwork)
                 return FloatMenuAcceptanceReport.WithFailReason("Dominion_Ops_NeedsNetwork".Translate(def.minNetwork.ToString("F0")));
-            if (s.HasMap && s.Map.mapPawns.FreeColonistsSpawnedCount > 0)
-                return FloatMenuAcceptanceReport.WithFailReason("Dominion_Ops_AlreadyThere".Translate());
             string reason = def.Worker.CannotTargetReason(f);
             if (reason != null) return FloatMenuAcceptanceReport.WithFailReason(reason);
             return true;
         }
+
+        private static Integration_VisitSettlements VisitSettlements => IntegrationRegistry.Get<Integration_VisitSettlements>();
+
+        public static List<Pawn> VisitAgents(Map map) =>
+            map.mapPawns.FreeColonistsSpawned.Where(p => !p.Downed && !p.Dead && !p.InMentalState).ToList();
 
         private static List<Pawn> Agents(Caravan caravan) =>
             caravan.PawnsListForReading.Where(p => p.IsColonist && !p.Downed && !p.Dead).ToList();
@@ -137,36 +154,48 @@ namespace Dominion
 
         public static void Begin(OperationDef def, Settlement s, Caravan caravan)
         {
+            List<Pawn> agents = Agents(caravan);
+            Map map;
+            try
+            {
+                // With Visit Settlements, a settlement being visited already has its map: the caravan joins the visit.
+                map = GetOrGenerateMapUtility.GetOrGenerateMap(s.Tile, null, null);
+            }
+            catch (System.Exception e)
+            {
+                DLog.Warning("Could not open the map of " + s.Label + " for an operation: " + e);
+                return;
+            }
+            if (def.silverCost > 0) PaySilver(caravan, def.silverCost);
+            CaravanEnterMapUtility.Enter(caravan, map, CaravanEnterMode.Edge, CaravanDropInventoryMode.DoNotDrop, false, null);
+            Start(def, s, map, agents);
+        }
+
+        /// <summary>Visit Settlements: the colonists on a visited map run the operation where they stand.</summary>
+        public static void BeginOnVisit(OperationDef def, Settlement s, Map map)
+        {
+            if (!CanStartOnVisit(def, s, map).Accepted) return;
+            if (def.silverCost > 0) DiplomacyHelpers.TakeSilver(def.silverCost);
+            Start(def, s, map, VisitAgents(map));
+        }
+
+        private static void Start(OperationDef def, Settlement s, Map map, List<Pawn> agents)
+        {
             Faction f = s.Faction;
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             comp.Player.AddInfluence(-def.influenceCost);
-            if (def.silverCost > 0) PaySilver(caravan, def.silverCost);
-
             var op = new Operation
             {
                 id = Svc.NewId(),
                 def = def,
                 target = f,
-                agents = Agents(caravan),
+                agents = agents,
                 startTick = Find.TickManager.TicksGame,
                 endTick = int.MaxValue,
                 physical = true,
                 settlement = s,
                 alerted = f.HostileTo(Faction.OfPlayer),
             };
-
-            Map map;
-            try
-            {
-                map = GetOrGenerateMapUtility.GetOrGenerateMap(s.Tile, null, null);
-            }
-            catch (System.Exception e)
-            {
-                DLog.Warning("Could not open the map of " + s.Label + " for an operation: " + e);
-                comp.Player.AddInfluence(def.influenceCost);
-                return;
-            }
-            CaravanEnterMapUtility.Enter(caravan, map, CaravanEnterMode.Edge, CaravanDropInventoryMode.DoNotDrop, false, null);
             Svc.operations.Add(op);
             MarkObjective(op, map);
 

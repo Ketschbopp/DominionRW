@@ -254,4 +254,15 @@
     <newsRules>Dominion_News_HostageRescued</newsRules>
     <headline>Daring rescue in {1}</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_VisitIncident</defName>
+    <label>incident during a visit</label>
+    <description>Your colonists misbehaved while visiting a settlement (Visit Settlements): theft, vandalism, building on their land or prying into their stores.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.4</newsworthiness>
+    <newsRules>Dominion_News_VisitIncident</newsRules>
+    <headline>{0} protests {2} by visitors from {1}</headline>
+  </Dominion.DominionEventDef>
 </Defs>

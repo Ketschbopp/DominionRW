@@ -195,6 +195,14 @@
   <Dominion_Ops_SabotageLabel>Sabotage</Dominion_Ops_SabotageLabel>
   <Dominion_Ops_SabotageText>Foreign saboteurs have struck the colony: the {0} has broken down.</Dominion_Ops_SabotageText>
 
+  <!-- Visit Settlements -->
+  <Dominion_Ops_RunOnVisit>Run it now at {0} ({1} colonists)</Dominion_Ops_RunOnVisit>
+  <Dominion_Ops_RunOnVisit_Desc>Your colonists visiting this settlement (Visit Settlements) carry out the operation in person, where they stand. The operation ends when they leave the map.</Dominion_Ops_RunOnVisit_Desc>
+  <Dominion_VisitIncident_Theft>theft</Dominion_VisitIncident_Theft>
+  <Dominion_VisitIncident_Vandalism>vandalism</Dominion_VisitIncident_Vandalism>
+  <Dominion_VisitIncident_Encroaching>building on their land</Dominion_VisitIncident_Encroaching>
+  <Dominion_VisitIncident_Prying>prying into their stores</Dominion_VisitIncident_Prying>
+
   <!-- Settings -->
   <Dominion_Setting_AiCovertOps>AI covert actions</Dominion_Setting_AiCovertOps>
   <Dominion_Setting_AiCovertOps_Desc>AI intelligence services also sabotage, incite riots, stage false flags, coups and assassinations, against each other and against you.</Dominion_Setting_AiCovertOps_Desc>
