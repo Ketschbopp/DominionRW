@@ -88,4 +88,17 @@
     <researchViewY>1</researchViewY>
   </ResearchProjectDef>
 
+  <ResearchProjectDef>
+    <defName>Dominion_Broadcasting</defName>
+    <label>broadcasting</label>
+    <description>Build a studio and transmitter to put your own programmes on the air: news for your colonists, culture for your neighbours, programmes for a chosen foreign audience, counter-programming and entertainment. Programmes play on your televisions and shape what newspapers print.</description>
+    <baseCost>1500</baseCost>
+    <techLevel>Industrial</techLevel>
+    <prerequisites>
+      <li>Dominion_RadioMonitoring</li>
+    </prerequisites>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>1</researchViewX>
+    <researchViewY>2</researchViewY>
+  </ResearchProjectDef>
 </Defs>

@@ -94,8 +94,38 @@ def leadership_desk():
         mask.rotate(angle).save(OUT / f"Dominion_LeadershipDesk_{rot}m.png", optimize=True)
 
 
+def broadcast_center():
+    """2x2 studio: desk with mixing console and microphone, transmitter mast at the back."""
+    s = 256
+    img = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    shaded_rect(d, [16, 96, 240, 236], (92, 96, 104, 255), width=4)                  # studio desk
+    shaded_rect(d, [40, 112, 216, 176], (52, 56, 62, 255), width=3, highlight=20)    # mixing console
+    for i, x in enumerate(range(52, 208, 16)):                                       # faders
+        d.rectangle([x, 120, x + 6, 168], fill=(30, 30, 34, 255))
+        y = 128 + (i * 13) % 32
+        d.rectangle([x - 3, y, x + 9, y + 8], fill=(220, 220, 220, 255), outline=OUTLINE)
+    for x, col in ((60, (200, 60, 50, 255)), (84, (60, 200, 80, 255)), (108, (230, 200, 60, 255))):
+        d.ellipse([x, 186, x + 14, 200], fill=col, outline=OUTLINE)                  # lamps
+    d.line([(180, 196), (196, 164)], fill=(40, 40, 40, 255), width=4)                # mic arm
+    d.ellipse([186, 152, 210, 176], fill=(70, 70, 76, 255), outline=OUTLINE, width=2)
+    # transmitter mast
+    shaded_rect(d, [92, 20, 164, 92], (140, 140, 148, 255), width=3)
+    d.line([(128, 26), (128, 4)], fill=(190, 190, 196, 255), width=6)
+    for r in (18, 30):
+        d.arc([128 - r, 8 - r // 2, 128 + r, 8 + r], 200, 340, fill=(220, 80, 70, 255), width=3)
+    d.rectangle([104, 40, 152, 76], fill=(60, 64, 70, 255), outline=OUTLINE, width=2)
+    for y in range(46, 74, 6):
+        d.line([(110, y), (146, y)], fill=(110, 200, 120, 255), width=2)
+    shadow = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    ImageDraw.Draw(shadow).rectangle([22, 28, 248, 246], fill=(0, 0, 0, 70))
+    shadow = shadow.filter(ImageFilter.GaussianBlur(4))
+    Image.alpha_composite(shadow, img).save(OUT / "Dominion_BroadcastCenter.png", optimize=True)
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
+    broadcast_center()
     radio_receiver()
     leadership_desk()
     print("wrote building textures to", OUT)

@@ -64,6 +64,7 @@ namespace Dominion
         public static ThoughtDef Dominion_News_PeaceNearby;
         public static ThoughtDef Dominion_News_UnrestNearby;
         public static ThoughtDef Dominion_ForeignPropaganda;
+        public static ThoughtDef Dominion_Broadcast_Informed;
 
         static DominionThoughtDefOf()
         {

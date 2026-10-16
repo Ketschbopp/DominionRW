@@ -57,6 +57,7 @@ namespace Dominion
                 : "-";
             float intel = IntelUtility.IntelOn(f);
             Row(l, "Dominion_Dossier_Intel".Translate(), intel.ToString("F0"));
+            Row(l, "Dominion_Dossier_Culture".Translate(), s.playerCulture.ToString("F0"));
             Row(l, "Dominion_Dossier_Leader".Translate(), leader);
             Row(l, "Dominion_Dossier_Capital".Translate(), s.capital?.LabelCap ?? "Dominion_None".Translate());
             Row(l, "Dominion_Col_Government".Translate(), DominionUI.GovernmentLabel(s.government));

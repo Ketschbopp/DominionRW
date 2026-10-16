@@ -12,4 +12,10 @@
     <reportString>attending to affairs of state.</reportString>
     <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
   </JobDef>
+  <JobDef>
+    <defName>Dominion_OperateBroadcast</defName>
+    <driverClass>Dominion.JobDriver_OperateBroadcast</driverClass>
+    <reportString>running a broadcast.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
 </Defs>

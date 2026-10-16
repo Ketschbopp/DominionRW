@@ -17,6 +17,7 @@ namespace Dominion
         private SummitRegistry summits = new SummitRegistry();
         private CouncilState council = new CouncilState();
         private IntelService intel = new IntelService();
+        private BroadcastState broadcast = new BroadcastState();
 
         /// <summary>0..100. How well the player's radio receivers cover the airwaves; raised by monitoring, decays daily.</summary>
         public float radioCoverage;
@@ -37,6 +38,7 @@ namespace Dominion
         public SummitRegistry Summits => summits;
         public CouncilState Council => council;
         public IntelService Intel => intel;
+        public BroadcastState Broadcast => broadcast;
         public DominionScheduler Scheduler => scheduler;
 
         /// <summary>Lookups refreshed at most once a day. Always call through here.</summary>
@@ -132,6 +134,7 @@ namespace Dominion
             Scribe_Deep.Look(ref summits, "summits");
             Scribe_Deep.Look(ref council, "council");
             Scribe_Deep.Look(ref intel, "intel");
+            Scribe_Deep.Look(ref broadcast, "broadcast");
             Scribe_Values.Look(ref radioCoverage, "radioCoverage");
 
             if (Scribe.mode == LoadSaveMode.Saving)
@@ -151,6 +154,7 @@ namespace Dominion
                 summits ??= new SummitRegistry();
                 council ??= new CouncilState();
                 intel ??= new IntelService();
+                broadcast ??= new BroadcastState();
                 factionStates = new Dictionary<int, FactionState>();
                 if (statesList != null)
                     foreach (FactionState s in statesList)

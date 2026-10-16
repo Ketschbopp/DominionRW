@@ -27,4 +27,18 @@
     </requiredCapacities>
     <canBeDoneByMechs>false</canBeDoneByMechs>
   </WorkGiverDef>
+  <WorkGiverDef>
+    <defName>Dominion_OperateBroadcast</defName>
+    <label>run broadcasts</label>
+    <giverClass>Dominion.WorkGiver_OperateBroadcast</giverClass>
+    <workType>Research</workType>
+    <priorityInType>35</priorityInType>
+    <verb>broadcast</verb>
+    <gerund>broadcasting</gerund>
+    <requiredCapacities>
+      <li>Talking</li>
+      <li>Manipulation</li>
+    </requiredCapacities>
+    <canBeDoneByMechs>false</canBeDoneByMechs>
+  </WorkGiverDef>
 </Defs>

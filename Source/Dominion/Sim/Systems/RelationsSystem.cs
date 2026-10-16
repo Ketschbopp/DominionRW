@@ -90,7 +90,12 @@ namespace Dominion
                 case FactionRelationKind.Hostile: t -= 20f; break;
             }
             if (other.IsPlayer)
+            {
                 t += f.PlayerGoodwill * 0.5f;
+                // Your culture on their airwaves: mostly political sympathy, and a little ideological affinity.
+                t += fs.playerCulture * 0.15f;
+                if (DominionMod.Settings.allowIdeoReforms) t += fs.playerCulture * 0.05f;
+            }
 
             return Mathf.Clamp(t, -100f, 100f);
         }

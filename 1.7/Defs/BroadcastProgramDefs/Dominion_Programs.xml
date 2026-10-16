@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <Dominion.BroadcastProgramDef>
+    <defName>Dominion_Program_News</defName>
+    <label>news bulletins</label>
+    <description>Regular news for your colonists. They feel well informed, and the broadcast network adds to your radio coverage.</description>
+    <workerClass>Dominion.Program_News</workerClass>
+    <needsTarget>false</needsTarget>
+    <tvThought>Dominion_TV_News</tvThought>
+    <order>1</order>
+  </Dominion.BroadcastProgramDef>
+
+  <Dominion.BroadcastProgramDef>
+    <defName>Dominion_Program_Cultural</defName>
+    <label>cultural programmes</label>
+    <description>Your music, stories and ideas, broadcast to everyone in reach. Raises your cultural influence on every faction within about 60 tiles, most on the nearest, which slowly warms their opinion of you.</description>
+    <workerClass>Dominion.Program_Cultural</workerClass>
+    <needsTarget>false</needsTarget>
+    <tvThought>Dominion_TV_Culture</tvThought>
+    <order>2</order>
+  </Dominion.BroadcastProgramDef>
+
+  <Dominion.BroadcastProgramDef>
+    <defName>Dominion_Program_PublicDiplomacy</defName>
+    <label>programmes for a foreign audience</label>
+    <description>Programmes made for one faction's people. Their opinion of you and your cultural influence on them rise faster than with general cultural programming.</description>
+    <workerClass>Dominion.Program_PublicDiplomacy</workerClass>
+    <needsTarget>true</needsTarget>
+    <tvThought>Dominion_TV_Culture</tvThought>
+    <order>3</order>
+  </Dominion.BroadcastProgramDef>
+
+  <Dominion.BroadcastProgramDef>
+    <defName>Dominion_Program_CounterProgramming</defName>
+    <label>counter-programming</label>
+    <description>Fill the airwaves so foreign propaganda cannot get through. While it runs, your colonists are not affected by other factions' propaganda.</description>
+    <workerClass>Dominion.Program_CounterProgramming</workerClass>
+    <needsTarget>false</needsTarget>
+    <tvThought>Dominion_TV_News</tvThought>
+    <order>4</order>
+  </Dominion.BroadcastProgramDef>
+
+  <Dominion.BroadcastProgramDef>
+    <defName>Dominion_Program_Entertainment</defName>
+    <label>entertainment</label>
+    <description>Shows, music and games. No political effect, but your colonists enjoy their television far more.</description>
+    <workerClass>Dominion.Program_Entertainment</workerClass>
+    <needsTarget>false</needsTarget>
+    <tvThought>Dominion_TV_Entertainment</tvThought>
+    <order>5</order>
+  </Dominion.BroadcastProgramDef>
+</Defs>

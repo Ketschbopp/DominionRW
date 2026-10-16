@@ -77,6 +77,7 @@ namespace Dominion
         public static ResearchProjectDef Dominion_IntelligenceAgency;
         public static ResearchProjectDef Dominion_DiplomaticCorps;
         public static ResearchProjectDef Dominion_IntelligenceNetworks;
+        public static ResearchProjectDef Dominion_Broadcasting;
 
         static DominionResearchDefOf()
         {

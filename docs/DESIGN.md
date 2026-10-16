@@ -356,7 +356,7 @@ Debug category **Dominion** includes:
 | **M5: Rim Council** ✅ | Sessions, motions, voting, decrees, violations |
 | **M6: Intelligence** ✅ (gathering scope) | Operations (abstract first, then physical maps), counter-intel, exposure |
 | **M7: War** | War goals, war score, warbands and interception, occupation, cold war, joint wars |
-| **M8: Broadcast and culture** | Broadcast Center, programs, TV and newspaper hooks, ideo influence |
+| **M8: Broadcast and culture** ✅ | Broadcast Center, programs, TV and newspaper hooks, ideo influence |
 | **M9: Integrations** | One integration per sub-milestone (the core bindings for E&D and FTV land in M1, since both are required): FTV (full) → E&D (full) → Simple Leadership → VOE → Visit Settlements → RimMarket → RimToll → RimCourt → IRBM → CBF → VBE → P&P |
 | **M10: Ending and polish** | Unification ending, events catalogue, balancing, translation keys |
 
@@ -511,6 +511,24 @@ M6 was built as **intelligence gathering**. The covert-action operations listed 
 - **AI services:**
   - AI factions run operations on the player (1% + aggression × 1% per day, +1% if they dislike you). Caught at 20% + sweep + 10% with Intelligence Agency + intel/300; when caught, every faction's opinion of the culprit falls. Uncaught propaganda gives colonists a small mood debuff.
   - AI factions also gather intelligence on their rivals. When agents are caught, it is reported as a *secret* event, which the player only hears about with intel 50 or more.
+
+## 9g. M8 implementation notes
+
+**Broadcast Center** (research *Broadcasting*, after Radio monitoring): a 2×2 powered studio. Pick a programme (and an audience faction where needed); a colonist on research work runs it in two-hour shifts. Airtime = hours × (0.5 + Social/10), capped at 8 per programme per day. Airtime turns into effects once a day.
+
+| Programme | Daily effect | On TV |
+|---|---|---|
+| News bulletins | Radio coverage + 1.5 × airtime; colonists *well informed* (+2) with 2 or more hours | +1 |
+| Cultural programmes | Cultural influence on factions within 60 tiles (0.5 × airtime, scaled by distance), small favour | +1 |
+| For a foreign audience | One faction: favour + 0.5 × airtime (max 5), cultural influence + airtime | +1 |
+| Counter-programming | Blocks foreign propaganda mood effects for 1.5 days | +1 |
+| Entertainment | None | +3 |
+
+**TV:** colonists watching any vanilla television get the on-air programme's memory once an hour. A programme counts as on air for 6 hours after its last airtime.
+
+**Newspapers** (Vanilla Books Expanded): newly printed newspapers carry the latest Dominion headline as their title and the three most recent headlines (plus the current programme) as their text.
+
+**Cultural influence** (per faction, 0–100) fades 1% per day and grows with treaties (+0.15 per day, alliances +0.3). It adds influence × 0.15 to the faction's opinion of the player, and × 0.05 more as ideological affinity while *ideology reforms* are allowed. *Actual precept changes in other factions' ideologies are not implemented yet: editing an ideology's precepts needs in-game testing first.*
 
 ## 10. Decisions log
 

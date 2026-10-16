@@ -214,7 +214,7 @@ namespace Dominion
                     LetterDefOf.NeutralEvent, null, f);
                 return;
             }
-            if (propaganda && DominionMod.Settings.colonistNewsThoughts)
+            if (propaganda && DominionMod.Settings.colonistNewsThoughts && !comp.Broadcast.CounterProgrammingActive)
             {
                 foreach (Map map in Find.Maps)
                     if (map.IsPlayerHome)

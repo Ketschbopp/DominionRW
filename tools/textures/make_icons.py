@@ -65,8 +65,19 @@ def delegation():
     img.save(world / "Dominion_Delegation.png")
 
 
+def broadcast():
+    img, d = base()
+    d.line([(64, 120), (64, 50)], fill=INK, width=8)
+    d.polygon([(40, 120), (88, 120), (64, 80)], outline=INK, fill=None)
+    d.ellipse([54, 38, 74, 58], fill=SEAL)
+    for r in (22, 38, 54):
+        d.arc([64 - r, 48 - r, 64 + r, 48 + r], 220, 320, fill=INK, width=6)
+    img.save(OUT / "Dominion_Broadcast.png")
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
+    broadcast()
     delegation()
     head_of_state()
     capital()

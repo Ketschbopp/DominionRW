@@ -498,4 +498,14 @@
   <Dominion_Setting_AiIntelligence_Desc>AI factions run intelligence operations against you and against each other.</Dominion_Setting_AiIntelligence_Desc>
   <Dominion_Setting_OperationSuccess>Operation success: {0}</Dominion_Setting_OperationSuccess>
 
+  <!-- M8: broadcasting and culture -->
+  <Dominion_Broadcast_Program>Programme: {0}</Dominion_Broadcast_Program>
+  <Dominion_Broadcast_Target>Audience: {0}</Dominion_Broadcast_Target>
+  <Dominion_Broadcast_Target_Desc>Choose which faction's people this programme is made for.</Dominion_Broadcast_Target_Desc>
+  <Dominion_Broadcast_Inspect>On air: {0}</Dominion_Broadcast_Inspect>
+  <Dominion_Broadcast_NoTarget>no audience chosen</Dominion_Broadcast_NoTarget>
+  <Dominion_Dossier_Culture>Your cultural influence</Dominion_Dossier_Culture>
+  <Dominion_Newspaper_Title>The Rim Herald: {0}</Dominion_Newspaper_Title>
+  <Dominion_Newspaper_Slant>Your broadcasters are currently airing: {0}.</Dominion_Newspaper_Slant>
+
 </LanguageData>

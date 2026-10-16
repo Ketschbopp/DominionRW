@@ -135,6 +135,7 @@ namespace Dominion
         public static readonly Texture2D HeadOfState = ContentFinder<Texture2D>.Get("UI/Commands/Dominion_HeadOfState");
         public static readonly Texture2D Capital = ContentFinder<Texture2D>.Get("UI/Commands/Dominion_Capital");
         public static readonly Texture2D Diplomacy = ContentFinder<Texture2D>.Get("UI/Commands/Dominion_Diplomacy");
+        public static readonly Texture2D Broadcast = ContentFinder<Texture2D>.Get("UI/Commands/Dominion_Broadcast");
     }
 
     [DefOf]
