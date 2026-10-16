@@ -59,4 +59,18 @@
       </li>
     </stages>
   </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>Dominion_ForeignPropaganda</defName>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <durationDays>2</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>foreign propaganda</label>
+        <description>Pamphlets and whispers from abroad have been going around the colony. Something about it leaves me uneasy.</description>
+        <baseMoodEffect>-2</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
 </Defs>

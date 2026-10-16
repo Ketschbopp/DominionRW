@@ -25,6 +25,10 @@ namespace Dominion
         public bool politicalEventsEnabled = true;
         public float stabilityDriftSpeed = 1f;
 
+        // Intelligence
+        public bool aiIntelligence = true;
+        public float operationSuccess = 1f;
+
         // News
         public int newsLogCap = 300;
         public bool falseRumors = true;
@@ -75,6 +79,8 @@ namespace Dominion
             Scribe_Values.Look(ref aiAggression, "aiAggression", 1f);
             Scribe_Values.Look(ref politicalEventsEnabled, "politicalEventsEnabled", true);
             Scribe_Values.Look(ref stabilityDriftSpeed, "stabilityDriftSpeed", 1f);
+            Scribe_Values.Look(ref aiIntelligence, "aiIntelligence", true);
+            Scribe_Values.Look(ref operationSuccess, "operationSuccess", 1f);
             Scribe_Values.Look(ref newsLogCap, "newsLogCap", 300);
             Scribe_Values.Look(ref falseRumors, "falseRumors", true);
             Scribe_Values.Look(ref colonistNewsThoughts, "colonistNewsThoughts", true);
@@ -104,6 +110,8 @@ namespace Dominion
             aiAggression = 1f;
             politicalEventsEnabled = true;
             stabilityDriftSpeed = 1f;
+            aiIntelligence = true;
+            operationSuccess = 1f;
             newsLogCap = 300;
             falseRumors = true;
             colonistNewsThoughts = true;

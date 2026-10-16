@@ -437,4 +437,27 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_AgentsExposed</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] exposes agents of [FACTION_B]</li>
+        <li>headline-&gt;Intelligence scandal: [FACTION_B] agents caught in [FACTION_A]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has uncovered agents working for [FACTION_B]. [exposed_detail] [closing]</li>
+        <li>exposed_detail-&gt;[FACTION_B] has denied any involvement.</li>
+        <li>exposed_detail-&gt;The affair has soured relations between the two.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_ForeignAgentsCaught</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] catches agents of [FACTION_B]</li>
+        <li>story-&gt;[LEAD] agents of [FACTION_B] have been caught by [FACTION_A]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>

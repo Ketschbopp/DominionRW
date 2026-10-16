@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_EstablishNetwork</defName>
+    <label>establish a network</label>
+    <description>Recruit informants and contacts among the target faction. A network raises your intel on them every day, makes later operations more likely to succeed, and slowly fades unless renewed. Suspicious factions may uncover part of it.</description>
+    <workerClass>Dominion.Operation_EstablishNetwork</workerClass>
+    <durationDays>6</durationDays>
+    <baseSuccess>0.5</baseSuccess>
+    <exposureOnSuccess>0.05</exposureOnSuccess>
+    <exposureOnFail>0.3</exposureOnFail>
+    <skill>Social</skill>
+    <influenceCost>10</influenceCost>
+    <silverCost>0</silverCost>
+  </Dominion.OperationDef>
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_GatherIntel</defName>
+    <label>gather intelligence</label>
+    <description>Agents observe and ask questions. On success your intel on the faction rises sharply, and any reports about them that had not reached you yet arrive at once.</description>
+    <workerClass>Dominion.Operation_GatherIntel</workerClass>
+    <durationDays>3</durationDays>
+    <baseSuccess>0.55</baseSuccess>
+    <exposureOnSuccess>0.05</exposureOnSuccess>
+    <exposureOnFail>0.35</exposureOnFail>
+    <skill>Intellectual</skill>
+    <influenceCost>8</influenceCost>
+    <silverCost>0</silverCost>
+  </Dominion.OperationDef>
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_Propaganda</defName>
+    <label>spread propaganda</label>
+    <description>Win hearts among their people: their opinion of you improves and the peace-minded bloc grows.</description>
+    <workerClass>Dominion.Operation_Propaganda</workerClass>
+    <durationDays>4</durationDays>
+    <baseSuccess>0.5</baseSuccess>
+    <exposureOnSuccess>0.1</exposureOnSuccess>
+    <exposureOnFail>0.4</exposureOnFail>
+    <skill>Social</skill>
+    <influenceCost>12</influenceCost>
+    <silverCost>0</silverCost>
+  </Dominion.OperationDef>
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_BribeOfficial</defName>
+    <label>bribe an official</label>
+    <description>Buy a friend in their administration with 400 silver. Their opinion of you improves and you learn more about them.</description>
+    <workerClass>Dominion.Operation_BribeOfficial</workerClass>
+    <durationDays>2</durationDays>
+    <baseSuccess>0.6</baseSuccess>
+    <exposureOnSuccess>0.1</exposureOnSuccess>
+    <exposureOnFail>0.35</exposureOnFail>
+    <skill>Social</skill>
+    <influenceCost>5</influenceCost>
+    <silverCost>400</silverCost>
+  </Dominion.OperationDef>
+</Defs>

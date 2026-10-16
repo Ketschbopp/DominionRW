@@ -462,4 +462,40 @@
   <Dominion_Mission_AttendCouncil>Attend the Rim Council at the capital of {0}</Dominion_Mission_AttendCouncil>
   <Dominion_MissionShort_AttendCouncil>the Rim Council</Dominion_MissionShort_AttendCouncil>
 
+  <!-- M6: intelligence -->
+  <Dominion_Tab_Intelligence>Intelligence</Dominion_Tab_Intelligence>
+  <Dominion_Ops_Title>Intelligence service</Dominion_Ops_Title>
+  <Dominion_Ops_NeedsResearch>Research {0} to run intelligence operations.</Dominion_Ops_NeedsResearch>
+  <Dominion_Ops_Plan>Plan an operation</Dominion_Ops_Plan>
+  <Dominion_Ops_CounterIntelButton>Counter-intelligence sweep ({0} influence)</Dominion_Ops_CounterIntelButton>
+  <Dominion_Ops_CounterIntelUntil>Counter-intelligence active ({0} left)</Dominion_Ops_CounterIntelUntil>
+  <Dominion_Ops_CounterIntel_Desc>For {0} days, foreign agents are far more likely to be caught.</Dominion_Ops_CounterIntel_Desc>
+  <Dominion_Ops_CounterIntelActive>A sweep is already under way.</Dominion_Ops_CounterIntelActive>
+  <Dominion_Ops_Running>Operations under way:</Dominion_Ops_Running>
+  <Dominion_Ops_RunningLine>{0} in {1}: {2}, back in {3}</Dominion_Ops_RunningLine>
+  <Dominion_Ops_Networks>Networks and intel:</Dominion_Ops_Networks>
+  <Dominion_Ops_NetworkLevel>network {0}</Dominion_Ops_NetworkLevel>
+  <Dominion_Ops_YourIntel>intel {0}</Dominion_Ops_YourIntel>
+  <Dominion_Ops_ChooseTarget>Choose a faction</Dominion_Ops_ChooseTarget>
+  <Dominion_Ops_ChooseAgents>Agents (they leave the colony until the operation ends):</Dominion_Ops_ChooseAgents>
+  <Dominion_Ops_Terms>Takes {0} days. Costs {1} influence and {2} silver. Relevant skill: {3}. Up to {4} agents.</Dominion_Ops_Terms>
+  <Dominion_Ops_Chance>Chance of success: {0}. Risk of exposure if it fails: {1}.</Dominion_Ops_Chance>
+  <Dominion_Ops_Launch>Send the agents</Dominion_Ops_Launch>
+  <Dominion_Ops_NoTarget>Choose a target faction.</Dominion_Ops_NoTarget>
+  <Dominion_Ops_NoAgents>Choose at least one agent.</Dominion_Ops_NoAgents>
+  <Dominion_Ops_TooManyAgents>At most {0} agents.</Dominion_Ops_TooManyAgents>
+  <Dominion_Ops_AlreadyRunning>That operation is already under way there.</Dominion_Ops_AlreadyRunning>
+  <Dominion_Ops_Launched>Agents set out to {0} in {1}. They will be back in about {2} days.</Dominion_Ops_Launched>
+  <Dominion_Ops_ReportLabel>Report: {0}</Dominion_Ops_ReportLabel>
+  <Dominion_Ops_Success>The operation ({0}) in {1} succeeded.</Dominion_Ops_Success>
+  <Dominion_Ops_Failure>The operation ({0}) in {1} failed.</Dominion_Ops_Failure>
+  <Dominion_Ops_Exposed>Worse, {0} found out who was behind it. They are not pleased.</Dominion_Ops_Exposed>
+  <Dominion_Ops_Detained>{0} was detained by {1}. A hostage exchange may get them back.</Dominion_Ops_Detained>
+  <Dominion_Ops_NetworkUncovered>{0} has uncovered part of your network.</Dominion_Ops_NetworkUncovered>
+  <Dominion_Ops_CaughtLabel>Foreign agents caught</Dominion_Ops_CaughtLabel>
+  <Dominion_Ops_CaughtText>Your people caught agents of {0} snooping around the colony. Every faction will hear of it.</Dominion_Ops_CaughtText>
+  <Dominion_Setting_AiIntelligence>AI intelligence services</Dominion_Setting_AiIntelligence>
+  <Dominion_Setting_AiIntelligence_Desc>AI factions run intelligence operations against you and against each other.</Dominion_Setting_AiIntelligence_Desc>
+  <Dominion_Setting_OperationSuccess>Operation success: {0}</Dominion_Setting_OperationSuccess>
+
 </LanguageData>

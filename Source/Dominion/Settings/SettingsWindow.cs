@@ -81,6 +81,10 @@ namespace Dominion
 
         private static void DrawNews(Listing_Standard l, DominionSettings s)
         {
+            l.CheckboxLabeled("Dominion_Setting_AiIntelligence".Translate(), ref s.aiIntelligence, "Dominion_Setting_AiIntelligence_Desc".Translate());
+            l.Label("Dominion_Setting_OperationSuccess".Translate(s.operationSuccess.ToStringPercent()));
+            s.operationSuccess = l.Slider(s.operationSuccess, 0.25f, 2f);
+            l.GapLine();
             l.Label("Dominion_Setting_NewsLogCap".Translate(s.newsLogCap));
             s.newsLogCap = (int)l.Slider(s.newsLogCap, 50, 2000);
             l.CheckboxLabeled("Dominion_Setting_FalseRumors".Translate(), ref s.falseRumors, "Dominion_Setting_FalseRumors_Desc".Translate());

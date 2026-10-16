@@ -37,6 +37,7 @@ namespace Dominion
             if (DominionResearchDefOf.Dominion_IntelligenceAgency.IsFinished) t += 10f;
 
             t += Mathf.Min(25f, comp.radioCoverage * 0.25f);
+            t += comp.Intel.Network(f) * 0.3f;
 
             Faction player = Faction.OfPlayerSilentFail;
             if (player != null)
@@ -75,6 +76,7 @@ namespace Dominion
         public static ResearchProjectDef Dominion_SignalDecoding;
         public static ResearchProjectDef Dominion_IntelligenceAgency;
         public static ResearchProjectDef Dominion_DiplomaticCorps;
+        public static ResearchProjectDef Dominion_IntelligenceNetworks;
 
         static DominionResearchDefOf()
         {

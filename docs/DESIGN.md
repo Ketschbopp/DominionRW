@@ -354,7 +354,7 @@ Debug category **Dominion** includes:
 | **M3: Diplomacy UI** ✅ | Dominion tab, dossiers, actions, treaties, embargo and border rights, Leadership Desk |
 | **M4: Physical diplomacy** ✅ | Envoys, delegations, summits plus the dialogue system, hostage exchange |
 | **M5: Rim Council** ✅ | Sessions, motions, voting, decrees, violations |
-| **M6: Espionage** | Operations (abstract first, then physical maps), counter-intel, exposure |
+| **M6: Intelligence** ✅ (gathering scope) | Operations (abstract first, then physical maps), counter-intel, exposure |
 | **M7: War** | War goals, war score, warbands and interception, occupation, cold war, joint wars |
 | **M8: Broadcast and culture** | Broadcast Center, programs, TV and newspaper hooks, ideo influence |
 | **M9: Integrations** | One integration per sub-milestone (the core bindings for E&D and FTV land in M1, since both are required): FTV (full) → E&D (full) → Simple Leadership → VOE → Visit Settlements → RimMarket → RimToll → RimCourt → IRBM → CBF → VBE → P&P |
@@ -489,6 +489,28 @@ The **dialogue** runs three rounds. Each round offers up to four approaches draw
 AI members comply by honour (and war weariness or hawkishness, as relevant); the player gets letters and dialogs.
 
 **Violations:** every other member's opinion of the violator falls (6 + 8 × honour), the player loses 5 goodwill with each member, and an AI violator loses legitimacy. Violations make sanctions and censure motions against the violator more likely.
+
+## 9f. M6 implementation notes (intelligence gathering)
+
+M6 was built as **intelligence gathering**. The covert-action operations listed in §5.5 are not implemented.
+
+- **Research:** *Intelligence networks* (Medieval, after Diplomatic Corps) unlocks the Intelligence tab.
+- **Operations** (`OperationDef`, data plus a worker). Up to three agents leave the colony for the duration, as world pawns, and walk back in at the capital:
+
+| Operation | Days | Skill | Cost | On success |
+|---|---|---|---|---|
+| Establish a network | 6 | Social | 10 influence | Network +25 |
+| Gather intelligence | 3 | Intellectual | 8 influence | Intel +20 (+ network/10); pending reports about them arrive at once |
+| Spread propaganda | 4 | Social | 12 influence | Their opinion of you +10, doves +5% |
+| Bribe an official | 2 | Social | 5 influence + 400 silver | Opinion +15, intel +10 |
+
+- **Success chance:** base + 3% per skill level above 5 + network/200 + 5% per extra agent − 15% × target paranoia, +5% with Intelligence Agency, −5% against juntas and autocracies.
+- **Exposure:** a failure has its own exposure chance (less 10% with a network over 50). Exposure costs favour and adds grievance, and there is a 40% chance one agent is detained. Detained agents go to the faction's kidnapped list and can come back through a hostage exchange.
+- **Networks** (0–100) add network × 0.3 to the intel target. They fade 0.3 per day, and a paranoid faction may uncover half of one (paranoia × 1% per day).
+- **Counter-intelligence:** a 15-influence sweep raises the catch chance by 30% for 30 days.
+- **AI services:**
+  - AI factions run operations on the player (1% + aggression × 1% per day, +1% if they dislike you). Caught at 20% + sweep + 10% with Intelligence Agency + intel/300; when caught, every faction's opinion of the culprit falls. Uncaught propaganda gives colonists a small mood debuff.
+  - AI factions also gather intelligence on their rivals. When agents are caught, it is reported as a *secret* event, which the player only hears about with intel 50 or more.
 
 ## 10. Decisions log
 

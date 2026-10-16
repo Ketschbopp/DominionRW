@@ -115,6 +115,8 @@ namespace Dominion
         public static DominionEventDef Dominion_MotionRejected;
         public static DominionEventDef Dominion_DecreeViolated;
         public static DominionEventDef Dominion_DecreeExpired;
+        public static DominionEventDef Dominion_AgentsExposed;
+        public static DominionEventDef Dominion_ForeignAgentsCaught;
 
         static DominionEventDefOf()
         {

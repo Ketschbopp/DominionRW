@@ -12,7 +12,9 @@ Rim World Dominion, a 1.7 RimWorld mod that expands and overhauls diplomacy and 
 
 **M4 (physical diplomacy)** puts diplomacy on the map: send diplomats or your head of state by caravan on missions to other settlements, exchange real hostages, and hold summits at your capital or theirs. Summits are three rounds of dialogue that depend on your leader's skills and the other leader's personality. AI agreements and offers now travel as delegations you can see (with enough intel) and intercept.
 
-**M5 (Rim Council)** adds the council of factions: sessions hosted in turn, delegations that physically travel to attend, motions from members and from you, weighted votes with lobbying, and decrees (sanctions, censure, ceasefires, collective defense, trade standards, diplomatic immunity, a slavery ban) that bind every member, with real consequences for violating them. See [docs/DESIGN.md](docs/DESIGN.md) for the architecture, feature spec, integration plan and roadmap.
+**M5 (Rim Council)** adds the council of factions: sessions hosted in turn, delegations that physically travel to attend, motions from members and from you, weighted votes with lobbying, and decrees (sanctions, censure, ceasefires, collective defense, trade standards, diplomatic immunity, a slavery ban) that bind every member, with real consequences for violating them.
+
+**M6 (intelligence)** adds the Intelligence tab: send agents abroad to build networks, gather intelligence, spread propaganda or bribe officials, run counter-intelligence sweeps, and deal with AI factions gathering intelligence on you and on each other. See [docs/DESIGN.md](docs/DESIGN.md) for the architecture, feature spec, integration plan and roadmap.
 
 ## Requirements
 

@@ -365,4 +365,26 @@
     <newsRules>Dominion_News_DecreeExpired</newsRules>
     <headline>Rim Council decree expires: {2}</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_AgentsExposed</defName>
+    <label>agents exposed</label>
+    <description>A faction has uncovered foreign agents working against it.</description>
+    <category>Espionage</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_AgentsExposed</newsRules>
+    <headline>{0} exposes agents of {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_ForeignAgentsCaught</defName>
+    <label>foreign agents caught</label>
+    <description>Your counter-intelligence caught foreign agents.</description>
+    <category>Espionage</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_ForeignAgentsCaught</newsRules>
+    <headline>{0} catches agents of {1}</headline>
+  </Dominion.DominionEventDef>
 </Defs>

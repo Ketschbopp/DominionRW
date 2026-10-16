@@ -74,4 +74,18 @@
     <researchViewY>1</researchViewY>
   </ResearchProjectDef>
 
+  <ResearchProjectDef>
+    <defName>Dominion_IntelligenceNetworks</defName>
+    <label>intelligence networks</label>
+    <description>Learn to run informants, contacts and agents abroad. Unlocks intelligence operations and counter-intelligence in the Dominion tab.</description>
+    <baseCost>1200</baseCost>
+    <techLevel>Medieval</techLevel>
+    <prerequisites>
+      <li>Dominion_DiplomaticCorps</li>
+    </prerequisites>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>1</researchViewX>
+    <researchViewY>1</researchViewY>
+  </ResearchProjectDef>
+
 </Defs>
