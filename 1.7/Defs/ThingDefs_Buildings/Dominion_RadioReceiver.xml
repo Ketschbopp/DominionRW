@@ -85,7 +85,8 @@
     <size>(2,2)</size>
     <rotatable>false</rotatable>
     <altitudeLayer>Building</altitudeLayer>
-    <passability>Impassable</passability>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
     <fillPercent>0.4</fillPercent>
     <castEdgeShadows>false</castEdgeShadows>
     <blockWind>false</blockWind>
