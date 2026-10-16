@@ -75,6 +75,8 @@ namespace Dominion
             s.aiAggression = l.Slider(s.aiAggression, 0f, 3f);
             l.Gap();
             l.CheckboxLabeled("Dominion_Setting_PoliticalEvents".Translate(), ref s.politicalEventsEnabled, "Dominion_Setting_PoliticalEvents_Desc".Translate());
+            l.CheckboxLabeled("Dominion_Setting_Emigration".Translate(), ref s.emigration, "Dominion_Setting_Emigration_Desc".Translate());
+            l.CheckboxLabeled("Dominion_Setting_EmbargoDrain".Translate(), ref s.embargoDrain, "Dominion_Setting_EmbargoDrain_Desc".Translate());
             l.Label("Dominion_Setting_StabilityDrift".Translate(s.stabilityDriftSpeed.ToStringPercent()));
             s.stabilityDriftSpeed = l.Slider(s.stabilityDriftSpeed, 0.1f, 3f);
         }

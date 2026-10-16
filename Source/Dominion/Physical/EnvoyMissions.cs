@@ -6,7 +6,7 @@ using Verse;
 
 namespace Dominion
 {
-    public enum EnvoyMission { ImproveRelations, NegotiateTreaty, PeaceTalks, GatherIntel, ExchangeHostages, AttendSummit, AttendCouncil }
+    public enum EnvoyMission { ImproveRelations, NegotiateTreaty, PeaceTalks, GatherIntel, ExchangeHostages, AttendSummit, AttendCouncil, NegotiateVassalage }
 
     public class WorldObjectCompProperties_Diplomacy : WorldObjectCompProperties
     {
@@ -106,6 +106,7 @@ namespace Dominion
                 case EnvoyMission.PeaceTalks: return 20f;
                 case EnvoyMission.GatherIntel: return 10f;
                 case EnvoyMission.ExchangeHostages: return 5f;
+                case EnvoyMission.NegotiateVassalage: return 30f;
                 default: return 0f;
             }
         }
@@ -127,6 +128,8 @@ namespace Dominion
                     return SummitSystem.SummitAbroadAt(s) != null;
                 case EnvoyMission.AttendCouncil:
                     return CouncilSystem.CanRegisterAt(s);
+                case EnvoyMission.NegotiateVassalage:
+                    return !hostile && IntegrationRegistry.IsActive<Integration_FactionTerritories>();
                 default:
                     return false;
             }
@@ -141,6 +144,13 @@ namespace Dominion
             int until = comp.Player.CooldownUntil("Envoy_" + m, s.Faction.loadID);
             if (until > Find.TickManager.TicksGame)
                 return FloatMenuAcceptanceReport.WithFailReason("Dominion_Action_Cooldown".Translate((until - Find.TickManager.TicksGame).ToStringTicksToPeriod(allowSeconds: false)));
+            if (m == EnvoyMission.NegotiateVassalage)
+            {
+                var ftv = IntegrationRegistry.Get<Integration_FactionTerritories>();
+                string reason = null;
+                if (ftv == null || !ftv.CanNegotiateVassalage(s, out reason))
+                    return FloatMenuAcceptanceReport.WithFailReason(reason.NullOrEmpty() ? "Dominion_Mission_VassalageUnavailable".Translate().ToString() : reason);
+            }
             if (m == EnvoyMission.AttendSummit && LeadershipUtility.HeadOfState() == null)
                 return FloatMenuAcceptanceReport.WithFailReason(LeadershipUtility.NoHeadOfStateReason());
             return true;
@@ -168,9 +178,25 @@ namespace Dominion
                     return Mathf.Clamp((baseChance ?? 0.2f) + bonus, 0.02f, 0.97f);
                 case EnvoyMission.ExchangeHostages:
                     return HostageUtility.ExchangeAcceptance(f, bonus);
+                case EnvoyMission.NegotiateVassalage:
+                    return VassalageAcceptance(f, bonus);
                 default:
                     return null;
             }
+        }
+
+        /// <summary>
+        /// A faction gives up a settlement as your vassal outpost when it likes you and you are much stronger.
+        /// FTV still charges its own goodwill cost on top.
+        /// </summary>
+        public static float VassalageAcceptance(Faction f, float bonus)
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            float opinion = comp.GetRelation(f, Faction.OfPlayer).opinion;
+            float mine = DiplomacyHelpers.PlayerStrength();
+            float theirs = Mathf.Max(1f, comp.GetState(f).militaryStrength);
+            float power = Mathf.Clamp01(mine / (mine + theirs));
+            return Mathf.Clamp(-0.1f + opinion / 250f + power * 0.5f + bonus, 0.02f, 0.9f);
         }
 
         public static void Perform(EnvoyMission m, Settlement s, TreatyDef treaty, Caravan caravan)
@@ -246,6 +272,16 @@ namespace Dominion
                         result = "Dominion_Hostages_Done".Translate(f.Name, returned, released);
                     }
                     else result = "Dominion_Hostages_Refused".Translate(f.Name);
+                    break;
+                case EnvoyMission.NegotiateVassalage:
+                    if (success && IntegrationRegistry.Get<Integration_FactionTerritories>().TryNegotiateVassalage(s))
+                        result = "Dominion_Vassalage_Accepted".Translate(f.Name, s.Label);
+                    else
+                    {
+                        success = false;
+                        view.favour -= 4f;
+                        result = "Dominion_Vassalage_Refused".Translate(f.Name, s.Label);
+                    }
                     break;
                 default:
                     return;

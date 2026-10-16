@@ -60,7 +60,8 @@ namespace Dominion
                            - s.activeWars * 4f
                            + GovernmentUtility.StabilityBonus(s.government)
                            - s.Bloc(Bloc.Reformists) * 10f
-                           + (s.capital == null ? -15f : 0f);
+                           + (s.capital == null ? -15f : 0f)
+                           + IntegrationRegistry.Sum(i => i.StabilityModifier(faction));
             target = Mathf.Clamp(target, 0f, 100f);
             s.stability += (target - s.stability) * 0.05f * settings.stabilityDriftSpeed + Rand.Range(-1f, 1f);
             s.stability = Mathf.Clamp(s.stability, 0f, 100f);

@@ -61,6 +61,7 @@ namespace Dominion
                 else if (partner.HostileTo(f)) t += treaty.def.intelBonus * 0.4f;
             }
 
+            t += IntegrationRegistry.Sum(i => i.IntelModifier(f));
             t -= s.personality.paranoia * 10f;
             if (s.government == GovernmentType.Junta || s.government == GovernmentType.Autocracy) t -= 5f;
 

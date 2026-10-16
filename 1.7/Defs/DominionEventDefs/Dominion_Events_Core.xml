@@ -387,4 +387,59 @@
     <newsRules>Dominion_News_ForeignAgentsCaught</newsRules>
     <headline>{0} catches agents of {1}</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_PowerStruggle</defName>
+    <label>power struggle</label>
+    <description>A struggle for power has broken out in a faction's leadership.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.55</newsworthiness>
+    <newsRules>Dominion_News_PowerStruggle</newsRules>
+    <headline>{0}: power struggle in the leadership</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SettlementLooted</defName>
+    <label>settlement looted</label>
+    <description>A faction settlement has been looted and its economy is recovering.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_SettlementLooted</newsRules>
+    <headline>{2} of {0} looted</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_VassalOutpostGained</defName>
+    <label>vassal outpost gained</label>
+    <description>A faction has taken a settlement under its rule as a vassal outpost.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_VassalOutpostGained</newsRules>
+    <headline>{0} takes a new vassal outpost</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_VassalOutpostLost</defName>
+    <label>vassal outpost lost</label>
+    <description>A faction has lost one of its vassal outposts.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_VassalOutpostLost</newsRules>
+    <headline>{0} loses a vassal outpost</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Emigration</defName>
+    <label>emigration</label>
+    <description>Unrest has driven people to leave a faction.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.35</newsworthiness>
+    <newsRules>Dominion_News_Emigration</newsRules>
+    <headline>People flee unrest in {0}</headline>
+  </Dominion.DominionEventDef>
 </Defs>

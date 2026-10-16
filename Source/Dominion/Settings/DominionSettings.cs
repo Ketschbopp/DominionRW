@@ -24,6 +24,8 @@ namespace Dominion
         public float aiAggression = 1f;
         public bool politicalEventsEnabled = true;
         public float stabilityDriftSpeed = 1f;
+        public bool emigration = true;
+        public bool embargoDrain = true;
 
         // Intelligence
         public bool aiIntelligence = true;
@@ -78,6 +80,8 @@ namespace Dominion
             Scribe_Values.Look(ref aiDiplomacyEnabled, "aiDiplomacyEnabled", true);
             Scribe_Values.Look(ref aiAggression, "aiAggression", 1f);
             Scribe_Values.Look(ref politicalEventsEnabled, "politicalEventsEnabled", true);
+            Scribe_Values.Look(ref emigration, "emigration", true);
+            Scribe_Values.Look(ref embargoDrain, "embargoDrain", true);
             Scribe_Values.Look(ref stabilityDriftSpeed, "stabilityDriftSpeed", 1f);
             Scribe_Values.Look(ref aiIntelligence, "aiIntelligence", true);
             Scribe_Values.Look(ref operationSuccess, "operationSuccess", 1f);
@@ -109,6 +113,8 @@ namespace Dominion
             aiDiplomacyEnabled = true;
             aiAggression = 1f;
             politicalEventsEnabled = true;
+            emigration = true;
+            embargoDrain = true;
             stabilityDriftSpeed = 1f;
             aiIntelligence = true;
             operationSuccess = 1f;

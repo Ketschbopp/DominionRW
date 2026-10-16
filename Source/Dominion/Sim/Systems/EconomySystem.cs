@@ -53,9 +53,15 @@ namespace Dominion
                 s.wealth = s.settlementCount * FallbackWealthPerSettlement;
             }
 
+            // Embargoes cost real goods: a small share of the stockpile is lost each day while they last.
+            int embargoes = EmbargoesAgainst(faction, comp);
+            if (embargoes > 0 && ed != null && DominionMod.Settings.embargoDrain)
+                ed.TryConsumeWealth(faction, s.wealth * Mathf.Min(0.01f, 0.002f * embargoes));
+
             float perHead = s.totalLiving > 0 ? s.wealth / s.totalLiving : 0f;
             float raw = worldWealthPerHead > 0f ? 100f * perHead / worldWealthPerHead : 100f;
-            raw *= 1f + TreatyEconomyBonus(faction, comp) + CouncilUtility.EconomyBonus(faction) - 0.04f * EmbargoesAgainst(faction, comp);
+            raw *= 1f + TreatyEconomyBonus(faction, comp) + CouncilUtility.EconomyBonus(faction) - 0.04f * embargoes
+                   + IntegrationRegistry.Sum(i => i.EconomyModifier(faction));
             raw = Mathf.Clamp(raw, 10f, 300f);
             s.economyIndex = Mathf.Lerp(s.economyIndex, raw, 0.2f);
         }

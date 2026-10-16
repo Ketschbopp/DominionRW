@@ -357,7 +357,7 @@ Debug category **Dominion** includes:
 | **M6: Intelligence** ✅ (gathering scope) | Operations (abstract first, then physical maps), counter-intel, exposure |
 | **M7: War** | War goals, war score, warbands and interception, occupation, cold war, joint wars |
 | **M8: Broadcast and culture** ✅ | Broadcast Center, programs, TV and newspaper hooks, ideo influence |
-| **M9: Integrations** | One integration per sub-milestone (the core bindings for E&D and FTV land in M1, since both are required): FTV (full) → E&D (full) → Simple Leadership → VOE → Visit Settlements → RimMarket → RimToll → RimCourt → IRBM → CBF → VBE → P&P |
+| **M9: Integrations** ✅ | One integration per sub-milestone (the core bindings for E&D and FTV land in M1, since both are required): FTV (full) → E&D (full) → Simple Leadership → VOE → Visit Settlements → RimMarket → RimToll → RimCourt → IRBM → CBF → VBE → P&P |
 | **M10: Ending and polish** | Unification ending, events catalogue, balancing, translation keys |
 
 Integrations are designed into the event bus from M0, so M9 is wiring and not restructuring. Any integration can be pulled forward.
@@ -382,7 +382,7 @@ Relation changes go through vanilla base goodwill and `SetRelationDirect` on bot
 
 ## 9b. M2 implementation notes
 
-**Intel** (player → each faction, 0–100) moves 10% per day toward a target: 5 base, +8/+8/+12/+10 for the four intel research projects, up to +25 from radio coverage, +25 if allied (+3 to +8 if neutral), +15/+8 if the faction is within 15/40 tiles, minus up to 10 for a paranoid faction and 5 for juntas and autocracies. Espionage (M6) and IRBM satellites (M9) will add to it.
+**Intel** (player → each faction, 0–100) moves 10% per day toward a target: 5 base, +8/+8/+12/+10 for the four intel research projects, up to +25 from radio coverage, +25 if allied (+3 to +8 if neutral), +15/+8 if the faction is within 15/40 tiles, minus up to 10 for a paranoid faction and 5 for juntas and autocracies. Espionage (M6), IRBM satellites, VOE outposts and Visit Settlements (M9) add to it.
 
 **Visibility.** Secrecy needs intel: Public 0, Restricted 25, Secret 50, BlackOps 80 (the best intel on either faction involved counts). Events involving the player are always known at once.
 
@@ -529,6 +529,29 @@ M6 was built as **intelligence gathering**. The covert-action operations listed 
 **Newspapers** (Vanilla Books Expanded): newly printed newspapers carry the latest Dominion headline as their title and the three most recent headlines (plus the current programme) as their text.
 
 **Cultural influence** (per faction, 0–100) fades 1% per day and grows with treaties (+0.15 per day, alliances +0.3). It adds influence × 0.15 to the faction's opinion of the player, and × 0.05 more as ideological affinity while *ideology reforms* are allowed. *Actual precept changes in other factions' ideologies are not implemented yet: editing an ideology's precepts needs in-game testing first.*
+
+## 9h. M9 implementation notes
+
+Every integration is one class, found by reflection and bound by name at startup. A binding failure switches only that integration off and is listed in the self-test (dev menu). Integrations feed the core through modifier hooks that the systems add up daily: opinion, intel, stability, economy and council vote weight, plus a daily tick and every event on the bus.
+
+| Mod | What it does in Dominion |
+|---|---|
+| **Faction Territories & Vassalage** (required) | Territory and vassal outposts counted daily. New envoy mission *Negotiate vassalage*: 30 influence, chance from the faction's opinion of you and your relative strength; on success FTV turns the settlement into your vassal outpost (FTV's own goodwill cost applies). Gaining or losing vassal outposts is news. Council weight: +1 per 250 territory tiles (max +2), +0.2 per vassal outpost (max +2) |
+| **Economics & Demography** (required) | Population and wealth source. Each embargo against a faction removes 0.2% of its stockpile a day (max 1%, setting). Riots move 1% and revolutions 3% of the adult population (max 40) to the most stable friendly faction (setting); this is news |
+| Simple Leadership | Capital governor in the dossier. A new power event in a faction: stability −4, legitimacy −5, *power struggle* news |
+| Vanilla Outposts Expanded | Your outposts add +0.3 council weight each (max +3); +8 intel on factions with a settlement within 15 tiles of one |
+| Visit Settlements | Colonists visiting a faction settlement: +2 intel, +0.5 favour and +0.5 cultural influence a day |
+| RimMarket | Market reputation sets opinion of you (±10) |
+| RimToll | Toll resentment lowers opinion of you (up to −20) |
+| RimCourt | Your judge reputation sets opinion of you (±8) |
+| IRBM | Satellite coverage of a faction's home tile: +15 intel. While the doomsday clock is running every faction loses 10 target stability |
+| Custom Base Framework | Seats count as capitals (since M1) |
+| Vanilla Books Expanded | Newspapers print Dominion headlines (M8) |
+| Pillage & Plunder | A newly plundered settlement: stability −3 and news; −5% economy per settlement still recovering |
+
+Change counters (power events, plundered settlements, vassal outposts) are not saved: the first day after loading only records the current state, so loading never produces stale news.
+
+*IRBM council motions and tribal vassals in the council are still deferred.*
 
 ## 10. Decisions log
 

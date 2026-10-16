@@ -55,13 +55,15 @@ namespace Dominion
                 int colonists = 0;
                 foreach (Map map in Find.Maps)
                     if (map.IsPlayerHome) colonists += map.mapPawns.FreeColonistsCount;
-                return Mathf.Round((1f + colonists / 10f + DiplomacyHelpers.PlayerStrength() / 300f) * 10f) / 10f;
+                float pw = 1f + colonists / 10f + DiplomacyHelpers.PlayerStrength() / 300f + IntegrationRegistry.Sum(i => i.VoteWeightModifier(f));
+                return Mathf.Round(pw * 10f) / 10f;
             }
             FactionState s = WorldComponent_Dominion.Instance.GetState(f);
             int allies = 0;
             foreach (Faction a in attending)
                 if (a != f && a.RelationKindWith(f) == FactionRelationKind.Ally) allies++;
-            float w = 1f + s.population / 100f + s.economyIndex / 200f + s.militaryStrength / 300f + allies * 0.25f;
+            float w = 1f + s.population / 100f + s.economyIndex / 200f + s.militaryStrength / 300f + allies * 0.25f
+                      + IntegrationRegistry.Sum(i => i.VoteWeightModifier(f));
             return Mathf.Round(w * 10f) / 10f;
         }
 

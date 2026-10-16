@@ -117,6 +117,11 @@ namespace Dominion
         public static DominionEventDef Dominion_DecreeExpired;
         public static DominionEventDef Dominion_AgentsExposed;
         public static DominionEventDef Dominion_ForeignAgentsCaught;
+        public static DominionEventDef Dominion_PowerStruggle;
+        public static DominionEventDef Dominion_SettlementLooted;
+        public static DominionEventDef Dominion_VassalOutpostGained;
+        public static DominionEventDef Dominion_VassalOutpostLost;
+        public static DominionEventDef Dominion_Emigration;
 
         static DominionEventDefOf()
         {

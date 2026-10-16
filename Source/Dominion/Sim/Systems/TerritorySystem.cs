@@ -14,8 +14,16 @@ namespace Dominion
     {
         public override int Order => 1;
 
+        /// <summary>The player's FTV territory and vassal outposts, refreshed daily. Not saved.</summary>
+        public static int PlayerTerritoryTiles { get; private set; }
+        public static int PlayerVassalOutposts { get; private set; }
+
         private readonly Dictionary<int, int> counting = new Dictionary<int, int>();
         private bool scanFromStart;
+
+        // Vassal outposts per master faction yesterday. Not saved: the first day after loading only records.
+        private Dictionary<int, int> lastVassals;
+        private RimWorld.Planet.World lastWorld;
 
         public override void Slot(int slot)
         {
@@ -48,6 +56,8 @@ namespace Dominion
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             foreach (Faction f in comp.Cache.Simulated)
                 comp.GetState(f).territoryTiles = counting.TryGetValue(f.loadID, out int c) ? c : 0;
+            Faction player = Faction.OfPlayerSilentFail;
+            PlayerTerritoryTiles = player != null && counting.TryGetValue(player.loadID, out int p) ? p : 0;
         }
 
         public override void DailyGlobal()
@@ -69,6 +79,26 @@ namespace Dominion
                     held[key] = held.TryGetValue(key, out int h) ? h + 1 : 1;
                 }
             });
+
+            if (ftv != null && ftv.IsActive)
+            {
+                if (lastWorld != Find.World) lastVassals = null;
+                lastWorld = Find.World;
+                if (lastVassals != null)
+                {
+                    foreach (Faction f in Find.FactionManager.AllFactionsListForReading)
+                    {
+                        if (f.defeated) continue;
+                        perMaster.TryGetValue(f.loadID, out int now);
+                        lastVassals.TryGetValue(f.loadID, out int before);
+                        if (now > before) EventBus.Raise(DominionEventDefOf.Dominion_VassalOutpostGained, f, magnitude: now - before, source: ftv.PackageId);
+                        else if (now < before) EventBus.Raise(DominionEventDefOf.Dominion_VassalOutpostLost, f, magnitude: before - now, source: ftv.PackageId);
+                    }
+                }
+                lastVassals = perMaster;
+                Faction player = Faction.OfPlayerSilentFail;
+                PlayerVassalOutposts = player != null && perMaster.TryGetValue(player.loadID, out int pv) ? pv : 0;
+            }
 
             for (int i = 0; i < simulated.Count; i++)
             {

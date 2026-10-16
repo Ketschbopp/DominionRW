@@ -132,6 +132,40 @@ namespace Dominion
             }
         }
 
+        public static float Sum(System.Func<DominionIntegration, float> modifier)
+        {
+            float sum = 0f;
+            for (int i = 0; i < all.Count; i++)
+            {
+                if (!all[i].IsActive) continue;
+                try
+                {
+                    sum += modifier(all[i]);
+                }
+                catch (Exception e)
+                {
+                    DLog.WarningOnce($"Integration '{all[i].Label}' modifier failed: {e.Message}", all[i].PackageId.GetHashCode() ^ 0x5u.GetHashCode());
+                }
+            }
+            return sum;
+        }
+
+        public static void ForEachActive(Action<DominionIntegration> action)
+        {
+            for (int i = 0; i < all.Count; i++)
+            {
+                if (!all[i].IsActive) continue;
+                try
+                {
+                    action(all[i]);
+                }
+                catch (Exception e)
+                {
+                    DLog.WarningOnce($"Integration '{all[i].Label}' failed: {e}", all[i].PackageId.GetHashCode() ^ 0x77);
+                }
+            }
+        }
+
         public static string SelfTestReport()
         {
             var sb = new StringBuilder("Dominion integration self-test\n");

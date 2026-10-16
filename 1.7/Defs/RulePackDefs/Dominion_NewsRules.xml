@@ -460,4 +460,58 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_PowerStruggle</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Power struggle in [FACTION_A]</li>
+        <li>headline-&gt;[LEADER_A] faces rivals at home</li>
+        <li>story-&gt;[LEAD] rivals are challenging [LEADER_A] for control of [FACTION_A]. [ps_detail] [closing]</li>
+        <li>ps_detail-&gt;Observers expect the government to be distracted for some time.</li>
+        <li>ps_detail-&gt;Officials in [CAPITAL_A] refused to comment.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SettlementLooted</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[DETAIL] of [FACTION_A] looted</li>
+        <li>headline-&gt;[FACTION_A] counts losses at [DETAIL]</li>
+        <li>story-&gt;[LEAD] the settlement of [DETAIL], held by [FACTION_A], has been looted. Its markets are expected to take weeks to recover. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_VassalOutpostGained</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] takes a new vassal outpost</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has brought another settlement under its rule as a vassal outpost. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_VassalOutpostLost</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] loses a vassal outpost</li>
+        <li>story-&gt;[LEAD] [FACTION_A] no longer rules one of its former vassal outposts. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Emigration</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;People flee unrest in [FACTION_A]</li>
+        <li>story-&gt;[LEAD] families are leaving the lands of [FACTION_A] after recent unrest. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>

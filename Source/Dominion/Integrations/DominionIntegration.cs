@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RimWorld;
 
 namespace Dominion
 {
@@ -42,5 +43,28 @@ namespace Dominion
 
         /// <summary>Called after every world load or new game, for active integrations only.</summary>
         protected internal virtual void OnWorldLoaded() { }
+
+        // Modifiers the core systems add up over all active integrations. Keep them cheap: they run daily per faction.
+
+        /// <summary>Added to <paramref name="f"/>'s target opinion of <paramref name="toward"/>.</summary>
+        public virtual float OpinionModifier(Faction f, Faction toward) => 0f;
+
+        /// <summary>Added to the player's intel target on <paramref name="f"/>.</summary>
+        public virtual float IntelModifier(Faction f) => 0f;
+
+        /// <summary>Added to <paramref name="f"/>'s target stability.</summary>
+        public virtual float StabilityModifier(Faction f) => 0f;
+
+        /// <summary>Economy index change (0.05 = +5%).</summary>
+        public virtual float EconomyModifier(Faction f) => 0f;
+
+        /// <summary>Added to a Rim Council member's vote weight.</summary>
+        public virtual float VoteWeightModifier(Faction f) => 0f;
+
+        /// <summary>Once a day, for active integrations.</summary>
+        public virtual void DailyGlobal() { }
+
+        /// <summary>Every Dominion event, for active integrations.</summary>
+        public virtual void OnEvent(DominionEvent ev) { }
     }
 }

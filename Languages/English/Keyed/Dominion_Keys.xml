@@ -508,4 +508,16 @@
   <Dominion_Newspaper_Title>The Rim Herald: {0}</Dominion_Newspaper_Title>
   <Dominion_Newspaper_Slant>Your broadcasters are currently airing: {0}.</Dominion_Newspaper_Slant>
 
+
+  <!-- M9: integrations -->
+  <Dominion_Dossier_Governor>Capital governor</Dominion_Dossier_Governor>
+  <Dominion_Mission_NegotiateVassalage>Negotiate vassalage with {0}</Dominion_Mission_NegotiateVassalage>
+  <Dominion_MissionShort_NegotiateVassalage>vassalage talks</Dominion_MissionShort_NegotiateVassalage>
+  <Dominion_Mission_VassalageUnavailable>This settlement cannot become your vassal outpost.</Dominion_Mission_VassalageUnavailable>
+  <Dominion_Vassalage_Accepted>{0} agreed to hand {1} over as your vassal outpost.</Dominion_Vassalage_Accepted>
+  <Dominion_Vassalage_Refused>{0} refused to give up {1}.</Dominion_Vassalage_Refused>
+  <Dominion_Setting_Emigration>Emigration after unrest</Dominion_Setting_Emigration>
+  <Dominion_Setting_Emigration_Desc>Riots and revolutions make a few people leave the faction (Economics &amp; Demography). They settle with the most stable friendly neighbour.</Dominion_Setting_Emigration_Desc>
+  <Dominion_Setting_EmbargoDrain>Embargoes drain stockpiles</Dominion_Setting_EmbargoDrain>
+  <Dominion_Setting_EmbargoDrain_Desc>Each embargo against a faction removes a small share of its Economics &amp; Demography stockpile every day.</Dominion_Setting_EmbargoDrain_Desc>
 </LanguageData>

@@ -76,6 +76,7 @@ namespace Dominion
             t -= r.grievance * 0.6f;
             t -= Mathf.Min(r.outpostsHeldByOther, 3) * 15f;
             t += r.favour;
+            t += IntegrationRegistry.Sum(i => i.OpinionModifier(f, other));
             t += DiplomacySystem.TreatyOpinionBonus(f, other);
             if (theirs != null)
             {

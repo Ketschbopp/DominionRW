@@ -27,6 +27,9 @@ namespace Dominion
         private MethodInfo getAllOutposts;
         private PropertyInfo outpostMasterId;
         private FieldInfo outpostOriginalId;
+        private MethodInfo canPurchase;
+        private MethodInfo tryPurchase;
+        private MethodInfo goodwillCost;
 
         protected internal override void Bind(Binder b)
         {
@@ -52,6 +55,9 @@ namespace Dominion
 
             // Used by later milestones (wars ceding settlements, vassalisation).
             Type vassalise = b.Type("FactionTerritories.Vassalise.VassaliseUtility");
+            canPurchase = b.Method(vassalise, "CanPurchaseVassaliseSettlement");
+            tryPurchase = b.Method(vassalise, "TryPurchaseVassalisation");
+            goodwillCost = b.Method(vassalise, "GetSettlementVassaliseGoodwillCost");
             b.Method(vassalise, "CanVassaliseSettlement");
             b.Method(vassalise, "ExecuteVassalisation");
             b.Method(vassalise, "ExecuteCedeToFactionAtTile");
@@ -92,6 +98,68 @@ namespace Dominion
             {
                 DLog.WarningOnce("Reading FTV vassal outposts failed: " + e, 0x0F71);
             }
+        }
+
+        /// <summary>Whether FTV lets the player negotiate this settlement into a vassal outpost.</summary>
+        public bool CanNegotiateVassalage(Settlement s, out string reason)
+        {
+            reason = null;
+            if (!IsActive || s == null) return false;
+            try
+            {
+                object[] args = { s, null };
+                bool ok = (bool)canPurchase.Invoke(null, args);
+                reason = args[1] as string;
+                return ok;
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("Checking FTV vassalisation failed: " + e, 0x0F72);
+                return false;
+            }
+        }
+
+        /// <summary>Goodwill FTV charges for a negotiated vassalisation, or -1 if unknown.</summary>
+        public int VassalageGoodwillCost
+        {
+            get
+            {
+                try { return IsActive ? (int)goodwillCost.Invoke(null, null) : -1; }
+                catch { return -1; }
+            }
+        }
+
+        /// <summary>Has FTV turn the settlement into a player vassal outpost, paying FTV's own costs.</summary>
+        public bool TryNegotiateVassalage(Settlement s)
+        {
+            if (!IsActive || s == null) return false;
+            try
+            {
+                return (bool)tryPurchase.Invoke(null, new object[] { s });
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("FTV vassalisation failed: " + e, 0x0F73);
+                return false;
+            }
+        }
+
+        /// <summary>Land and vassals count in the Rim Council: up to +2 for territory, +0.2 per vassal outpost (max +2).</summary>
+        public override float VoteWeightModifier(RimWorld.Faction f)
+        {
+            int tiles, vassals;
+            if (f.IsPlayer)
+            {
+                tiles = TerritorySystem.PlayerTerritoryTiles;
+                vassals = TerritorySystem.PlayerVassalOutposts;
+            }
+            else
+            {
+                FactionState s = WorldComponent_Dominion.Instance.GetState(f);
+                tiles = s.territoryTiles;
+                vassals = s.vassalOutposts;
+            }
+            return UnityEngine.Mathf.Min(2f, tiles / 250f) + UnityEngine.Mathf.Min(2f, vassals * 0.2f);
         }
 
         /// <summary>FTV stores factions as unique load ids like "Faction_12".</summary>

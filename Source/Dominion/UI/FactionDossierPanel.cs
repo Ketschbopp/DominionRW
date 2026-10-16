@@ -60,6 +60,10 @@ namespace Dominion
             Row(l, "Dominion_Dossier_Culture".Translate(), s.playerCulture.ToString("F0"));
             Row(l, "Dominion_Dossier_Leader".Translate(), leader);
             Row(l, "Dominion_Dossier_Capital".Translate(), s.capital?.LabelCap ?? "Dominion_None".Translate());
+            var leadership = IntegrationRegistry.Get<Integration_SimpleLeadership>();
+            if (leadership != null && leadership.IsActive && s.capital != null)
+                Row(l, "Dominion_Dossier_Governor".Translate(), f, IntelUtility.RestrictedIntel,
+                    () => leadership.GovernorOf(s.capital)?.LabelShortCap ?? "Dominion_None".Translate().ToString());
             Row(l, "Dominion_Col_Government".Translate(), DominionUI.GovernmentLabel(s.government));
             Row(l, "Dominion_Col_Stability".Translate(), f, IntelUtility.RestrictedIntel, () => DominionUI.Colored(s.stability.ToString("F0"), DominionUI.StabilityColor(s.stability)));
             Row(l, "Dominion_Dossier_Legitimacy".Translate(), f, IntelUtility.RestrictedIntel, () => s.legitimacy.ToString("F0"));
