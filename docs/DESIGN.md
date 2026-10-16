@@ -404,6 +404,13 @@ A report is *Confirmed* if it came by radio or dispatch or intel is 30+ above wh
 
 **Radio.** Radio coverage (0–100) rises while a colonist monitors a powered receiver (Research work; about 4 per hour, scaled by Intellectual skill and hearing) and decays 30% per day. Colonists stop monitoring at 90.
 
+**Radio desk.** With a receiver built, the player can queue two radio orders (rubber-stamp buttons on the newspaper, or gizmos on the receiver). Research-work colonists take them before plain monitoring, in two-hour shifts that also feed coverage; progress is kept on the order.
+
+| Order | Work | Success chance | Effect |
+|---|---|---|---|
+| Colony advisory | 1500 ticks, speed 0.5 + Social/10 | (0.4 + 0.05 × Social) × Talking, 20–97% | Clears bad-news and propaganda moods, *reassured* (+3, 2 days), and new bad news gives no mood for 2 days. On failure: *unconvincing advisory* (−1, 1 day) |
+| Investigate rumour | 3000 ticks, speed 0.5 + Intellectual/10 | 0.35 + 0.035 × Intellectual + 0.003 × coverage, 25–97% | True: the rumour becomes Confirmed and is stamped VERIFIED. False: a correction runs at once and the mood it caused is cleared. Inconclusive: may be retried |
+
 **Text.** Headlines and stories come from vanilla grammar (`RulePackDef` per event, plus the shared `Dominion_NewsCommon`) and are resolved once at delivery, then saved.
 
 **Dossier gating.** Leader, capital and government are always known; stability, population, economy and military need 25; wealth, war weariness, personality and blocs need 50; a faction's opinions of others need 80. The raw event log is dev-mode only, since it shows everything.

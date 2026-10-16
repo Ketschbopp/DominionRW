@@ -89,6 +89,34 @@
   </ThoughtDef>
 
   <ThoughtDef>
+    <defName>Dominion_Advisory_Reassured</defName>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <durationDays>2</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>reassured by radio advisory</label>
+        <description>Someone came on the colony radio and laid out what is really going on out there. Calmly, sensibly. I feel better about it.</description>
+        <baseMoodEffect>3</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>Dominion_Advisory_Unconvincing</defName>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <durationDays>1</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>unconvincing advisory</label>
+        <description>The radio told us everything is under control. The voice cracked twice. Nobody believes it.</description>
+        <baseMoodEffect>-1</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
     <defName>Dominion_TV_News</defName>
     <thoughtClass>Thought_Memory</thoughtClass>
     <durationDays>1</durationDays>

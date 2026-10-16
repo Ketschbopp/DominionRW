@@ -115,6 +115,36 @@ def pin():
     img.save(OUT / "Pin.png")
 
 
+def round_stamp(name, glyph, seed):
+    """A circular rubber stamp with a pictogram, used as a gizmo icon. Drawn in red ink (gizmos cannot be tinted per draw)."""
+    w = 128
+    img = Image.new("RGBA", (w, w), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    ink = (150, 32, 28, 255)
+    d.ellipse([4, 4, w - 5, w - 5], outline=ink, width=8)
+    d.ellipse([18, 18, w - 19, w - 19], outline=ink, width=3)
+    glyph(d, ink)
+    img = grunge(img, seed, amount=5, strength=(0.15, 0.9))
+    img.filter(ImageFilter.GaussianBlur(0.4)).save(OUT / f"Gizmo_{name}.png")
+
+
+def glyph_advisory(d, ink):  # a microphone with radio waves
+    d.rounded_rectangle([52, 32, 76, 72], radius=12, fill=ink)
+    d.arc([42, 46, 86, 84], 0, 180, fill=ink, width=5)
+    d.line([(64, 84), (64, 96)], fill=ink, width=5)
+    d.line([(50, 97), (78, 97)], fill=ink, width=5)
+    for r in (30, 40):
+        d.arc([64 - r - 8, 52 - r, 64 + r + 8, 52 + r], 150, 210, fill=ink, width=4)
+        d.arc([64 - r - 8, 52 - r, 64 + r + 8, 52 + r], 330, 30, fill=ink, width=4)
+
+
+def glyph_investigate(d, ink):  # a magnifying glass over a scrap of newsprint
+    for y in (44, 56, 68, 80):
+        d.line([(34, y), (70, y)], fill=ink, width=3)
+    d.ellipse([46, 34, 86, 74], outline=ink, width=7)
+    d.line([(80, 68), (98, 90)], fill=ink, width=10)
+
+
 # ---------------------------------------------------------------- category icons (64 px, white glyphs)
 
 def icon(name, draw):
@@ -207,6 +237,14 @@ if __name__ == "__main__":
     stamp("DISPROVED", "Disproved", 13)
     stamp("STOP PRESS", "StopPress", 14)
     stamp("CLASSIFIED", "Classified", 15)
+    stamp("INVESTIGATE", "Investigate", 16)
+    stamp("UNDER INQUIRY", "Inquiry", 17)
+    stamp("VERIFIED", "Verified", 18)
+    stamp("ADVISORY", "Advisory", 19)
+    stamp("IN FORCE", "InForce", 20)
+    stamp("QUEUED", "Queued", 21)
+    round_stamp("Advisory", glyph_advisory, 22)
+    round_stamp("Investigate", glyph_investigate, 23)
     rule()
     seal_small()
     pin()

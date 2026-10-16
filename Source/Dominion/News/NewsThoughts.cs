@@ -15,6 +15,8 @@ namespace Dominion
             if (!DominionMod.Settings.colonistNewsThoughts) return;
             ThoughtDef thought = ThoughtFor(n);
             if (thought == null) return;
+            // A radio advisory is in force: colonists were told to expect this and keep calm.
+            if (thought.stages[0].baseMoodEffect < 0f && WorldComponent_Dominion.Instance?.RadioOrders.AdvisoryInForce == true) return;
 
             List<Map> maps = Find.Maps;
             for (int m = 0; m < maps.Count; m++)
@@ -25,7 +27,7 @@ namespace Dominion
             }
         }
 
-        private static ThoughtDef ThoughtFor(NewsItem n)
+        public static ThoughtDef ThoughtFor(NewsItem n)
         {
             Faction player = Faction.OfPlayerSilentFail;
             if (player == null || n.def == null) return null;
@@ -65,6 +67,8 @@ namespace Dominion
         public static ThoughtDef Dominion_News_UnrestNearby;
         public static ThoughtDef Dominion_ForeignPropaganda;
         public static ThoughtDef Dominion_Broadcast_Informed;
+        public static ThoughtDef Dominion_Advisory_Reassured;
+        public static ThoughtDef Dominion_Advisory_Unconvincing;
 
         static DominionThoughtDefOf()
         {

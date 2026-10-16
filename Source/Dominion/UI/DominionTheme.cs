@@ -3,6 +3,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Grammar;
+using Verse.Sound;
 
 namespace Dominion
 {
@@ -24,6 +25,14 @@ namespace Dominion
         public static readonly Texture2D StampDisproved = Tex("Stamp_Disproved");
         public static readonly Texture2D StampStopPress = Tex("Stamp_StopPress");
         public static readonly Texture2D StampClassified = Tex("Stamp_Classified");
+        public static readonly Texture2D StampInvestigate = Tex("Stamp_Investigate");
+        public static readonly Texture2D StampInquiry = Tex("Stamp_Inquiry");
+        public static readonly Texture2D StampVerified = Tex("Stamp_Verified");
+        public static readonly Texture2D StampAdvisory = Tex("Stamp_Advisory");
+        public static readonly Texture2D StampInForce = Tex("Stamp_InForce");
+        public static readonly Texture2D StampQueued = Tex("Stamp_Queued");
+        public static readonly Texture2D GizmoAdvisory = Tex("Gizmo_Advisory");
+        public static readonly Texture2D GizmoInvestigate = Tex("Gizmo_Investigate");
 
         private static readonly Dictionary<EventCategory, Texture2D> categoryIcons = new Dictionary<EventCategory, Texture2D>();
 
@@ -71,6 +80,32 @@ namespace Dominion
             UI.RotateAroundPivot(angle, rect.center);
             DrawInk(rect, stamp, new Color(color.r, color.g, color.b, 0.85f));
             GUI.matrix = m;
+        }
+
+        /// <summary>
+        /// A rubber stamp the player can press: faint until hovered, then fully inked and pressed down a little.
+        /// Returns true when clicked. A disabled stamp is drawn grey and shows <paramref name="disabledReason"/>.
+        /// </summary>
+        public static bool StampButton(Rect rect, Texture2D stamp, Color color, float angle, string tooltip, string disabledReason = null, bool lit = false)
+        {
+            bool disabled = disabledReason != null;
+            bool over = !disabled && Mouse.IsOver(rect);
+            Color ink = disabled ? new Color(0.45f, 0.42f, 0.38f) : color;
+            float alpha = disabled ? 0.45f : over || lit ? 1f : 0.65f;
+            Rect r = over && Input.GetMouseButton(0) ? rect.ContractedBy(2f) : rect;
+            if (over) Widgets.DrawBoxSolid(rect.ExpandedBy(2f), PaperShade);
+            Matrix4x4 m = GUI.matrix;
+            UI.RotateAroundPivot(angle, r.center);
+            DrawInk(r, stamp, new Color(ink.r, ink.g, ink.b, alpha));
+            GUI.matrix = m;
+            TooltipHandler.TipRegion(rect, disabled ? tooltip + "\n\n" + disabledReason.Colorize(ColorLibrary.RedReadable) : tooltip);
+            if (disabled) return false;
+            if (Widgets.ButtonInvisible(rect))
+            {
+                SoundDefOf.Click.PlayOneShotOnCamera();
+                return true;
+            }
+            return false;
         }
 
         /// <summary>A label in ink.</summary>

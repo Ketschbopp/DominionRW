@@ -42,6 +42,9 @@ namespace Dominion
         /// <summary>For corrections: the item being corrected.</summary>
         public int correctsId = -1;
 
+        /// <summary>The colony checked it over the radio and got a definite answer.</summary>
+        public bool investigated;
+
         public bool delivered;
         public bool read;
 
@@ -89,6 +92,7 @@ namespace Dominion
             Scribe_Values.Look(ref truthful, "truthful", true);
             Scribe_Values.Look(ref corrected, "corrected");
             Scribe_Values.Look(ref correctsId, "correctsId", -1);
+            Scribe_Values.Look(ref investigated, "investigated");
             Scribe_Values.Look(ref delivered, "delivered");
             Scribe_Values.Look(ref read, "read");
             Scribe_Values.Look(ref detail, "detail");

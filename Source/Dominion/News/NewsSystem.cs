@@ -195,21 +195,27 @@ namespace Dominion
                 NewsItem n = delivered[i];
                 if (n.truthful || n.corrected || n.correctsId >= 0) continue;
                 if (IntelUtility.IntelOn(n.primary) < CorrectionIntel) continue;
-                n.corrected = true;
-                int now = Find.TickManager.TicksGame;
-                comp.News.Add(new NewsItem
-                {
-                    def = DominionEventDefOf.Dominion_NewsCorrection,
-                    occurredTick = now,
-                    primary = n.primary,
-                    secondary = n.secondary,
-                    secrecy = Secrecy.Public,
-                    confidence = NewsConfidence.Confirmed,
-                    source = NewsSource.Correction,
-                    correctsId = n.id,
-                    arrivesTick = now + Rand.Range(GenDate.TicksPerHour, GenDate.TicksPerHour * 12),
-                });
+                PublishCorrection(n, comp, Rand.Range(GenDate.TicksPerHour, GenDate.TicksPerHour * 12));
             }
+        }
+
+        /// <summary>Marks a false rumour as corrected and sends out the correction after <paramref name="delay"/> ticks.</summary>
+        public static void PublishCorrection(NewsItem n, WorldComponent_Dominion comp, int delay)
+        {
+            n.corrected = true;
+            int now = Find.TickManager.TicksGame;
+            comp.News.Add(new NewsItem
+            {
+                def = DominionEventDefOf.Dominion_NewsCorrection,
+                occurredTick = now,
+                primary = n.primary,
+                secondary = n.secondary,
+                secrecy = Secrecy.Public,
+                confidence = NewsConfidence.Confirmed,
+                source = NewsSource.Correction,
+                correctsId = n.id,
+                arrivesTick = now + delay,
+            });
         }
     }
 }

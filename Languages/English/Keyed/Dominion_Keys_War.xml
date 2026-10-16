@@ -284,4 +284,39 @@
   <Dominion_Setting_JointWars_Desc>Factions at war ask their allies and puppets to join, you included.</Dominion_Setting_JointWars_Desc>
   <Dominion_Setting_ColdWars>Cold wars</Dominion_Setting_ColdWars>
   <Dominion_Setting_ColdWars_Desc>Bitter rivals of similar strength enter cold wars: arms races, propaganda, border skirmishes and proxy wars.</Dominion_Setting_ColdWars_Desc>
+
+  <!-- Radio desk: advisories and rumour investigations -->
+  <Dominion_Radio_DeskTitle>Radio desk</Dominion_Radio_DeskTitle>
+  <Dominion_Radio_OrdersQueued>Radio orders queued: {0}</Dominion_Radio_OrdersQueued>
+  <Dominion_Radio_Upset>{0} colonists rattled by the news</Dominion_Radio_Upset>
+  <Dominion_Radio_NeedResearch>Needs research: {0}.</Dominion_Radio_NeedResearch>
+  <Dominion_Radio_NeedReceiver>Build a radio receiver first.</Dominion_Radio_NeedReceiver>
+  <Dominion_Radio_ClickToCancel>Click to cancel.</Dominion_Radio_ClickToCancel>
+  <Dominion_Radio_AdvisoryCaption>colony advisory</Dominion_Radio_AdvisoryCaption>
+  <Dominion_Radio_IssueAdvisory>Issue advisory</Dominion_Radio_IssueAdvisory>
+  <Dominion_Radio_CancelAdvisory>Cancel advisory</Dominion_Radio_CancelAdvisory>
+  <Dominion_Radio_IssueAdvisory_Desc>Have a colonist go on the colony radio and talk everyone through the latest news: what it means, what it does not, and why there is no need to panic.
+
+A colonist with research work enabled reads it at a radio receiver. If it lands (better with high Social), it clears moods from bad news and foreign propaganda, cheers people up, and for {0} days colonists shrug off new bad news. A clumsy advisory makes things a little worse.
+
+Colonists currently upset by the news: {1}.</Dominion_Radio_IssueAdvisory_Desc>
+  <Dominion_Radio_AdvisoryInForce>Advisory in force for another {0}.</Dominion_Radio_AdvisoryInForce>
+  <Dominion_Radio_AdvisoryQueued>Advisory queued. The next colonist free for research work will take it to the radio.</Dominion_Radio_AdvisoryQueued>
+  <Dominion_Radio_AdvisoryDone>{PAWN_nameDef} went on the air with a colony advisory. It landed: {1} worried colonists calmed down, and bad news will not rattle anyone for {2} days.</Dominion_Radio_AdvisoryDone>
+  <Dominion_Radio_AdvisoryFailed>{PAWN_nameDef}'s radio advisory fell flat. If anything, people are more nervous now.</Dominion_Radio_AdvisoryFailed>
+  <Dominion_Radio_Investigate>Investigate rumour</Dominion_Radio_Investigate>
+  <Dominion_Radio_Investigate_Desc>Send the story to the radio desk. A colonist with research work enabled calls around on the radio (contacts, traders, other stations) until it is confirmed or exposed as false.
+
+Success is likelier with high Intellectual and good radio coverage. An inconclusive result can be tried again. Exposing a false rumour runs a correction at once and clears the worry it caused.</Dominion_Radio_Investigate_Desc>
+  <Dominion_Radio_InvestigateOption>Investigate: {0}</Dominion_Radio_InvestigateOption>
+  <Dominion_Radio_InvestigateCancelOption>Stop investigating: {0}</Dominion_Radio_InvestigateCancelOption>
+  <Dominion_Radio_NoRumours>No unverified rumours to investigate</Dominion_Radio_NoRumours>
+  <Dominion_Radio_InvestigateQueued>Sent to the radio desk: "{0}"</Dominion_Radio_InvestigateQueued>
+  <Dominion_Radio_InvestigateNote>Unverified. Stamp it to have the radio desk check the story.</Dominion_Radio_InvestigateNote>
+  <Dominion_Radio_InquiryNote>The radio desk is on it: {0} done.</Dominion_Radio_InquiryNote>
+  <Dominion_Radio_InvestigateTrue>{PAWN_nameDef} checked the rumour on the radio. It is true: "{1}"</Dominion_Radio_InvestigateTrue>
+  <Dominion_Radio_InvestigateFalse>{PAWN_nameDef} exposed a false rumour over the radio: "{1}". A correction is going out.</Dominion_Radio_InvestigateFalse>
+  <Dominion_Radio_InvestigateInconclusive>{PAWN_nameDef} could not get a straight answer on the radio about "{1}". It can be tried again.</Dominion_Radio_InvestigateInconclusive>
+  <Dominion_Radio_ReportAdvisory>reading a colony advisory on the radio.</Dominion_Radio_ReportAdvisory>
+  <Dominion_Radio_ReportInvestigate>chasing a rumour on the radio.</Dominion_Radio_ReportInvestigate>
 </LanguageData>
