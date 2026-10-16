@@ -13,9 +13,20 @@ namespace Dominion
     {
         public override int Order => 15;
 
+        /// <summary>A linked antenna keeps coverage full all day, not just at the daily pass.</summary>
+        public override void Hourly()
+        {
+            if (RadioAntenna.GlobalCoverage) WorldComponent_Dominion.Instance.radioCoverage = 100f;
+        }
+
         public override void DailyGlobal()
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (RadioAntenna.GlobalCoverage)
+            {
+                comp.radioCoverage = 100f;
+                return;
+            }
             comp.radioCoverage *= 0.7f;
             if (comp.radioCoverage < 0.5f) comp.radioCoverage = 0f;
         }

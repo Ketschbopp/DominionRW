@@ -404,6 +404,8 @@ With vanilla's **Tube television** researched, every report that is not hidden a
 
 **Radio.** Radio coverage (0–100) rises while a colonist monitors a powered receiver (Research work; about 4 per hour, scaled by Intellectual skill and hearing) and decays 30% per day. Colonists stop monitoring at 90.
 
+**Large radio antenna** (research *World communications protocols*, 2×2, 250 W): built touching a radio receiver, it links to it. While both are powered, radio coverage stays at 100% with nobody monitoring, and Restricted events can also arrive by radio intercept (1–6 h). Modded buildings of at least 2×2 called "antenna" count too. A setting, *News travels instantly*, delivers every report the player has the intel for the moment it happens.
+
 **Radio desk.** With a receiver built, the player can queue two radio orders (rubber-stamp buttons on the newspaper, or gizmos on the receiver). Research-work colonists take them before plain monitoring, in two-hour shifts that also feed coverage; progress is kept on the order.
 
 | Order | Work | Success chance | Effect |

@@ -49,13 +49,17 @@ namespace Dominion
                 item.confidence = NewsConfidence.Confirmed;
                 item.source = NewsSource.DiplomaticDispatch;
                 item.arrivesTick = ev.tick;
+                if (DominionMod.Settings.instantNews) Deliver(item, comp);
                 return;
             }
 
             float intel = IntelUtility.IntelOn(ev.primary, ev.secondary);
             float required = IntelUtility.RequiredIntel(ev.secrecy);
             if (intel >= required)
+            {
                 Schedule(item, intel, required, comp, NewsSource.TravelerGossip);
+                if (DominionMod.Settings.instantNews) Deliver(item, comp);
+            }
             else
                 item.expiresTick = ev.tick + HiddenLifetimeDays * GenDate.TicksPerDay;
         }
@@ -72,7 +76,8 @@ namespace Dominion
                                  item.secondary?.RelationKindWith(player) == FactionRelationKind.Ally);
 
             int delay;
-            if (item.secrecy == Secrecy.Public && radio)
+            // A linked large antenna hears the whole world, including traffic that is only lightly guarded.
+            if (radio && (item.secrecy == Secrecy.Public || item.secrecy == Secrecy.Restricted && RadioAntenna.GlobalCoverage))
             {
                 item.source = NewsSource.RadioIntercept;
                 delay = Rand.Range(1 * hour, 6 * hour);
@@ -98,6 +103,7 @@ namespace Dominion
             item.confidence = direct || intel >= required + 30f ? NewsConfidence.Confirmed : NewsConfidence.Rumor;
             // With television (vanilla Tube television research), the world's news reaches the colony within hours.
             if (TelevisionResearched) delay = Mathf.Min(delay, Rand.Range(1 * hour, 4 * hour));
+            if (DominionMod.Settings.instantNews) delay = 0;
             item.arrivesTick = now + delay;
             item.expiresTick = -1;
         }
@@ -108,10 +114,10 @@ namespace Dominion
             List<NewsItem> pending = comp.News.Pending;
             if (pending.Count == 0) return;
             int now = Find.TickManager.TicksGame;
-            // News already on the slow road when television arrives catches up too.
-            if (TelevisionResearched)
+            // News already on the slow road when television arrives (or instant news is switched on) catches up too.
+            if (TelevisionResearched || DominionMod.Settings.instantNews)
             {
-                int latest = now + 4 * GenDate.TicksPerHour;
+                int latest = DominionMod.Settings.instantNews ? now : now + 4 * GenDate.TicksPerHour;
                 for (int i = 0; i < pending.Count; i++)
                     if (!pending[i].Hidden && pending[i].arrivesTick > latest) pending[i].arrivesTick = latest;
             }

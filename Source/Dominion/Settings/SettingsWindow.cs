@@ -123,6 +123,7 @@ namespace Dominion
             l.Label("Dominion_Setting_NewsLogCap".Translate(s.newsLogCap));
             s.newsLogCap = (int)l.Slider(s.newsLogCap, 50, 2000);
             l.CheckboxLabeled("Dominion_Setting_FalseRumors".Translate(), ref s.falseRumors, "Dominion_Setting_FalseRumors_Desc".Translate());
+            l.CheckboxLabeled("Dominion_Setting_InstantNews".Translate(), ref s.instantNews, "Dominion_Setting_InstantNews_Desc".Translate());
             l.CheckboxLabeled("Dominion_Setting_NewsThoughts".Translate(), ref s.colonistNewsThoughts, "Dominion_Setting_NewsThoughts_Desc".Translate());
             l.CheckboxLabeled("Dominion_Setting_LetterForMajor".Translate(), ref s.letterForMajorNews, "Dominion_Setting_LetterForMajor_Desc".Translate());
             l.GapLine();

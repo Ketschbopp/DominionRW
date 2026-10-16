@@ -123,7 +123,52 @@ def broadcast_center():
     Image.alpha_composite(shadow, img).save(OUT / "Dominion_BroadcastCenter.png", optimize=True)
 
 
+def large_radio_antenna():
+    """2x2 lattice mast on a concrete pad with guy wires, seen from above at RimWorld's usual slant."""
+    s = 256
+    img = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    steel = (150, 152, 158, 255)
+    dark = (96, 98, 104, 255)
+    # concrete pad and anchor blocks
+    shaded_rect(d, [70, 178, 186, 238], (138, 134, 126, 255))
+    for ax, ay in ((14, 226), (226, 226), (120, 250)):
+        d.rectangle([ax - 10, ay - 8, ax + 10, ay + 4], fill=(120, 116, 108, 255), outline=OUTLINE, width=2)
+    # guy wires from the anchors to the mast
+    for ax, ay in ((14, 222), (226, 222)):
+        d.line([(ax, ay), (128, 70)], fill=(70, 70, 74, 255), width=2)
+        d.line([(ax, ay), (128, 130)], fill=(70, 70, 74, 255), width=2)
+    # lattice mast: two rails narrowing upward, with cross bracing
+    top, bottom = 18, 206
+    def rail_x(y, side):
+        w = 8 + (y - top) * 0.11
+        return 128 + side * w
+    d.line([(rail_x(bottom, -1), bottom), (rail_x(top, -1), top)], fill=OUTLINE, width=6)
+    d.line([(rail_x(bottom, 1), bottom), (rail_x(top, 1), top)], fill=OUTLINE, width=6)
+    d.line([(rail_x(bottom, -1), bottom), (rail_x(top, -1), top)], fill=steel, width=3)
+    d.line([(rail_x(bottom, 1), bottom), (rail_x(top, 1), top)], fill=steel, width=3)
+    y = bottom
+    side = 1
+    while y > top + 12:
+        ny = y - 18
+        d.line([(rail_x(y, -side), y), (rail_x(ny, side), ny)], fill=dark, width=2)
+        d.line([(rail_x(ny, -1), ny), (rail_x(ny, 1), ny)], fill=dark, width=2)
+        y, side = ny, -side
+    # dipole arms, a dish and the red warning light
+    for yy, w in ((40, 34), (66, 28)):
+        d.line([(128 - w, yy), (128 + w, yy)], fill=OUTLINE, width=5)
+        d.line([(128 - w, yy), (128 + w, yy)], fill=steel, width=2)
+    d.chord([138, 92, 176, 130], 270, 90, fill=(196, 196, 200, 255), outline=OUTLINE, width=2)
+    d.ellipse([121, 6, 135, 20], fill=(210, 50, 40, 255), outline=OUTLINE, width=2)
+    d.ellipse([125, 9, 130, 14], fill=(255, 170, 150, 255))
+    shadow = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    ImageDraw.Draw(shadow).polygon([(84, 236), (190, 236), (230, 120), (150, 110)], fill=(0, 0, 0, 55))
+    shadow = shadow.filter(ImageFilter.GaussianBlur(5))
+    Image.alpha_composite(shadow, img).save(OUT / "Dominion_LargeRadioAntenna.png", optimize=True)
+
+
 if __name__ == "__main__":
+    large_radio_antenna()
     OUT.mkdir(parents=True, exist_ok=True)
     broadcast_center()
     radio_receiver()
