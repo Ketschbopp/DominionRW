@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Integrations with other mods -->
+
+  <!-- Faction Territories expansion: where a new settlement is going up when no town of the builder is nearby -->
+  <Dominion_Integration_TheFrontier>the frontier</Dominion_Integration_TheFrontier>
+
+  <!-- Visit Settlements: why the "enter settlement" command is disabled. {0} settlement, {1} its current holder -->
+  <Dominion_Visit_BlockedOccupied>{0} is occupied by {1}. Its people are in no mood to receive visitors.</Dominion_Visit_BlockedOccupied>
+  <Dominion_Visit_BlockedSiege>{0} is under siege. Its gates are shut.</Dominion_Visit_BlockedSiege>
+  <Dominion_Visit_BlockedBlockade>{0} is blockaded. Nobody gets in or out.</Dominion_Visit_BlockedBlockade>
+
+</LanguageData>

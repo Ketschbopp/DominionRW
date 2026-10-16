@@ -98,6 +98,7 @@ namespace Dominion
                 sieges[id] = (tile, attacker, defender);
                 Faction a = comp.Cache.FactionById(attacker), d = comp.Cache.FactionById(defender);
                 if (!primed || a == null || d == null) continue;
+                ftv.EnsureWarForSiege(a, d); // AI-vs-AI siege without a Dominion war: make it one (integration)
                 Settlement s = Find.WorldObjects.SettlementAt(new PlanetTile(tile));
                 EventBus.Raise(DominionEventDefOf.Dominion_SiegeBegan, a, d, tile, detail: s?.Label);
             }

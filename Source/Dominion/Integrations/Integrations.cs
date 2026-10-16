@@ -142,7 +142,7 @@ namespace Dominion
     }
 
     /// <summary>RimMarket: how a faction's traders rate your market carries over into its opinion of you.</summary>
-    public class Integration_RimMarket : DominionIntegration
+    public partial class Integration_RimMarket : DominionIntegration
     {
         public override string PackageId => "forti.rimmarket";
         public override string Label => "RimMarket";
@@ -163,6 +163,7 @@ namespace Dominion
             routeFaction = b.Field(route, "faction");
             routeSettlement = b.Field(route, "settlement");
             routeNextDeparture = b.Field(route, "nextDepartureTick");
+            BindTrade(b, route);
         }
 
         private PropertyInfo routes;
@@ -178,6 +179,7 @@ namespace Dominion
         {
             object m = instance?.GetValue(null);
             if (m == null || !(routes.GetValue(m) is System.Collections.IEnumerable list)) return;
+            TrackTrade(list);
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             Faction player = Faction.OfPlayer;
             int next = Find.TickManager.TicksGame + GenDate.TicksPerDay;

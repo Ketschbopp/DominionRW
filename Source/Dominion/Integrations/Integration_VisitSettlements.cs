@@ -20,7 +20,7 @@ namespace Dominion
     /// <item>A summit at their capital opens when your head of state is visiting it.</item>
     /// </list>
     /// </summary>
-    public class Integration_VisitSettlements : DominionIntegration
+    public partial class Integration_VisitSettlements : DominionIntegration
     {
         public override string PackageId => "NinaGoblin.VisitSettlements";
         public override string[] AlternatePackageIds => new[] { "alt4s.VisitSettlements" };

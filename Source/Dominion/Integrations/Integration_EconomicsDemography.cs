@@ -10,7 +10,7 @@ namespace Dominion
     /// Required. Economics &amp; Demography is the source of every faction's population and wealth.
     /// Calls go through reflection, but only once per faction per day, so the cost is negligible.
     /// </summary>
-    public class Integration_EconomicsDemography : DominionIntegration
+    public partial class Integration_EconomicsDemography : DominionIntegration
     {
         public override string PackageId => "helldan.economicsdemography";
         public override string Label => "Economics & Demography";
@@ -52,6 +52,7 @@ namespace Dominion
             // Optional: without it, Dominion's economic climate only changes its own index, not E&D's production.
             produceGoods = manager?.GetMethod("ProduceGoodsCategorized", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             b.Note(produceGoods != null ? "production hook: ProduceGoodsCategorized" : "production hook not found (climate will not reach E&D production)");
+            BindGoods(stockpile, b);
         }
 
         /// <summary>Dominion's economic climate scales E&amp;D's production for each faction.</summary>
@@ -254,6 +255,7 @@ namespace Dominion
         /// </summary>
         public override void OnEvent(DominionEvent ev)
         {
+            OnEventGoods(ev);
             if (!DominionMod.Settings.emigration || ev.primary == null || ev.primary.IsPlayer) return;
             float share;
             if (ev.def == DominionEventDefOf.Dominion_Riots) share = 0.01f;

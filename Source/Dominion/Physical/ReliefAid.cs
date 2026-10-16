@@ -28,7 +28,7 @@ namespace Dominion
         }
 
         /// <summary>Hands over aid up to <see cref="MaxValue"/>: medicine first, then food, then silver. Returns the value given.</summary>
-        public static float Give(Caravan caravan)
+        public static float Give(Caravan caravan, List<ThingDefCount> handedOver = null)
         {
             var items = new List<Thing>();
             foreach (Thing t in CaravanInventoryUtility.AllInventoryItems(caravan))
@@ -43,6 +43,7 @@ namespace Dominion
                 int count = Mathf.Min(t.stackCount, Mathf.CeilToInt((MaxValue - given) / unit));
                 if (count <= 0) continue;
                 given += unit * count;
+                handedOver?.Add(new ThingDefCount(t.def, count));
                 Thing part = t.SplitOff(count);
                 if (!part.Destroyed) part.Destroy();
             }
@@ -52,10 +53,12 @@ namespace Dominion
         public static void Deliver(Faction f, Caravan caravan, Pawn envoy)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            float value = Give(caravan);
+            var handedOver = new List<ThingDefCount>();
+            float value = Give(caravan, handedOver);
             FactionState s = comp.GetState(f);
-            // The goods reach their stockpile (as silver value in E&D) and ease the crisis economy.
-            EconomyEffects.Receive(f, Mathf.RoundToInt(value));
+            // The goods reach their E&D stockpile as themselves (silver value if that fails) and ease the crisis economy.
+            if (!(IntegrationRegistry.Get<Integration_EconomicsDemography>()?.ReceiveGoods(f, handedOver) ?? false))
+                EconomyEffects.Receive(f, Mathf.RoundToInt(value));
             EconomyEffects.Shock(f, Mathf.Min(0.06f, value / Mathf.Max(1000f, s.wealth) * 2f));
             RelationState view = comp.GetRelation(f, Faction.OfPlayer);
             view.favour += Mathf.Min(25f, value / 40f);

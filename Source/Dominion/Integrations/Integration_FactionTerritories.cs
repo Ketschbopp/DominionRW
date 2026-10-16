@@ -12,7 +12,7 @@ namespace Dominion
     /// Required. Faction Territories and Vassalage owns territory and vassal outposts. Tile ownership is
     /// read through a compiled delegate, because the territory scan calls it for every world tile once a day.
     /// </summary>
-    public class Integration_FactionTerritories : DominionIntegration
+    public partial class Integration_FactionTerritories : DominionIntegration
     {
         public override string PackageId => "jaeger972.factionterritories";
         public override string Label => "Faction Territories and Vassalage";
@@ -86,10 +86,12 @@ namespace Dominion
             b.Note(requestRegenerate != null ? "territory refresh: RequestRegenerate" : "territory refresh not found");
             b.Note(tryCreateInvasion != null && invasionAttacker != null ? "invasions: warbands besiege through FTV" : "invasions not found: warband sieges stay abstract");
             b.Note(rollWinner != null ? "invasion outcomes use Dominion's military strength" : "invasion outcome hook not found");
+            BindExpansion(b);
         }
 
         protected internal override void OnActivated()
         {
+            PatchExpansion();
             if (rollWinner == null || rollPatched) return;
             try
             {

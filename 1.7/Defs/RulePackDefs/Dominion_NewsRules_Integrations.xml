@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- News grammar for events raised by integrations (Dominion_Events_Integrations.xml). -->
+
+  <RulePackDef>
+    <defName>Dominion_News_SettlementConstructionBegun</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] builds a new settlement near [DETAIL]</li>
+        <li>headline-&gt;Settlers of [FACTION_A] break ground near [DETAIL]</li>
+        <li>story-&gt;[LEAD] settlers from [FACTION_A] have begun building a new town near [DETAIL], at the edge of its lands. [cb_detail] [closing]</li>
+        <li>cb_detail-&gt;Until the walls are up, the site is said to be lightly guarded.</li>
+        <li>cb_detail-&gt;[observers] see it as a sign that [FACTION_A] means to grow.</li>
+        <li>cb_detail-&gt;Neighbours are watching the new site closely.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SettlementFounded</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] founds [DETAIL]</li>
+        <li>headline-&gt;New town of [DETAIL] stands, says [FACTION_A]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has finished building the new settlement of [DETAIL]. [sf_detail] [closing]</li>
+        <li>sf_detail-&gt;The first families are already moving in.</li>
+        <li>sf_detail-&gt;[LEADER_A] has called it proof of the faction's strength.</li>
+        <li>sf_detail-&gt;Its claim on the surrounding land is expected to follow.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_ConstructionRaided</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] attacks settlers of [FACTION_B] near [DETAIL]</li>
+        <li>headline-&gt;Settlement site of [FACTION_B] raided</li>
+        <li>story-&gt;[LEAD] forces of [FACTION_A] have attacked a settlement under construction by [FACTION_B] near [DETAIL]. [cr_detail] [closing]</li>
+        <li>cr_detail-&gt;[FACTION_B] has called it an unprovoked attack on peaceful settlers.</li>
+        <li>cr_detail-&gt;The builders are said to have had little time to prepare.</li>
+        <li>cr_detail-&gt;[observers] expect [FACTION_B] to demand redress.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_ConvoyLost</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Trade convoy of [FACTION_A] lost on the road from [DETAIL]</li>
+        <li>headline-&gt;Caravan from [DETAIL] destroyed</li>
+        <li>story-&gt;[LEAD] a trade convoy of [FACTION_A] bound from [DETAIL] has been destroyed on the road, attacked by [FACTION_B]. [cl_detail] [closing]</li>
+        <li>cl_detail-&gt;Its goods were carried off and the drivers have not been seen since.</li>
+        <li>cl_detail-&gt;Merchants say the route is becoming too dangerous to use.</li>
+        <li>cl_detail-&gt;[observers] fear for the future of the trade route.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+</Defs>
