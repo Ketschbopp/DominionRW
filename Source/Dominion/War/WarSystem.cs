@@ -165,7 +165,14 @@ namespace Dominion
         {
             WorldComponent_Dominion comp = Comp;
             WarRegistry reg = comp.Wars;
+            foreach (War w in reg.wars)
+                if (w.attacker != null && w.defender != null && (w.attacker.defeated || w.defender.defeated))
+                    WarbandUtility.Recall(w.attacker, w.defender);
             reg.wars.RemoveAll(w => w.attacker == null || w.defender == null || w.attacker.defeated || w.defender.defeated);
+            // A defeated faction's envoys and fighters have nowhere to go.
+            foreach (WorldObject o in Find.WorldObjects.AllWorldObjects.ToList())
+                if ((o is Warband || o is Delegation) && !o.Destroyed && (o.Faction == null || o.Faction.defeated))
+                    o.Destroy();
 
             foreach (Warband w in WarbandUtility.All().ToList())
                 if (w.Blockading) WarbandUtility.BlockadeDay(w);

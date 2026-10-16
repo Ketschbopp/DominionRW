@@ -79,6 +79,11 @@ namespace Dominion
 
         public bool InCrisis => crisis != null && crisisUntilTick > Find.TickManager.TicksGame;
 
+        /// <summary>In crisis, or out of it for less than <see cref="AidGraceDays"/>: aid still helps with the recovery.</summary>
+        public bool NeedsAid => crisis != null && crisisUntilTick + AidGraceDays * GenDate.TicksPerDay > Find.TickManager.TicksGame;
+
+        public const int AidGraceDays = 10;
+
         /// <summary>Tracks leader changes so legitimacy resets for a new leader.</summary>
         public Pawn lastKnownLeader;
 

@@ -153,7 +153,7 @@ namespace Dominion
 
         public PlanetTile TileAhead(int steps) => path.Count == 0 ? Tile : new PlanetTile(path[Mathf.Min(path.Count - 1, index + steps)]);
 
-        public bool CanBeIntercepted => !Destroyed && Faction != null && !Faction.IsPlayer && VisibleToPlayer;
+        public bool CanBeIntercepted => !Destroyed && Faction != null && !Faction.IsPlayer && !Faction.defeated && VisibleToPlayer;
 
         public void Engage(Caravan caravan) => DelegationUtility.Intercept(this, caravan);
 

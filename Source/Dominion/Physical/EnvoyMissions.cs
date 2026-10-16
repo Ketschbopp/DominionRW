@@ -132,7 +132,7 @@ namespace Dominion
                 case EnvoyMission.NegotiateVassalage:
                     return !hostile && IntegrationRegistry.IsActive<Integration_FactionTerritories>();
                 case EnvoyMission.DeliverAid:
-                    return !hostile && WorldComponent_Dominion.Instance.GetState(f).InCrisis;
+                    return !hostile && WorldComponent_Dominion.Instance.GetState(f).NeedsAid;
                 default:
                     return false;
             }
@@ -179,7 +179,7 @@ namespace Dominion
                 if (ftv == null || !ftv.CanNegotiateVassalage(s, out reason))
                     return FloatMenuAcceptanceReport.WithFailReason(reason.NullOrEmpty() ? "Dominion_Mission_VassalageUnavailable".Translate().ToString() : reason);
             }
-            if (m == EnvoyMission.DeliverAid && !comp.GetState(s.Faction).InCrisis)
+            if (m == EnvoyMission.DeliverAid && !comp.GetState(s.Faction).NeedsAid)
                 return FloatMenuAcceptanceReport.WithFailReason("Dominion_Aid_NoCrisis".Translate(s.Faction.Name));
             if (m == EnvoyMission.AttendSummit && LeadershipUtility.HeadOfState() == null)
                 return FloatMenuAcceptanceReport.WithFailReason(LeadershipUtility.NoHeadOfStateReason());

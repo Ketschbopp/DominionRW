@@ -95,7 +95,6 @@ namespace Dominion
             Add(-0.04f * EmbargoesAgainst(f, comp), "Dominion_Climate_Embargoes");
             Add(-0.02f * Mathf.Min(3, s.coldWars), "Dominion_Climate_ColdWars");
             Add(Blockaded(f, comp) ? -0.12f : 0f, "Dominion_Climate_Blockade");
-            Add(Find.TickManager.TicksGame < s.sabotagedUntilTick ? -0.08f : 0f, "Dominion_Climate_Sabotage");
             Add(s.InCrisis ? -0.08f : 0f, "Dominion_Climate_Crisis");
             Add(TreatyBonus(f, comp), "Dominion_Climate_Treaties");
             Add(CouncilUtility.EconomyBonus(f), "Dominion_Climate_Council");

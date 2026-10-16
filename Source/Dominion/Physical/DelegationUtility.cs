@@ -49,7 +49,7 @@ namespace Dominion
         public static bool AnyPending(Faction a, Faction b)
         {
             foreach (WorldObject o in Find.WorldObjects.AllWorldObjects)
-                if (o is Delegation d && ((d.Faction == a && d.target == b) || (d.Faction == b && d.target == a)))
+                if (o is Delegation d && d.purpose == DelegationPurpose.Agreement && ((d.Faction == a && d.target == b) || (d.Faction == b && d.target == a)))
                     return true;
             return false;
         }

@@ -36,7 +36,8 @@ namespace Dominion
                 Decree d = c.decrees[i];
                 try
                 {
-                    if (d.expiresTick >= 0 && now >= d.expiresTick) Expire(d);
+                    // A decree aimed at a faction that no longer exists has nothing left to do.
+                    if (d.expiresTick >= 0 && now >= d.expiresTick || d.targets.Any(t => t == null || t.defeated)) Expire(d);
                     else if (DominionMod.Settings.councilEnabled) d.def.Worker.DailyCheck(d);
                 }
                 catch (System.Exception e)
@@ -115,6 +116,12 @@ namespace Dominion
             foreach (Faction m in members)
             {
                 if (m == c.host || m.IsPlayer) continue;
+                // No safe road to an enemy's council: they attend by radio.
+                if (m.HostileTo(c.host))
+                {
+                    c.attending.Add(m);
+                    continue;
+                }
                 Delegation d = DelegationUtility.Dispatch(m, c.host, DelegationPurpose.CouncilDelegate);
                 if (d == null) c.attending.Add(m); // no road needed (or none possible): counts as present
             }

@@ -198,6 +198,7 @@ namespace Dominion
                 endTick = int.MaxValue,
                 physical = true,
                 settlement = s,
+                tile = s.Tile.tileId,
                 alerted = f.HostileTo(Faction.OfPlayer),
             };
             Svc.operations.Add(op);
@@ -305,6 +306,15 @@ namespace Dominion
         public static void Check(Operation op, bool hourly)
         {
             Map map = op.settlement?.Map;
+            if (map == null && op.tile >= 0)
+                map = Find.Maps.FirstOrDefault(m => m.Tile.tileId == op.tile);
+            // The base was wiped out with the captive still alive: they are free.
+            bool baseGone = op.settlement == null || op.settlement.Destroyed;
+            if (baseGone && !op.achieved && op.def.objective == PhysicalObjective.RescueHostage && op.hostage != null && op.hostage.Spawned && !op.hostage.Dead)
+            {
+                op.hostage.guest?.SetGuestStatus(null, GuestStatus.Guest);
+                Achieve(op);
+            }
             List<Pawn> onMap = map == null ? new List<Pawn>() : op.agents.Where(p => p != null && !p.Dead && p.Spawned && p.Map == map).ToList();
             Faction f = op.target;
 

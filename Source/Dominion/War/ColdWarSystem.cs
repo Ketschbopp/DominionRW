@@ -19,7 +19,7 @@ namespace Dominion
 
         private static WorldComponent_Dominion Comp => WorldComponent_Dominion.Instance;
 
-        public static bool InColdWar(Faction a, Faction b) => Comp.TryGetRelation(a, b)?.ColdWar ?? false;
+        public static bool InColdWar(Faction a, Faction b) => a != null && b != null && !a.defeated && !b.defeated && (Comp.TryGetRelation(a, b)?.ColdWar ?? false);
 
         public static void Begin(Faction a, Faction b)
         {

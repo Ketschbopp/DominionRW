@@ -121,7 +121,7 @@ namespace Dominion
             Tile = new PlanetTile(path[index]);
             visibleCheckedTick = -99999;
 
-            if (!warnedPlayer && target != null && target.IsPlayer && TicksToArrival < GenDate.TicksPerDay && VisibleToPlayer)
+            if (!warnedPlayer && mission == WarbandMission.RaidPlayer && target != null && target.IsPlayer && TicksToArrival < GenDate.TicksPerDay && VisibleToPlayer)
             {
                 warnedPlayer = true;
                 Find.LetterStack.ReceiveLetter("Dominion_Warband_ApproachingLabel".Translate(),
@@ -207,7 +207,7 @@ namespace Dominion
 
         public PlanetTile TileAhead(int steps) => path.Count == 0 || Blockading ? Tile : new PlanetTile(path[Mathf.Min(path.Count - 1, index + steps)]);
 
-        public bool CanBeIntercepted => !Destroyed && Faction != null && !Faction.IsPlayer && VisibleToPlayer;
+        public bool CanBeIntercepted => !Destroyed && Faction != null && !Faction.IsPlayer && !Faction.defeated && VisibleToPlayer;
 
         public void Engage(Caravan caravan) => WarbandUtility.Intercept(this, caravan);
 
