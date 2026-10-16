@@ -57,6 +57,9 @@ namespace Dominion
         public float partnerFavourTowardFaction;
         public float partnerStabilityOffset;
 
+        /// <summary>Days the economic effect lasts; 0 = a lasting shock that fades over about a month.</summary>
+        public int economyDays;
+
         /// <summary>Chance the faction's leader dies (assassination attempts).</summary>
         public float leaderDeathChance;
 
@@ -227,7 +230,7 @@ namespace Dominion
             s.stability = Mathf.Clamp(s.stability + w.stabilityOffset, 0f, 100f);
             s.legitimacy = Mathf.Clamp(s.legitimacy + w.legitimacyOffset, 0f, 100f);
             // A lasting shock that reaches E&D: losses burn stockpile goods, booms raise production for weeks.
-            if (w.economyFactor != 1f) EconomyEffects.Shock(f, w.economyFactor - 1f);
+            if (w.economyFactor != 1f) EconomyEffects.Shock(f, w.economyFactor - 1f, days: w.economyDays);
             if (w.blocShift != 0f)
             {
                 s.blocs[(int)w.bloc] = Mathf.Max(0f, s.blocs[(int)w.bloc] + w.blocShift);

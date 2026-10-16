@@ -20,8 +20,11 @@ namespace Dominion
 
             if (mode == NewsNotifyMode.Letter)
             {
-                string text = n.story + "\n\n" + "Dominion_News_LetterFooter".Translate(
-                    NewsText.SourceLabel(n.source), ConfidenceLabel(n.confidence));
+                // Letters read like the paper: the desk and reporter, the story, then where it came from.
+                string byline = ("Dominion_NewsDesk_" + n.Category).Translate().ToString().ToUpper() + "  \u00B7  "
+                                + ("Dominion_News_Byline_" + n.source).Translate(DominionTheme.Flavour("reporter", n.id * 7919 + 13));
+                string text = byline.Colorize(ColoredText.SubtleGrayColor) + "\n\n" + n.story + "\n\n" + "Dominion_News_LetterFooter".Translate(
+                    NewsText.SourceLabel(n.source), ConfidenceLabel(n.confidence)) + "\n" + "Dominion_News_LetterSignature".Translate(DominionTheme.Edition).Colorize(ColoredText.SubtleGrayColor);
                 Find.LetterStack.ReceiveLetter(n.headline.Truncate(260f), text, LetterFor(n), null, n.primary, null, null, null, 0, true);
             }
             else

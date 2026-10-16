@@ -139,7 +139,8 @@
       <populationShare>-0.02</populationShare>
       <stabilityOffset>-6</stabilityOffset>
       <economyFactor>0.95</economyFactor>
-      <crisisDays>20</crisisDays>
+      <crisisDays>6</crisisDays>
+      <economyDays>6</economyDays>
     </world>
   </Dominion.DominionEventDef>
 
@@ -157,7 +158,8 @@
       <populationShare>-0.015</populationShare>
       <economyFactor>0.94</economyFactor>
       <stabilityOffset>-4</stabilityOffset>
-      <crisisDays>20</crisisDays>
+      <crisisDays>6</crisisDays>
+      <economyDays>6</economyDays>
       <spreadChance>0.25</spreadChance>
       <spreadDistance>25</spreadDistance>
     </world>
@@ -177,7 +179,8 @@
       <atSettlement>true</atSettlement>
       <economyFactor>0.93</economyFactor>
       <stabilityOffset>-3</stabilityOffset>
-      <crisisDays>15</crisisDays>
+      <crisisDays>6</crisisDays>
+      <economyDays>6</economyDays>
     </world>
   </Dominion.DominionEventDef>
 

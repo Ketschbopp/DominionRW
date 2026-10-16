@@ -181,7 +181,7 @@ namespace Dominion
                         EventBus.Raise(DominionEventDefOf.Dominion_Riots, f, magnitude: 0.5f, source: PackageId);
                         break;
                     case "SL_Famine":
-                        EconomyEffects.Shock(f, -0.03f);
+                        EconomyEffects.Shock(f, -0.03f, days: 6);
                         st.stability = Mathf.Max(0f, st.stability - 2f);
                         break;
                     case "SL_Sanctioned":

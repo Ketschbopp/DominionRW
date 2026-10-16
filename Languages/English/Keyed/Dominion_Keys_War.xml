@@ -218,6 +218,7 @@
   <!-- Economic climate -->
   <Dominion_Climate_Header>Economic climate (also scales Economics &amp; Demography production): {0}</Dominion_Climate_Header>
   <Dominion_Climate_Shock>lasting shocks (wars, disasters, sabotage, booms)</Dominion_Climate_Shock>
+  <Dominion_Climate_ShortShocks>recent sabotage and disasters (wear off in days)</Dominion_Climate_ShortShocks>
   <Dominion_Climate_Wars>wars</Dominion_Climate_Wars>
   <Dominion_Climate_Embargoes>embargoes against it</Dominion_Climate_Embargoes>
   <Dominion_Climate_ColdWars>cold wars</Dominion_Climate_ColdWars>
@@ -229,6 +230,41 @@
   <Dominion_Climate_Stability>stability</Dominion_Climate_Stability>
   <Dominion_Climate_Mods>other mods</Dominion_Climate_Mods>
   <Dominion_Reason_MissileStrike>missile strike</Dominion_Reason_MissileStrike>
+
+  <!-- The Rimward Courier (news tab) -->
+  <Dominion_News_EditionLine>Edition No. {0}  ·  {1}  ·  Weather: {2}  ·  Price: {3} silver</Dominion_News_EditionLine>
+  <Dominion_News_StopPressTag>STOP PRESS</Dominion_News_StopPressTag>
+  <Dominion_News_Ago>{0} ago</Dominion_News_Ago>
+  <Dominion_News_Dateline>{0} — {1}</Dominion_News_Dateline>
+  <Dominion_News_PlaceRim>Somewhere on the rim</Dominion_News_PlaceRim>
+  <Dominion_News_Classifieds>— CLASSIFIEDS —</Dominion_News_Classifieds>
+  <Dominion_News_Static>The radio crackles with static. Somewhere out there, something is happening.</Dominion_News_Static>
+  <Dominion_News_WeatherUnknown>unknown</Dominion_News_WeatherUnknown>
+  <Dominion_News_LetterSignature>— The Rimward Courier, edition No. {0}</Dominion_News_LetterSignature>
+  <Dominion_NewsDesk_General>Rim desk</Dominion_NewsDesk_General>
+  <Dominion_NewsDesk_Diplomacy>Foreign affairs</Dominion_NewsDesk_Diplomacy>
+  <Dominion_NewsDesk_War>War desk</Dominion_NewsDesk_War>
+  <Dominion_NewsDesk_Military>Military affairs</Dominion_NewsDesk_Military>
+  <Dominion_NewsDesk_Economy>Markets and trade</Dominion_NewsDesk_Economy>
+  <Dominion_NewsDesk_Politics>Politics</Dominion_NewsDesk_Politics>
+  <Dominion_NewsDesk_Espionage>Shadows and secrets</Dominion_NewsDesk_Espionage>
+  <Dominion_NewsDesk_Disaster>Catastrophe</Dominion_NewsDesk_Disaster>
+  <Dominion_NewsDesk_Culture>Culture and society</Dominion_NewsDesk_Culture>
+  <Dominion_NewsDesk_Council>Rim Council</Dominion_NewsDesk_Council>
+  <Dominion_News_Byline_TravelerGossip>Overheard by {0} at a caravan fire</Dominion_News_Byline_TravelerGossip>
+  <Dominion_News_Byline_RadioIntercept>Transcribed from the radio by {0}</Dominion_News_Byline_RadioIntercept>
+  <Dominion_News_Byline_DiplomaticDispatch>From a diplomatic dispatch, edited by {0}</Dominion_News_Byline_DiplomaticDispatch>
+  <Dominion_News_Byline_IntelReport>Filed by one of our agents (name withheld). Redactions by {0}</Dominion_News_Byline_IntelReport>
+  <Dominion_News_Byline_Leak>From a source who asked not to be named, via {0}</Dominion_News_Byline_Leak>
+  <Dominion_News_Byline_Correction>A correction, with apologies, from {0}</Dominion_News_Byline_Correction>
+
+  <!-- Dominion window header -->
+  <Dominion_Header_Subtitle>The affairs of {0}</Dominion_Header_Subtitle>
+  <Dominion_Header_HeadOfState>Head of state: {0}</Dominion_Header_HeadOfState>
+  <Dominion_Header_Capital>Capital: {0}</Dominion_Header_Capital>
+  <Dominion_Header_Influence>Influence {0} / {1}</Dominion_Header_Influence>
+  <Dominion_Header_Stats>Your wars: {0}  ·  Wars on the rim: {1}  ·  Your treaties: {2}  ·  Factions: {3}  ·  Unread news: {4}</Dominion_Header_Stats>
+  <Dominion_Header_Latest>LATEST:</Dominion_Header_Latest>
 
   <!-- Settings -->
   <Dominion_Setting_AiCovertOps>AI covert actions</Dominion_Setting_AiCovertOps>

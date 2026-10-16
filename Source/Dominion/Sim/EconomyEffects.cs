@@ -38,13 +38,19 @@ namespace Dominion
         /// A lasting change to a faction's economy (−0.08 = 8% worse). Losses also destroy part of its E&amp;D stockpile,
         /// so the damage is real goods, not just a number.
         /// </summary>
-        public static void Shock(Faction f, float delta, bool destroyGoods = true)
+        public static void Shock(Faction f, float delta, bool destroyGoods = true, int days = 0)
         {
             if (f == null || f.IsPlayer || delta == 0f) return;
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (comp == null || !DominionScheduler.IsSimulated(f)) return;
             FactionState s = comp.GetState(f);
-            s.economyShock = Mathf.Clamp(s.economyShock + delta, MinShock, MaxShock);
+            if (days > 0)
+            {
+                // Short blows (sabotage, disasters) wear off on a fixed day.
+                int now = Find.TickManager.TicksGame;
+                s.timedShocks.Add(new TimedShock { amount = delta, startTick = now, untilTick = now + days * GenDate.TicksPerDay });
+            }
+            else s.economyShock = Mathf.Clamp(s.economyShock + delta, MinShock, MaxShock);
             s.economyIndex = Mathf.Clamp(s.economyIndex * (1f + delta), 10f, 300f);
             if (delta < 0f && destroyGoods && s.wealth > 0f)
                 ED?.TryConsumeWealth(f, s.wealth * Mathf.Min(0.15f, -delta * 0.5f));
@@ -60,6 +66,8 @@ namespace Dominion
         /// <summary>Called daily: the shock fades.</summary>
         public static void Decay(FactionState s)
         {
+            int now = Find.TickManager.TicksGame;
+            s.timedShocks.RemoveAll(t => t == null || now >= t.untilTick);
             s.economyShock *= 1f - ShockDecay;
             if (Mathf.Abs(s.economyShock) < 0.002f) s.economyShock = 0f;
         }
@@ -79,6 +87,10 @@ namespace Dominion
             }
 
             Add(s.economyShock, "Dominion_Climate_Shock");
+            float timed = 0f;
+            int tick = Find.TickManager.TicksGame;
+            foreach (TimedShock t in s.timedShocks) timed += t.Current(tick);
+            Add(timed, "Dominion_Climate_ShortShocks");
             Add(-Mathf.Min(0.18f, 0.06f * s.activeWars), "Dominion_Climate_Wars");
             Add(-0.04f * EmbargoesAgainst(f, comp), "Dominion_Climate_Embargoes");
             Add(-0.02f * Mathf.Min(3, s.coldWars), "Dominion_Climate_ColdWars");

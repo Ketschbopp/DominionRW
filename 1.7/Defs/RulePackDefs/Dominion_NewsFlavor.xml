@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Flavour for The Rimward Courier: reporters, mottos and classified ads. Roots: reporter, motto, classified. -->
+  <RulePackDef>
+    <defName>Dominion_NewsFlavor</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>reporter->[rep_first] [rep_last]</li>
+        <li>reporter->[rep_first] "[rep_nick]" [rep_last]</li>
+        <li>reporter->[rep_first] [rep_last], [rep_title]</li>
+        <li>rep_first->Marta</li>
+        <li>rep_first->Oskar</li>
+        <li>rep_first->Tilde</li>
+        <li>rep_first->Bram</li>
+        <li>rep_first->Ines</li>
+        <li>rep_first->Hollis</li>
+        <li>rep_first->Wren</li>
+        <li>rep_first->Doran</li>
+        <li>rep_first->Sabeth</li>
+        <li>rep_first->Kasimir</li>
+        <li>rep_first->Ottilie</li>
+        <li>rep_first->Fennick</li>
+        <li>rep_first->Juno</li>
+        <li>rep_first->Ambrose</li>
+        <li>rep_first->Lark</li>
+        <li>rep_first->Petra</li>
+        <li>rep_last->Voss</li>
+        <li>rep_last->Harrow</li>
+        <li>rep_last->Quill</li>
+        <li>rep_last->Brightwater</li>
+        <li>rep_last->Okonkwo</li>
+        <li>rep_last->Lindqvist</li>
+        <li>rep_last->Marlowe</li>
+        <li>rep_last->Ashdown</li>
+        <li>rep_last->Kettering</li>
+        <li>rep_last->Delacroix</li>
+        <li>rep_last->Thorne</li>
+        <li>rep_last->Pemberton</li>
+        <li>rep_last->Blackwood</li>
+        <li>rep_last->Muffett</li>
+        <li>rep_nick->Inkwell</li>
+        <li>rep_nick->Two-Scoops</li>
+        <li>rep_nick->Static</li>
+        <li>rep_nick->Lucky</li>
+        <li>rep_nick->Ears</li>
+        <li>rep_nick->Deadline</li>
+        <li>rep_nick->Scoop</li>
+        <li>rep_nick->Muffalo</li>
+        <li>rep_title->foreign correspondent</li>
+        <li>rep_title->war correspondent</li>
+        <li>rep_title->our rim desk</li>
+        <li>rep_title->senior gossip</li>
+        <li>rep_title->caravan route reporter</li>
+        <li>rep_title->radio desk</li>
+
+        <li>motto->All the news that survives the caravan route</li>
+        <li>motto->Read it before the raiders do</li>
+        <li>motto->Printed on the finest recycled caravan manifests</li>
+        <li>motto->Trusted by at least three colonies</li>
+        <li>motto->Now with twenty percent fewer rumours</li>
+        <li>motto->The only paper that has outlived four editors</li>
+        <li>motto->Neutral since the last war, mostly</li>
+        <li>motto->Wrapping pemmican across the rim since day one</li>
+        <li>motto->If it happened, we heard about it eventually</li>
+        <li>motto->Fit to print, fit to burn for warmth</li>
+        <li>motto->Not responsible for prophecies, mood breaks or raids</li>
+        <li>motto->Delivered by drop pod when the drop pod works</li>
+
+        <li>classified->LOST: one muffalo, answers to Gerald. Reward paid in pemmican.</li>
+        <li>classified->FOR SALE: charge rifle, one careful owner, minor scorch marks. No questions.</li>
+        <li>classified->WANTED: doctor with steady hands and fewer than three mental breaks a season.</li>
+        <li>classified->HATS repaired, re-made, or taken from the fallen. Discretion assured.</li>
+        <li>classified->BOOMALOPE WRANGLER needed. Fire insurance not provided.</li>
+        <li>classified->THRUMBO sighted north of the river. Do not approach. Do admire from a distance.</li>
+        <li>classified->INSECT JELLY, fresh from the hive. Freshness not guaranteed. No refunds.</li>
+        <li>classified->LEARN TO COOK! Our graduates' food poisoning rate is now under ten percent.</li>
+        <li>classified->ANCIENT DANGER TOURS. Guide not included (guide was eaten).</li>
+        <li>classified->RAIDER APOLOGY LINE: currently unstaffed.</li>
+        <li>classified->FOUND: one bionic arm, still waving. Collect from the town well.</li>
+        <li>classified->ROOM TO LET. Pleasant, impressive, only slightly haunted by the previous tenant.</li>
+        <li>classified->PSYCHITE TEA for medicinal purposes only. Very medicinal. Ask for "the usual".</li>
+        <li>classified->SEEKING MATCH: lonely hermit, likes long walks to nowhere. No cannibals.</li>
+        <li>classified->MECHANOID PARTS bought and sold. Do not ask where they came from. Do not turn them on.</li>
+        <li>classified->ALPACA WOOL, finest on the rim. Alpacas not for sale. Alpacas know what they did.</li>
+        <li>classified->TOXIC FALLOUT? Stay indoors and read the Courier. Twice.</li>
+        <li>classified->COMMS CONSOLE REPAIRS. We also fix your relations with the Empire (results not guaranteed).</li>
+        <li>classified->BEER! Brewed in a real barrel by a real colonist with a real Brewing skill of at least 3.</li>
+        <li>classified->FUNERAL SERVICES. Sarcophagus, grave or "the usual spot behind the pig pen".</li>
+        <li>classified->PRISONER WORK RELEASE: experienced cook, recruitable with patience. Do not let near knives.</li>
+        <li>classified->WILL TRADE: two pet rats for anything that is not another pet rat.</li>
+        <li>classified->CARAVAN GUARDS for hire. Musket-trained. Have never once run away. Mostly.</li>
+        <li>classified->SMOKELEAF JOINTS for "relaxation". Side effects include laziness and saying "far out".</li>
+        <li>classified->MISSING: our last editor. If found, remind him the paper is due.</li>
+        <li>classified->CRYPTOSLEEP PODS, lightly used. Occupants removed. Probably.</li>
+        <li>classified->PUBLIC NOTICE: the eclipse is not a sign. The volcanic winter, however, may be.</li>
+        <li>classified->GOODWILL GIFTS wrapped while you wait. Silver preferred. Organs frowned upon.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+</Defs>

@@ -82,7 +82,7 @@
   <Dominion.OperationDef>
     <defName>Dominion_Op_Sabotage</defName>
     <label>sabotage</label>
-    <description>Only in person. Your agents destroy a marked building in one of their settlements (power and stores first). Their economy loses 12%, their military is weakened for 30 days, goods burn in their stockpiles, and it counts in a war.</description>
+    <description>Only in person. Your agents destroy a marked building in one of their settlements (power and stores first). Goods burn in their stockpiles, and for about six days their economy is 12% weaker and their military 15% weaker. It counts in a war.</description>
     <workerClass>Dominion.Operation_Sabotage</workerClass>
     <allowAbstract>false</allowAbstract>
     <allowPhysical>true</allowPhysical>

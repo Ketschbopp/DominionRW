@@ -33,6 +33,9 @@ namespace Dominion
 
         /// <summary>A lasting economic shock (-0.6..0.4) from wars, disasters, sabotage or booms. Fades over about a month.</summary>
         public float economyShock;
+
+        /// <summary>Short economic blows (sabotage, disasters) that wear off on a fixed day instead of fading slowly.</summary>
+        public List<TimedShock> timedShocks = new List<TimedShock>();
         public float militaryStrength;
         public int population;
         public int totalLiving;
@@ -152,6 +155,7 @@ namespace Dominion
             Scribe_Deep.Look(ref personality, "personality");
             Scribe_Values.Look(ref economyIndex, "economyIndex", 100f);
             Scribe_Values.Look(ref economyShock, "economyShock");
+            Scribe_Collections.Look(ref timedShocks, "timedShocks", LookMode.Deep);
             Scribe_Values.Look(ref militaryStrength, "militaryStrength");
             Scribe_Values.Look(ref population, "population");
             Scribe_Values.Look(ref totalLiving, "totalLiving");
@@ -185,6 +189,7 @@ namespace Dominion
                     if (faction != null) personality.SeedFrom(faction);
                 }
                 if (blocs == null || blocs.Length != BlocCount) blocs = new float[BlocCount];
+                timedShocks ??= new List<TimedShock>();
                 // The effective personality is not saved; rebuild it now so it is right before this faction's slot runs.
                 if (faction != null)
                 {
@@ -192,6 +197,28 @@ namespace Dominion
                     catch (System.Exception e) { DLog.WarningOnce("Refreshing personality after load failed: " + e.Message, faction.loadID ^ 0x7E1); }
                 }
             }
+        }
+    }
+
+    /// <summary>An economic blow that is strongest at first and gone after its duration. Saved.</summary>
+    public class TimedShock : IExposable
+    {
+        public float amount;
+        public int startTick;
+        public int untilTick;
+
+        /// <summary>What is left of it now: the full amount at the start, nothing at the end.</summary>
+        public float Current(int now)
+        {
+            if (now >= untilTick || untilTick <= startTick) return 0f;
+            return amount * (untilTick - now) / (float)(untilTick - startTick);
+        }
+
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref amount, "amount");
+            Scribe_Values.Look(ref startTick, "startTick");
+            Scribe_Values.Look(ref untilTick, "untilTick");
         }
     }
 }

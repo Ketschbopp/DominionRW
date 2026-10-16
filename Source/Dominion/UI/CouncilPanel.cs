@@ -28,9 +28,7 @@ namespace Dominion
             var l = new Listing_Standard();
             l.Begin(view);
 
-            Text.Font = GameFont.Medium;
-            l.Label("Dominion_Council_Title".Translate());
-            Text.Font = GameFont.Small;
+            DominionTheme.Header(l, "Dominion_Council_Title".Translate());
 
             bool member = CouncilUtility.IsMember(Faction.OfPlayer);
             l.Label(member

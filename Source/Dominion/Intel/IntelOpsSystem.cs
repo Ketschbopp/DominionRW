@@ -296,8 +296,8 @@ namespace Dominion
             }
             else if (roll < 0.7f)
             {
-                EconomyEffects.Shock(rival, -0.04f);
-                rs.sabotagedUntilTick = Find.TickManager.TicksGame + 10 * GenDate.TicksPerDay;
+                EconomyEffects.Shock(rival, -0.04f, days: Operation_Sabotage.SabotageDays);
+                rs.sabotagedUntilTick = Find.TickManager.TicksGame + Operation_Sabotage.SabotageDays * GenDate.TicksPerDay;
                 WarUtility.AddScore(f, rival, 4f);
                 EventBus.Raise(DominionEventDefOf.Dominion_Sabotage, rival, f, secrecy: Secrecy.Secret);
             }

@@ -25,9 +25,7 @@ namespace Dominion
             var l = new Listing_Standard();
             l.Begin(view);
 
-            Text.Font = GameFont.Medium;
-            l.Label("Dominion_Federation_Title".Translate());
-            Text.Font = GameFont.Small;
+            DominionTheme.Header(l, "Dominion_Federation_Title".Translate());
             if (!DominionMod.Settings.endingEnabled)
             {
                 GUI.color = Color.gray;

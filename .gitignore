@@ -3,3 +3,4 @@ Source/**/bin/
 *.user
 .vs/
 .idea/
+__pycache__/

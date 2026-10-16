@@ -69,14 +69,7 @@ namespace Dominion
             Widgets.EndScrollView();
         }
 
-        private static void Header(Listing_Standard l, string text)
-        {
-            l.Gap(6f);
-            Text.Font = GameFont.Medium;
-            l.Label(text);
-            Text.Font = GameFont.Small;
-            l.GapLine(4f);
-        }
+        private static void Header(Listing_Standard l, string text) => DominionTheme.Header(l, text);
 
         private static void None(Listing_Standard l)
         {
