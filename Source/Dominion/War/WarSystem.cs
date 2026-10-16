@@ -184,7 +184,8 @@ namespace Dominion
             if (reg.originalOwner.Count > 0)
             {
                 var alive = new HashSet<int>();
-                foreach (Settlement s in Find.WorldObjects.Settlements) alive.Add(s.Tile.tileId);
+                foreach (Settlement s in Find.WorldObjects.Settlements)
+                    if (DominionGeo.OnSurface(s.Tile)) alive.Add(s.Tile.tileId);
                 foreach (KeyValuePair<int, int> kv in reg.originalOwner.ToList())
                 {
                     Faction orig = comp.Cache.FactionById(kv.Value);

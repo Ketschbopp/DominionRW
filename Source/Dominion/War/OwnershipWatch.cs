@@ -41,7 +41,8 @@ namespace Dominion
             for (int i = 0; i < settlements.Count; i++)
             {
                 Settlement s = settlements[i];
-                if (s.Faction == null) continue;
+                // Tile ids repeat across planet layers; only the surface is tracked.
+                if (s.Faction == null || !DominionGeo.OnSurface(s.Tile)) continue;
                 int tile = s.Tile.tileId;
                 seen.Add(tile);
                 if (ownerByTile.TryGetValue(tile, out int before) && before != s.Faction.loadID && primed)

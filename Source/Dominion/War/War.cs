@@ -167,7 +167,7 @@ namespace Dominion
             return false;
         }
 
-        public int OriginalOwnerOf(Settlement s) => s != null && originalOwner.TryGetValue(s.Tile.tileId, out int id) ? id : -1;
+        public int OriginalOwnerOf(Settlement s) => s != null && DominionGeo.OnSurface(s.Tile) && originalOwner.TryGetValue(s.Tile.tileId, out int id) ? id : -1;
 
         public void ExposeData()
         {
