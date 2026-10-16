@@ -6,7 +6,7 @@ using Verse;
 
 namespace Dominion
 {
-    public enum EnvoyMission { ImproveRelations, NegotiateTreaty, PeaceTalks, GatherIntel, ExchangeHostages, AttendSummit, AttendCouncil, NegotiateVassalage }
+    public enum EnvoyMission { ImproveRelations, NegotiateTreaty, PeaceTalks, GatherIntel, ExchangeHostages, AttendSummit, AttendCouncil, NegotiateVassalage, DeliverAid }
 
     public class WorldObjectCompProperties_Diplomacy : WorldObjectCompProperties
     {
@@ -130,6 +130,8 @@ namespace Dominion
                     return CouncilSystem.CanRegisterAt(s);
                 case EnvoyMission.NegotiateVassalage:
                     return !hostile && IntegrationRegistry.IsActive<Integration_FactionTerritories>();
+                case EnvoyMission.DeliverAid:
+                    return !hostile && WorldComponent_Dominion.Instance.GetState(f).InCrisis;
                 default:
                     return false;
             }
@@ -151,6 +153,8 @@ namespace Dominion
                 if (ftv == null || !ftv.CanNegotiateVassalage(s, out reason))
                     return FloatMenuAcceptanceReport.WithFailReason(reason.NullOrEmpty() ? "Dominion_Mission_VassalageUnavailable".Translate().ToString() : reason);
             }
+            if (m == EnvoyMission.DeliverAid && !comp.GetState(s.Faction).InCrisis)
+                return FloatMenuAcceptanceReport.WithFailReason("Dominion_Aid_NoCrisis".Translate(s.Faction.Name));
             if (m == EnvoyMission.AttendSummit && LeadershipUtility.HeadOfState() == null)
                 return FloatMenuAcceptanceReport.WithFailReason(LeadershipUtility.NoHeadOfStateReason());
             return true;
@@ -218,6 +222,17 @@ namespace Dominion
             if (m == EnvoyMission.AttendSummit)
             {
                 SummitSystem.AttendAbroad(s, caravan, envoy);
+                return;
+            }
+            if (m == EnvoyMission.DeliverAid)
+            {
+                if (ReliefAid.AidValue(caravan) < ReliefAid.MinValue)
+                {
+                    Messages.Message("Dominion_Aid_NotEnough".Translate(ReliefAid.MinValue.ToStringMoney()), caravan, MessageTypeDefOf.RejectInput, historical: false);
+                    return;
+                }
+                comp.Player.SetCooldown("Envoy_" + m, f.loadID, Find.TickManager.TicksGame + 10 * GenDate.TicksPerDay);
+                ReliefAid.Deliver(f, caravan, envoy);
                 return;
             }
             if (m == EnvoyMission.AttendCouncil)

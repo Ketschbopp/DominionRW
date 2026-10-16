@@ -58,7 +58,8 @@ namespace Dominion
             }
             foreach (Decree d in c.decrees)
             {
-                string line = "  " + d.Summary + "  (" + "Dominion_Dip_Expires".Translate(Mathf.Max(0, d.expiresTick - now).ToStringTicksToPeriod(allowSeconds: false)) + ")";
+                string line = "  " + d.Summary + "  (" + (d.expiresTick < 0 ? "Dominion_Dip_NoExpiry".Translate().ToString()
+                    : "Dominion_Dip_Expires".Translate(Mathf.Max(0, d.expiresTick - now).ToStringTicksToPeriod(allowSeconds: false)).ToString()) + ")";
                 if (d.violators.Count > 0)
                     line += "  " + "Dominion_Council_Violators".Translate(string.Join(", ", d.violators.Select(v => v.Name))).Colorize(ColorLibrary.RedReadable);
                 Rect r = l.GetRect(Text.CalcHeight(line, view.width));

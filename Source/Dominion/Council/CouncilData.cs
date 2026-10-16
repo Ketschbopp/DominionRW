@@ -16,6 +16,9 @@ namespace Dominion
         /// <summary>How long the resulting decree lasts. 0 = it acts once when passed.</summary>
         public int durationDays;
 
+        /// <summary>The decree never expires.</summary>
+        public bool permanent;
+
         /// <summary>Days members get to comply before they are in violation.</summary>
         public int graceDays = 5;
 

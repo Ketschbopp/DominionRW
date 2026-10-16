@@ -101,4 +101,19 @@
     <researchViewX>1</researchViewX>
     <researchViewY>2</researchViewY>
   </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>Dominion_PlanetaryFederation</defName>
+    <label>planetary federation</label>
+    <description>Draft the constitution of a federation spanning the whole planet, with your colony at its head. Lets you put the Federation Charter before the Rim Council; once it passes, factions can sign Federation membership with you. Unite the world to win.</description>
+    <baseCost>4000</baseCost>
+    <techLevel>Industrial</techLevel>
+    <prerequisites>
+      <li>Dominion_DiplomaticCorps</li>
+      <li>Dominion_WorldCommsProtocols</li>
+    </prerequisites>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>2</researchViewX>
+    <researchViewY>1</researchViewY>
+  </ResearchProjectDef>
 </Defs>

@@ -71,4 +71,23 @@
     <minOpinion>20</minOpinion>
     <paranoiaWeight>-0.3</paranoiaWeight>
   </Dominion.TreatyDef>
+
+  <Dominion.TreatyDef>
+    <defName>Dominion_FederationMembership</defName>
+    <label>Federation membership</label>
+    <description>The faction joins your planetary federation: no war between members, each defends the other, preferential trade, open intelligence and growing economies. Needs the Federation Charter in force. Members who come to dislike you may leave. Counts toward the unification ending.</description>
+    <federation>true</federation>
+    <nonAggression>true</nonAggression>
+    <defensive>true</defensive>
+    <tradeBonus>0.1</tradeBonus>
+    <economyBonus>0.04</economyBonus>
+    <intelBonus>25</intelBonus>
+    <opinionBonus>20</opinionBonus>
+    <influenceCost>60</influenceCost>
+    <requiredResearch>Dominion_PlanetaryFederation</requiredResearch>
+    <aiAcceptBase>0</aiAcceptBase>
+    <minOpinion>50</minOpinion>
+    <honourWeight>0.15</honourWeight>
+    <paranoiaWeight>-0.25</paranoiaWeight>
+  </Dominion.TreatyDef>
 </Defs>

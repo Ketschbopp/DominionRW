@@ -58,6 +58,12 @@ namespace Dominion
         /// <summary>Treaties that cannot exist alongside this one between the same pair.</summary>
         public List<TreatyDef> incompatibleWith;
 
+        /// <summary>
+        /// Membership of the player's Federation: only with the player, only after the Federation Charter passed
+        /// and Planetary Federation is researched. Counts toward the unification ending.
+        /// </summary>
+        public bool federation;
+
         public bool Expires => durationDays > 0;
 
         public override IEnumerable<string> ConfigErrors()
@@ -77,6 +83,7 @@ namespace Dominion
         public static TreatyDef Dominion_TradeAgreement;
         public static TreatyDef Dominion_DefensivePact;
         public static TreatyDef Dominion_IntelSharing;
+        public static TreatyDef Dominion_FederationMembership;
 
         static DominionTreatyDefOf()
         {

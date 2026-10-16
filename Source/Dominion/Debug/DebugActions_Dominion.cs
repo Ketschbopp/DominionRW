@@ -302,6 +302,68 @@ namespace Dominion
             c.nextSessionTick = Find.TickManager.TicksGame;
         }
 
+        [DebugAction(Category, "World event: fire on faction...", allowedGameStates = AllowedGameStates.Playing)]
+        private static List<DebugActionNode> FireWorldEvent()
+        {
+            var nodes = new List<DebugActionNode>();
+            foreach (DominionEventDef def in DefDatabase<DominionEventDef>.AllDefsListForReading.Where(d => d.world != null).OrderBy(d => d.defName))
+            {
+                DominionEventDef capturedDef = def;
+                var defNode = new DebugActionNode(def.defName);
+                foreach (Faction f in WorldComponent_Dominion.Instance.Cache.Simulated)
+                {
+                    Faction captured = f;
+                    defNode.AddChild(new DebugActionNode(f.Name, DebugActionType.Action,
+                        () => WorldEventSystem.Fire(capturedDef, captured, WorldEventSystem.PickPartner(captured, capturedDef.world.partner), null)));
+                }
+                nodes.Add(defNode);
+            }
+            return nodes;
+        }
+
+        [DebugAction(Category, "Federation: put Charter in force", allowedGameStates = AllowedGameStates.Playing)]
+        private static void FederationCharter()
+        {
+            UnificationState st = WorldComponent_Dominion.Instance.Unification;
+            if (st.CharterInForce) return;
+            st.charterTick = Find.TickManager.TicksGame;
+            EventBus.Raise(DominionEventDefOf.Dominion_FederationCharter, Faction.OfPlayer);
+        }
+
+        [DebugAction(Category, "Federation: every major faction joins", allowedGameStates = AllowedGameStates.Playing)]
+        private static void FederationAllJoin()
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            foreach (Faction f in FederationUtility.Majors().ToList())
+            {
+                if (f.HostileTo(Faction.OfPlayer) || FederationUtility.IsMember(f)) continue;
+                comp.Treaties.Sign(DominionTreatyDefOf.Dominion_FederationMembership, Faction.OfPlayer, f, Faction.OfPlayer);
+            }
+        }
+
+        [DebugAction(Category, "Federation: log progress", allowedGameStates = AllowedGameStates.Playing)]
+        private static void FederationLog()
+        {
+            FederationUtility.Progress p = FederationUtility.Compute();
+            DLog.Message($"Unification: {p.unified}/{p.required} needed of {p.total} (federation {p.federation}, subjugated {p.subjugated}, conquered {p.conquered}); dominant {FederationUtility.DominantPath(p)}");
+        }
+
+        [DebugAction(Category, "Federation: proclaim now (ending)", allowedGameStates = AllowedGameStates.Playing)]
+        private static void FederationProclaim()
+        {
+            WorldComponent_Dominion.Instance.Unification.proclaimed = false;
+            FederationUtility.Proclaim();
+        }
+
+        [DebugAction(Category, "Federation: reset ending", allowedGameStates = AllowedGameStates.Playing)]
+        private static void FederationReset()
+        {
+            UnificationState st = WorldComponent_Dominion.Instance.Unification;
+            st.offered = false;
+            st.proclaimed = false;
+            st.proclaimedTick = -1;
+        }
+
         [DebugAction(Category, "Integration self-test")]
         private static void SelfTest() => DLog.Message(IntegrationRegistry.SelfTestReport());
 

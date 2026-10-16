@@ -253,7 +253,7 @@ namespace Dominion
                 def = m.def,
                 targets = new List<Faction>(m.targets),
                 passedTick = now,
-                expiresTick = now + Mathf.Max(30, m.def.durationDays) * GenDate.TicksPerDay,
+                expiresTick = m.def.permanent ? -1 : now + Mathf.Max(30, m.def.durationDays) * GenDate.TicksPerDay,
             };
             c.decrees.Add(d);
             EventBus.Raise(DominionEventDefOf.Dominion_DecreePassed, m.sponsor, m.targets.FirstOrDefault(), detail: m.Summary);

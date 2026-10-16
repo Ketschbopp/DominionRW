@@ -55,6 +55,14 @@ namespace Dominion
         public int nextAiActionTick;
         public int lastIdeoReformTick = -999999;
         public int lowStabilityDays;
+        public int lastWorldEventTick = -999999;
+        public DominionEventDef lastWorldEvent;
+
+        /// <summary>A famine, plague or disaster: until this tick others can send aid.</summary>
+        public int crisisUntilTick = -1;
+        public DominionEventDef crisis;
+
+        public bool InCrisis => crisis != null && crisisUntilTick > Find.TickManager.TicksGame;
 
         /// <summary>Tracks leader changes so legitimacy resets for a new leader.</summary>
         public Pawn lastKnownLeader;
@@ -143,6 +151,10 @@ namespace Dominion
             Scribe_Values.Look(ref nextAiActionTick, "nextAiActionTick");
             Scribe_Values.Look(ref lastIdeoReformTick, "lastIdeoReformTick", -999999);
             Scribe_Values.Look(ref lowStabilityDays, "lowStabilityDays");
+            Scribe_Values.Look(ref lastWorldEventTick, "lastWorldEventTick", -999999);
+            Scribe_Defs.Look(ref lastWorldEvent, "lastWorldEvent");
+            Scribe_Values.Look(ref crisisUntilTick, "crisisUntilTick", -1);
+            Scribe_Defs.Look(ref crisis, "crisis");
             Scribe_References.Look(ref lastKnownLeader, "lastKnownLeader");
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)

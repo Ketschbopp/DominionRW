@@ -84,7 +84,8 @@ namespace Dominion
             AIPersonality p = comp.GetState(f).personality;
             float chance = def.aiAcceptBase + view.opinion / 200f
                            + p.greed * def.greedWeight + p.honour * def.honourWeight + p.paranoia * def.paranoiaWeight
-                           + LeadershipUtility.AcceptanceBonus();
+                           + LeadershipUtility.AcceptanceBonus()
+                           + (def.federation ? FederationUtility.JoinBonus(f) : 0f);
             return Mathf.Clamp(chance, 0.02f, 0.95f);
         }
     }

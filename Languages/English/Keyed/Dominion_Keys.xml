@@ -520,4 +520,64 @@
   <Dominion_Setting_Emigration_Desc>Riots and revolutions make a few people leave the faction (Economics &amp; Demography). They settle with the most stable friendly neighbour.</Dominion_Setting_Emigration_Desc>
   <Dominion_Setting_EmbargoDrain>Embargoes drain stockpiles</Dominion_Setting_EmbargoDrain>
   <Dominion_Setting_EmbargoDrain_Desc>Each embargo against a faction removes a small share of its Economics &amp; Demography stockpile every day.</Dominion_Setting_EmbargoDrain_Desc>
+
+  <!-- M10: Federation and ending -->
+  <Dominion_Tab_Federation>Federation</Dominion_Tab_Federation>
+  <Dominion_Federation_Title>The Federation</Dominion_Federation_Title>
+  <Dominion_Federation_EndingOff>The unification ending is switched off in the settings. Progress is still tracked.</Dominion_Federation_EndingOff>
+  <Dominion_Federation_StepResearch>Research {0}</Dominion_Federation_StepResearch>
+  <Dominion_Federation_StepCharter>Pass the Federation Charter at the Rim Council (propose it as a motion)</Dominion_Federation_StepCharter>
+  <Dominion_Federation_StepCharterNoCouncil>The Rim Council is switched off: the Charter is in force once the research is done</Dominion_Federation_StepCharterNoCouncil>
+  <Dominion_Federation_Progress>Unification</Dominion_Federation_Progress>
+  <Dominion_Federation_Breakdown>Federation members: {0}   Subjugated: {1}   Conquered: {2}   Major factions: {3}</Dominion_Federation_Breakdown>
+  <Dominion_Federation_Rules>A major faction is unified when it joins the Federation (sign Federation membership by comms, envoy or summit), when you hold as many of its former settlements as vassal outposts as it has left, or when it falls while at war with you.</Dominion_Federation_Rules>
+  <Dominion_Federation_Opinion>(opinion {0})</Dominion_Federation_Opinion>
+  <Dominion_Federation_Proclaim>Proclaim the Federation</Dominion_Federation_Proclaim>
+  <Dominion_Federation_Proclaimed>The Federation was proclaimed {0} ago.</Dominion_Federation_Proclaimed>
+  <Dominion_Federation_Later>Not yet</Dominion_Federation_Later>
+  <Dominion_Federation_ReadyLabel>The world is united</Dominion_Federation_ReadyLabel>
+  <Dominion_Federation_ReadyText>{0} of {1} major factions now stand with you. You can proclaim the Federation and end your story here, or carry on and proclaim it later from the Federation tab.
+
+The game continues after the credits either way.</Dominion_Federation_ReadyText>
+  <Dominion_Federation_CharterLabel>Federation Charter adopted</Dominion_Federation_CharterLabel>
+  <Dominion_Federation_CharterText>The Rim Council has adopted the Federation Charter. Any major faction may now sign Federation membership with you, through the comms console, an envoy or a summit. Friends may also ask to join on their own.</Dominion_Federation_CharterText>
+  <Dominion_Federation_NoCharter>needs the Federation Charter in force</Dominion_Federation_NoCharter>
+  <Dominion_Federation_NotEligible>only major factions can join</Dominion_Federation_NotEligible>
+  <Dominion_Federation_OnlyPlayer>only with the Federation's founder</Dominion_Federation_OnlyPlayer>
+  <Dominion_UnifyStatus_None>Independent</Dominion_UnifyStatus_None>
+  <Dominion_UnifyStatus_None_Desc>Not yet unified. Raise their opinion of you and offer Federation membership, take their settlements as vassal outposts, or defeat them.</Dominion_UnifyStatus_None_Desc>
+  <Dominion_UnifyStatus_Federation>Federation member</Dominion_UnifyStatus_Federation>
+  <Dominion_UnifyStatus_Federation_Desc>Signed Federation membership. A member who comes to dislike you may leave.</Dominion_UnifyStatus_Federation_Desc>
+  <Dominion_UnifyStatus_Subjugated>Subjugated</Dominion_UnifyStatus_Subjugated>
+  <Dominion_UnifyStatus_Subjugated_Desc>You hold at least as many of their former settlements as vassal outposts as they have left.</Dominion_UnifyStatus_Subjugated_Desc>
+  <Dominion_UnifyStatus_Conquered>Conquered</Dominion_UnifyStatus_Conquered>
+  <Dominion_UnifyStatus_Conquered_Desc>Fell while at war with you.</Dominion_UnifyStatus_Conquered_Desc>
+  <Dominion_UnifyPath_Federation>by joining the Federation</Dominion_UnifyPath_Federation>
+  <Dominion_UnifyPath_Subjugated>as vassals</Dominion_UnifyPath_Subjugated>
+  <Dominion_UnifyPath_Conquered>by conquest</Dominion_UnifyPath_Conquered>
+  <Dominion_Ending_Intro>The Federation of {0}
+
+{1} peoples now stand under one banner: {2} who joined freely, {3} who were made vassals, {4} who were conquered.</Dominion_Ending_Intro>
+  <Dominion_Ending_Federation>It was built with words, not walls. Summit by summit and treaty by treaty, {1} convinced the rival powers that they were stronger together than apart. The Rim Council became a parliament, and the old borders became lines on a map that no one patrols any more.</Dominion_Ending_Federation>
+  <Dominion_Ending_Subjugated>It was built on obligation. One settlement at a time, {0} took the old powers under its protection until there was no one left to resist. The vassals pay their dues and keep their peace, and if they grumble, they grumble quietly.</Dominion_Ending_Subjugated>
+  <Dominion_Ending_Conquered>It was built by the sword. The rival powers that would not bend were broken, and {1} rules what remains. Order has come to the planet; whether it is loved is another matter.</Dominion_Ending_Conquered>
+  <Dominion_Ending_Mixed>It was built every way there was: some peoples signed the charter willingly, some were bound as vassals, and some were defeated. {1} learned to use every tool, and in the end the planet answers to {0}.</Dominion_Ending_Mixed>
+  <Dominion_Ending_Outro>The story of the colony goes on, but the age of feuding powers is over.</Dominion_Ending_Outro>
+  <Dominion_Mission_DeliverAid>Deliver aid to {0}</Dominion_Mission_DeliverAid>
+  <Dominion_MissionShort_DeliverAid>aid delivery</Dominion_MissionShort_DeliverAid>
+  <Dominion_Aid_Done>{0} gratefully received your aid worth {1}.</Dominion_Aid_Done>
+  <Dominion_Aid_NoCrisis>{0} is not in crisis</Dominion_Aid_NoCrisis>
+  <Dominion_Aid_NotEnough>The caravan needs at least {0} worth of medicine, food or silver to deliver.</Dominion_Aid_NotEnough>
+  <Dominion_SettingsTab_Events>World events</Dominion_SettingsTab_Events>
+  <Dominion_SettingsTab_Ending>Ending</Dominion_SettingsTab_Ending>
+  <Dominion_Setting_WorldEvents>World events</Dominion_Setting_WorldEvents>
+  <Dominion_Setting_WorldEvents_Desc>Scandals, famines, plagues, disasters, trade booms, festivals and more happen to factions on their own, depending on their state.</Dominion_Setting_WorldEvents_Desc>
+  <Dominion_Setting_WorldEventFrequency>World event frequency: {0}</Dominion_Setting_WorldEventFrequency>
+  <Dominion_Setting_PlagueSpread>Plagues spread</Dominion_Setting_PlagueSpread>
+  <Dominion_Setting_PlagueSpread_Desc>An outbreak can spread to nearby factions.</Dominion_Setting_PlagueSpread_Desc>
+  <Dominion_Setting_EndingEnabled>Unification ending</Dominion_Setting_EndingEnabled>
+  <Dominion_Setting_EndingEnabled_Desc>Unite the major factions under your Federation to win. The game goes on after the credits.</Dominion_Setting_EndingEnabled_Desc>
+  <Dominion_Setting_EndingShare>Share of major factions needed: {0}</Dominion_Setting_EndingShare>
+  <Dominion_Setting_EndingOutlaws>Outlaws count as major factions</Dominion_Setting_EndingOutlaws>
+  <Dominion_Setting_EndingOutlaws_Desc>Pirates and other permanent enemies must be dealt with too. They can never join, so they must be subjugated or conquered.</Dominion_Setting_EndingOutlaws_Desc>
 </LanguageData>

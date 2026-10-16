@@ -113,6 +113,14 @@ namespace Dominion
                     if (r != null) r.outpostsHeldByOther = h;
                     else if (h > 0) comp.GetRelation(f, g).outpostsHeldByOther = h;
                 }
+                Faction player = Faction.OfPlayerSilentFail;
+                if (player != null)
+                {
+                    held.TryGetValue(RelationState.Key(f.loadID, player.loadID), out int ph);
+                    RelationState pr = comp.TryGetRelation(f, player);
+                    if (pr != null) pr.outpostsHeldByOther = ph;
+                    else if (ph > 0) comp.GetRelation(f, player).outpostsHeldByOther = ph;
+                }
             }
         }
     }

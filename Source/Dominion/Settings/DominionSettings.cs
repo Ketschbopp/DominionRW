@@ -51,6 +51,14 @@ namespace Dominion
         public bool allowIdeoReforms = true;
         public int ideoReformMinDays = 120;
 
+        // Ending and world events
+        public bool endingEnabled = true;
+        public float endingShare = 1f;
+        public bool endingIncludeOutlaws;
+        public bool worldEvents = true;
+        public float worldEventFrequency = 1f;
+        public bool plagueSpread = true;
+
         // Performance
         public bool profilingEnabled;
 
@@ -97,6 +105,12 @@ namespace Dominion
             Scribe_Values.Look(ref diplomatMode, "diplomatMode", DiplomatMode.IdeoRole);
             Scribe_Values.Look(ref allowIdeoReforms, "allowIdeoReforms", true);
             Scribe_Values.Look(ref ideoReformMinDays, "ideoReformMinDays", 120);
+            Scribe_Values.Look(ref endingEnabled, "endingEnabled", true);
+            Scribe_Values.Look(ref endingShare, "endingShare", 1f);
+            Scribe_Values.Look(ref endingIncludeOutlaws, "endingIncludeOutlaws");
+            Scribe_Values.Look(ref worldEvents, "worldEvents", true);
+            Scribe_Values.Look(ref worldEventFrequency, "worldEventFrequency", 1f);
+            Scribe_Values.Look(ref plagueSpread, "plagueSpread", true);
             Scribe_Values.Look(ref profilingEnabled, "profilingEnabled");
             Scribe_Collections.Look(ref disabledIntegrations, "disabledIntegrations", LookMode.Value);
             if (Scribe.mode == LoadSaveMode.PostLoadInit && disabledIntegrations == null)
@@ -130,6 +144,12 @@ namespace Dominion
             diplomatMode = DiplomatMode.IdeoRole;
             allowIdeoReforms = true;
             ideoReformMinDays = 120;
+            endingEnabled = true;
+            endingShare = 1f;
+            endingIncludeOutlaws = false;
+            worldEvents = true;
+            worldEventFrequency = 1f;
+            plagueSpread = true;
             profilingEnabled = false;
             disabledIntegrations.Clear();
         }

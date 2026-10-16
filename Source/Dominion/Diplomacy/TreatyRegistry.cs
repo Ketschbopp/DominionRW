@@ -47,6 +47,11 @@ namespace Dominion
         {
             if (Has(x, y, def)) return "Dominion_Treaty_AlreadySigned".Translate();
             if (x.HostileTo(y)) return "Dominion_Treaty_AtWar".Translate();
+            if (def.federation)
+            {
+                string why = FederationUtility.CannotJoinReason(x.IsPlayer ? y : x, x.IsPlayer || y.IsPlayer);
+                if (why != null) return why;
+            }
             if (def.incompatibleWith != null)
                 foreach (TreatyDef other in def.incompatibleWith)
                     if (Has(x, y, other)) return "Dominion_Treaty_Incompatible".Translate(other.label);
@@ -75,7 +80,10 @@ namespace Dominion
                     DiplomacyUtility.SetRelationKind(x, y, FactionRelationKind.Ally, proposer, def.label);
                 return t;
             }
-            EventBus.Raise(DominionEventDefOf.Dominion_TreatySigned, proposer, proposer == x ? y : x, detail: def.label, secrecy: def.secrecy);
+            if (def.federation)
+                EventBus.Raise(DominionEventDefOf.Dominion_FederationJoined, x.IsPlayer ? y : x, Faction.OfPlayer);
+            else
+                EventBus.Raise(DominionEventDefOf.Dominion_TreatySigned, proposer, proposer == x ? y : x, detail: def.label, secrecy: def.secrecy);
             return t;
         }
 
@@ -91,7 +99,10 @@ namespace Dominion
                     DiplomacyUtility.SetRelationKind(t.a, t.b, FactionRelationKind.Neutral, by, t.def.label);
                 return;
             }
-            EventBus.Raise(DominionEventDefOf.Dominion_TreatyCancelled, by, t.Other(by), detail: t.def.label, secrecy: t.def.secrecy);
+            if (t.def.federation)
+                EventBus.Raise(DominionEventDefOf.Dominion_FederationLeft, t.a.IsPlayer ? t.b : t.a, Faction.OfPlayer);
+            else
+                EventBus.Raise(DominionEventDefOf.Dominion_TreatyCancelled, by, t.Other(by), detail: t.def.label, secrecy: t.def.secrecy);
         }
 
         /// <summary>A treaty violated by <paramref name="breaker"/>. Everyone thinks less of them.</summary>

@@ -9,7 +9,7 @@ namespace Dominion
     /// <summary>Tabbed mod settings. New modules add a tab here.</summary>
     public static class SettingsWindow
     {
-        private enum Tab { General, Simulation, News, Council, Leadership, Culture, Integrations, Performance }
+        private enum Tab { General, Simulation, News, Council, Leadership, Culture, Events, Ending, Integrations, Performance }
 
         private static Tab current = Tab.General;
         private static Vector2 scroll;
@@ -43,6 +43,8 @@ namespace Dominion
                 case Tab.Council: DrawCouncil(l, s); break;
                 case Tab.Leadership: DrawLeadership(l, s); break;
                 case Tab.Culture: DrawCulture(l, s); break;
+                case Tab.Events: DrawEvents(l, s); break;
+                case Tab.Ending: DrawEnding(l, s); break;
                 case Tab.Integrations: DrawIntegrations(l, s); break;
                 case Tab.Performance: DrawPerformance(l, s); break;
             }
@@ -162,6 +164,26 @@ namespace Dominion
                 l.Label("Dominion_Setting_IdeoReformMinDays".Translate(s.ideoReformMinDays));
                 s.ideoReformMinDays = (int)l.Slider(s.ideoReformMinDays, 30, 600);
             }
+        }
+
+        private static void DrawEvents(Listing_Standard l, DominionSettings s)
+        {
+            l.CheckboxLabeled("Dominion_Setting_WorldEvents".Translate(), ref s.worldEvents, "Dominion_Setting_WorldEvents_Desc".Translate());
+            if (s.worldEvents)
+            {
+                l.Label("Dominion_Setting_WorldEventFrequency".Translate(s.worldEventFrequency.ToStringPercent()));
+                s.worldEventFrequency = l.Slider(s.worldEventFrequency, 0.1f, 3f);
+                l.CheckboxLabeled("Dominion_Setting_PlagueSpread".Translate(), ref s.plagueSpread, "Dominion_Setting_PlagueSpread_Desc".Translate());
+            }
+        }
+
+        private static void DrawEnding(Listing_Standard l, DominionSettings s)
+        {
+            l.CheckboxLabeled("Dominion_Setting_EndingEnabled".Translate(), ref s.endingEnabled, "Dominion_Setting_EndingEnabled_Desc".Translate());
+            if (!s.endingEnabled) return;
+            l.Label("Dominion_Setting_EndingShare".Translate(s.endingShare.ToStringPercent()));
+            s.endingShare = Mathf.Round(l.Slider(s.endingShare, 0.5f, 1f) * 20f) / 20f;
+            l.CheckboxLabeled("Dominion_Setting_EndingOutlaws".Translate(), ref s.endingIncludeOutlaws, "Dominion_Setting_EndingOutlaws_Desc".Translate());
         }
 
         private static void DrawIntegrations(Listing_Standard l, DominionSettings s)

@@ -92,4 +92,18 @@
     <aiProposeChance>0.25</aiProposeChance>
     <summary>A ban on slavery</summary>
   </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_FederationCharter</defName>
+    <label>Federation Charter</label>
+    <description>Founds a planetary federation led by your colony. Once passed, any major faction may sign Federation membership with you. Only you can propose it, after researching Planetary Federation. It never expires.</description>
+    <workerClass>Dominion.CouncilMotion_FederationCharter</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>0</durationDays>
+    <permanent>true</permanent>
+    <graceDays>0</graceDays>
+    <proposeCost>40</proposeCost>
+    <aiProposeChance>0</aiProposeChance>
+    <summary>The Federation Charter</summary>
+  </Dominion.CouncilMotionDef>
 </Defs>

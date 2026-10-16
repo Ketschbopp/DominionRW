@@ -442,4 +442,59 @@
     <newsRules>Dominion_News_Emigration</newsRules>
     <headline>People flee unrest in {0}</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FederationCharter</defName>
+    <label>Federation Charter</label>
+    <description>The Rim Council has adopted the Federation Charter.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.95</newsworthiness>
+    <newsRules>Dominion_News_FederationCharter</newsRules>
+    <headline>Rim Council adopts the Federation Charter</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FederationJoined</defName>
+    <label>joined the Federation</label>
+    <description>A faction has joined the player's Federation.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <newsRules>Dominion_News_FederationJoined</newsRules>
+    <headline>{0} joins the Federation</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FederationLeft</defName>
+    <label>left the Federation</label>
+    <description>A faction has left the player's Federation.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.85</newsworthiness>
+    <newsRules>Dominion_News_FederationLeft</newsRules>
+    <headline>{0} leaves the Federation</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FederationProclaimed</defName>
+    <label>Federation proclaimed</label>
+    <description>The planetary Federation has been proclaimed.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>1.0</newsworthiness>
+    <newsRules>Dominion_News_FederationProclaimed</newsRules>
+    <headline>The Federation is proclaimed</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FactionAbsorbed</defName>
+    <label>faction absorbed</label>
+    <description>A major faction has become part of the player's realm.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_FactionAbsorbed</newsRules>
+    <headline>{0} absorbed into the realm of {1}</headline>
+  </Dominion.DominionEventDef>
 </Defs>

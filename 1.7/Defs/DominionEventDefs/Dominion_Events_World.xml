@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- World events: rolled daily per faction under <world> conditions; effects apply whenever raised. See Dominion.WorldEventProps. -->
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Scandal</defName>
+    <label>political scandal</label>
+    <description>A scandal has shaken a faction's government.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.45</newsworthiness>
+    <newsRules>Dominion_News_Scandal</newsRules>
+    <headline>Scandal rocks {0}</headline>
+    <world>
+      <mtbDays>400</mtbDays>
+      <legitimacyOffset>-8</legitimacyOffset>
+      <stabilityOffset>-3</stabilityOffset>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SuccessionCrisis</defName>
+    <label>succession crisis</label>
+    <description>Rivals dispute who should lead the faction next.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_SuccessionCrisis</newsRules>
+    <headline>Succession crisis in {0}</headline>
+    <world>
+      <mtbDays>600</mtbDays>
+      <legitimacy>0~40</legitimacy>
+      <stabilityOffset>-8</stabilityOffset>
+      <legitimacyOffset>-5</legitimacyOffset>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_OfficialDefects</defName>
+    <label>official defects</label>
+    <description>A senior official has fled to a rival faction.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_OfficialDefects</newsRules>
+    <headline>{0} official defects to {1}</headline>
+    <world>
+      <mtbDays>700</mtbDays>
+      <partner>Rival</partner>
+      <partnerRequired>true</partnerRequired>
+      <legitimacyOffset>-4</legitimacyOffset>
+      <favourTowardPartner>-10</favourTowardPartner>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_ReformMovement</defName>
+    <label>reform movement</label>
+    <description>A popular movement is demanding reform.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.4</newsworthiness>
+    <newsRules>Dominion_News_ReformMovement</newsRules>
+    <headline>Reformers march in {0}</headline>
+    <world>
+      <mtbDays>500</mtbDays>
+      <stability>0~60</stability>
+      <bloc>Reformists</bloc>
+      <blocShift>0.06</blocShift>
+      <stabilityOffset>-2</stabilityOffset>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SecessionMovement</defName>
+    <label>secession movement</label>
+    <description>Outlying settlements talk of breaking away. Factions are never split, but the government is weakened.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.55</newsworthiness>
+    <newsRules>Dominion_News_SecessionMovement</newsRules>
+    <headline>Separatists stir in {0}</headline>
+    <world>
+      <mtbDays>900</mtbDays>
+      <stability>0~30</stability>
+      <minSettlements>2</minSettlements>
+      <stabilityOffset>-6</stabilityOffset>
+      <legitimacyOffset>-4</legitimacyOffset>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_ReligiousSchism</defName>
+    <label>religious schism</label>
+    <description>A dispute over doctrine has split the faithful.</description>
+    <category>Culture</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.45</newsworthiness>
+    <newsRules>Dominion_News_ReligiousSchism</newsRules>
+    <headline>Schism divides the faithful of {0}</headline>
+    <world>
+      <mtbDays>800</mtbDays>
+      <needsIdeology>true</needsIdeology>
+      <bloc>Zealots</bloc>
+      <blocShift>0.05</blocShift>
+      <stabilityOffset>-5</stabilityOffset>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_CulturalFestival</defName>
+    <label>cultural festival</label>
+    <description>A great festival has lifted spirits.</description>
+    <category>Culture</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <newsRules>Dominion_News_CulturalFestival</newsRules>
+    <headline>Festival season in {0}</headline>
+    <world>
+      <mtbDays>350</mtbDays>
+      <stability>50~100</stability>
+      <stabilityOffset>4</stabilityOffset>
+      <legitimacyOffset>2</legitimacyOffset>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Famine</defName>
+    <label>famine</label>
+    <description>Food has run short.</description>
+    <category>Disaster</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_Famine</newsRules>
+    <headline>Famine strikes {0}</headline>
+    <world>
+      <mtbDays>500</mtbDays>
+      <economy>0~70</economy>
+      <populationShare>-0.02</populationShare>
+      <stabilityOffset>-6</stabilityOffset>
+      <economyFactor>0.95</economyFactor>
+      <crisisDays>20</crisisDays>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_PlagueOutbreak</defName>
+    <label>plague outbreak</label>
+    <description>A disease is spreading through the population.</description>
+    <category>Disaster</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.75</newsworthiness>
+    <newsRules>Dominion_News_PlagueOutbreak</newsRules>
+    <headline>Plague breaks out in {0}</headline>
+    <world>
+      <mtbDays>900</mtbDays>
+      <populationShare>-0.015</populationShare>
+      <economyFactor>0.94</economyFactor>
+      <stabilityOffset>-4</stabilityOffset>
+      <crisisDays>20</crisisDays>
+      <spreadChance>0.25</spreadChance>
+      <spreadDistance>25</spreadDistance>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_NaturalDisaster</defName>
+    <label>natural disaster</label>
+    <description>A settlement has been hit by a disaster.</description>
+    <category>Disaster</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.65</newsworthiness>
+    <newsRules>Dominion_News_NaturalDisaster</newsRules>
+    <headline>Disaster hits {2}</headline>
+    <world>
+      <mtbDays>700</mtbDays>
+      <atSettlement>true</atSettlement>
+      <economyFactor>0.93</economyFactor>
+      <stabilityOffset>-3</stabilityOffset>
+      <crisisDays>15</crisisDays>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_RefugeeWave</defName>
+    <label>refugee wave</label>
+    <description>People are fleeing a troubled faction.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_RefugeeWave</newsRules>
+    <headline>Refugees flee {0}</headline>
+    <world>
+      <mtbDays>400</mtbDays>
+      <stability>0~30</stability>
+      <partner>MostStable</partner>
+      <populationShare>-0.02</populationShare>
+      <populationToPartner>true</populationToPartner>
+      <partnerStabilityOffset>-2</partnerStabilityOffset>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TradeBoom</defName>
+    <label>trade boom</label>
+    <description>Trade is booming.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.35</newsworthiness>
+    <newsRules>Dominion_News_TradeBoom</newsRules>
+    <headline>Trade boom in {0}</headline>
+    <world>
+      <mtbDays>400</mtbDays>
+      <economy>90~1000</economy>
+      <needsPeace>true</needsPeace>
+      <partner>TradePartner</partner>
+      <economyFactor>1.08</economyFactor>
+      <stabilityOffset>3</stabilityOffset>
+      <favourTowardPartner>4</favourTowardPartner>
+      <partnerFavourTowardFaction>4</partnerFavourTowardFaction>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_GoodHarvest</defName>
+    <label>good harvest</label>
+    <description>A bumper harvest.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.25</newsworthiness>
+    <newsRules>Dominion_News_GoodHarvest</newsRules>
+    <headline>Bumper harvest in {0}</headline>
+    <world>
+      <mtbDays>350</mtbDays>
+      <economyFactor>1.04</economyFactor>
+      <stabilityOffset>2</stabilityOffset>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_MarketCrash</defName>
+    <label>market crash</label>
+    <description>Prices have collapsed.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.55</newsworthiness>
+    <newsRules>Dominion_News_MarketCrash</newsRules>
+    <headline>Markets crash in {0}</headline>
+    <world>
+      <mtbDays>800</mtbDays>
+      <economy>120~1000</economy>
+      <economyFactor>0.9</economyFactor>
+      <stabilityOffset>-4</stabilityOffset>
+    </world>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_AidSent</defName>
+    <label>aid sent</label>
+    <description>A faction has sent aid to another in crisis.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.45</newsworthiness>
+    <newsRules>Dominion_News_AidSent</newsRules>
+    <headline>{0} sends aid to {1}</headline>
+  </Dominion.DominionEventDef>
+</Defs>

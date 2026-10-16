@@ -358,7 +358,7 @@ Debug category **Dominion** includes:
 | **M7: War** | War goals, war score, warbands and interception, occupation, cold war, joint wars |
 | **M8: Broadcast and culture** ✅ | Broadcast Center, programs, TV and newspaper hooks, ideo influence |
 | **M9: Integrations** ✅ | One integration per sub-milestone (the core bindings for E&D and FTV land in M1, since both are required): FTV (full) → E&D (full) → Simple Leadership → VOE → Visit Settlements → RimMarket → RimToll → RimCourt → IRBM → CBF → VBE → P&P |
-| **M10: Ending and polish** | Unification ending, events catalogue, balancing, translation keys |
+| **M10: Ending and polish** ✅ | Unification ending, events catalogue, balancing, translation keys |
 
 Integrations are designed into the event bus from M0, so M9 is wiring and not restructuring. Any integration can be pulled forward.
 
@@ -552,6 +552,35 @@ Every integration is one class, found by reflection and bound by name at startup
 Change counters (power events, plundered settlements, vassal outposts) are not saved: the first day after loading only records the current state, so loading never produces stale news.
 
 *IRBM council motions and tribal vassals in the council are still deferred.*
+
+## 9i. M10 implementation notes
+
+**The Federation.** Research *Planetary Federation* (4000, after Diplomatic Corps and World Comms Protocols), then propose the **Federation Charter** at the Rim Council (40 influence; only the player can propose it; it never expires). Members lean yes with their opinion of you and honour, and no with paranoia and aggression. With the council switched off, the research alone puts the charter in force. Then any major faction can sign **Federation membership** with you by comms, envoy or summit (60 influence, opinion at least 50; acceptance adds a bandwagon bonus of up to +30% for the share already unified, your cultural influence and your relative strength). Members get non-aggression, a defensive pact, +10% trade, +4% economy, +25 intel and +20 opinion. Friends above 70 opinion offer to join on their own. A member whose opinion of you drops below −15 may leave.
+
+**Unification.** Major factions are visible, humanlike, with a settlement (outlaws only with the setting). One is unified when it is a **member**, **subjugated** (you hold at least as many of its former settlements as FTV vassal outposts as it has left), or **conquered** (fell while at war with you). A member destroyed by someone else is lost, not unified. The Federation tab shows the steps, a progress bar and every faction's status. When the required share (setting, 50–100%) is unified you are offered the proclamation; the credits text depends on the path that brought in more than half the factions (or a mixed ending). The game continues afterwards.
+
+**World events** are `DominionEventDef`s with a `<world>` block (conditions, partner choice, effects), so new ones are XML-only. Each faction rolls once a day; at most one world event per faction every 8 days and the same one not within 60 days. Effects apply whenever the event is raised, including from the dev menu.
+
+| Event | When | Effect |
+|---|---|---|
+| Political scandal | any | legitimacy −8, stability −3 |
+| Succession crisis | legitimacy ≤ 40 | stability −8, legitimacy −5 |
+| Official defects | has a rival | legitimacy −4, opinion of the rival −10 |
+| Reform movement | stability ≤ 60 | Reformists +6%, stability −2 |
+| Secession movement | stability ≤ 30, 2+ settlements | stability −6, legitimacy −4 (factions never split) |
+| Religious schism | Ideology | Zealots +5%, stability −5 |
+| Cultural festival | stability ≥ 50 | stability +4, legitimacy +2 |
+| Famine | economy ≤ 70 | −2% population, stability −6, economy −5%, crisis 20 days |
+| Plague outbreak | any | −1.5% population, economy −6%, stability −4, crisis 20 days, 25% spread to factions within 25 tiles |
+| Natural disaster | any (at a settlement) | economy −7%, stability −3, crisis 15 days |
+| Refugee wave | stability ≤ 30 | 2% of the population moves to the most stable neighbour |
+| Trade boom | economy ≥ 90, at peace | economy +8%, stability +3, warmer ties with a trade partner |
+| Good harvest | any | economy +4%, stability +2 |
+| Market crash | economy ≥ 120 | economy −10%, stability −4 |
+
+**Aid.** A faction in crisis can be helped: friendly AI factions with a healthy economy may send aid (news, favour, stability), and the player can take a caravan with an envoy to one of its settlements and **deliver aid**: medicine, then food, then silver, at least 300 and up to 1500 silver worth. Favour up to +25, goodwill +2 to +12, cultural influence +5, their stability +4, and the crisis ends.
+
+*Assassination attempts, border skirmishes and arms-race incidents are left out of the catalogue: they belong with war (M7), which is not implemented. Visitable world sites are handled through the faction's own settlements (aid deliveries) rather than separate site objects.*
 
 ## 10. Decisions log
 

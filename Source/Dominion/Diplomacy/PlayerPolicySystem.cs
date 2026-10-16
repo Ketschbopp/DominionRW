@@ -77,6 +77,9 @@ namespace Dominion
             if (ally) wanted.Add(DominionTreatyDefOf.Dominion_IntelSharing);
             if (ally && view.opinion > 60f) wanted.Add(DominionTreatyDefOf.Dominion_DefensivePact);
             if (!ally && view.opinion > 70f && f.PlayerGoodwill >= 60) wanted.Add(DominionTreatyDefOf.Dominion_Alliance);
+            // Close friends ask to join your Federation once its charter is in force.
+            if (view.opinion > 70f && FederationUtility.CharterInForce && FederationUtility.IsMajor(f))
+                wanted.Add(DominionTreatyDefOf.Dominion_FederationMembership);
             wanted.RemoveAll(t => comp.Treaties.CannotSignReason(t, f, player) != null);
             return wanted.Count > 0 ? wanted.RandomElement() : null;
         }

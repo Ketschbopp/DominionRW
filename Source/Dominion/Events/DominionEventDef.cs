@@ -29,6 +29,9 @@ namespace Dominion
         /// <summary>Grammar for news reports about this event: needs "headline" and "story" roots. Optional.</summary>
         public RulePackDef newsRules;
 
+        /// <summary>Makes this a world event: rolled daily per faction under its conditions, with its effects. Optional.</summary>
+        public WorldEventProps world;
+
         /// <summary>Hidden from the dev-menu event list.</summary>
         public bool debugHidden;
 
@@ -122,6 +125,12 @@ namespace Dominion
         public static DominionEventDef Dominion_VassalOutpostGained;
         public static DominionEventDef Dominion_VassalOutpostLost;
         public static DominionEventDef Dominion_Emigration;
+        public static DominionEventDef Dominion_FederationCharter;
+        public static DominionEventDef Dominion_FederationJoined;
+        public static DominionEventDef Dominion_FederationLeft;
+        public static DominionEventDef Dominion_FederationProclaimed;
+        public static DominionEventDef Dominion_FactionAbsorbed;
+        public static DominionEventDef Dominion_AidSent;
 
         static DominionEventDefOf()
         {

@@ -514,4 +514,59 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_FederationCharter</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Rim Council adopts the Federation Charter</li>
+        <li>headline-&gt;A federation for the whole planet: Charter passes</li>
+        <li>story-&gt;[LEAD] the Rim Council has adopted the Federation Charter put forward by [FACTION_A]. Any faction may now join. [fc_detail] [closing]</li>
+        <li>fc_detail-&gt;Supporters call it the end of an age of feuding powers.</li>
+        <li>fc_detail-&gt;Sceptics warn it puts too much power in one capital.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_FederationJoined</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] joins the Federation</li>
+        <li>headline-&gt;Federation grows: [FACTION_A] signs on</li>
+        <li>story-&gt;[LEAD] [LEADER_A] has signed [FACTION_A] into the Federation led by [FACTION_B]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_FederationLeft</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] leaves the Federation</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has withdrawn from the Federation led by [FACTION_B], citing a loss of trust. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_FederationProclaimed</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;The Federation is proclaimed</li>
+        <li>headline-&gt;One world: [FACTION_A] proclaims the Federation</li>
+        <li>story-&gt;[LEAD] with the planet united, [FACTION_A] has proclaimed the Federation. Crowds gathered across the world as the charter was read aloud.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_FactionAbsorbed</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] absorbed into the realm of [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] is no more as an independent power; its lands now answer to [FACTION_B] ([DETAIL]). [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>
