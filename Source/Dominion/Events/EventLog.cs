@@ -13,6 +13,9 @@ namespace Dominion
 
         public int NextId() => nextId++;
 
+        /// <summary>The id the next event will get, without taking it.</summary>
+        public int PeekNextId => nextId;
+
         public void Add(DominionEvent ev)
         {
             events.Add(ev);

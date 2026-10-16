@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace Dominion
@@ -51,6 +52,14 @@ namespace Dominion
 
             int now = Find.TickManager.TicksGame;
 
+            // What the faction thinks of you slowly shows in its goodwill (a point a day at most, never flipping
+            // the relation on its own), so the world's view of you is felt in vanilla trade, quests and raids too.
+            if (!f.def.permanentEnemy && Mathf.Abs(op - f.GoodwillWith(player)) > 15f)
+                DiplomacyUtility.NudgeGoodwill(f, player, op, maxStep: 1);
+
+            // A faction that hates you, is strong enough and not tied down elsewhere may go to war with you.
+            if (!hostile && TryDeclareWarOnPlayer(f, s, view, comp, now)) return;
+
             // A war-weary enemy sues for peace. Without this, a war with you could only end on your initiative.
             if (hostile && !f.def.permanentEnemy && s.warWeariness > 50f
                 && now - comp.Player.LastOfferTick(f.loadID) > OfferCooldownDays * GenDate.TicksPerDay
@@ -75,6 +84,22 @@ namespace Dominion
                     else Offer(f, offer, null);
                 }
             }
+        }
+
+        private static bool TryDeclareWarOnPlayer(Faction f, FactionState s, RelationState view, WorldComponent_Dominion comp, int now)
+        {
+            Faction player = Faction.OfPlayer;
+            if (f.def.permanentEnemy || f.RelationKindWith(player) == FactionRelationKind.Ally || view.opinion > -60f) return false;
+            if (now < view.truceUntil || s.activeWars >= 2 || s.warWeariness > 30f || s.stability < 30f) return false;
+            float hatred = (-view.opinion - 60f) / 40f;
+            float chance = 0.02f * hatred * s.effectiveAggression * DominionMod.Settings.aiAggression;
+            // Pacts are rarely broken, and only by the dishonourable.
+            if (comp.Treaties.AnyNonAggression(f, player)) chance *= (1f - s.personality.honour) * 0.3f;
+            if (!Rand.Chance(Mathf.Min(0.05f, chance))) return false;
+            DiplomacyUtility.SetRelationKind(f, player, FactionRelationKind.Hostile, f, "Dominion_Reason_War".Translate());
+            Find.LetterStack.ReceiveLetter("Dominion_WarOnPlayer_Label".Translate(f.Name), "Dominion_WarOnPlayer_Text".Translate(f.Name, f.leader?.LabelShort ?? f.Name),
+                LetterDefOf.ThreatBig, null, f);
+            return true;
         }
 
         private static TreatyDef ChooseOffer(Faction f, FactionState s, RelationState view, WorldComponent_Dominion comp)

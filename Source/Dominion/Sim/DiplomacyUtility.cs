@@ -61,12 +61,12 @@ namespace Dominion
         /// Moves base goodwill a few points toward <paramref name="towards"/> without crossing the thresholds
         /// that would flip the relation kind. Changing kind is always a deliberate decision.
         /// </summary>
-        public static void NudgeGoodwill(Faction a, Faction b, float towards)
+        public static void NudgeGoodwill(Faction a, Faction b, float towards, int maxStep = 3)
         {
             int current = a.BaseGoodwillWith(b);
             float diff = towards - current;
             if (Mathf.Abs(diff) < 2f) return;
-            int step = Mathf.Clamp(Mathf.RoundToInt(diff * 0.1f), -3, 3);
+            int step = Mathf.Clamp(Mathf.RoundToInt(diff * 0.1f), -maxStep, maxStep);
             if (step == 0) step = diff > 0 ? 1 : -1;
 
             int min, max;

@@ -11,4 +11,8 @@
   <Dominion_Visit_BlockedSiege>{0} is under siege. Its gates are shut.</Dominion_Visit_BlockedSiege>
   <Dominion_Visit_BlockedBlockade>{0} is blockaded. Nobody gets in or out.</Dominion_Visit_BlockedBlockade>
 
+
+  <!-- AI factions and the player -->
+  <Dominion_WarOnPlayer_Label>{0} declares war</Dominion_WarOnPlayer_Label>
+  <Dominion_WarOnPlayer_Text>{0} has declared war on you. {1} has had enough of your colony, and their fighters are being called up.\n\nExpect raids and warbands. Allies may answer a call to arms; the War tab shows how it goes.</Dominion_WarOnPlayer_Text>
 </LanguageData>
