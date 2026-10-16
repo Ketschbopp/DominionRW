@@ -133,4 +133,36 @@
     <requiredResearch>Dominion_DiplomaticCorps</requiredResearch>
     <order>0</order>
   </Dominion.DiplomacyActionDef>
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_CallToArms</defName>
+    <label>call to arms</label>
+    <description>Ask them to join one of your wars. Allies, pact partners and puppets are the most willing; nobody likes joining the losing side.</description>
+    <workerClass>Dominion.DiplomacyAction_CallToArms</workerClass>
+    <tier>Advanced</tier>
+    <influenceCost>15</influenceCost>
+    <cooldownDays>15</cooldownDays>
+    <order>20</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_ColdWar</defName>
+    <label>declare or end cold war</label>
+    <description>Declare an open rivalry short of war: an arms race, propaganda and their spies busy in your colony. Their enemies approve. Or offer to end one; they agree more readily the less they hate you.</description>
+    <workerClass>Dominion.DiplomacyAction_ColdWar</workerClass>
+    <tier>Advanced</tier>
+    <influenceCost>10</influenceCost>
+    <cooldownDays>30</cooldownDays>
+    <order>21</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_ProxyWar</defName>
+    <label>fund a proxy war</label>
+    <description>Send 500 silver and weapons to help them in a war against someone you oppose. It tilts their war and they will be grateful. It is secret, but one time in four it leaks.</description>
+    <workerClass>Dominion.DiplomacyAction_ProxyWar</workerClass>
+    <tier>Advanced</tier>
+    <influenceCost>15</influenceCost>
+    <cooldownDays>20</cooldownDays>
+    <order>22</order>
+  </Dominion.DiplomacyActionDef>
 </Defs>

@@ -131,6 +131,29 @@ namespace Dominion
         public static DominionEventDef Dominion_FederationProclaimed;
         public static DominionEventDef Dominion_FactionAbsorbed;
         public static DominionEventDef Dominion_AidSent;
+        public static DominionEventDef Dominion_JoinedWar;
+        public static DominionEventDef Dominion_CallToArmsRefused;
+        public static DominionEventDef Dominion_WarbandMarching;
+        public static DominionEventDef Dominion_Reinforcements;
+        public static DominionEventDef Dominion_BattleFought;
+        public static DominionEventDef Dominion_SettlementOccupied;
+        public static DominionEventDef Dominion_SettlementReturned;
+        public static DominionEventDef Dominion_WarbandIntercepted;
+        public static DominionEventDef Dominion_Blockade;
+        public static DominionEventDef Dominion_Capitulation;
+        public static DominionEventDef Dominion_PeaceTerms;
+        public static DominionEventDef Dominion_PuppetFreed;
+        public static DominionEventDef Dominion_ColdWarBegan;
+        public static DominionEventDef Dominion_ColdWarEnded;
+        public static DominionEventDef Dominion_ArmsRace;
+        public static DominionEventDef Dominion_BorderSkirmish;
+        public static DominionEventDef Dominion_ProxyWar;
+        public static DominionEventDef Dominion_Assassination;
+        public static DominionEventDef Dominion_Sabotage;
+        public static DominionEventDef Dominion_FalseFlag;
+        public static DominionEventDef Dominion_TechnologyStolen;
+        public static DominionEventDef Dominion_PuppetInstalled;
+        public static DominionEventDef Dominion_HostageRescued;
 
         static DominionEventDefOf()
         {

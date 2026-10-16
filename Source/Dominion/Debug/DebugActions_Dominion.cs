@@ -364,6 +364,104 @@ namespace Dominion
             st.proclaimedTick = -1;
         }
 
+        [DebugAction(Category, "War: log wars", allowedGameStates = AllowedGameStates.Playing)]
+        private static void LogWars()
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            var sb = new System.Text.StringBuilder($"{comp.Wars.wars.Count} wars:\n");
+            foreach (War w in comp.Wars.wars)
+                sb.AppendLine($"#{w.id} {w.attacker?.Name} vs {w.defender?.Name}: goal={w.goal} score={w.score:F1} battles={w.battles} alliedTo={w.alliedTo?.Name ?? "-"} target={w.goalSettlement?.Label ?? "-"}");
+            sb.AppendLine($"Warbands: {WarbandUtility.All().Count()}, occupied: {comp.Wars.originalOwner.Count}, blockades: {comp.Wars.blockades.Count}");
+            DLog.Message(sb.ToString());
+        }
+
+        [DebugAction(Category, "War: set score...", allowedGameStates = AllowedGameStates.Playing)]
+        private static List<DebugActionNode> SetWarScore()
+        {
+            var nodes = new List<DebugActionNode>();
+            foreach (War w in WorldComponent_Dominion.Instance.Wars.wars)
+            {
+                var node = new DebugActionNode(w.attacker.Name + " vs " + w.defender.Name);
+                foreach (float v in new[] { -100f, -80f, -40f, 0f, 40f, 80f, 100f })
+                {
+                    War cw = w;
+                    float cv = v;
+                    node.AddChild(new DebugActionNode(v.ToString("F0"), DebugActionType.Action, () => cw.score = cv));
+                }
+                nodes.Add(node);
+            }
+            return nodes;
+        }
+
+        [DebugAction(Category, "War: force capitulation...", allowedGameStates = AllowedGameStates.Playing)]
+        private static List<DebugActionNode> ForceCapitulation()
+        {
+            var nodes = new List<DebugActionNode>();
+            foreach (War w in WorldComponent_Dominion.Instance.Wars.wars)
+            {
+                War cw = w;
+                nodes.Add(new DebugActionNode(w.defender.Name + " surrenders to " + w.attacker.Name, DebugActionType.Action, () => WarUtility.Capitulate(cw, cw.defender)));
+                nodes.Add(new DebugActionNode(w.attacker.Name + " surrenders to " + w.defender.Name, DebugActionType.Action, () => WarUtility.Capitulate(cw, cw.attacker)));
+            }
+            return nodes;
+        }
+
+        [DebugAction(Category, "War: launch warband...", allowedGameStates = AllowedGameStates.Playing)]
+        private static List<DebugActionNode> LaunchWarband()
+        {
+            var nodes = new List<DebugActionNode>();
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            foreach (Faction a in comp.Cache.Simulated)
+            {
+                var node = new DebugActionNode(a.Name);
+                foreach (Faction b in DebugFactions())
+                {
+                    if (a == b) continue;
+                    Faction ca = a, cb = b;
+                    node.AddChild(new DebugActionNode(b.Name, DebugActionType.Action, () =>
+                    {
+                        if (WarbandUtility.Launch(ca, cb, cb.IsPlayer ? WarbandMission.RaidPlayer : WarbandMission.Siege) == null)
+                            Messages.Message("Dominion: no route for a warband.", MessageTypeDefOf.RejectInput, historical: false);
+                    }));
+                }
+                nodes.Add(node);
+            }
+            return nodes;
+        }
+
+        [DebugAction(Category, "War: start cold war...", allowedGameStates = AllowedGameStates.Playing)]
+        private static List<DebugActionNode> StartColdWar()
+        {
+            var nodes = new List<DebugActionNode>();
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            foreach (Faction a in DebugFactions())
+            {
+                var node = new DebugActionNode(a.Name);
+                foreach (Faction b in DebugFactions())
+                {
+                    if (a == b) continue;
+                    Faction ca = a, cb = b;
+                    node.AddChild(new DebugActionNode(b.Name, DebugActionType.Action, () => ColdWarSystem.Begin(ca, cb)));
+                }
+                nodes.Add(node);
+            }
+            return nodes;
+        }
+
+        [DebugAction(Category, "Ops: finish abstract operations now", allowedGameStates = AllowedGameStates.Playing)]
+        private static void FinishOps()
+        {
+            foreach (Operation op in WorldComponent_Dominion.Instance.Intel.operations)
+                if (!op.physical) op.endTick = Find.TickManager.TicksGame;
+        }
+
+        [DebugAction(Category, "Ops: physical objective done", allowedGameStates = AllowedGameStates.Playing)]
+        private static void PhysicalDone()
+        {
+            Operation op = WorldComponent_Dominion.Instance.Intel.ActivePhysical;
+            if (op != null) op.achieved = true;
+        }
+
         [DebugAction(Category, "Integration self-test")]
         private static void SelfTest() => DLog.Message(IntegrationRegistry.SelfTestReport());
 

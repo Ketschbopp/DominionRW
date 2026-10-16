@@ -138,7 +138,7 @@ namespace Dominion
             float chance = 0.2f + ds.personality.honour * 0.7f;
             if (comp.Treaties.AnyNonAggression(o.defender, o.aggressor)) chance *= 0.5f;
             if (Rand.Chance(chance))
-                DiplomacyUtility.SetRelationKind(o.defender, o.aggressor, FactionRelationKind.Hostile, o.defender, o.treaty.def.label);
+                WarUtility.JoinWar(o.defender, o.victim, o.aggressor, o.treaty.def.label);
             else
                 comp.Treaties.Break(o.treaty, o.defender);
         }
@@ -152,7 +152,7 @@ namespace Dominion
                 action = () =>
                 {
                     if (!o.aggressor.HostileTo(Faction.OfPlayer))
-                        DiplomacyUtility.SetRelationKind(Faction.OfPlayer, o.aggressor, FactionRelationKind.Hostile, Faction.OfPlayer, o.treaty.def.label);
+                        WarUtility.JoinWar(Faction.OfPlayer, o.victim, o.aggressor, o.treaty.def.label);
                 },
                 resolveTree = true,
             };

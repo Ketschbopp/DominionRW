@@ -30,6 +30,7 @@ namespace Dominion
         private MethodInfo canPurchase;
         private MethodInfo tryPurchase;
         private MethodInfo goodwillCost;
+        private MethodInfo executeVassalisation;
 
         protected internal override void Bind(Binder b)
         {
@@ -59,7 +60,7 @@ namespace Dominion
             tryPurchase = b.Method(vassalise, "TryPurchaseVassalisation");
             goodwillCost = b.Method(vassalise, "GetSettlementVassaliseGoodwillCost");
             b.Method(vassalise, "CanVassaliseSettlement");
-            b.Method(vassalise, "ExecuteVassalisation");
+            executeVassalisation = b.Method(vassalise, "ExecuteVassalisation");
             b.Method(vassalise, "ExecuteCedeToFactionAtTile");
         }
 
@@ -142,6 +143,40 @@ namespace Dominion
                 DLog.WarningOnce("FTV vassalisation failed: " + e, 0x0F73);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Peace terms: the settlement becomes the player's vassal outpost without FTV's purchase cost. Arguments are
+        /// matched by type, so small signature changes in FTV still work. True if the settlement changed hands.
+        /// </summary>
+        public bool TryCedeToPlayer(Settlement s)
+        {
+            if (!IsActive || s == null || s.Destroyed || executeVassalisation == null) return false;
+            RimWorld.Faction before = s.Faction;
+            try
+            {
+                ParameterInfo[] ps = executeVassalisation.GetParameters();
+                object[] args = new object[ps.Length];
+                for (int i = 0; i < ps.Length; i++)
+                {
+                    Type t = ps[i].ParameterType;
+                    if (t.IsAssignableFrom(typeof(Settlement))) args[i] = s;
+                    else if (t == typeof(RimWorld.Faction)) args[i] = RimWorld.Faction.OfPlayer;
+                    else if (t == typeof(PlanetTile)) args[i] = s.Tile;
+                    else if (t == typeof(int)) args[i] = s.Tile.tileId;
+                    else if (ps[i].HasDefaultValue) args[i] = ps[i].DefaultValue;
+                    else if (t == typeof(bool)) args[i] = false;
+                    else if (t.IsValueType) args[i] = Activator.CreateInstance(t);
+                }
+                object result = executeVassalisation.Invoke(null, args);
+                if (result is bool ok && !ok) return false;
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("FTV cession failed: " + e, 0x0F74);
+                return false;
+            }
+            return s.Destroyed || s.Faction != before;
         }
 
         /// <summary>Land and vassals count in the Rim Council: up to +2 for territory, +0.2 per vassal outpost (max +2).</summary>

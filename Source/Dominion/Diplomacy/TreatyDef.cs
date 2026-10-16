@@ -64,6 +64,18 @@ namespace Dominion
         /// </summary>
         public bool federation;
 
+        /// <summary>Imposed by a peace or a coup, never proposed: hidden from every proposal menu and the AI's own offers.</summary>
+        public bool imposed;
+
+        /// <summary>
+        /// The first party (a) pays the second (b): a's economy index falls by this share and b's rises by 70% of it.
+        /// With the player involved, silver changes hands every 15 days instead.
+        /// </summary>
+        public float tribute;
+
+        /// <summary>The first party (a) is a puppet of the second (b): it joins b's wars and counts as subjugated for the ending.</summary>
+        public bool puppet;
+
         public bool Expires => durationDays > 0;
 
         public override IEnumerable<string> ConfigErrors()
@@ -84,6 +96,8 @@ namespace Dominion
         public static TreatyDef Dominion_DefensivePact;
         public static TreatyDef Dominion_IntelSharing;
         public static TreatyDef Dominion_FederationMembership;
+        public static TreatyDef Dominion_Tribute;
+        public static TreatyDef Dominion_Puppet;
 
         static DominionTreatyDefOf()
         {

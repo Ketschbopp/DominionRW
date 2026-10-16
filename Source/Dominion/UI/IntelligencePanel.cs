@@ -55,8 +55,20 @@ namespace Dominion
             }
             int now = Find.TickManager.TicksGame;
             foreach (Operation op in svc.operations)
-                l.Label("  " + "Dominion_Ops_RunningLine".Translate(op.def.LabelCap, op.target.Name,
-                    string.Join(", ", op.agents.Select(a => a.LabelShortCap)), Mathf.Max(0, op.endTick - now).ToStringTicksToPeriod(allowSeconds: false)));
+            {
+                if (!op.physical)
+                {
+                    l.Label("  " + "Dominion_Ops_RunningLine".Translate(op.def.LabelCap, op.target.Name,
+                        string.Join(", ", op.agents.Select(a => a.LabelShortCap)), Mathf.Max(0, op.endTick - now).ToStringTicksToPeriod(allowSeconds: false)));
+                    continue;
+                }
+                Rect row = l.GetRect(Line);
+                string line = "  " + "Dominion_Ops_RunningPhysical".Translate(op.def.LabelCap, op.settlement?.Label ?? op.target.Name, PhysicalOps.Status(op));
+                Widgets.Label(row.LeftPart(0.8f), line.Truncate(row.width * 0.8f));
+                Thing look = op.objective != null && op.objective.Spawned ? op.objective : op.agents.FirstOrDefault(a => a.Spawned);
+                if (look != null && Widgets.ButtonText(row.RightPart(0.18f), "Dominion_Ops_ShowTarget".Translate()))
+                    CameraJumper.TryJumpAndSelect(look);
+            }
 
             l.GapLine();
             l.Label("Dominion_Ops_Networks".Translate());
@@ -89,6 +101,7 @@ namespace Dominion
         private const float Line = 24f;
         private OperationDef op;
         private Faction target;
+        private Faction thirdParty;
         private readonly HashSet<Pawn> agents = new HashSet<Pawn>();
         private Vector2 scroll;
 
@@ -118,12 +131,23 @@ namespace Dominion
                     .Select(f => new FloatMenuOption(f.Name, () => target = f)).ToList()));
             y += 38f;
 
+            if (op != null && op.needsThirdParty)
+            {
+                if (Widgets.ButtonText(new Rect(inRect.x + inRect.width / 2f + 4f, y, inRect.width / 2f - 4f, 32f),
+                        thirdParty != null ? "Dominion_Ops_Blame".Translate(thirdParty.Name).ToString() : "Dominion_Ops_ChooseBlame".Translate().ToString()))
+                    Find.WindowStack.Add(new FloatMenu(WorldComponent_Dominion.Instance.Cache.Simulated
+                        .Where(f => f != target).Select(f => new FloatMenuOption(f.Name, () => thirdParty = f)).ToList()));
+                y += 38f;
+            }
+
             if (op != null)
             {
                 string cost = op.silverCost > 0
                     ? "Dominion_Ops_CostWithSilver".Translate(op.influenceCost.ToString("F0"), op.silverCost).ToString()
                     : "Dominion_Ops_CostInfluence".Translate(op.influenceCost.ToString("F0")).ToString();
-                string info = op.description + "\n\n" + "Dominion_Ops_Terms".Translate(op.durationDays, cost, op.skill?.label ?? "-", op.maxAgents);
+                string modes = op.allowAbstract && op.allowPhysical ? "Dominion_Ops_ModeBoth".Translate()
+                    : op.allowPhysical ? "Dominion_Ops_ModePhysical".Translate() : "Dominion_Ops_ModeAbstract".Translate();
+                string info = op.description + "\n\n" + "Dominion_Ops_Terms".Translate(op.durationDays, cost, op.skill?.label ?? "-", op.maxAgents) + "\n" + modes;
                 float h = Text.CalcHeight(info, inRect.width);
                 Widgets.Label(new Rect(inRect.x, y, inRect.width, h), info);
                 y += h + 8f;
@@ -152,9 +176,9 @@ namespace Dominion
             Widgets.EndScrollView();
 
             List<Pawn> team = agents.Where(p => p.Spawned && candidates.Contains(p)).ToList();
-            string reason = op == null ? "-" : IntelOpsSystem.CannotLaunchReason(op, target, team);
+            string reason = op == null ? "-" : IntelOpsSystem.CannotLaunchReason(op, target, team, thirdParty);
             float y2 = inRect.yMax - 84f;
-            if (op != null && target != null && team.Count > 0)
+            if (op != null && op.allowAbstract && target != null && team.Count > 0)
                 Widgets.Label(new Rect(inRect.x, y2, inRect.width, Line), "Dominion_Ops_Chance".Translate(IntelOpsSystem.SuccessChance(op, target, team).ToStringPercent(),
                     op.exposureOnFail.ToStringPercent()));
             if (reason != null)
@@ -168,7 +192,7 @@ namespace Dominion
             if (Widgets.ButtonText(new Rect(inRect.center.x - 100f, inRect.yMax - 36f, 200f, 34f), "Dominion_Ops_Launch".Translate(), active: reason == null)
                 && reason == null)
             {
-                IntelOpsSystem.Launch(op, target, team);
+                IntelOpsSystem.Launch(op, target, team, thirdParty);
                 Close();
             }
         }

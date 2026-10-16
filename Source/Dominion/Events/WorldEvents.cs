@@ -57,6 +57,9 @@ namespace Dominion
         public float partnerFavourTowardFaction;
         public float partnerStabilityOffset;
 
+        /// <summary>Chance the faction's leader dies (assassination attempts).</summary>
+        public float leaderDeathChance;
+
         /// <summary>Days the faction counts as in crisis: others (and you) can send aid.</summary>
         public int crisisDays;
 
@@ -252,6 +255,9 @@ namespace Dominion
                     ps.stability = Mathf.Clamp(ps.stability + w.partnerStabilityOffset, 0f, 100f);
                 }
             }
+
+            if (w.leaderDeathChance > 0f && VisitorUtility.LeaderIsFree(f.leader) && Rand.Chance(w.leaderDeathChance))
+                f.leader.Kill(null);
 
             if (w.crisisDays > 0)
             {

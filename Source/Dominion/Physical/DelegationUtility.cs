@@ -221,6 +221,7 @@ namespace Dominion
     public static class DominionWorldObjectDefOf
     {
         public static WorldObjectDef Dominion_Delegation;
+        public static WorldObjectDef Dominion_Warband;
 
         static DominionWorldObjectDefOf()
         {

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <RulePackDef>
+    <defName>Dominion_News_JoinedWar</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] joins the war against [FACTION_B]</li>
+        <li>headline-&gt;[FACTION_A] enters the war on the side of [DETAIL]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has declared war on [FACTION_B], answering the call of [DETAIL]. [jw_detail] [closing]</li>
+        <li>jw_detail-&gt;The war is widening.</li>
+        <li>jw_detail-&gt;[observers] fear the conflict will draw in still more powers.</li>
+        <li>jw_detail-&gt;[LEADER_A] spoke of honour and old promises.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_CallToArmsRefused</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] refuses to fight for [FACTION_B]</li>
+        <li>headline-&gt;[FACTION_A] stays out of the war against [DETAIL]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has turned down a request from [FACTION_B] to join its war against [DETAIL]. [ref_detail] [closing]</li>
+        <li>ref_detail-&gt;[FACTION_B] is said to be bitterly disappointed.</li>
+        <li>ref_detail-&gt;The friendship between the two has cooled.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_WarbandMarching</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Warband of [FACTION_A] marches on [DETAIL]</li>
+        <li>headline-&gt;Troops of [FACTION_A] on the move against [FACTION_B]</li>
+        <li>story-&gt;[LEAD] a warband of [FACTION_A] has set out against [FACTION_B], heading for [DETAIL]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Reinforcements</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] sends troops to aid [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has dispatched a column of fighters to reinforce its ally [FACTION_B]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_BattleFought</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] defeats [FACTION_B] at [DETAIL]</li>
+        <li>headline-&gt;Battle of [DETAIL]: victory for [FACTION_A]</li>
+        <li>headline-&gt;[FACTION_B] beaten at [DETAIL]</li>
+        <li>story-&gt;[LEAD] forces of [FACTION_A] and [FACTION_B] clashed at [DETAIL], and [FACTION_A] carried the day. [battle_detail] [closing]</li>
+        <li>battle_detail-&gt;Losses are said to be heavy on both sides.</li>
+        <li>battle_detail-&gt;The survivors of [FACTION_B] fell back in disorder.</li>
+        <li>battle_detail-&gt;[observers] call it a turning point in the war.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SettlementOccupied</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] occupies [DETAIL]</li>
+        <li>headline-&gt;[DETAIL] falls to [FACTION_A]</li>
+        <li>headline-&gt;[FACTION_B] loses [DETAIL]</li>
+        <li>story-&gt;[LEAD] [DETAIL], a settlement of [FACTION_B], has fallen to [FACTION_A]. [occ_detail] [closing]</li>
+        <li>occ_detail-&gt;The flag of [FACTION_A] now flies over the town.</li>
+        <li>occ_detail-&gt;Refugees are streaming out of the area.</li>
+        <li>occ_detail-&gt;[FACTION_B] vows to take it back.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SettlementReturned</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[DETAIL] returns to [FACTION_A]</li>
+        <li>headline-&gt;[FACTION_A] regains [DETAIL]</li>
+        <li>story-&gt;[LEAD] [DETAIL] is once again in the hands of [FACTION_A], after a time under [FACTION_B]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_WarbandIntercepted</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] ambushes a warband of [FACTION_B]</li>
+        <li>headline-&gt;Warband of [FACTION_B] intercepted</li>
+        <li>story-&gt;[LEAD] fighters of [FACTION_A] fell on a warband of [FACTION_B] on the march. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Blockade</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] blockades [DETAIL]</li>
+        <li>headline-&gt;Siege lines around [DETAIL]</li>
+        <li>story-&gt;[LEAD] forces of [FACTION_A] have cut off [DETAIL], a settlement of [FACTION_B]. Trade has stopped. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Capitulation</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] capitulates to [FACTION_B]</li>
+        <li>headline-&gt;[FACTION_A] surrenders</li>
+        <li>headline-&gt;War ends: [FACTION_A] accepts the terms of [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has surrendered to [FACTION_B]. The terms: [DETAIL]. [cap_detail] [closing]</li>
+        <li>cap_detail-&gt;[LEADER_A] signed the surrender in silence.</li>
+        <li>cap_detail-&gt;Crowds gathered to hear the news.</li>
+        <li>cap_detail-&gt;The war is over, but the bitterness will linger.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_PeaceTerms</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Peace on the terms of [FACTION_A]</li>
+        <li>headline-&gt;[FACTION_B] makes concessions to [FACTION_A]</li>
+        <li>story-&gt;[LEAD] the peace between [FACTION_A] and [FACTION_B] leaves [FACTION_A] the clear winner. The terms: [DETAIL]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_PuppetFreed</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] breaks free of [FACTION_B]</li>
+        <li>headline-&gt;[FACTION_A] defies its masters in [FACTION_B]</li>
+        <li>story-&gt;[LEAD] the government of [FACTION_A] has renounced its obligations to [FACTION_B]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_PuppetInstalled</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;A puppet regime rules [FACTION_A]</li>
+        <li>headline-&gt;[FACTION_A] now takes orders from abroad</li>
+        <li>story-&gt;[LEAD] the new government of [FACTION_A] owes its position to foreign backers. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_ColdWarBegan</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Cold war between [FACTION_A] and [FACTION_B]</li>
+        <li>headline-&gt;[FACTION_A] and [FACTION_B]: an armed peace</li>
+        <li>story-&gt;[LEAD] relations between [FACTION_A] and [FACTION_B] have frozen into open rivalry. [cw_detail] [closing]</li>
+        <li>cw_detail-&gt;Both sides are said to be arming.</li>
+        <li>cw_detail-&gt;Their envoys no longer speak to each other.</li>
+        <li>cw_detail-&gt;Propaganda from each side fills the airwaves.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_ColdWarEnded</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Thaw between [FACTION_A] and [FACTION_B]</li>
+        <li>headline-&gt;[FACTION_A] and [FACTION_B] step back from the brink</li>
+        <li>story-&gt;[LEAD] the long rivalry between [FACTION_A] and [FACTION_B] appears to be over. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_ArmsRace</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Arms race between [FACTION_A] and [FACTION_B]</li>
+        <li>headline-&gt;[FACTION_A] and [FACTION_B] pour wealth into weapons</li>
+        <li>story-&gt;[LEAD] [FACTION_A] and [FACTION_B] are building up their forces at a pace not seen in years. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_BorderSkirmish</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Border clash between [FACTION_A] and [FACTION_B]</li>
+        <li>headline-&gt;Shots fired on the [FACTION_A]-[FACTION_B] border</li>
+        <li>story-&gt;[LEAD] patrols of [FACTION_A] and [FACTION_B] exchanged fire along their border. Each blames the other. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_ProxyWar</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] funds [DETAIL] against [FACTION_B]</li>
+        <li>headline-&gt;Weapons of [FACTION_A] found in the hands of [DETAIL]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has been sending money and arms to [DETAIL] for its war against [FACTION_B]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Assassination</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Assassination in [FACTION_A]</li>
+        <li>headline-&gt;Murder at the top in [FACTION_A]</li>
+        <li>story-&gt;[LEAD] a senior figure of [FACTION_A] has been assassinated. [as_detail] [closing]</li>
+        <li>as_detail-&gt;Suspicion falls on foreign agents.</li>
+        <li>as_detail-&gt;The killers have not been found.</li>
+        <li>as_detail-&gt;The government has declared a day of mourning.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Sabotage</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Sabotage in [FACTION_A]</li>
+        <li>headline-&gt;Fires and explosions hit [FACTION_A]</li>
+        <li>story-&gt;[LEAD] saboteurs have struck at the stores and workshops of [FACTION_A]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_FalseFlag</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;False flag: [FACTION_B] framed [DETAIL] in [FACTION_A]</li>
+        <li>headline-&gt;The affair in [FACTION_A] was staged by [FACTION_B]</li>
+        <li>story-&gt;[LEAD] the agents caught in [FACTION_A] were not working for [DETAIL] at all: [FACTION_B] staged the affair to set the two against each other. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_TechnologyStolen</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Research stolen from [FACTION_A]</li>
+        <li>headline-&gt;Secrets of [FACTION_A] in foreign hands</li>
+        <li>story-&gt;[LEAD] plans and research notes have gone missing from [FACTION_A]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_HostageRescued</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Daring rescue in [FACTION_B]</li>
+        <li>headline-&gt;[DETAIL] snatched from [FACTION_B]</li>
+        <li>story-&gt;[LEAD] a team from [FACTION_A] slipped into a settlement of [FACTION_B] and brought out [DETAIL]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_AssassinationAttempt</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Attempt on the life of [LEADER_A]</li>
+        <li>headline-&gt;[FACTION_A]: assassin strikes at [LEADER_A]</li>
+        <li>story-&gt;[LEAD] an assassin has struck at [LEADER_A] of [FACTION_A]. [aa_detail] [closing]</li>
+        <li>aa_detail-&gt;Whether the leader survived is not yet clear.</li>
+        <li>aa_detail-&gt;Guards have been doubled across the capital.</li>
+        <li>aa_detail-&gt;The attacker's backers are unknown.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+</Defs>

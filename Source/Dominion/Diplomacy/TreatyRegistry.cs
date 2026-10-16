@@ -45,6 +45,7 @@ namespace Dominion
         /// <summary>Why the pair cannot sign this treaty, or null if they can.</summary>
         public string CannotSignReason(TreatyDef def, Faction x, Faction y)
         {
+            if (def.imposed) return "Dominion_Treaty_Imposed".Translate();
             if (Has(x, y, def)) return "Dominion_Treaty_AlreadySigned".Translate();
             if (x.HostileTo(y)) return "Dominion_Treaty_AtWar".Translate();
             if (def.federation)
@@ -90,6 +91,13 @@ namespace Dominion
         /// <summary>Ends a treaty by agreement or notice. Not a violation, but the other side is displeased.</summary>
         public void Cancel(Treaty t, Faction by)
         {
+            // An imposed treaty can be ended by the side it favours (releasing a puppet, forgiving tribute);
+            // walking out of it as the side that owes is a violation.
+            if (t.def.imposed && by == t.a)
+            {
+                Break(t, by);
+                return;
+            }
             if (!treaties.Remove(t)) return;
             WorldComponent_Dominion.Instance.GetRelation(t.Other(by), by).grievance += 5f;
             if (t.def.alliance)

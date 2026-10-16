@@ -13,4 +13,18 @@
     <canHaveFaction>true</canHaveFaction>
     <selectable>true</selectable>
   </WorldObjectDef>
+
+  <WorldObjectDef>
+    <defName>Dominion_Warband</defName>
+    <label>warband</label>
+    <description>An army on the march. It besieges, blockades or raids when it arrives. A caravan of yours on the same tile can intercept it; if you are not already at war with its faction, that is an act of war.</description>
+    <worldObjectClass>Dominion.Warband</worldObjectClass>
+    <texture>World/Dominion_Warband</texture>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/Dominion_Warband</expandingIconTexture>
+    <expandingIconPriority>60</expandingIconPriority>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <canHaveFaction>true</canHaveFaction>
+    <selectable>true</selectable>
+  </WorldObjectDef>
 </Defs>

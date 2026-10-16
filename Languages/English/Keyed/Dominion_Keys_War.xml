@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- War (M7) -->
+  <Dominion_Tab_War>War</Dominion_Tab_War>
+  <Dominion_SettingsTab_War>War</Dominion_SettingsTab_War>
+  <Dominion_SettingsTab_Espionage>Espionage</Dominion_SettingsTab_Espionage>
+  <Dominion_War_Label>{0} against {1}</Dominion_War_Label>
+
+  <Dominion_WarGoal_Punitive>punitive war</Dominion_WarGoal_Punitive>
+  <Dominion_WarGoal_Punitive_Desc>Teach them a lesson. If you win, their stability, legitimacy and economy suffer.</Dominion_WarGoal_Punitive_Desc>
+  <Dominion_WarGoal_Conquest>conquest</Dominion_WarGoal_Conquest>
+  <Dominion_WarGoal_Conquest_Desc>Take a settlement. If you win, it is ceded to the winner (to you as a vassal outpost through Faction Territories), or they pay instead.</Dominion_WarGoal_Conquest_Desc>
+  <Dominion_WarGoal_Vassalisation>vassalisation</Dominion_WarGoal_Vassalisation>
+  <Dominion_WarGoal_Vassalisation_Desc>Make them a puppet: it obeys, pays a little tribute, never attacks you and joins your wars.</Dominion_WarGoal_Vassalisation_Desc>
+  <Dominion_WarGoal_Tribute>tribute</Dominion_WarGoal_Tribute>
+  <Dominion_WarGoal_Tribute_Desc>They pay a large sum at the peace and tribute for 180 days after.</Dominion_WarGoal_Tribute_Desc>
+  <Dominion_WarGoal_RegimeChange>regime change</Dominion_WarGoal_RegimeChange>
+  <Dominion_WarGoal_RegimeChange_Desc>Overthrow their government. The new regime owes its position to the winner.</Dominion_WarGoal_RegimeChange_Desc>
+  <Dominion_WarGoal_Liberation>liberation</Dominion_WarGoal_Liberation>
+  <Dominion_WarGoal_Liberation_Desc>Free the settlements they have taken from others and return them to their owners.</Dominion_WarGoal_Liberation_Desc>
+
+  <Dominion_War_ChooseGoal>War goal</Dominion_War_ChooseGoal>
+  <Dominion_War_GoalChosen>War goal: {0}. {1}</Dominion_War_GoalChosen>
+  <Dominion_War_ConquestTarget>Your target: {0}.</Dominion_War_ConquestTarget>
+  <Dominion_War_EndedLabel>War with {0} over</Dominion_War_EndedLabel>
+  <Dominion_War_JoinedPeaceText>The war you were part of has ended. {0} offers you peace as well.</Dominion_War_JoinedPeaceText>
+  <Dominion_War_AcceptPeace>Make peace</Dominion_War_AcceptPeace>
+  <Dominion_War_FightOn>Fight on</Dominion_War_FightOn>
+  <Dominion_War_PeaceOfferTitle>Peace offered</Dominion_War_PeaceOfferTitle>
+  <Dominion_War_SurrenderOfferText>{0} can fight no longer and offers to surrender. The terms would be:\n\n{1}</Dominion_War_SurrenderOfferText>
+  <Dominion_War_AcceptSurrender>Accept the surrender</Dominion_War_AcceptSurrender>
+  <Dominion_War_SurrenderOfferTitle>Surrender offered</Dominion_War_SurrenderOfferTitle>
+  <Dominion_War_SurrenderDemandText>{0} has the upper hand and demands your surrender. The terms would be:\n\n{1}\n\nIf you refuse, the war goes on.</Dominion_War_SurrenderDemandText>
+  <Dominion_War_Surrender>Surrender</Dominion_War_Surrender>
+  <Dominion_War_Refuse>Refuse</Dominion_War_Refuse>
+  <Dominion_War_SurrenderDemandTitle>Demand for surrender</Dominion_War_SurrenderDemandTitle>
+  <Dominion_War_CallToArmsText>Your ally {0} is at war with {1} and asks you to join. Refusing will disappoint them.</Dominion_War_CallToArmsText>
+  <Dominion_War_JoinWar>Declare war on {0}</Dominion_War_JoinWar>
+  <Dominion_War_DeclineCall>Decline</Dominion_War_DeclineCall>
+  <Dominion_War_CallToArmsTitle>Call to arms</Dominion_War_CallToArmsTitle>
+
+  <Dominion_Reason_Capitulation>capitulation</Dominion_Reason_Capitulation>
+  <Dominion_Reason_AllyPeace>peace with an ally</Dominion_Reason_AllyPeace>
+  <Dominion_Reason_CallToArms>called to arms by {0}</Dominion_Reason_CallToArms>
+  <Dominion_Reason_PuppetRevolt>puppet revolt</Dominion_Reason_PuppetRevolt>
+  <Dominion_Reason_WarbandIntercepted>warband intercepted</Dominion_Reason_WarbandIntercepted>
+  <Dominion_Reason_CovertDiscovered>covert operation discovered</Dominion_Reason_CovertDiscovered>
+  <Dominion_Reason_CovertExposed>covert operation exposed</Dominion_Reason_CovertExposed>
+  <Dominion_Reason_FalseFlag>staged incident</Dominion_Reason_FalseFlag>
+
+  <!-- Peace terms -->
+  <Dominion_Terms_WhitePeace>Neither side has the upper hand: a white peace, with no terms.</Dominion_Terms_WhitePeace>
+  <Dominion_Terms_Victory>{0} has the upper hand and sets the terms for {1}:</Dominion_Terms_Victory>
+  <Dominion_Terms_Capitulation>{1} capitulates, and {0} dictates the terms:</Dominion_Terms_Capitulation>
+  <Dominion_Terms_KeepsSettlement>{0} keeps {1}.</Dominion_Terms_KeepsSettlement>
+  <Dominion_Terms_ReturnsSettlement>{0} hands {1} back to {2}.</Dominion_Terms_ReturnsSettlement>
+  <Dominion_Terms_Reparations>{0} pays reparations to {1}.</Dominion_Terms_Reparations>
+  <Dominion_Terms_ConquestPaid>{0} has no settlement to give up and pays instead.</Dominion_Terms_ConquestPaid>
+  <Dominion_Terms_CededToPlayer>{0} becomes your vassal outpost.</Dominion_Terms_CededToPlayer>
+  <Dominion_Terms_CedeFailed>The cession could not be carried out, so {0} pays instead.</Dominion_Terms_CedeFailed>
+  <Dominion_Terms_Ceded>{0} is ceded to {1}.</Dominion_Terms_Ceded>
+  <Dominion_Terms_PlayerTributary>You must pay tribute to {0} for 180 days.</Dominion_Terms_PlayerTributary>
+  <Dominion_Terms_Puppet>{0} becomes a puppet of {1}.</Dominion_Terms_Puppet>
+  <Dominion_Terms_Tribute>{0} pays {1} now, and tribute for 180 days.</Dominion_Terms_Tribute>
+  <Dominion_Terms_PlayerHumbled>{0} humiliates your government: you lose 30 influence.</Dominion_Terms_PlayerHumbled>
+  <Dominion_Terms_RegimeChange>The government of {0} is overthrown and replaced.</Dominion_Terms_RegimeChange>
+  <Dominion_Terms_Punitive>{0} pays the price of defeat in stability, prestige and wealth.</Dominion_Terms_Punitive>
+  <Dominion_Terms_PlayerPaid>You paid {0} silver to {1}.</Dominion_Terms_PlayerPaid>
+  <Dominion_Terms_PaidToPlayer>{0} pays you {1} silver, delivered by drop pod.</Dominion_Terms_PaidToPlayer>
+  <Dominion_Terms_Paid>{0} pays {1} a share of its wealth.</Dominion_Terms_Paid>
+  <Dominion_Terms_Outcome_White>a white peace</Dominion_Terms_Outcome_White>
+  <Dominion_Terms_Outcome_Reparations>reparations</Dominion_Terms_Outcome_Reparations>
+  <Dominion_Terms_Outcome_Ceded>{0} ceded</Dominion_Terms_Outcome_Ceded>
+  <Dominion_Terms_Outcome_Tribute>tribute</Dominion_Terms_Outcome_Tribute>
+  <Dominion_Terms_Outcome_Puppet>a puppet government</Dominion_Terms_Outcome_Puppet>
+  <Dominion_Terms_Outcome_Humbled>humiliation</Dominion_Terms_Outcome_Humbled>
+  <Dominion_Terms_Outcome_RegimeChange>a change of regime</Dominion_Terms_Outcome_RegimeChange>
+  <Dominion_Terms_Outcome_Liberation>the return of occupied lands</Dominion_Terms_Outcome_Liberation>
+  <Dominion_Terms_Outcome_Punitive>a punitive peace</Dominion_Terms_Outcome_Punitive>
+  <Dominion_Treaty_Imposed>Imposed by a peace or a coup; it cannot be proposed.</Dominion_Treaty_Imposed>
+
+  <!-- Tribute -->
+  <Dominion_Tribute_Arrived>{0} has sent its tribute: {1} silver.</Dominion_Tribute_Arrived>
+  <Dominion_Tribute_PaidByPlayer>You paid {0} silver in tribute to {1}.</Dominion_Tribute_PaidByPlayer>
+  <Dominion_Tribute_DefaultLabel>Tribute not paid</Dominion_Tribute_DefaultLabel>
+  <Dominion_Tribute_DefaultText>You could not pay the {1} silver you owe {0}. The tribute treaty is broken, and every faction will hear of it.</Dominion_Tribute_DefaultText>
+
+  <!-- Blockades -->
+  <Dominion_Blockade_Option>Blockade {0}</Dominion_Blockade_Option>
+  <Dominion_Blockade_Report>heading to blockade {0}</Dominion_Blockade_Report>
+  <Dominion_Blockade_Already>already blockaded</Dominion_Blockade_Already>
+  <Dominion_Blockade_NoFighters>needs a colonist able to fight</Dominion_Blockade_NoFighters>
+  <Dominion_Blockade_Started>Your caravan is blockading {0}. Each day its economy suffers and the war tilts your way. Keep the caravan there to keep it up.</Dominion_Blockade_Started>
+  <Dominion_Blockade_Lifted>The blockade of {0} has been lifted.</Dominion_Blockade_Lifted>
+  <Dominion_Blockade_SortieLabel>Sortie</Dominion_Blockade_SortieLabel>
+  <Dominion_Blockade_SortieText>The garrison of {0} has sallied out to break your blockade. Fighters of {1} are attacking your caravan!</Dominion_Blockade_SortieText>
+
+  <!-- Warbands -->
+  <Dominion_Warband_Label>warband of {0}</Dominion_Warband_Label>
+  <Dominion_WarbandMission_Siege>Marching on {1} ({0})</Dominion_WarbandMission_Siege>
+  <Dominion_WarbandMission_RaidPlayer>Marching on your colony</Dominion_WarbandMission_RaidPlayer>
+  <Dominion_WarbandMission_Blockade>Blockading {1} ({0})</Dominion_WarbandMission_Blockade>
+  <Dominion_WarbandMission_Reinforce>Reinforcing {1} against {0}</Dominion_WarbandMission_Reinforce>
+  <Dominion_Warband_Arrives>arrives in {0}</Dominion_Warband_Arrives>
+  <Dominion_Warband_BlockadeLeft>Blockade lifts in {0}</Dominion_Warband_BlockadeLeft>
+  <Dominion_Warband_Strength>Strength: {0} points</Dominion_Warband_Strength>
+  <Dominion_Warband_Intercept>Intercept the warband of {0}</Dominion_Warband_Intercept>
+  <Dominion_Warband_InterceptActOfWar>Intercept the warband of {0} (an act of war)</Dominion_Warband_InterceptActOfWar>
+  <Dominion_Warband_MoveToIntercept>Move to intercept</Dominion_Warband_MoveToIntercept>
+  <Dominion_Warband_InterceptedLabel>Warband intercepted</Dominion_Warband_InterceptedLabel>
+  <Dominion_Warband_InterceptedText>Your caravan has fallen on a warband of {0}. Every one of them you defeat counts in the war.</Dominion_Warband_InterceptedText>
+  <Dominion_Warband_PassingCaravan>A warband of {0} is passing {1}.</Dominion_Warband_PassingCaravan>
+  <Dominion_Warband_ApproachingLabel>Warband approaching</Dominion_Warband_ApproachingLabel>
+  <Dominion_Warband_ApproachingText>A warband of {0} is marching on your colony and will arrive in about {1}. A caravan can try to intercept it on the way.</Dominion_Warband_ApproachingText>
+
+  <!-- War tab -->
+  <Dominion_WarTab_Yours>Your wars</Dominion_WarTab_Yours>
+  <Dominion_WarTab_World>Wars elsewhere</Dominion_WarTab_World>
+  <Dominion_WarTab_ColdWars>Cold wars</Dominion_WarTab_ColdWars>
+  <Dominion_WarTab_Warbands>Warbands in sight</Dominion_WarTab_Warbands>
+  <Dominion_WarTab_Occupied>Occupied settlements</Dominion_WarTab_Occupied>
+  <Dominion_WarTab_Blockades>Your blockades</Dominion_WarTab_Blockades>
+  <Dominion_WarTab_NoBlockades>None. A caravan at an enemy settlement can blockade it.</Dominion_WarTab_NoBlockades>
+  <Dominion_WarTab_BlockadeLine>{0} blockading {1} for {2}</Dominion_WarTab_BlockadeLine>
+  <Dominion_WarTab_Goal>goal: {0}</Dominion_WarTab_Goal>
+  <Dominion_WarTab_JoinedFor>fighting for {0}</Dominion_WarTab_JoinedFor>
+  <Dominion_WarTab_Details>Under way for {0}. Battles: {1}. Settlements occupied: {2}.</Dominion_WarTab_Details>
+  <Dominion_WarTab_PeaceNow>Peace now would mean... (hover for the terms)</Dominion_WarTab_PeaceNow>
+  <Dominion_WarTab_Even>Even ({0})</Dominion_WarTab_Even>
+  <Dominion_WarTab_Ahead>{0} ahead by {1}</Dominion_WarTab_Ahead>
+  <Dominion_WarTab_Score_Desc>War score, from {1} winning (left, blue) to {0} winning (right, red). It moves with battles, occupations, blockades, deaths in combat, and slowly with the balance of strength and war weariness. 25 or more ahead sets the terms of a peace; far enough ahead, the loser capitulates.</Dominion_WarTab_Score_Desc>
+  <Dominion_WarTab_ColdWarLine>{0} and {1}, for {2}</Dominion_WarTab_ColdWarLine>
+  <Dominion_WarTab_NoWarbands>None in sight. You see the warbands of factions you have intel 25 or more on, and any near your colonies or caravans.</Dominion_WarTab_NoWarbands>
+  <Dominion_WarTab_Show>Show</Dominion_WarTab_Show>
+  <Dominion_WarTab_OccupiedLine>{0}: held by {1}, taken from {2}</Dominion_WarTab_OccupiedLine>
+
+  <!-- War diplomacy -->
+  <Dominion_CallToArms_NoWar>None of your enemies is one {0} could fight.</Dominion_CallToArms_NoWar>
+  <Dominion_CallToArms_Option>Against {0} ({1})</Dominion_CallToArms_Option>
+  <Dominion_CallToArms_Ask>Ask {0} ({1})</Dominion_CallToArms_Ask>
+  <Dominion_CallToArms_Accepted>{0} joins your war against {1}!</Dominion_CallToArms_Accepted>
+  <Dominion_CallToArms_Refused>{0} will not join your war against {1}.</Dominion_CallToArms_Refused>
+  <Dominion_ColdWar_Disabled>Cold wars are switched off in the settings.</Dominion_ColdWar_Disabled>
+  <Dominion_ColdWar_Allied>You are allies.</Dominion_ColdWar_Allied>
+  <Dominion_ColdWar_Confirm>Declare a cold war on {0}? They will resent it, their spies will be busier in your colony, and their enemies will like you better. It is not war, but it can become one.</Dominion_ColdWar_Confirm>
+  <Dominion_ColdWar_Ended>The cold war with {0} is over.</Dominion_ColdWar_Ended>
+  <Dominion_ColdWar_EndRefused>{0} refuses to end the cold war.</Dominion_ColdWar_EndRefused>
+  <Dominion_Proxy_NoTarget>{0} is not at war with anyone you oppose.</Dominion_Proxy_NoTarget>
+  <Dominion_Proxy_Option>Against {0} ({1} silver)</Dominion_Proxy_Option>
+  <Dominion_Proxy_Done>Your silver and weapons reach {0} for its war against {1}.</Dominion_Proxy_Done>
+  <Dominion_Proxy_Leaked>Your aid to {0} has leaked: {1} knows you are behind it.</Dominion_Proxy_Leaked>
+
+  <!-- Covert operations (M6) -->
+  <Dominion_Ops_ModeAbstract>Run off-map only.</Dominion_Ops_ModeAbstract>
+  <Dominion_Ops_ModeBoth>Run it off-map from here, or in person: send a caravan with your agents to one of their settlements and choose the operation there, for a bigger reward.</Dominion_Ops_ModeBoth>
+  <Dominion_Ops_ModePhysical>In person only: form a caravan with your agents and choose this operation at one of their settlements.</Dominion_Ops_ModePhysical>
+  <Dominion_Ops_PhysicalOnly>This operation can only be run in person, from a caravan.</Dominion_Ops_PhysicalOnly>
+  <Dominion_Ops_Blame>Blame: {0}</Dominion_Ops_Blame>
+  <Dominion_Ops_ChooseBlame>Choose who to blame</Dominion_Ops_ChooseBlame>
+  <Dominion_Ops_NoThirdParty>Choose another faction to blame.</Dominion_Ops_NoThirdParty>
+  <Dominion_Ops_NeedsNetwork>Needs a network of at least {0} there.</Dominion_Ops_NeedsNetwork>
+  <Dominion_Ops_NoHostages>{0} holds none of your people.</Dominion_Ops_NoHostages>
+  <Dominion_Ops_NoLeader>{0} has no leader to target.</Dominion_Ops_NoLeader>
+  <Dominion_Ops_NoProject>Choose a research project first.</Dominion_Ops_NoProject>
+  <Dominion_Ops_NothingToSteal>{0} knows nothing you do not.</Dominion_Ops_NothingToSteal>
+  <Dominion_Ops_NotWhileHostile>Not against a faction you are at war with.</Dominion_Ops_NotWhileHostile>
+  <Dominion_Ops_TooStable>{0} is too stable for a coup (needs stability {1} or less).</Dominion_Ops_TooStable>
+  <Dominion_Ops_AlreadyPuppet>{0} is already your puppet.</Dominion_Ops_AlreadyPuppet>
+  <Dominion_Ops_AlreadyThere>Your colonists are already there.</Dominion_Ops_AlreadyThere>
+  <Dominion_Ops_PhysicalBusy>Another operation is already under way in person.</Dominion_Ops_PhysicalBusy>
+  <Dominion_Ops_ExposedWar>{0} has declared war over it.</Dominion_Ops_ExposedWar>
+  <Dominion_Ops_PhysicalOption>Covert operation: {0} ({1})</Dominion_Ops_PhysicalOption>
+  <Dominion_Ops_PhysicalReport>heading to {0} on a covert operation</Dominion_Ops_PhysicalReport>
+  <Dominion_Ops_PhysicalBriefLabel>Operation: {0}</Dominion_Ops_PhysicalBriefLabel>
+  <Dominion_Ops_PhysicalBrief_None>Your agents are inside {1}.</Dominion_Ops_PhysicalBrief_None>
+  <Dominion_Ops_PhysicalBrief_KillLeader>Your agents are inside {1}. The target, {2}, is marked. Kill them, then get your people out.</Dominion_Ops_PhysicalBrief_KillLeader>
+  <Dominion_Ops_PhysicalBrief_DestroyBuilding>Your agents are inside {1}. Destroy the marked {2}, then get out.</Dominion_Ops_PhysicalBrief_DestroyBuilding>
+  <Dominion_Ops_PhysicalBrief_ReachTarget>Your agents are inside {1}. Reach the marked {2}, then get out.</Dominion_Ops_PhysicalBrief_ReachTarget>
+  <Dominion_Ops_PhysicalBrief_RescueHostage>Your agents are inside {1}. {2} is held prisoner here: reach them and bring them home.</Dominion_Ops_PhysicalBrief_RescueHostage>
+  <Dominion_Ops_PhysicalStealth>The guards of {0} are not hostile, for now. Every hour your agents stay, they may be noticed, and then it is war. The operation ends when your agents leave the map.</Dominion_Ops_PhysicalStealth>
+  <Dominion_Ops_PhysicalHostile>{0} is at war with you: expect a fight. The operation ends when your agents leave the map.</Dominion_Ops_PhysicalHostile>
+  <Dominion_Ops_PhysicalDone_None>Done. Get out!</Dominion_Ops_PhysicalDone_None>
+  <Dominion_Ops_PhysicalDone_KillLeader>The target is dead. Get out!</Dominion_Ops_PhysicalDone_KillLeader>
+  <Dominion_Ops_PhysicalDone_DestroyBuilding>Target destroyed. Get out!</Dominion_Ops_PhysicalDone_DestroyBuilding>
+  <Dominion_Ops_PhysicalDone_ReachTarget>Your agents have what they came for. Get out!</Dominion_Ops_PhysicalDone_ReachTarget>
+  <Dominion_Ops_PhysicalDone_RescueHostage>The captive is free. Get everyone out!</Dominion_Ops_PhysicalDone_RescueHostage>
+  <Dominion_Ops_PhysicalStatus_Stealth>undetected</Dominion_Ops_PhysicalStatus_Stealth>
+  <Dominion_Ops_PhysicalStatus_Alarm>alarm raised</Dominion_Ops_PhysicalStatus_Alarm>
+  <Dominion_Ops_PhysicalStatus_Done>done, getting out</Dominion_Ops_PhysicalStatus_Done>
+  <Dominion_Ops_RunningPhysical>{0} at {1}: {2}</Dominion_Ops_RunningPhysical>
+  <Dominion_Ops_ShowTarget>Show</Dominion_Ops_ShowTarget>
+  <Dominion_Ops_AlarmLabel>Alarm raised</Dominion_Ops_AlarmLabel>
+  <Dominion_Ops_AlarmText>Your agents have been discovered in {1}! {0} is now hostile, and its guards are coming for them. Get out.</Dominion_Ops_AlarmText>
+  <Dominion_Ops_SabotageLabel>Sabotage</Dominion_Ops_SabotageLabel>
+  <Dominion_Ops_SabotageText>Foreign saboteurs have struck the colony: the {0} has broken down.</Dominion_Ops_SabotageText>
+
+  <!-- Settings -->
+  <Dominion_Setting_AiCovertOps>AI covert actions</Dominion_Setting_AiCovertOps>
+  <Dominion_Setting_AiCovertOps_Desc>AI intelligence services also sabotage, incite riots, stage false flags, coups and assassinations, against each other and against you.</Dominion_Setting_AiCovertOps_Desc>
+  <Dominion_Setting_PhysicalDetection>Detection in operations run in person: {0}</Dominion_Setting_PhysicalDetection>
+  <Dominion_Setting_PhysicalDetection_Desc>How quickly guards notice your agents on their map.</Dominion_Setting_PhysicalDetection_Desc>
+  <Dominion_Setting_Warbands>Warbands</Dominion_Setting_Warbands>
+  <Dominion_Setting_Warbands_Desc>Factions at war send armies across the world map to besiege, blockade and raid, and to reinforce their allies.</Dominion_Setting_Warbands_Desc>
+  <Dominion_Setting_WarbandFrequency>Warband frequency: {0}</Dominion_Setting_WarbandFrequency>
+  <Dominion_Setting_WarbandRaids>Warbands raid your colony</Dominion_Setting_WarbandRaids>
+  <Dominion_Setting_WarbandRaids_Desc>Factions at war with you may march warbands on your colony. They arrive as raids sized like any other. When off, warbands only fight each other.</Dominion_Setting_WarbandRaids_Desc>
+  <Dominion_Setting_Occupation>Occupation</Dominion_Setting_Occupation>
+  <Dominion_Setting_Occupation_Desc>Victorious warbands occupy enemy settlements. The peace decides whether they are kept.</Dominion_Setting_Occupation_Desc>
+  <Dominion_Setting_CapitulationScore>Capitulation at war score {0}</Dominion_Setting_CapitulationScore>
+  <Dominion_Setting_CapitulationScore_Desc>When one side of a war is this far ahead, the loser surrenders on the winner's terms. When you are involved, you are asked.</Dominion_Setting_CapitulationScore_Desc>
+  <Dominion_Setting_JointWars>Joint wars</Dominion_Setting_JointWars>
+  <Dominion_Setting_JointWars_Desc>Factions at war ask their allies and puppets to join, you included.</Dominion_Setting_JointWars_Desc>
+  <Dominion_Setting_ColdWars>Cold wars</Dominion_Setting_ColdWars>
+  <Dominion_Setting_ColdWars_Desc>Bitter rivals of similar strength enter cold wars: arms races, propaganda, border skirmishes and proxy wars.</Dominion_Setting_ColdWars_Desc>
+</LanguageData>

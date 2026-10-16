@@ -63,6 +63,8 @@ namespace Dominion
         public static UnifyPath StatusOf(Faction f)
         {
             if (IsMember(f)) return UnifyPath.Federation;
+            // A puppet regime is as good as subjugated.
+            if (WarSystem.IsPuppetOf(f, Faction.OfPlayer, WorldComponent_Dominion.Instance)) return UnifyPath.Subjugated;
             RelationState r = WorldComponent_Dominion.Instance.TryGetRelation(f, Faction.OfPlayer);
             int held = r?.outpostsHeldByOther ?? 0;
             if (held > 0 && held >= WorldComponent_Dominion.Instance.Cache.SettlementsOf(f).Count) return UnifyPath.Subjugated;

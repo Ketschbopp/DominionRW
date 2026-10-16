@@ -18,8 +18,10 @@
   <Dominion.OperationDef>
     <defName>Dominion_Op_GatherIntel</defName>
     <label>gather intelligence</label>
-    <description>Agents observe and ask questions. On success your intel on the faction rises sharply, and any reports about them that had not reached you yet arrive at once.</description>
+    <description>Agents observe and ask questions. On success your intel on the faction rises sharply, and any reports about them that had not reached you yet arrive at once. In person, your agents must reach their archives and get out: more intel.</description>
     <workerClass>Dominion.Operation_GatherIntel</workerClass>
+    <allowPhysical>true</allowPhysical>
+    <objective>ReachTarget</objective>
     <durationDays>3</durationDays>
     <baseSuccess>0.55</baseSuccess>
     <exposureOnSuccess>0.05</exposureOnSuccess>
@@ -55,5 +57,126 @@
     <skill>Social</skill>
     <influenceCost>5</influenceCost>
     <silverCost>400</silverCost>
+  </Dominion.OperationDef>
+
+  <!-- Covert actions. Physical operations are run from a caravan at one of the target's settlements. -->
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_Assassinate</defName>
+    <label>assassinate the leader</label>
+    <description>Only in person. Your agents enter one of their settlements, where their leader is waiting (or, if the leader is away, a senior official), and kill them. A new leader takes over with little legitimacy. If you are caught it may mean war.</description>
+    <workerClass>Dominion.Operation_Assassinate</workerClass>
+    <allowAbstract>false</allowAbstract>
+    <allowPhysical>true</allowPhysical>
+    <objective>KillLeader</objective>
+    <hostileAct>true</hostileAct>
+    <successEvent>Dominion_Assassination</successEvent>
+    <durationDays>0</durationDays>
+    <exposureOnSuccess>0.35</exposureOnSuccess>
+    <exposureOnFail>0.6</exposureOnFail>
+    <skill>Shooting</skill>
+    <influenceCost>25</influenceCost>
+    <silverCost>0</silverCost>
+  </Dominion.OperationDef>
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_Sabotage</defName>
+    <label>sabotage</label>
+    <description>Only in person. Your agents destroy a marked building in one of their settlements (power and stores first). Their economy loses 12%, their military is weakened for 30 days, goods burn in their stockpiles, and it counts in a war.</description>
+    <workerClass>Dominion.Operation_Sabotage</workerClass>
+    <allowAbstract>false</allowAbstract>
+    <allowPhysical>true</allowPhysical>
+    <objective>DestroyBuilding</objective>
+    <hostileAct>true</hostileAct>
+    <successEvent>Dominion_Sabotage</successEvent>
+    <durationDays>0</durationDays>
+    <exposureOnSuccess>0.25</exposureOnSuccess>
+    <exposureOnFail>0.5</exposureOnFail>
+    <skill>Construction</skill>
+    <influenceCost>15</influenceCost>
+    <silverCost>0</silverCost>
+  </Dominion.OperationDef>
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_InciteRiots</defName>
+    <label>incite riots</label>
+    <description>Fund agitators and malcontents. Stability falls sharply, riots break out, and a shaky regime may not survive them.</description>
+    <workerClass>Dominion.Operation_InciteRiots</workerClass>
+    <hostileAct>true</hostileAct>
+    <durationDays>5</durationDays>
+    <baseSuccess>0.5</baseSuccess>
+    <exposureOnSuccess>0.1</exposureOnSuccess>
+    <exposureOnFail>0.4</exposureOnFail>
+    <skill>Social</skill>
+    <influenceCost>15</influenceCost>
+    <silverCost>300</silverCost>
+  </Dominion.OperationDef>
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_Coup</defName>
+    <label>stage a coup</label>
+    <description>Topple an unstable government and put your own people in charge. The new regime becomes your puppet: it pays a little tribute, never attacks you, joins your wars, and counts as subjugated for the Federation. Needs a network of 30 and a target with stability 45 or less.</description>
+    <workerClass>Dominion.Operation_Coup</workerClass>
+    <hostileAct>true</hostileAct>
+    <successEvent>Dominion_PuppetInstalled</successEvent>
+    <durationDays>10</durationDays>
+    <baseSuccess>0.35</baseSuccess>
+    <exposureOnSuccess>0.15</exposureOnSuccess>
+    <exposureOnFail>0.5</exposureOnFail>
+    <minNetwork>30</minNetwork>
+    <maxTargetStability>45</maxTargetStability>
+    <skill>Social</skill>
+    <influenceCost>40</influenceCost>
+    <silverCost>1000</silverCost>
+  </Dominion.OperationDef>
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_FalseFlag</defName>
+    <label>false flag</label>
+    <description>Stage an incident and leave evidence pointing at a third faction. The target blames them and may even go to war with them. If the truth comes out, both turn on you.</description>
+    <workerClass>Dominion.Operation_FalseFlag</workerClass>
+    <needsThirdParty>true</needsThirdParty>
+    <hostileAct>true</hostileAct>
+    <successEvent>Dominion_FalseFlag</successEvent>
+    <durationDays>6</durationDays>
+    <baseSuccess>0.45</baseSuccess>
+    <exposureOnSuccess>0.1</exposureOnSuccess>
+    <exposureOnFail>0.45</exposureOnFail>
+    <skill>Intellectual</skill>
+    <influenceCost>25</influenceCost>
+    <silverCost>0</silverCost>
+  </Dominion.OperationDef>
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_StealTechnology</defName>
+    <label>steal technology</label>
+    <description>Copy their research: progress on your current project, more from more advanced factions. In person, your agents must reach a marked workshop and get out, for a bigger haul.</description>
+    <workerClass>Dominion.Operation_StealTechnology</workerClass>
+    <allowPhysical>true</allowPhysical>
+    <objective>ReachTarget</objective>
+    <successEvent>Dominion_TechnologyStolen</successEvent>
+    <durationDays>5</durationDays>
+    <baseSuccess>0.4</baseSuccess>
+    <exposureOnSuccess>0.1</exposureOnSuccess>
+    <exposureOnFail>0.4</exposureOnFail>
+    <skill>Intellectual</skill>
+    <influenceCost>15</influenceCost>
+    <silverCost>0</silverCost>
+  </Dominion.OperationDef>
+
+  <Dominion.OperationDef>
+    <defName>Dominion_Op_Rescue</defName>
+    <label>rescue a captive</label>
+    <description>Only in person. Your agents enter one of their settlements, where a colonist they hold is kept prisoner, reach them and bring them home.</description>
+    <workerClass>Dominion.Operation_Rescue</workerClass>
+    <allowAbstract>false</allowAbstract>
+    <allowPhysical>true</allowPhysical>
+    <objective>RescueHostage</objective>
+    <durationDays>0</durationDays>
+    <exposureOnSuccess>0.3</exposureOnSuccess>
+    <exposureOnFail>0.5</exposureOnFail>
+    <skill>Melee</skill>
+    <influenceCost>5</influenceCost>
+    <silverCost>0</silverCost>
   </Dominion.OperationDef>
 </Defs>

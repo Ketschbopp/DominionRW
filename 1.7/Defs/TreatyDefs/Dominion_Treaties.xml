@@ -90,4 +90,30 @@
     <honourWeight>0.15</honourWeight>
     <paranoiaWeight>-0.25</paranoiaWeight>
   </Dominion.TreatyDef>
+  <!-- Imposed by peace terms or a coup: never proposed. In each, the first party (a) is the one that pays or obeys. -->
+  <Dominion.TreatyDef>
+    <defName>Dominion_Tribute</defName>
+    <label>tribute</label>
+    <description>Imposed by a peace: the loser pays the winner for 180 days. Between AI factions it moves economy; with you, silver changes hands every 15 days. Neither side may attack the other. Failing to pay breaks it.</description>
+    <imposed>true</imposed>
+    <durationDays>180</durationDays>
+    <nonAggression>true</nonAggression>
+    <tribute>0.04</tribute>
+    <opinionBonus>-5</opinionBonus>
+    <influenceCost>0</influenceCost>
+  </Dominion.TreatyDef>
+
+  <Dominion.TreatyDef>
+    <defName>Dominion_Puppet</defName>
+    <label>puppet regime</label>
+    <description>The weaker side's government answers to the stronger: it pays a little tribute, never attacks its overlord and joins its wars. A puppet of yours counts as subjugated for the Federation. A puppet that comes to resent its overlord may break free.</description>
+    <imposed>true</imposed>
+    <puppet>true</puppet>
+    <nonAggression>true</nonAggression>
+    <tribute>0.02</tribute>
+    <intelBonus>15</intelBonus>
+    <opinionBonus>5</opinionBonus>
+    <secrecy>Restricted</secrecy>
+    <influenceCost>0</influenceCost>
+  </Dominion.TreatyDef>
 </Defs>

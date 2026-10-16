@@ -1,6 +1,7 @@
 using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
+using UnityEngine;
 using Verse;
 
 namespace Dominion
@@ -76,6 +77,35 @@ namespace Dominion
             Faction f = factionBase?.Faction;
             if (f == null || f.IsPlayer || !factionBase.Destroyed) return;
             WorldComponent_Dominion.Instance?.Unification.beatenByPlayer.Add(f.loadID);
+            if (WorldComponent_Dominion.Instance != null) WarUtility.AddScore(Faction.OfPlayer, f, 25f);
+        }
+    }
+
+    /// <summary>Deaths in battle count toward the war score, capped per day. Runs once per death, never per tick.</summary>
+    [HarmonyPatch(typeof(Faction), nameof(Faction.Notify_MemberDied))]
+    public static class Patch_Faction_Notify_MemberDied
+    {
+        private const float DailyCap = 12f;
+
+        public static void Postfix(Faction __instance, Pawn member, DamageInfo? dinfo)
+        {
+            if (Current.ProgramState != ProgramState.Playing || member == null) return;
+            Faction killer = dinfo?.Instigator?.Faction;
+            if (killer == null || killer == __instance) return;
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            War w = comp?.Wars.Find(killer, __instance);
+            if (w == null) return;
+            int day = GenDate.DaysPassed;
+            if (w.killDay != day)
+            {
+                w.killDay = day;
+                w.killScoreToday = 0f;
+            }
+            float add = member == __instance.leader ? 10f : member.RaceProps.Humanlike ? 0.6f : 0.2f;
+            add = Mathf.Min(add, DailyCap - w.killScoreToday);
+            if (add <= 0f) return;
+            w.killScoreToday += add;
+            WarUtility.AddScore(killer, __instance, add);
         }
     }
 }

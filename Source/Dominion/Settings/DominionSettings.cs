@@ -30,6 +30,17 @@ namespace Dominion
         // Intelligence
         public bool aiIntelligence = true;
         public float operationSuccess = 1f;
+        public bool aiCovertOps = true;
+        public float physicalDetection = 1f;
+
+        // War
+        public bool warbands = true;
+        public float warbandFrequency = 1f;
+        public bool warbandRaidsOnPlayer = true;
+        public bool warOccupation = true;
+        public float capitulationScore = 75f;
+        public bool aiJointWars = true;
+        public bool coldWars = true;
 
         // News
         public int newsLogCap = 300;
@@ -93,6 +104,15 @@ namespace Dominion
             Scribe_Values.Look(ref stabilityDriftSpeed, "stabilityDriftSpeed", 1f);
             Scribe_Values.Look(ref aiIntelligence, "aiIntelligence", true);
             Scribe_Values.Look(ref operationSuccess, "operationSuccess", 1f);
+            Scribe_Values.Look(ref aiCovertOps, "aiCovertOps", true);
+            Scribe_Values.Look(ref physicalDetection, "physicalDetection", 1f);
+            Scribe_Values.Look(ref warbands, "warbands", true);
+            Scribe_Values.Look(ref warbandFrequency, "warbandFrequency", 1f);
+            Scribe_Values.Look(ref warbandRaidsOnPlayer, "warbandRaidsOnPlayer", true);
+            Scribe_Values.Look(ref warOccupation, "warOccupation", true);
+            Scribe_Values.Look(ref capitulationScore, "capitulationScore", 75f);
+            Scribe_Values.Look(ref aiJointWars, "aiJointWars", true);
+            Scribe_Values.Look(ref coldWars, "coldWars", true);
             Scribe_Values.Look(ref newsLogCap, "newsLogCap", 300);
             Scribe_Values.Look(ref falseRumors, "falseRumors", true);
             Scribe_Values.Look(ref colonistNewsThoughts, "colonistNewsThoughts", true);
@@ -132,6 +152,15 @@ namespace Dominion
             stabilityDriftSpeed = 1f;
             aiIntelligence = true;
             operationSuccess = 1f;
+            aiCovertOps = true;
+            physicalDetection = 1f;
+            warbands = true;
+            warbandFrequency = 1f;
+            warbandRaidsOnPlayer = true;
+            warOccupation = true;
+            capitulationScore = 75f;
+            aiJointWars = true;
+            coldWars = true;
             newsLogCap = 300;
             falseRumors = true;
             colonistNewsThoughts = true;

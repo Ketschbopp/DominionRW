@@ -65,6 +65,12 @@ namespace Dominion
         public int crisisUntilTick = -1;
         public DominionEventDef crisis;
 
+        /// <summary>Last tick one of this faction's warbands raided the player.</summary>
+        public int lastRaidOnPlayerTick = -999999;
+
+        /// <summary>Sabotage keeps the faction's military weakened until this tick.</summary>
+        public int sabotagedUntilTick = -1;
+
         public bool InCrisis => crisis != null && crisisUntilTick > Find.TickManager.TicksGame;
 
         /// <summary>Tracks leader changes so legitimacy resets for a new leader.</summary>
@@ -73,6 +79,7 @@ namespace Dominion
         // Recomputed daily, not saved.
         [Unsaved] public int activeWars;
         [Unsaved] public float effectiveAggression;
+        [Unsaved] public int coldWars;
 
         public FactionState() { }
 
@@ -160,6 +167,8 @@ namespace Dominion
             Scribe_Values.Look(ref crisisUntilTick, "crisisUntilTick", -1);
             Scribe_Defs.Look(ref crisis, "crisis");
             Scribe_References.Look(ref lastKnownLeader, "lastKnownLeader");
+            Scribe_Values.Look(ref lastRaidOnPlayerTick, "lastRaidOnPlayerTick", -999999);
+            Scribe_Values.Look(ref sabotagedUntilTick, "sabotagedUntilTick", -1);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {

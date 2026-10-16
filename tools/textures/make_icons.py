@@ -65,6 +65,23 @@ def delegation():
     img.save(world / "Dominion_Delegation.png")
 
 
+def warband():
+    """World map icon: crossed swords over a shield. White so the faction colour tints it."""
+    img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    white, dark = (255, 255, 255, 255), (40, 40, 40, 255)
+    for (x0, y0, x1, y1) in ((8, 8, 56, 56), (56, 8, 8, 56)):
+        d.line([(x0, y0), (x1, y1)], fill=dark, width=8)
+        d.line([(x0, y0), (x1, y1)], fill=white, width=4)
+    for (gx, gy) in ((14, 50), (50, 50)):  # hilts
+        d.line([(gx - 7, gy - 7), (gx + 7, gy + 7)], fill=dark, width=5)
+    d.polygon([(20, 22), (44, 22), (44, 38), (32, 50), (20, 38)], fill=white, outline=dark)
+    d.line([(32, 24), (32, 46)], fill=dark, width=3)
+    world = ROOT / "Textures" / "World"
+    world.mkdir(parents=True, exist_ok=True)
+    img.save(world / "Dominion_Warband.png")
+
+
 def broadcast():
     img, d = base()
     d.line([(64, 120), (64, 50)], fill=INK, width=8)
@@ -79,6 +96,7 @@ if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     broadcast()
     delegation()
+    warband()
     head_of_state()
     capital()
     diplomacy()

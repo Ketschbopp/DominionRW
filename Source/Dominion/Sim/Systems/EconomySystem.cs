@@ -70,6 +70,7 @@ namespace Dominion
             float perHead = s.totalLiving > 0 ? s.wealth / s.totalLiving : 0f;
             float raw = worldWealthPerHead > 0f ? 100f * perHead / worldWealthPerHead : 100f;
             raw *= 1f + TreatyEconomyBonus(faction, comp) + CouncilUtility.EconomyBonus(faction) - 0.04f * embargoes
+                   - 0.02f * Mathf.Min(3, s.coldWars)
                    + IntegrationRegistry.Sum(i => i.EconomyModifier(faction));
             raw = Mathf.Clamp(raw, 10f, 300f);
             s.economyIndex = Mathf.Lerp(s.economyIndex, raw, 0.2f);
@@ -79,7 +80,12 @@ namespace Dominion
         {
             float sum = 0f;
             foreach (Treaty t in comp.Treaties.All)
-                if (t.Involves(f)) sum += t.def.economyBonus;
+            {
+                if (!t.Involves(f)) continue;
+                sum += t.def.economyBonus;
+                // Tribute flows from the first party to the second.
+                if (t.def.tribute > 0f) sum += t.a == f ? -t.def.tribute : t.def.tribute * 0.7f;
+            }
             return sum;
         }
 

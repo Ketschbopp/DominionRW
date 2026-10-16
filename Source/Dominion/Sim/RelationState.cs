@@ -44,6 +44,9 @@ namespace Dominion
         /// <summary>Number of the from-faction's former settlements the to-faction holds as FTV vassal outposts.</summary>
         public int outpostsHeldByOther;
 
+        /// <summary>Tick a cold war between the two began, or -1. Kept the same on both sides.</summary>
+        public int coldWarSince = -1;
+
         // Recomputed daily, not saved. Shown in the dossier tooltip.
         [Unsaved] public float targetOpinion;
         [Unsaved] public int sharedEnemies;
@@ -58,6 +61,8 @@ namespace Dominion
         }
 
         public bool AtWar => warSince >= 0;
+
+        public bool ColdWar => coldWarSince >= 0;
 
         public static long Key(int fromId, int toId) => ((long)fromId << 32) | (uint)toId;
 
@@ -75,6 +80,7 @@ namespace Dominion
             Scribe_Values.Look(ref border, "border", BorderStatus.Open);
             Scribe_Values.Look(ref embargo, "embargo");
             Scribe_Values.Look(ref favour, "favour");
+            Scribe_Values.Look(ref coldWarSince, "coldWarSince", -1);
         }
     }
 }

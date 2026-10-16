@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RimWorld;
+using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
@@ -89,8 +90,11 @@ namespace Dominion
         {
             FactionState s = Comp.GetState(f);
             float ratio = DiplomacyHelpers.PlayerStrength() / Mathf.Max(1f, s.militaryStrength);
+            // How the war is going counts most: a beaten enemy wants out, a winning one wants more.
+            War war = Comp.Wars.Find(f, Faction.OfPlayer);
+            float score = war != null ? Mathf.Clamp(-war.ScoreFor(f) / 100f, -0.3f, 0.4f) : 0f;
             return Clamp(0.1f + s.warWeariness / 150f + s.Bloc(Bloc.Doves) * 0.4f + (TheirView(f).opinion + 100f) / 500f
-                         + Mathf.Clamp(ratio - 1f, -0.3f, 0.3f) * 0.3f + LeadershipUtility.AcceptanceBonus());
+                         + Mathf.Clamp(ratio - 1f, -0.3f, 0.3f) * 0.3f + score + LeadershipUtility.AcceptanceBonus());
         }
 
         public override void Execute(Faction f)
@@ -98,6 +102,7 @@ namespace Dominion
             Commit(f);
             if (Rand.Chance(AcceptanceChance(f).Value))
             {
+                // Terms follow the war score (see PeaceTerms); the letter about the war's end lists them.
                 DiplomacyUtility.SetRelationKind(Faction.OfPlayer, f, FactionRelationKind.Neutral, Faction.OfPlayer, def.label);
                 Report("Dominion_Peace_Accepted".Translate(f.Name), true);
             }
@@ -112,14 +117,32 @@ namespace Dominion
 
         public override void Execute(Faction f)
         {
+            // First the war goal: it decides what you get if you win.
+            var options = new List<FloatMenuOption>();
+            foreach (WarGoal goal in WarUtility.PlayerGoals(f))
+            {
+                WarGoal g = goal;
+                options.Add(new FloatMenuOption(WarUtility.GoalLabel(g), () => Confirm(f, g),
+                    mouseoverGuiAction: r => TooltipHandler.TipRegion(r, WarUtility.GoalDescription(g))));
+            }
+            Find.WindowStack.Add(new FloatMenu(options, "Dominion_War_ChooseGoal".Translate()));
+        }
+
+        private void Confirm(Faction f, WarGoal goal)
+        {
             List<Treaty> treaties = new List<Treaty>();
             Comp.Treaties.Between(Faction.OfPlayer, f, treaties);
-            string text = "Dominion_War_Confirm".Translate(f.Name);
+            Settlement target = goal == WarGoal.Conquest ? WarUtility.NearestSettlement(f, DelegationUtility.HomeTile(Faction.OfPlayer), avoidCapital: true) : null;
+            string text = "Dominion_War_Confirm".Translate(f.Name) + "\n\n" + "Dominion_War_GoalChosen".Translate(WarUtility.GoalLabel(goal), WarUtility.GoalDescription(goal));
+            if (target != null) text += "\n" + "Dominion_War_ConquestTarget".Translate(target.Label);
             if (treaties.Count > 0)
                 text += "\n\n" + "Dominion_War_BreaksTreaties".Translate(string.Join(", ", treaties.ConvertAll(t => t.Label)));
             Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(text, () =>
             {
+                if (f.HostileTo(Faction.OfPlayer)) return;
                 Commit(f);
+                Comp.Wars.pendingPlayerGoal = goal;
+                Comp.Wars.pendingPlayerTarget = target;
                 DiplomacyUtility.SetRelationKind(Faction.OfPlayer, f, FactionRelationKind.Hostile, Faction.OfPlayer, def.label);
             }, destructive: true));
         }
@@ -136,6 +159,7 @@ namespace Dominion
             float influence = Comp.Player.influence;
             foreach (TreatyDef t in DefDatabase<TreatyDef>.AllDefsListForReading)
             {
+                if (t.imposed) continue;
                 TreatyDef treaty = t;
                 string reason = Comp.Treaties.CannotSignReason(t, Faction.OfPlayer, f);
                 if (reason == null && t.requiredResearch != null && !t.requiredResearch.IsFinished)

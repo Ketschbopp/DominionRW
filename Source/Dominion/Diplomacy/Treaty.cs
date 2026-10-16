@@ -15,6 +15,9 @@ namespace Dominion
         /// <summary>-1 if it does not expire.</summary>
         public int expiresTick = -1;
 
+        /// <summary>Last tribute payment, for tribute treaties with the player.</summary>
+        public int lastPaymentTick = -1;
+
         public bool Involves(Faction f) => f != null && (a == f || b == f);
 
         public bool Between(Faction x, Faction y) => (a == x && b == y) || (a == y && b == x);
@@ -31,6 +34,7 @@ namespace Dominion
             Scribe_References.Look(ref b, "b");
             Scribe_Values.Look(ref signedTick, "signedTick");
             Scribe_Values.Look(ref expiresTick, "expiresTick", -1);
+            Scribe_Values.Look(ref lastPaymentTick, "lastPaymentTick", -1);
         }
     }
 }

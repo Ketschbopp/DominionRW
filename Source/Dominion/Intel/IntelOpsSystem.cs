@@ -36,11 +36,15 @@ namespace Dominion
             return Mathf.Clamp(chance * DominionMod.Settings.operationSuccess, 0.05f, 0.95f);
         }
 
-        public static string CannotLaunchReason(OperationDef def, Faction target, List<Pawn> agents)
+        public static string CannotLaunchReason(OperationDef def, Faction target, List<Pawn> agents, Faction thirdParty = null)
         {
             if (!DominionResearchDefOf.Dominion_IntelligenceNetworks.IsFinished)
                 return "Dominion_Action_NeedsResearch".Translate(DominionResearchDefOf.Dominion_IntelligenceNetworks.label);
+            if (!def.allowAbstract) return "Dominion_Ops_PhysicalOnly".Translate();
             if (target == null || target.IsPlayer || target.defeated) return "Dominion_Ops_NoTarget".Translate();
+            if (def.needsThirdParty && (thirdParty == null || thirdParty == target || thirdParty.IsPlayer || thirdParty.defeated))
+                return "Dominion_Ops_NoThirdParty".Translate();
+            if (Svc.Network(target) < def.minNetwork) return "Dominion_Ops_NeedsNetwork".Translate(def.minNetwork.ToString("F0"));
             if (agents.Count == 0) return "Dominion_Ops_NoAgents".Translate();
             if (agents.Count > def.maxAgents) return "Dominion_Ops_TooManyAgents".Translate(def.maxAgents);
             // Agents abroad are not on any map; sending everyone would end the game.
@@ -62,7 +66,7 @@ namespace Dominion
         }
 
         /// <summary>Agents leave the colony for the length of the operation.</summary>
-        public static void Launch(OperationDef def, Faction target, List<Pawn> agents)
+        public static void Launch(OperationDef def, Faction target, List<Pawn> agents, Faction thirdParty = null)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (def.silverCost > 0 && DiplomacyHelpers.AvailableSilverFresh() < def.silverCost)
@@ -79,6 +83,7 @@ namespace Dominion
                 def = def,
                 target = target,
                 agents = new List<Pawn>(agents),
+                thirdParty = def.needsThirdParty ? thirdParty : null,
                 startTick = now,
                 endTick = now + def.durationDays * GenDate.TicksPerDay,
             };
@@ -102,7 +107,18 @@ namespace Dominion
             }
             int now = Find.TickManager.TicksGame;
             foreach (Operation op in Svc.operations.ToList())
-                if (now >= op.endTick) Resolve(op);
+            {
+                if (op.physical) PhysicalOps.Check(op, hourly: true);
+                else if (now >= op.endTick) Resolve(op);
+            }
+        }
+
+        /// <summary>Physical operations are watched closely: objectives and the agents leaving are noticed within a few seconds.</summary>
+        public override void Slot(int slot)
+        {
+            List<Operation> ops = Svc.operations;
+            for (int i = ops.Count - 1; i >= 0; i--)
+                if (i < ops.Count && ops[i].physical) PhysicalOps.Check(ops[i], hourly: false);
         }
 
         private static void Resolve(Operation op)
@@ -115,23 +131,48 @@ namespace Dominion
                 ReturnAgents(agents);
                 return;
             }
-
-            bool success = Rand.Chance(SuccessChance(op.def, op.target, agents));
-            if (success) op.def.Worker.Succeed(op);
+            string blocked = op.def.Worker.CannotTargetReason(op.target);
+            bool success = blocked == null && Rand.Chance(SuccessChance(op.def, op.target, agents));
             float exposure = success ? op.def.exposureOnSuccess : op.def.exposureOnFail;
             if (svc.Network(op.target) > 50f) exposure -= 0.1f;
             bool exposed = Rand.Chance(Mathf.Max(0f, exposure));
+            Conclude(op, success, exposed, agents);
+            ReturnAgents(agents);
+        }
+
+        /// <summary>
+        /// The outcome of an operation, abstract or physical: its effect, the news, and the price of being caught.
+        /// <paramref name="agents"/> are the agents abroad (abstract only); one of them may be detained.
+        /// </summary>
+        public static void Conclude(Operation op, bool success, bool exposed, List<Pawn> agents)
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            Faction player = Faction.OfPlayer;
+            if (success)
+            {
+                op.def.Worker.Succeed(op);
+                if (op.def.successEvent != null)
+                    EventBus.Raise(op.def.successEvent, op.target, player, detail: op.thirdParty?.Name ?? op.hostage?.LabelShort,
+                        secrecy: exposed ? Secrecy.Public : (Secrecy?)null);
+            }
 
             string text = (success ? "Dominion_Ops_Success" : "Dominion_Ops_Failure").Translate(op.def.label, op.target.Name);
             if (exposed)
             {
-                WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-                RelationState view = comp.GetRelation(op.target, Faction.OfPlayer);
-                view.favour -= 20f;
-                view.grievance += 15f;
-                EventBus.Raise(DominionEventDefOf.Dominion_AgentsExposed, op.target, Faction.OfPlayer, detail: op.def.label);
+                float scale = op.def.hostileAct ? 2f : 1f;
+                RelationState view = comp.GetRelation(op.target, player);
+                view.favour -= 20f * scale;
+                view.grievance += 15f * scale;
+                if (op.thirdParty != null)
+                {
+                    // The truth comes out: the faction that was blamed has a grievance too.
+                    RelationState blamed = comp.GetRelation(op.thirdParty, player);
+                    blamed.grievance += 25f;
+                    comp.GetRelation(op.target, op.thirdParty).grievance *= 0.5f;
+                }
+                EventBus.Raise(DominionEventDefOf.Dominion_AgentsExposed, op.target, player, detail: op.def.label);
                 text += "\n\n" + (success ? "Dominion_Ops_ExposedAfterSuccess" : "Dominion_Ops_Exposed").Translate(op.target.Name);
-                if (Rand.Chance(0.4f))
+                if (agents != null && agents.Count > 0 && Rand.Chance(0.4f))
                 {
                     Pawn detained = agents.RandomElement();
                     agents.Remove(detained);
@@ -139,8 +180,14 @@ namespace Dominion
                     op.target.kidnapped.Kidnap(detained, null);
                     text += "\n\n" + "Dominion_Ops_Detained".Translate(detained.LabelShortCap, op.target.Name);
                 }
+                // Assassins, saboteurs and plotters caught red-handed can mean war.
+                if (op.def.hostileAct && !op.target.HostileTo(player) && !op.target.def.permanentEnemy
+                    && Rand.Chance(0.15f + comp.GetState(op.target).personality.aggression * 0.3f))
+                {
+                    DiplomacyUtility.SetRelationKind(op.target, player, FactionRelationKind.Hostile, op.target, "Dominion_Reason_CovertExposed".Translate());
+                    text += "\n\n" + "Dominion_Ops_ExposedWar".Translate(op.target.Name);
+                }
             }
-            ReturnAgents(agents);
             Find.LetterStack.ReceiveLetter("Dominion_Ops_ReportLabel".Translate(op.def.LabelCap), text,
                 success && !exposed ? LetterDefOf.PositiveEvent : exposed ? LetterDefOf.NegativeEvent : LetterDefOf.NeutralEvent, null, op.target);
         }
@@ -210,7 +257,8 @@ namespace Dominion
             if (player != null)
             {
                 float op = comp.GetRelation(f, player).opinion;
-                float chance = 0.01f + s.personality.aggression * 0.01f + (op < -30f ? 0.01f : 0f);
+                float chance = 0.01f + s.personality.aggression * 0.01f + (op < -30f ? 0.01f : 0f)
+                               + (ColdWarSystem.InColdWar(f, player) || f.HostileTo(player) ? 0.015f : 0f);
                 if (Rand.Chance(chance)) AiOperationOnPlayer(f, s);
             }
 
@@ -218,11 +266,55 @@ namespace Dominion
             if (Rand.Chance(0.005f + s.personality.paranoia * 0.005f))
             {
                 Faction rival = comp.Cache.Simulated.Where(o => o != f).OrderBy(o => comp.GetRelation(f, o).opinion).FirstOrDefault();
-                if (rival != null && comp.GetRelation(f, rival).opinion < 0f && Rand.Chance(0.3f + comp.GetState(rival).personality.paranoia * 0.3f))
+                if (rival != null && comp.GetRelation(f, rival).opinion < 0f)
                 {
-                    comp.GetRelation(rival, f).grievance += 15f;
-                    EventBus.Raise(DominionEventDefOf.Dominion_AgentsExposed, rival, f, secrecy: Secrecy.Secret);
+                    if (Rand.Chance(0.3f + comp.GetState(rival).personality.paranoia * 0.3f))
+                    {
+                        comp.GetRelation(rival, f).grievance += 15f;
+                        EventBus.Raise(DominionEventDefOf.Dominion_AgentsExposed, rival, f, secrecy: Secrecy.Secret);
+                    }
+                    else if (DominionMod.Settings.aiCovertOps)
+                        AiCovertAction(f, s, rival, comp);
                 }
+            }
+        }
+
+        /// <summary>
+        /// An AI intelligence service that got its agents in acts against the rival. Rivals in a cold war or at war try
+        /// harder things. Every action is a secret event: the player hears of it only with good intel.
+        /// </summary>
+        private static void AiCovertAction(Faction f, FactionState s, Faction rival, WorldComponent_Dominion comp)
+        {
+            FactionState rs = comp.GetState(rival);
+            bool bitter = f.HostileTo(rival) || ColdWarSystem.InColdWar(f, rival);
+            float roll = Rand.Value;
+            if (roll < 0.35f)
+            {
+                rs.stability = Mathf.Max(0f, rs.stability - 6f);
+                EventBus.Raise(DominionEventDefOf.Dominion_Riots, rival, magnitude: 0.5f);
+            }
+            else if (roll < 0.7f)
+            {
+                rs.economyIndex = Mathf.Max(10f, rs.economyIndex * 0.96f);
+                rs.sabotagedUntilTick = Find.TickManager.TicksGame + 10 * GenDate.TicksPerDay;
+                WarUtility.AddScore(f, rival, 4f);
+                EventBus.Raise(DominionEventDefOf.Dominion_Sabotage, rival, f, secrecy: Secrecy.Secret);
+            }
+            else if (roll < 0.85f || !bitter)
+            {
+                // A false flag: blame the rival's other enemy.
+                Faction scapegoat = comp.Cache.Simulated.FirstOrDefault(o => o != f && o != rival && comp.GetRelation(rival, o).opinion < 0f && !rival.HostileTo(o));
+                if (scapegoat == null) return;
+                comp.GetRelation(rival, scapegoat).grievance += 25f;
+                EventBus.Raise(DominionEventDefOf.Dominion_AgentsExposed, rival, scapegoat);
+                EventBus.Raise(DominionEventDefOf.Dominion_FalseFlag, rival, f, detail: scapegoat.Name, secrecy: Secrecy.BlackOps);
+            }
+            else if (roll < 0.95f && rs.stability < 25f && rs.legitimacy < 45f)
+                EventBus.Raise(DominionEventDefOf.Dominion_Coup, rival);
+            else if (VisitorUtility.LeaderIsFree(rival.leader))
+            {
+                EventBus.Raise(DominionEventDefOf.Dominion_Assassination, rival, f, secrecy: Secrecy.BlackOps);
+                rival.leader.Kill(null);
             }
         }
 
@@ -243,6 +335,8 @@ namespace Dominion
                     LetterDefOf.NeutralEvent, null, f);
                 return;
             }
+            if (!propaganda && DominionMod.Settings.aiCovertOps && Rand.Chance(0.4f) && SabotagePlayer(f))
+                return;
             if (propaganda && DominionMod.Settings.colonistNewsThoughts && !comp.Broadcast.CounterProgrammingActive)
             {
                 foreach (Map map in Find.Maps)
@@ -250,6 +344,28 @@ namespace Dominion
                         foreach (Pawn p in map.mapPawns.FreeColonistsSpawned)
                             p.needs?.mood?.thoughts?.memories?.TryGainMemory(DominionThoughtDefOf.Dominion_ForeignPropaganda, null, null);
             }
+        }
+
+        /// <summary>Foreign saboteurs break something in the colony. True if they found something to break.</summary>
+        private static bool SabotagePlayer(Faction f)
+        {
+            var candidates = new List<Building>();
+            foreach (Map map in Find.Maps)
+            {
+                if (!map.IsPlayerHome) continue;
+                foreach (Building b in map.listerBuildings.allBuildingsColonist)
+                {
+                    CompBreakdownable c = b.TryGetComp<CompBreakdownable>();
+                    if (c != null && !c.BrokenDown) candidates.Add(b);
+                }
+            }
+            if (candidates.Count == 0) return false;
+            Building target = candidates.RandomElement();
+            target.TryGetComp<CompBreakdownable>().DoBreakdown();
+            Find.LetterStack.ReceiveLetter("Dominion_Ops_SabotageLabel".Translate(), "Dominion_Ops_SabotageText".Translate(target.LabelShort),
+                LetterDefOf.NegativeEvent, target);
+            EventBus.Raise(DominionEventDefOf.Dominion_Sabotage, Faction.OfPlayer, null);
+            return true;
         }
     }
 }

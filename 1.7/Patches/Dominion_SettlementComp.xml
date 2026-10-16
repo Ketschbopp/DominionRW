@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Patch>
-  <!-- Diplomatic missions: caravans carrying an envoy get extra options on every settlement. -->
+  <!-- Caravans get extra options on every settlement: diplomatic missions (with an envoy), covert operations and blockades. -->
   <Operation Class="PatchOperationConditional">
     <xpath>Defs/WorldObjectDef[defName="Settlement"]/comps</xpath>
     <match Class="PatchOperationAdd">
       <xpath>Defs/WorldObjectDef[defName="Settlement"]/comps</xpath>
       <value>
         <li Class="Dominion.WorldObjectCompProperties_Diplomacy"/>
+        <li Class="Dominion.WorldObjectCompProperties_CovertOps"/>
+        <li Class="Dominion.WorldObjectCompProperties_Blockade"/>
       </value>
     </match>
     <nomatch Class="PatchOperationAdd">
@@ -14,6 +16,10 @@
       <value>
         <comps>
           <li Class="Dominion.WorldObjectCompProperties_Diplomacy"/>
+          <li Class="Dominion.WorldObjectCompProperties_CovertOps"/>
+          <li Class="Dominion.WorldObjectCompProperties_Blockade"/>
+        <li Class="Dominion.WorldObjectCompProperties_CovertOps"/>
+        <li Class="Dominion.WorldObjectCompProperties_Blockade"/>
         </comps>
       </value>
     </nomatch>
