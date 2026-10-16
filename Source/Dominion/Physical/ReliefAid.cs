@@ -54,6 +54,9 @@ namespace Dominion
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             float value = Give(caravan);
             FactionState s = comp.GetState(f);
+            // The goods reach their stockpile (as silver value in E&D) and ease the crisis economy.
+            EconomyEffects.Receive(f, Mathf.RoundToInt(value));
+            EconomyEffects.Shock(f, Mathf.Min(0.06f, value / Mathf.Max(1000f, s.wealth) * 2f));
             RelationState view = comp.GetRelation(f, Faction.OfPlayer);
             view.favour += Mathf.Min(25f, value / 40f);
             f.TryAffectGoodwillWith(Faction.OfPlayer, Mathf.Clamp(Mathf.RoundToInt(value / 120f), 2, 12), canSendMessage: false, canSendHostilityLetter: false);

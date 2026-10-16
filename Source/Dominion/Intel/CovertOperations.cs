@@ -55,9 +55,9 @@ namespace Dominion
             float m = Mult(op);
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             FactionState s = comp.GetState(op.target);
-            s.economyIndex = Mathf.Max(10f, s.economyIndex * (1f - 0.08f * m));
+            EconomyEffects.Shock(op.target, -0.08f * m);
             s.sabotagedUntilTick = Find.TickManager.TicksGame + Mathf.RoundToInt(20f * m) * GenDate.TicksPerDay;
-            IntegrationRegistry.Get<Integration_EconomicsDemography>()?.TryConsumeWealth(op.target, 1500f * m);
+            EconomyEffects.DestroyGoods(op.target, 1500f * m);
             WarUtility.AddScore(Faction.OfPlayer, op.target, 5f * m);
         }
     }

@@ -30,6 +30,9 @@ namespace Dominion
 
         // Economy and strength. economyIndex: 100 = world average wealth per head.
         public float economyIndex = 100f;
+
+        /// <summary>A lasting economic shock (-0.6..0.4) from wars, disasters, sabotage or booms. Fades over about a month.</summary>
+        public float economyShock;
         public float militaryStrength;
         public int population;
         public int totalLiving;
@@ -80,6 +83,9 @@ namespace Dominion
         [Unsaved] public int activeWars;
         [Unsaved] public float effectiveAggression;
         [Unsaved] public int coldWars;
+
+        /// <summary>Today's economic climate (see EconomyEffects): scales E&amp;D production and the economy index.</summary>
+        [Unsaved] public float climate;
 
         public FactionState() { }
 
@@ -145,6 +151,7 @@ namespace Dominion
 
             Scribe_Deep.Look(ref personality, "personality");
             Scribe_Values.Look(ref economyIndex, "economyIndex", 100f);
+            Scribe_Values.Look(ref economyShock, "economyShock");
             Scribe_Values.Look(ref militaryStrength, "militaryStrength");
             Scribe_Values.Look(ref population, "population");
             Scribe_Values.Look(ref totalLiving, "totalLiving");

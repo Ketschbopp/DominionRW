@@ -132,7 +132,8 @@ namespace Dominion
                     if (proxy == f || proxy.IsPlayer || proxy.HostileTo(f)) continue;
                     WarUtility.AddScore(proxy, g, 6f);
                     comp.GetRelation(proxy, f).favour += 5f;
-                    s.economyIndex = Mathf.Max(10f, s.economyIndex * 0.99f);
+                    // Real money: silver from the sponsor's stockpile to the proxy's.
+                    EconomyEffects.Transfer(f, proxy, Mathf.RoundToInt(Mathf.Clamp(s.wealth * 0.01f, 200f, 1500f)));
                     EventBus.Raise(DominionEventDefOf.Dominion_ProxyWar, f, g, detail: proxy.Name);
                     break;
                 }

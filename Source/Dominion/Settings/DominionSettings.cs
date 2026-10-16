@@ -16,6 +16,7 @@ namespace Dominion
     {
         // General
         public bool debugLogging;
+        public bool showCapitals = true;
 
         // Simulation
         public SimulationDetail simulationDetail = SimulationDetail.Normal;
@@ -94,6 +95,7 @@ namespace Dominion
         {
             base.ExposeData();
             Scribe_Values.Look(ref debugLogging, "debugLogging");
+            Scribe_Values.Look(ref showCapitals, "showCapitals", true);
             Scribe_Values.Look(ref simulationDetail, "simulationDetail", SimulationDetail.Normal);
             Scribe_Values.Look(ref eventLogCap, "eventLogCap", 500);
             Scribe_Values.Look(ref aiDiplomacyEnabled, "aiDiplomacyEnabled", true);
@@ -142,6 +144,7 @@ namespace Dominion
         public void ResetToDefaults()
         {
             debugLogging = false;
+            showCapitals = true;
             simulationDetail = SimulationDetail.Normal;
             eventLogCap = 500;
             aiDiplomacyEnabled = true;

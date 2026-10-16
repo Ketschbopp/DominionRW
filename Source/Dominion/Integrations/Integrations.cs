@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -13,63 +14,6 @@ namespace Dominion
     // Optional mods. Each binds what it needs at startup, and adds its effects through the modifier hooks on
     // DominionIntegration and its daily hook. Everything goes through reflection, so a missing or changed mod
     // only switches its own integration off. See docs/DESIGN.md §9h.
-
-    /// <summary>Simple Leadership: its power struggles shake a faction's politics; capital governors show in dossiers.</summary>
-    public class Integration_SimpleLeadership : DominionIntegration
-    {
-        public override string PackageId => "pb3n.SimpleLeadership";
-        public override string Label => "Simple Leadership";
-
-        private FieldInfo instance;
-        private MethodInfo getBaseLeader;
-        private MethodInfo getActiveEventsFor;
-        private readonly Dictionary<int, int> knownEvents = new Dictionary<int, int>();
-        private bool primed;
-
-        /// <summary>The first day after loading only records what is already going on.</summary>
-        protected internal override void OnWorldLoaded()
-        {
-            knownEvents.Clear();
-            primed = false;
-        }
-
-        protected internal override void Bind(Binder b)
-        {
-            Type tracker = b.Type("SimpleLeadership.WorldComponent_LeaderTracker");
-            instance = b.Field(tracker, "Instance");
-            getBaseLeader = b.Method(tracker, "GetBaseLeader", new[] { typeof(Settlement) });
-            getActiveEventsFor = b.Method(tracker, "GetActiveEventsFor", new[] { typeof(object) });
-        }
-
-        private object Tracker => instance?.GetValue(null);
-
-        /// <summary>The leader Simple Leadership assigned to a settlement, if any.</summary>
-        public Pawn GovernorOf(Settlement s)
-        {
-            object t = Tracker;
-            return t == null || s == null ? null : getBaseLeader.Invoke(t, new object[] { s }) as Pawn;
-        }
-
-        public override void DailyGlobal()
-        {
-            object t = Tracker;
-            if (t == null) return;
-            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            // A copy: listeners of the events raised below may rebuild the cache.
-            foreach (Faction f in comp.Cache.Simulated.ToList())
-            {
-                int count = (getActiveEventsFor.Invoke(t, new object[] { f }) as ICollection)?.Count ?? 0;
-                knownEvents.TryGetValue(f.loadID, out int before);
-                knownEvents[f.loadID] = count;
-                if (!primed || count <= before) continue;
-                FactionState s = comp.GetState(f);
-                s.stability = Mathf.Max(0f, s.stability - 4f);
-                s.legitimacy = Mathf.Max(0f, s.legitimacy - 5f);
-                EventBus.Raise(DominionEventDefOf.Dominion_PowerStruggle, f, source: PackageId);
-            }
-            primed = true;
-        }
-    }
 
     /// <summary>Vanilla Outposts Expanded: your outposts add council weight and watch nearby factions.</summary>
     public class Integration_VanillaOutposts : DominionIntegration
@@ -192,7 +136,41 @@ namespace Dominion
             opinionOf = b.Method(manager, "OpinionOf", new[] { typeof(Faction) });
             Type rep = b.Type("RimMarket.Reputation.MarketReputation");
             total = b.Property(rep, "Total");
-            b.Type("RimMarket.Routes.TradeRoute");
+            Type route = b.Type("RimMarket.Routes.TradeRoute");
+            routes = b.Property(manager, "Routes");
+            routeFaction = b.Field(route, "faction");
+            routeSettlement = b.Field(route, "settlement");
+            routeNextDeparture = b.Field(route, "nextDepartureTick");
+        }
+
+        private PropertyInfo routes;
+        private FieldInfo routeFaction;
+        private FieldInfo routeSettlement;
+        private FieldInfo routeNextDeparture;
+
+        /// <summary>
+        /// Trade routes stop while trade is impossible: war, an embargo either way, closed borders, or the route's town
+        /// blockaded or occupied by someone else. Convoys wait a day at a time and resume on their own afterwards.
+        /// </summary>
+        public override void DailyGlobal()
+        {
+            object m = instance?.GetValue(null);
+            if (m == null || !(routes.GetValue(m) is System.Collections.IEnumerable list)) return;
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            Faction player = Faction.OfPlayer;
+            int next = Find.TickManager.TicksGame + GenDate.TicksPerDay;
+            foreach (object r in list)
+            {
+                if (!(routeFaction.GetValue(r) is Faction f)) continue;
+                Settlement s = routeSettlement.GetValue(r) as Settlement;
+                bool blocked = f.HostileTo(player)
+                               || (comp.TryGetRelation(player, f)?.embargo ?? false) || (comp.TryGetRelation(f, player)?.embargo ?? false)
+                               || (comp.TryGetRelation(player, f)?.border == BorderStatus.Closed) || (comp.TryGetRelation(f, player)?.border == BorderStatus.Closed)
+                               || (s != null && (s.Faction != f || comp.Wars.blockades.Any(b => b.settlement == s)
+                                                 || WarbandUtility.All().Any(w => w.Blockading && w.Tile == s.Tile)));
+                if (!blocked) continue;
+                if ((int)routeNextDeparture.GetValue(r) < next) routeNextDeparture.SetValue(r, next);
+            }
         }
 
         public override float OpinionModifier(Faction f, Faction toward)
@@ -226,6 +204,78 @@ namespace Dominion
             isTileObserved = b.Method(registry, "IsTileObserved", new[] { typeof(int) });
             clockType = b.Type("IRBM.DoomsdayClockManager");
             isTriggered = b.Field(clockType, "isTriggered");
+
+            // Optional: missile strikes as acts of war.
+            missileType = AccessTools.TypeByName("IRBM.WorldObject_Missile");
+            onArrived = missileType?.GetMethod("OnArrived", BindingFlags.Public | BindingFlags.Instance);
+            b.Note(onArrived != null ? "missile strikes: WorldObject_Missile.OnArrived" : "missile strike hook not found");
+        }
+
+        private static Type missileType;
+        private MethodInfo onArrived;
+
+        protected internal override void OnActivated()
+        {
+            if (onArrived == null) return;
+            try
+            {
+                DominionMod.Harmony.Patch(onArrived, prefix: new HarmonyMethod(typeof(Integration_IRBM), nameof(MissileArrivedPrefix)));
+            }
+            catch (Exception e)
+            {
+                DLog.Warning("Could not hook IRBM missile strikes: " + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// A missile is about to hit a settlement or site: an act of war against its owner (and war if they were at peace),
+        /// war score, losses in people and wealth, and a world that thinks less of whoever uses strategic weapons.
+        /// </summary>
+        public static void MissileArrivedPrefix(WorldObject __instance)
+        {
+            if (Current.ProgramState != ProgramState.Playing || WorldComponent_Dominion.Instance == null) return;
+            try
+            {
+                Traverse t = Traverse.Create(__instance);
+                if (t.Field("isAntiAir").GetValue<bool>() || t.Field("targetSatellite").GetValue() != null || t.Field("targetMissile").GetValue() != null) return;
+                Faction attacker = __instance.Faction;
+                PlanetTile tile = t.Field("destinationTile").GetValue<PlanetTile>();
+                MapParent target = t.Field("targetMapParent").GetValue<MapParent>() ?? (tile.Valid ? Find.WorldObjects.MapParentAt(tile) : null);
+                Faction victim = target?.Faction;
+                if (attacker == null || victim == null || attacker == victim || victim.Hidden) return;
+                object warhead = Traverse.Create(t.Property("MissileComp").GetValue()).Field("warheadDef").GetValue();
+                bool strategic = warhead != null && (Traverse.Create(warhead).Field("doomsdayAdvanceMinutes").GetValue<float>() > 0f
+                    || (Traverse.Create(warhead).Field("payloadComps").GetValue() is System.Collections.IEnumerable comps
+                        && comps.Cast<object>().Any(c => c != null && c.GetType().Name.Contains("Strategic"))));
+                MissileStrike(attacker, victim, target, strategic);
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("IRBM missile hook failed: " + e.Message, 0x1B31);
+            }
+        }
+
+        private static void MissileStrike(Faction attacker, Faction victim, MapParent target, bool strategic)
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (!attacker.HostileTo(victim) && WarUtility.CanWage(attacker) && WarUtility.CanWage(victim))
+                DiplomacyUtility.SetRelationKind(attacker, victim, FactionRelationKind.Hostile, attacker, "Dominion_Reason_MissileStrike".Translate());
+            WarUtility.AddScore(attacker, victim, strategic ? 25f : 8f);
+            if (!victim.IsPlayer && DominionScheduler.IsSimulated(victim))
+            {
+                FactionState s = comp.GetState(victim);
+                s.stability = Mathf.Max(0f, s.stability - (strategic ? 12f : 4f));
+                EconomyEffects.Shock(victim, strategic ? -0.15f : -0.04f);
+                IntegrationRegistry.Get<Integration_EconomicsDemography>()?.ModifyPopulation(victim,
+                    -Mathf.Clamp(Mathf.RoundToInt(s.population * (strategic ? 0.08f : 0.01f)), 1, strategic ? 120 : 15));
+            }
+            comp.GetRelation(victim, attacker).grievance += strategic ? 60f : 20f;
+            if (strategic)
+                // Nobody likes the faction that used a weapon of mass destruction, whoever it was aimed at.
+                foreach (Faction other in comp.Cache.Simulated)
+                    if (other != attacker && other != victim) comp.GetRelation(other, attacker).favour -= 10f + 10f * comp.GetState(other).personality.honour;
+            EventBus.Raise(DominionEventDefOf.Dominion_MissileStrike, attacker, victim, target.Tile.tileId, detail: target.Label,
+                magnitude: strategic ? 2f : 1f, source: "kazepsi.irbm");
         }
 
         private bool worldOnEdge;
@@ -261,56 +311,5 @@ namespace Dominion
             Type doer = b.Type("VanillaBooksExpanded.BookOutcomeDoer_Newspaper");
             b.Method(doer, "OnBookGenerated");
         }
-    }
-
-    /// <summary>Pillage &amp; Plunder: a looted settlement costs its faction economy and stability while it recovers.</summary>
-    public class Integration_PillageAndPlunder : DominionIntegration
-    {
-        public override string PackageId => "lordfelix.pillageandplunder";
-        public override string Label => "Pillage & Plunder";
-
-        private PropertyInfo instance;
-        private MethodInfo isPlundered;
-        private readonly HashSet<int> known = new HashSet<int>();
-        private bool primed;
-
-        protected internal override void OnWorldLoaded()
-        {
-            known.Clear();
-            recovering.Clear();
-            primed = false;
-        }
-        private readonly Dictionary<int, int> recovering = new Dictionary<int, int>();
-
-        protected internal override void Bind(Binder b)
-        {
-            Type manager = b.Type("PillageAndPlunder.PlunderedSettlementManager");
-            instance = b.Property(manager, "Instance");
-            isPlundered = b.Method(manager, "IsSettlementPlundered", new[] { typeof(Settlement) });
-        }
-
-        public override void DailyGlobal()
-        {
-            object m = instance?.GetValue(null);
-            if (m == null) return;
-            recovering.Clear();
-            var stillPlundered = new HashSet<int>();
-            foreach (Settlement s in Find.WorldObjects.Settlements)
-            {
-                if (s.Faction == null || s.Faction.IsPlayer || !(bool)isPlundered.Invoke(m, new object[] { s })) continue;
-                stillPlundered.Add(s.ID);
-                recovering[s.Faction.loadID] = (recovering.TryGetValue(s.Faction.loadID, out int n) ? n : 0) + 1;
-                if (known.Add(s.ID) && primed)
-                {
-                    FactionState fs = WorldComponent_Dominion.Instance.GetState(s.Faction);
-                    fs.stability = Mathf.Max(0f, fs.stability - 3f);
-                    EventBus.Raise(DominionEventDefOf.Dominion_SettlementLooted, s.Faction, null, s.Tile.tileId, detail: s.Label, source: PackageId);
-                }
-            }
-            known.IntersectWith(stillPlundered);
-            primed = true;
-        }
-
-        public override float EconomyModifier(Faction f) => recovering.TryGetValue(f.loadID, out int n) ? -0.05f * n : 0f;
     }
 }

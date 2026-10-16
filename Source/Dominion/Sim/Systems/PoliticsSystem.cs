@@ -173,7 +173,7 @@ namespace Dominion
                 s.lastRiotTick = now;
                 s.stability = Mathf.Max(0f, s.stability - 2f * ev.magnitude);
                 s.legitimacy = Mathf.Max(0f, s.legitimacy - 4f * ev.magnitude);
-                s.economyIndex *= 0.97f;
+                EconomyEffects.Shock(f, -0.03f * ev.magnitude);
                 s.blocs[(int)Bloc.Reformists] += 0.03f;
                 s.NormalizeBlocs();
             }

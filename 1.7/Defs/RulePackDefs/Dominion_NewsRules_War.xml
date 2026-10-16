@@ -301,4 +301,32 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SiegeBegan</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] besieges [DETAIL]</li>
+        <li>headline-&gt;Siege of [DETAIL]: [FACTION_A] at the gates</li>
+        <li>story-&gt;[LEAD] forces of [FACTION_A] have surrounded [DETAIL], a settlement of [FACTION_B]. [siege_detail] [closing]</li>
+        <li>siege_detail-&gt;The defenders are said to be short of supplies.</li>
+        <li>siege_detail-&gt;Volunteers from abroad are said to be on their way to help.</li>
+        <li>siege_detail-&gt;[observers] expect the town to fall within days.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_MissileStrike</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] launches a missile strike on [DETAIL]</li>
+        <li>headline-&gt;Missiles fall on [DETAIL]</li>
+        <li>story-&gt;[LEAD] a missile launched by [FACTION_A] has struck [DETAIL], held by [FACTION_B]. [ms_detail] [closing]</li>
+        <li>ms_detail-&gt;Casualties are feared to be heavy.</li>
+        <li>ms_detail-&gt;Governments everywhere have condemned the attack.</li>
+        <li>ms_detail-&gt;[FACTION_B] has vowed to retaliate.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>

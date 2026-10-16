@@ -164,7 +164,7 @@ namespace Dominion
                 Messages.Message("Dominion_Action_NeedsSilver".Translate(Silver), MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
-            DiplomacyHelpers.TakeSilver(Silver);
+            EconomyEffects.Transfer(Faction.OfPlayer, f, Silver);
             Commit(f);
             WarUtility.AddScore(f, enemy, 10f);
             TheirView(f).favour += 8f;

@@ -126,8 +126,17 @@ namespace Dominion
         public List<War> wars = new List<War>();
         public List<Blockade> blockades = new List<Blockade>();
 
-        /// <summary>Occupied settlements: settlement id → load id of the faction that held it before the first occupation.</summary>
+        /// <summary>Caravans chasing a delegation or warband.</summary>
+        public List<Pursuit> pursuits = new List<Pursuit>();
+
+        /// <summary>
+        /// Occupied settlements: world tile → load id of the faction that held it before the first occupation. Keyed by tile,
+        /// because other mods (FTV invasions) replace the settlement object when it changes hands.
+        /// </summary>
         public Dictionary<int, int> originalOwner = new Dictionary<int, int>();
+
+        /// <summary>Strength of the Dominion warband behind an FTV invasion, by tile, so its outcome uses it.</summary>
+        public Dictionary<int, float> siegePoints = new Dictionary<int, float>();
 
         /// <summary>The goal the player chose for the war they are about to declare.</summary>
         public WarGoal pendingPlayerGoal = WarGoal.Punitive;
@@ -158,7 +167,7 @@ namespace Dominion
             return false;
         }
 
-        public int OriginalOwnerOf(Settlement s) => s != null && originalOwner.TryGetValue(s.ID, out int id) ? id : -1;
+        public int OriginalOwnerOf(Settlement s) => s != null && originalOwner.TryGetValue(s.Tile.tileId, out int id) ? id : -1;
 
         public void ExposeData()
         {
@@ -169,7 +178,10 @@ namespace Dominion
             }
             Scribe_Collections.Look(ref wars, "wars", LookMode.Deep);
             Scribe_Collections.Look(ref blockades, "blockades", LookMode.Deep);
-            Scribe_Collections.Look(ref originalOwner, "originalOwner", LookMode.Value, LookMode.Value);
+            if (Scribe.mode == LoadSaveMode.Saving) pursuits.RemoveAll(x => x == null || x.caravan == null || x.caravan.Destroyed || x.target == null || x.target.Destroyed);
+            Scribe_Collections.Look(ref pursuits, "pursuits", LookMode.Deep);
+            Scribe_Collections.Look(ref originalOwner, "originalOwnerByTile", LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref siegePoints, "siegePoints", LookMode.Value, LookMode.Value);
             Scribe_Values.Look(ref pendingPlayerGoal, "pendingPlayerGoal");
             Scribe_References.Look(ref pendingPlayerTarget, "pendingPlayerTarget");
             Scribe_Values.Look(ref nextId, "nextId");
@@ -177,7 +189,10 @@ namespace Dominion
             {
                 wars ??= new List<War>();
                 blockades ??= new List<Blockade>();
+                pursuits ??= new List<Pursuit>();
+                pursuits.RemoveAll(x => x == null || x.caravan == null || x.target == null);
                 originalOwner ??= new Dictionary<int, int>();
+                siegePoints ??= new Dictionary<int, float>();
                 wars.RemoveAll(w => w == null || w.attacker == null || w.defender == null);
                 blockades.RemoveAll(b => b == null || b.caravan == null || b.settlement == null);
             }

@@ -63,6 +63,7 @@ namespace Dominion
         private static void DrawGeneral(Listing_Standard l, DominionSettings s)
         {
             l.CheckboxLabeled("Dominion_Setting_DebugLogging".Translate(), ref s.debugLogging, "Dominion_Setting_DebugLogging_Desc".Translate());
+            l.CheckboxLabeled("Dominion_Setting_ShowCapitals".Translate(), ref s.showCapitals, "Dominion_Setting_ShowCapitals_Desc".Translate());
             l.Gap();
             if (l.ButtonText("Dominion_Setting_ResetDefaults".Translate()))
                 s.ResetToDefaults();

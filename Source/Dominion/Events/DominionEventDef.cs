@@ -155,6 +155,8 @@ namespace Dominion
         public static DominionEventDef Dominion_PuppetInstalled;
         public static DominionEventDef Dominion_HostageRescued;
         public static DominionEventDef Dominion_VisitIncident;
+        public static DominionEventDef Dominion_SiegeBegan;
+        public static DominionEventDef Dominion_MissileStrike;
 
         static DominionEventDefOf()
         {

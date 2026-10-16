@@ -166,7 +166,11 @@ namespace Dominion
                 DLog.Warning("Could not open the map of " + s.Label + " for an operation: " + e);
                 return;
             }
-            if (def.silverCost > 0) PaySilver(caravan, def.silverCost);
+            if (def.silverCost > 0)
+            {
+                PaySilver(caravan, def.silverCost);
+                EconomyEffects.Receive(s.Faction, def.silverCost);
+            }
             CaravanEnterMapUtility.Enter(caravan, map, CaravanEnterMode.Edge, CaravanDropInventoryMode.DoNotDrop, false, null);
             Start(def, s, map, agents);
         }
@@ -175,7 +179,7 @@ namespace Dominion
         public static void BeginOnVisit(OperationDef def, Settlement s, Map map)
         {
             if (!CanStartOnVisit(def, s, map).Accepted) return;
-            if (def.silverCost > 0) DiplomacyHelpers.TakeSilver(def.silverCost);
+            if (def.silverCost > 0) EconomyEffects.Transfer(Faction.OfPlayer, s.Faction, def.silverCost);
             Start(def, s, map, VisitAgents(map));
         }
 

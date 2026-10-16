@@ -480,7 +480,8 @@
       <rulesStrings>
         <li>headline-&gt;[DETAIL] of [FACTION_A] looted</li>
         <li>headline-&gt;[FACTION_A] counts losses at [DETAIL]</li>
-        <li>story-&gt;[LEAD] the settlement of [DETAIL], held by [FACTION_A], has been looted. Its markets are expected to take weeks to recover. [closing]</li>
+        <li>headline-&gt;[FACTION_B] sacks [DETAIL]</li>
+        <li>story-&gt;[LEAD] the settlement of [DETAIL], held by [FACTION_A], has been looted by [FACTION_B]. Its markets are expected to take weeks to recover. [closing]</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
