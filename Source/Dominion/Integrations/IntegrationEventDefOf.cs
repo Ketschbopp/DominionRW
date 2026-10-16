@@ -14,6 +14,10 @@ namespace Dominion
         // RimMarket trade routes
         public static DominionEventDef Dominion_ConvoyLost;
 
+        // Economics & Demography
+        public static DominionEventDef Dominion_Starvation;
+        public static DominionEventDef Dominion_PirateTheft;
+
         static IntegrationEventDefOf()
         {
             DefOfHelper.EnsureInitializedInCtor(typeof(IntegrationEventDefOf));
