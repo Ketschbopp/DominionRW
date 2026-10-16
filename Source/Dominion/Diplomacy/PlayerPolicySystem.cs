@@ -88,10 +88,16 @@ namespace Dominion
         public static void EnvoyArrived(Faction f, TreatyDef treaty)
         {
             if (treaty == null || f.HostileTo(Faction.OfPlayer)) return;
+            // Things changed on the road: the treaty may already be signed, or no longer possible.
+            if (WorldComponent_Dominion.Instance.Treaties.CannotSignReason(treaty, f, Faction.OfPlayer) != null) return;
             Map map = VisitorUtility.PlayerCapitalMap();
-            List<Pawn> party = VisitorUtility.MakeEnvoyParty(f);
-            Pawn envoy = party.Count > 0 ? party[0] : null;
-            if (!VisitorUtility.SpawnVisitors(f, map, party, GenDate.TicksPerDay / 2)) envoy = null;
+            Pawn envoy = null;
+            if (VisitorUtility.CanHostVisitors(map))
+            {
+                List<Pawn> party = VisitorUtility.MakeEnvoyParty(f);
+                if (party.Count > 0 && VisitorUtility.SpawnVisitors(f, map, party, GenDate.TicksPerDay / 2)) envoy = party[0];
+                else foreach (Pawn p in party) if (!p.Spawned && !p.Discarded) p.Discard();
+            }
             Offer(f, treaty, envoy);
         }
 
@@ -105,8 +111,9 @@ namespace Dominion
             {
                 action = () =>
                 {
-                    if (comp.Treaties.CannotSignReason(treaty, f, Faction.OfPlayer) == null)
-                        comp.Treaties.Sign(treaty, f, Faction.OfPlayer, f);
+                    string why = comp.Treaties.CannotSignReason(treaty, f, Faction.OfPlayer);
+                    if (why == null) comp.Treaties.Sign(treaty, f, Faction.OfPlayer, f);
+                    else Messages.Message("Dominion_Offer_TooLate".Translate(treaty.label, why), MessageTypeDefOf.RejectInput, historical: false);
                 },
                 resolveTree = true,
             });

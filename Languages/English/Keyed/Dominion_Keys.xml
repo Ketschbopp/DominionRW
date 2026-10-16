@@ -6,7 +6,6 @@
   <Dominion_Tab_Events>Events</Dominion_Tab_Events>
   <Dominion_Tab_Integrations>Integrations</Dominion_Tab_Integrations>
   <Dominion_Col_Faction>Faction</Dominion_Col_Faction>
-  <Dominion_Col_Leader>Leader</Dominion_Col_Leader>
   <Dominion_Col_Relation>Relation to you</Dominion_Col_Relation>
   <Dominion_NoEvents>Nothing has happened yet.</Dominion_NoEvents>
 
@@ -128,7 +127,6 @@
   <!-- Relation change reasons -->
   <Dominion_Reason_War>war declared</Dominion_Reason_War>
   <Dominion_Reason_Peace>peace agreed</Dominion_Reason_Peace>
-  <Dominion_Reason_Alliance>alliance formed</Dominion_Reason_Alliance>
   <Dominion_Reason_BreakAlliance>alliance ended</Dominion_Reason_BreakAlliance>
 
   <!-- M1 settings -->
@@ -530,7 +528,7 @@
   <Dominion_Federation_StepCharterNoCouncil>The Rim Council is switched off: the Charter is in force once the research is done</Dominion_Federation_StepCharterNoCouncil>
   <Dominion_Federation_Progress>Unification</Dominion_Federation_Progress>
   <Dominion_Federation_Breakdown>Federation members: {0}   Subjugated: {1}   Conquered: {2}   Major factions: {3}</Dominion_Federation_Breakdown>
-  <Dominion_Federation_Rules>A major faction is unified when it joins the Federation (sign Federation membership by comms, envoy or summit), when you hold as many of its former settlements as vassal outposts as it has left, or when it falls while at war with you.</Dominion_Federation_Rules>
+  <Dominion_Federation_Rules>A major faction is unified when it joins the Federation (sign Federation membership by comms, envoy or summit), when you hold at least as many of its settlements as vassal outposts as it has left (and, once it is gone, at least half of what it once had), or when it falls while at war with you after you have beaten one of its settlements in battle.</Dominion_Federation_Rules>
   <Dominion_Federation_Opinion>(opinion {0})</Dominion_Federation_Opinion>
   <Dominion_Federation_Proclaim>Proclaim the Federation</Dominion_Federation_Proclaim>
   <Dominion_Federation_Proclaimed>The Federation was proclaimed {0} ago.</Dominion_Federation_Proclaimed>
@@ -551,7 +549,7 @@ The game continues after the credits either way.</Dominion_Federation_ReadyText>
   <Dominion_UnifyStatus_Subjugated>Subjugated</Dominion_UnifyStatus_Subjugated>
   <Dominion_UnifyStatus_Subjugated_Desc>You hold at least as many of their former settlements as vassal outposts as they have left.</Dominion_UnifyStatus_Subjugated_Desc>
   <Dominion_UnifyStatus_Conquered>Conquered</Dominion_UnifyStatus_Conquered>
-  <Dominion_UnifyStatus_Conquered_Desc>Fell while at war with you.</Dominion_UnifyStatus_Conquered_Desc>
+  <Dominion_UnifyStatus_Conquered_Desc>Fell while at war with you, after you defeated one of their settlements yourself.</Dominion_UnifyStatus_Conquered_Desc>
   <Dominion_UnifyPath_Federation>by joining the Federation</Dominion_UnifyPath_Federation>
   <Dominion_UnifyPath_Subjugated>as vassals</Dominion_UnifyPath_Subjugated>
   <Dominion_UnifyPath_Conquered>by conquest</Dominion_UnifyPath_Conquered>
@@ -580,4 +578,12 @@ The game continues after the credits either way.</Dominion_Federation_ReadyText>
   <Dominion_Setting_EndingShare>Share of major factions needed: {0}</Dominion_Setting_EndingShare>
   <Dominion_Setting_EndingOutlaws>Outlaws count as major factions</Dominion_Setting_EndingOutlaws>
   <Dominion_Setting_EndingOutlaws_Desc>Pirates and other permanent enemies must be dealt with too. They can never join, so they must be subjugated or conquered.</Dominion_Setting_EndingOutlaws_Desc>
+
+  <!-- Review pass -->
+  <Dominion_Summit_CancelledFactionGone>the faction no longer exists</Dominion_Summit_CancelledFactionGone>
+  <Dominion_Summit_ConcessionUnaffordable>You no longer have the silver or influence for a concession.</Dominion_Summit_ConcessionUnaffordable>
+  <Dominion_Mission_NoLongerPossible>The mission to {0} is no longer possible: things changed while the caravan was travelling.</Dominion_Mission_NoLongerPossible>
+  <Dominion_Tribute_NoColony>{0} agreed to pay tribute, but you have no colony to deliver it to.</Dominion_Tribute_NoColony>
+  <Dominion_Offer_TooLate>The {0} can no longer be signed: {1}.</Dominion_Offer_TooLate>
+  <Dominion_Council_MotionVoid>(void: no longer valid)</Dominion_Council_MotionVoid>
 </LanguageData>

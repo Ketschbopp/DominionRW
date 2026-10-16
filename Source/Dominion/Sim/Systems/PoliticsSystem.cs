@@ -142,7 +142,8 @@ namespace Dominion
             Faction f = ev.primary;
             if (f == null) return;
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            FactionState s = comp.GetState(f);
+            // Only factions the sim tracks; never create state for the player or hidden factions on every event.
+            if (!DominionScheduler.IsSimulated(f) || !comp.TryGetState(f, out FactionState s)) return;
             int now = Find.TickManager.TicksGame;
             DominionEventDef def = ev.def;
 

@@ -74,6 +74,12 @@ namespace Dominion
             Scribe_Values.Look(ref occurredTick, "occurredTick");
             Scribe_Values.Look(ref arrivesTick, "arrivesTick", -1);
             Scribe_Values.Look(ref expiresTick, "expiresTick", -1);
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                // Factions removed from the game (quests) would leave unresolvable references.
+                if (!SaveUtil.StillExists(primary)) primary = null;
+                if (!SaveUtil.StillExists(secondary)) secondary = null;
+            }
             Scribe_References.Look(ref primary, "primary");
             Scribe_References.Look(ref secondary, "secondary");
             Scribe_Values.Look(ref tile, "tile", -1);

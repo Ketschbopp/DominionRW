@@ -52,7 +52,19 @@ namespace Dominion
         public int onAirUntil = -1;
         public int counterProgrammingUntil = -1;
 
-        public static string Key(BroadcastProgramDef def, Faction target) => def.defName + ":" + (target?.loadID ?? -1);
+        // Keys are built every few ticks by operating pawns; interned so that allocates nothing after the first time.
+        private static readonly Dictionary<(BroadcastProgramDef, int), string> keys = new Dictionary<(BroadcastProgramDef, int), string>();
+
+        public static string Key(BroadcastProgramDef def, Faction target)
+        {
+            int id = target?.loadID ?? -1;
+            if (!keys.TryGetValue((def, id), out string key))
+                keys[(def, id)] = key = def.defName + ":" + id;
+            return key;
+        }
+
+        public float AirtimeFor(BroadcastProgramDef def, Faction target) =>
+            airtime.TryGetValue(Key(def, target), out float v) ? v : 0f;
 
         public void AddAirtime(BroadcastProgramDef def, Faction target, float hours)
         {

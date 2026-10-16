@@ -56,8 +56,34 @@ namespace Dominion
 
         private int Social => DiplomatUtility.Social(ours);
 
+        // Chances and the transcript only change when a move is played; the window draws every frame.
+        private readonly Dictionary<SummitMove, float> chanceCache = new Dictionary<SummitMove, float>();
+        private float finalChanceCache = -1f;
+        private string logText;
+        private int logTextCount = -1;
+        private float logHeight;
+        private float logWidth = -1f;
+
+        private float CachedChance(SummitMove m)
+        {
+            if (!chanceCache.TryGetValue(m, out float c))
+            {
+                Evaluate(m, out c, out _, out _);
+                chanceCache[m] = c;
+            }
+            return c;
+        }
+
+        private float CachedFinalChance()
+        {
+            if (finalChanceCache < 0f) finalChanceCache = FinalChance();
+            return finalChanceCache;
+        }
+
         private void PrepareRound()
         {
+            chanceCache.Clear();
+            finalChanceCache = -1f;
             offered.Clear();
             var eligible = new List<SummitMove>();
             foreach (SummitMove m in System.Enum.GetValues(typeof(SummitMove)))
@@ -105,11 +131,20 @@ namespace Dominion
 
         private void Play(SummitMove m)
         {
+            chanceCache.Clear();
+            finalChanceCache = -1f;
             Evaluate(m, out float chance, out float onSuccess, out float onFail);
             if (m == SummitMove.Concession)
             {
+                // Recheck: silver or influence may have gone since the round began.
                 if (DiplomacyHelpers.AvailableSilver() >= ConcessionSilver) DiplomacyHelpers.TakeSilver(ConcessionSilver);
-                else WorldComponent_Dominion.Instance.Player.AddInfluence(-ConcessionInfluence);
+                else if (WorldComponent_Dominion.Instance.Player.influence >= ConcessionInfluence)
+                    WorldComponent_Dominion.Instance.Player.AddInfluence(-ConcessionInfluence);
+                else
+                {
+                    Messages.Message("Dominion_Summit_ConcessionUnaffordable".Translate(), MessageTypeDefOf.RejectInput, historical: false);
+                    return;
+                }
             }
             bool success = Rand.Chance(chance);
             rapport = Mathf.Clamp(rapport + (success ? onSuccess : onFail), -100f, 100f);
@@ -219,15 +254,22 @@ namespace Dominion
             Widgets.Label(bar, "Dominion_Summit_Rapport".Translate(rapport.ToString("F0")));
             Text.Anchor = TextAnchor.UpperLeft;
             if (!concluded && round >= Rounds)
-                Widgets.Label(new Rect(mid.x, mid.y + 86f, mid.width, 24f), "Dominion_Summit_FinalChance".Translate(FinalChance().ToStringPercent()));
+                Widgets.Label(new Rect(mid.x, mid.y + 86f, mid.width, 24f), "Dominion_Summit_FinalChance".Translate(CachedFinalChance().ToStringPercent()));
 
             // Transcript
             y += 128f;
             Rect logRect = new Rect(inRect.x, y, inRect.width, inRect.height - (y - inRect.y) - 120f);
             Widgets.DrawMenuSection(logRect);
             Rect inner = logRect.ContractedBy(8f);
-            string text = string.Join("\n\n", log);
-            float h = Text.CalcHeight(text, inner.width - 16f);
+            if (logTextCount != log.Count || logWidth != inner.width)
+            {
+                logText = string.Join("\n\n", log);
+                logHeight = Text.CalcHeight(logText, inner.width - 16f);
+                logTextCount = log.Count;
+                logWidth = inner.width;
+            }
+            string text = logText;
+            float h = logHeight;
             Rect view = new Rect(0f, 0f, inner.width - 16f, h);
             Widgets.BeginScrollView(inner, ref logScroll, view);
             Widgets.Label(view, text);
@@ -252,7 +294,7 @@ namespace Dominion
                 for (int i = 0; i < offered.Count; i++)
                 {
                     SummitMove m = offered[i];
-                    Evaluate(m, out float chance, out _, out _);
+                    float chance = CachedChance(m);
                     Rect b = new Rect(choices.x + (i % 2) * (w + 12f), choices.y + (i / 2) * 40f, w, 36f);
                     if (Widgets.ButtonText(b, ("Dominion_SummitMoveLabel_" + m).Translate() + "  (" + chance.ToStringPercent() + ")"))
                     {

@@ -597,3 +597,44 @@ Change counters (power events, plundered settlements, vassal outposts) are not s
 | 9 | Integration order | As in M9 |
 | 10 | Economics & Demography | **Hard requirement** (added later by the author) |
 | 11 | Faction Territories & Vassalage | **Hard requirement** (added later by the author) |
+
+---
+
+## 11. Status after M10 and the review pass
+
+**Nothing has been tested in game yet.** Everything builds against the 1.7 reference assemblies and every def, key and texture is checked by script, but no save has been loaded. The first in-game session is the most important next step.
+
+### Left out on purpose
+
+- **M7 War** as a whole: war goals and war score, warbands and their interception, occupation, cold war and proxy wars, joint wars, blockades. Wars today are vanilla hostility (plus the Declare war action, the ceasefire and collective defense motions, and defensive pacts that call allies in).
+- **Covert operations** from §5.5: assassination, sabotage, inciting riots, coups and puppets, false flags, rescue or extraction, stealing technology, and physical (on-map) operations. Built: establish network, gather intel, propaganda, bribe official, counter-intelligence.
+- **Hostile broadcasting**: the propaganda program aimed at a faction's stability and the disinformation program.
+- **World events tied to war**: assassination attempts, border skirmishes, arms races.
+
+### Deferred, still to do
+
+| Area | Missing |
+|---|---|
+| Diplomacy actions | threaten, apologise, military access, research cooperation, political marriage (RimCourt), guarantee of independence, loans, investment, release vassal, annexation |
+| Vassalage | faction-level vassals and puppets (only FTV settlement vassalage exists); tribal vassals sitting in the council through their overlord |
+| Rim Council | non-proliferation (IRBM), plague quarantine, recognition of territory, peacekeeping coalition and admit-member motions |
+| Culture | real precept changes in other factions' ideologies (reforms only move opinion today); a dedicated Diplomat role precept; precepts gating actions (e.g. pacifists declaring war) |
+| Summits | in-summit incidents beyond the current ones (protest, betrayal); Visit Settlements as a venue; hostage exchanges at an agreed time and place (today they happen at once) |
+| Economy | trade-screen tooltip explaining each price factor; traders from plague-hit factions bringing disease |
+| Map and UI | Overview world-map overlay (territory, alliances, wars); the paper-document look with leader photos and stamps (windows use the standard RimWorld style) |
+| World events | visitable world sites (rallies, ceremonies, disaster relief on site); aid is delivered at the faction's own settlements instead |
+| Other | translations beyond English; balancing from real play |
+
+### Review pass (bugs and efficiency)
+
+A four-way code review found no crash on a normal path; it found about 60 smaller problems, and these were fixed:
+
+- **Lost or duplicated pawns:** a faction leader removed from the world when a summit could not take place; kidnapped colonists vanishing in a hostage exchange with no home map; a leader pulled out of a caravan or a prison into a summit; an envoy's luggage lost on capture, and a caravan left empty when its only colonist was taken; agents stranded when an operation's target vanished or there was no colony map (they now wait and come home later).
+- **Stale actions:** envoy missions now recheck everything on arrival (war declared, treaty already signed, research missing, summit called off); intercepting a delegation that already moved on; offers that can no longer be signed; summits with a faction that is gone; a summit "arranged" letter after it had already been called off.
+- **Rim Council:** a session could get stuck forever when a motion's target faction was removed; one broken decree stopped every later decree; sanctions lifted embargoes that existed before them; switching the council off froze decrees with their effects; a delayed announcement gave delegates an hour instead of 15 days; one-time motions (censure) lingered as 30-day decrees.
+- **Unification:** factions finished off by others no longer count as yours; subjugation needs at least half of what a faction once had, counted fresh from FTV; conquest needs a settlement you beat in battle.
+- **Across saves:** systems kept data from the previous save (territory scan, world wealth, outposts, pending calls to war); capitals destroyed just before a save were never reported lost; personalities were zero until a faction's first daily update; quest factions left dangling references in the event log and news.
+- **Balance:** a treaty signed at a summit now costs half its normal influence on top of the summit; tribute is not reported as paid when there is no colony to receive it; a concession can no longer be made for free.
+- **Efficiency:** shared enemies were O(F³) per faction per day (now computed once per pair per day); settlement distances were recomputed daily for every pair (now only after settlements change); the Diplomacy, Council, Federation, dossier, intelligence and summit windows recomputed silver, hostages, vote weights and chances every frame (now cached for half a second of real time); broadcasting built a new string key every few ticks; every event copied the decree list.
+- **UI:** the dossier profile was cut off (it now scrolls, and the dossier is taller); scroll positions reset when switching factions or settings tabs; long names and reasons are truncated with tooltips; Statecraft no longer needs the Intellectual work tag (a head of state who cannot do intellectual work could not earn influence).
+

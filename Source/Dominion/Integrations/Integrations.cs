@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -54,7 +55,8 @@ namespace Dominion
             object t = Tracker;
             if (t == null) return;
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            foreach (Faction f in comp.Cache.Simulated)
+            // A copy: listeners of the events raised below may rebuild the cache.
+            foreach (Faction f in comp.Cache.Simulated.ToList())
             {
                 int count = (getActiveEventsFor.Invoke(t, new object[] { f }) as ICollection)?.Count ?? 0;
                 knownEvents.TryGetValue(f.loadID, out int before);
@@ -78,6 +80,8 @@ namespace Dominion
         private const float WatchTiles = 15f;
         private Type outpostBase;
         private readonly List<PlanetTile> playerOutposts = new List<PlanetTile>();
+
+        protected internal override void OnWorldLoaded() => playerOutposts.Clear();
 
         protected internal override void Bind(Binder b)
         {
@@ -252,6 +256,8 @@ namespace Dominion
         }
 
         private bool worldOnEdge;
+
+        protected internal override void OnWorldLoaded() => worldOnEdge = false;
 
         public override void DailyGlobal()
         {

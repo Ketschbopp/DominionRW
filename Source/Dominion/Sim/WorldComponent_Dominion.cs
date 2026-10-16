@@ -66,6 +66,11 @@ namespace Dominion
             Instance = this;
             cache.Rebuild();
             scheduler.Rebuild();
+            foreach (SimSystem s in SimSystemRegistry.All)
+            {
+                try { s.OnWorldLoaded(); }
+                catch (System.Exception e) { DLog.Warning($"{s.Name}.OnWorldLoaded failed: {e}"); }
+            }
             IntegrationRegistry.NotifyWorldLoaded();
         }
 
@@ -110,6 +115,7 @@ namespace Dominion
         /// <summary>Removes state for factions that no longer exist (removed by another mod or the game).</summary>
         public void PruneMissingFactions()
         {
+            PruneMissingRelations();
             WorldCache c = Cache;
             List<int> dead = null;
             foreach (KeyValuePair<int, FactionState> kv in factionStates)
@@ -118,10 +124,17 @@ namespace Dominion
             if (dead == null) return;
             foreach (int id in dead)
                 factionStates.Remove(id);
-            List<long> deadRel = new List<long>();
+        }
+
+        /// <summary>Drops relations with factions that left the game, including ones that never had a state.</summary>
+        private void PruneMissingRelations()
+        {
+            WorldCache c = Cache;
+            List<long> deadRel = null;
             foreach (KeyValuePair<long, RelationState> kv in relations)
-                if (dead.Contains(kv.Value.fromId) || dead.Contains(kv.Value.toId))
-                    deadRel.Add(kv.Key);
+                if (c.FactionById(kv.Value.fromId) == null || c.FactionById(kv.Value.toId) == null)
+                    (deadRel ??= new List<long>()).Add(kv.Key);
+            if (deadRel == null) return;
             foreach (long k in deadRel)
                 relations.Remove(k);
         }

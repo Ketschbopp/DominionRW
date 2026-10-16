@@ -108,6 +108,7 @@ namespace Dominion
                 {
                     r.embargo = true;
                     d.complied.Add(m);
+                    d.imposed.Add(m);
                     EventBus.Raise(DominionEventDefOf.Dominion_EmbargoDeclared, m, x);
                 }
                 else if (!d.InGrace)
@@ -117,9 +118,9 @@ namespace Dominion
 
         public override void OnExpired(Decree d)
         {
-            // Embargoes AI members imposed for the decree end with it (their own policy toward the player continues).
+            // Embargoes AI members imposed for the decree end with it; embargoes they already had stay.
             Faction x = d.targets[0];
-            foreach (Faction m in d.complied)
+            foreach (Faction m in d.imposed)
                 if (!m.IsPlayer && !x.IsPlayer && WorldComponent_Dominion.Instance.GetRelation(m, x).embargo)
                 {
                     WorldComponent_Dominion.Instance.GetRelation(m, x).embargo = false;

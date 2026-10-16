@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using RimWorld;
 using RimWorld.Planet;
@@ -36,7 +37,7 @@ namespace Dominion
                     if (hostile) continue;
                     foreach (TreatyDef treaty in DefDatabase<TreatyDef>.AllDefsListForReading)
                     {
-                        if (WorldComponent_Dominion.Instance.Treaties.CannotSignReason(treaty, Faction.OfPlayer, f) != null) continue;
+                        if (EnvoyMissions.TreatyBlockedReason(treaty, f) != null) continue;
                         TreatyDef t = treaty;
                         foreach (FloatMenuOption o in Option(caravan, settlement, mission, t))
                             yield return o;
@@ -53,7 +54,7 @@ namespace Dominion
         {
             string label = EnvoyMissions.Label(mission, settlement.Faction, treaty, DiplomatUtility.BestEnvoy(caravan));
             return CaravanArrivalActionUtility.GetFloatMenuOptions(
-                () => EnvoyMissions.CanDo(mission, settlement, treaty),
+                () => EnvoyMissions.CanDo(mission, settlement, treaty, caravan),
                 () => new CaravanArrivalAction_DiplomaticMission(settlement, mission, treaty),
                 label, caravan, settlement.Tile, settlement, null);
         }
@@ -81,7 +82,7 @@ namespace Dominion
         public override FloatMenuAcceptanceReport StillValid(Caravan caravan, PlanetTile destinationTile)
         {
             if (settlement == null || settlement.Destroyed || settlement.Tile != destinationTile) return false;
-            return EnvoyMissions.CanDo(mission, settlement, treaty);
+            return EnvoyMissions.CanDo(mission, settlement, treaty, caravan);
         }
 
         public override void Arrived(Caravan caravan) => EnvoyMissions.Perform(mission, settlement, treaty, caravan);
@@ -137,9 +138,34 @@ namespace Dominion
             }
         }
 
-        public static FloatMenuAcceptanceReport CanDo(EnvoyMission m, Settlement s, TreatyDef treaty)
+        /// <summary>Why the player cannot sign this treaty with them now (already signed, at war, research missing...), or null.</summary>
+        public static string TreatyBlockedReason(TreatyDef treaty, Faction f)
+        {
+            if (treaty == null) return "Dominion_Council_WrongTargets".Translate();
+            string reason = WorldComponent_Dominion.Instance.Treaties.CannotSignReason(treaty, Faction.OfPlayer, f);
+            if (reason == null && treaty.requiredResearch != null && !treaty.requiredResearch.IsFinished)
+                reason = "Dominion_Action_NeedsResearch".Translate(treaty.requiredResearch.label);
+            return reason;
+        }
+
+        /// <summary>
+        /// Whether the mission can go ahead. With a caravan it also rechecks that the mission still applies, since
+        /// things change while the caravan travels (war declared, treaty already signed, summit called off).
+        /// </summary>
+        public static FloatMenuAcceptanceReport CanDo(EnvoyMission m, Settlement s, TreatyDef treaty, Caravan caravan = null)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (s?.Faction == null || s.Faction.IsPlayer || s.Faction.defeated)
+                return false;
+            if (m == EnvoyMission.NegotiateTreaty)
+            {
+                string why = TreatyBlockedReason(treaty, s.Faction);
+                if (why != null) return FloatMenuAcceptanceReport.WithFailReason(why);
+            }
+            else if (caravan != null && !Applies(m, s, caravan))
+                return FloatMenuAcceptanceReport.WithFailReason("Dominion_Mission_NoLongerPossible".Translate(s.Faction.Name));
+            if (m == EnvoyMission.AttendSummit && caravan != null && !caravan.PawnsListForReading.Contains(LeadershipUtility.HeadOfState()))
+                return FloatMenuAcceptanceReport.WithFailReason("Dominion_Summit_NeedsHeadOfState".Translate());
             float cost = Cost(m, treaty);
             if (comp.Player.influence < cost)
                 return FloatMenuAcceptanceReport.WithFailReason("Dominion_Action_NeedsInfluence".Translate(cost.ToString("F0")));
@@ -213,10 +239,10 @@ namespace Dominion
                 Messages.Message("Dominion_Mission_NoEnvoy".Translate(), caravan, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
-            FloatMenuAcceptanceReport ok = CanDo(m, s, treaty);
+            FloatMenuAcceptanceReport ok = CanDo(m, s, treaty, caravan);
             if (!ok.Accepted)
             {
-                Messages.Message(ok.FailReason, caravan, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message(ok.FailReason ?? "Dominion_Mission_NoLongerPossible".Translate(f.Name).ToString(), caravan, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
             if (m == EnvoyMission.AttendSummit)
@@ -238,6 +264,7 @@ namespace Dominion
             if (m == EnvoyMission.AttendCouncil)
             {
                 if (CouncilSystem.CanRegisterAt(s)) CouncilSystem.RegisterPlayer(envoy);
+                else Messages.Message("Dominion_Mission_NoLongerPossible".Translate(f.Name), caravan, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
@@ -268,7 +295,9 @@ namespace Dominion
                         DiplomacyUtility.SetRelationKind(Faction.OfPlayer, f, FactionRelationKind.Neutral, Faction.OfPlayer, "Dominion_Reason_Peace".Translate());
                         result = "Dominion_Peace_Accepted".Translate(f.Name);
                     }
-                    else if (Rand.Chance(0.35f * comp.GetState(f).personality.aggression))
+                    // An envoy travelling alone is sent home rather than taken: a caravan cannot be left with no one.
+                    else if (caravan.PawnsListForReading.Any(p => p != envoy && p.IsColonist && !p.Downed)
+                             && Rand.Chance(0.35f * comp.GetState(f).personality.aggression))
                     {
                         Capture(envoy, caravan, f);
                         return;
@@ -283,7 +312,7 @@ namespace Dominion
                 case EnvoyMission.ExchangeHostages:
                     if (success)
                     {
-                        HostageUtility.Exchange(f, out int returned, out int released);
+                        HostageUtility.Exchange(f, out int returned, out int released, caravan);
                         result = "Dominion_Hostages_Done".Translate(f.Name, returned, released);
                     }
                     else result = "Dominion_Hostages_Refused".Translate(f.Name);
@@ -311,6 +340,8 @@ namespace Dominion
         {
             try
             {
+                // Their luggage stays with the caravan.
+                CaravanInventoryUtility.MoveAllInventoryToSomeoneElse(envoy, caravan.PawnsListForReading, null);
                 caravan.RemovePawn(envoy);
                 f.kidnapped.Kidnap(envoy, null);
             }

@@ -9,7 +9,12 @@ namespace Dominion
     public static class DiplomacyHelpers
     {
         /// <summary>Silver in the player's home maps that colonists could hand over.</summary>
-        public static int AvailableSilver()
+        // Read by action buttons every frame; counting walks every silver stack on every home map.
+        private static readonly UICache<int> silverCache = new UICache<int>(CountSilver);
+
+        public static int AvailableSilver() => silverCache.Value;
+
+        private static int CountSilver()
         {
             int total = 0;
             foreach (Thing t in SilverStacks())
@@ -20,6 +25,7 @@ namespace Dominion
         /// <summary>Removes silver from the player's home maps. Returns how much was taken.</summary>
         public static int TakeSilver(int amount)
         {
+            silverCache.Invalidate();
             int taken = 0;
             foreach (Thing t in SilverStacks())
             {
@@ -45,10 +51,11 @@ namespace Dominion
         }
 
         /// <summary>Drops silver from a faction near the player's capital (or any home).</summary>
-        public static void DropSilver(int amount)
+        /// <summary>Drops silver at the capital by pod. False if there is no home map to deliver to.</summary>
+        public static bool DropSilver(int amount)
         {
             Map map = WorldComponent_Dominion.Instance?.Player.capital?.Map ?? Find.AnyPlayerHomeMap;
-            if (map == null || amount <= 0) return;
+            if (map == null || amount <= 0) return false;
             var things = new List<Thing>();
             while (amount > 0)
             {
@@ -58,6 +65,7 @@ namespace Dominion
                 things.Add(silver);
             }
             DropPodUtility.DropThingsNear(DropCellFinder.TradeDropSpot(map), map, things, 110, false, false, true, false, true, null);
+            return true;
         }
 
         /// <summary>The player's strength on the same scale as factions' military strength.</summary>

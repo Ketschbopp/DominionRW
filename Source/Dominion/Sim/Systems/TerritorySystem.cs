@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -60,6 +61,14 @@ namespace Dominion
             PlayerTerritoryTiles = player != null && counting.TryGetValue(player.loadID, out int p) ? p : 0;
         }
 
+        public override void OnWorldLoaded()
+        {
+            counting.Clear();
+            scanFromStart = false;
+            lastVassals = null;
+            lastWorld = null;
+        }
+
         public override void DailyGlobal()
         {
             var ftv = IntegrationRegistry.Get<Integration_FactionTerritories>();
@@ -86,7 +95,7 @@ namespace Dominion
                 lastWorld = Find.World;
                 if (lastVassals != null)
                 {
-                    foreach (Faction f in Find.FactionManager.AllFactionsListForReading)
+                    foreach (Faction f in Find.FactionManager.AllFactionsListForReading.ToList())
                     {
                         if (f.defeated) continue;
                         perMaster.TryGetValue(f.loadID, out int now);

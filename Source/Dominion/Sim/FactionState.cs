@@ -42,6 +42,9 @@ namespace Dominion
 
         public Settlement capital;
 
+        /// <summary>The capital's tile, saved separately so a capital destroyed just before a save is still noticed.</summary>
+        public int capitalTile = -1;
+
         /// <summary>0..100. How much the player knows about this faction. Gates news and the dossier.</summary>
         public float playerIntel;
 
@@ -143,6 +146,7 @@ namespace Dominion
             Scribe_Values.Look(ref vassalOutposts, "vassalOutposts");
             Scribe_Values.Look(ref settlementCount, "settlementCount");
             Scribe_References.Look(ref capital, "capital");
+            Scribe_Values.Look(ref capitalTile, "capitalTile", -1);
             Scribe_Values.Look(ref playerIntel, "playerIntel");
             Scribe_Values.Look(ref playerCulture, "playerCulture");
             Scribe_Values.Look(ref leaderSinceTick, "leaderSinceTick", -1);
@@ -165,6 +169,12 @@ namespace Dominion
                     if (faction != null) personality.SeedFrom(faction);
                 }
                 if (blocs == null || blocs.Length != BlocCount) blocs = new float[BlocCount];
+                // The effective personality is not saved; rebuild it now so it is right before this faction's slot runs.
+                if (faction != null)
+                {
+                    try { personality.Refresh(faction); }
+                    catch (System.Exception e) { DLog.WarningOnce("Refreshing personality after load failed: " + e.Message, faction.loadID ^ 0x7E1); }
+                }
             }
         }
     }

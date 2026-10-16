@@ -38,6 +38,7 @@ namespace Dominion
             Scribe_Values.Look(ref venue, "venue");
             Scribe_Values.Look(ref status, "status");
             Scribe_Values.Look(ref expiresTick, "expiresTick");
+            if (Scribe.mode == LoadSaveMode.Saving && visitor != null && visitor.Discarded) visitor = null;
             Scribe_References.Look(ref visitor, "visitor");
         }
     }

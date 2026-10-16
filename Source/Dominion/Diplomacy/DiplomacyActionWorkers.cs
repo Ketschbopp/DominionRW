@@ -235,7 +235,11 @@ namespace Dominion
             {
                 FactionState s = Comp.GetState(f);
                 int amount = Mathf.Clamp(Mathf.RoundToInt(s.wealth * 0.01f), 100, 1000);
-                DiplomacyHelpers.DropSilver(amount);
+                if (!DiplomacyHelpers.DropSilver(amount))
+                {
+                    Report("Dominion_Tribute_NoColony".Translate(f.Name), false);
+                    return;
+                }
                 view.grievance += 25f;
                 EventBus.Raise(DominionEventDefOf.Dominion_TributePaid, f, Faction.OfPlayer, detail: amount.ToString());
                 Report("Dominion_Tribute_Paid".Translate(f.Name, amount), true);

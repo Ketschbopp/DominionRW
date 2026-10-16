@@ -74,6 +74,9 @@ namespace Dominion
     public class IntelService : IExposable
     {
         public List<Operation> operations = new List<Operation>();
+
+        /// <summary>Agents back from an operation who could not come home yet (no colony map). Retried hourly.</summary>
+        public List<Pawn> returning = new List<Pawn>();
         private Dictionary<int, float> networks = new Dictionary<int, float>();
         public int counterIntelUntil = -1;
         private int nextId;
@@ -101,11 +104,18 @@ namespace Dominion
             Scribe_Collections.Look(ref networks, "networks", LookMode.Value, LookMode.Value);
             Scribe_Values.Look(ref counterIntelUntil, "counterIntelUntil", -1);
             Scribe_Values.Look(ref nextId, "nextId");
+            Scribe_Collections.Look(ref returning, "returning", LookMode.Reference);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 operations ??= new List<Operation>();
                 networks ??= new Dictionary<int, float>();
+                returning ??= new List<Pawn>();
+                // An operation against a faction that no longer exists is over: its agents head home.
+                foreach (Operation o in operations)
+                    if (o != null && (o.def == null || o.target == null) && o.agents != null)
+                        returning.AddRange(o.agents);
                 operations.RemoveAll(o => o?.def == null || o.target == null);
+                returning.RemoveAll(p => p == null || p.Dead);
             }
         }
     }
@@ -133,7 +143,9 @@ namespace Dominion
             foreach (NewsItem n in comp.News.Pending)
             {
                 if (n.primary != op.target && n.secondary != op.target) continue;
+                if (!n.truthful) continue; // agents on the ground see through rumours; they stay what they are
                 n.source = NewsSource.IntelReport;
+                n.confidence = NewsConfidence.Confirmed;
                 n.arrivesTick = now;
                 n.expiresTick = -1;
             }

@@ -11,8 +11,8 @@ namespace Dominion
         private Vector2 scroll;
         private float height = 600f;
 
-        // The tracker walks every treaty and faction; once per tick is plenty.
-        private int cachedTick = -1;
+        // The tracker walks every treaty and faction: refreshed twice a second of real time, also while paused.
+        private float nextRefresh = -1f;
         private FederationUtility.Progress progress;
         private readonly List<(Faction faction, UnifyPath status)> rows = new List<(Faction, UnifyPath)>();
 
@@ -87,9 +87,9 @@ namespace Dominion
 
         private void Refresh()
         {
-            int now = Find.TickManager.TicksGame;
-            if (now == cachedTick) return;
-            cachedTick = now;
+            float now = Time.realtimeSinceStartup;
+            if (now < nextRefresh) return;
+            nextRefresh = now + 0.5f;
             progress = FederationUtility.Compute();
             rows.Clear();
             foreach (Faction f in FederationUtility.Majors())

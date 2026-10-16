@@ -94,8 +94,8 @@ namespace Dominion
             if (selected != null && !shown.Contains(selected)) selected = null;
             if (selected == null && shown.Count > 0) selected = shown[0];
 
-            Rect tableRect = rect.TopPart(0.45f);
-            Rect dossierRect = rect.BottomPart(0.55f);
+            Rect tableRect = rect.TopPart(0.38f);
+            Rect dossierRect = rect.BottomPart(0.62f);
             dossierRect.yMin += 6f;
 
             // Columns: faction, government, stability, economy, military, relation to player
@@ -128,7 +128,11 @@ namespace Dominion
                 if (f == selected) Widgets.DrawHighlightSelected(row);
                 else if (i % 2 == 1) Widgets.DrawLightHighlight(row);
                 Widgets.DrawHighlightIfMouseover(row);
-                if (Widgets.ButtonInvisible(row)) selected = f;
+                if (Widgets.ButtonInvisible(row))
+                {
+                    selected = f;
+                    dossierScroll = Vector2.zero;
+                }
 
                 x = row.x;
                 Rect cell = new Rect(x, row.y, row.width * widths[0], RowHeight);

@@ -47,7 +47,7 @@ namespace Dominion
 
             Pawn hos = LeadershipUtility.HeadOfState();
             Rect r = new Rect(inner.x, inner.y, w, inner.height);
-            Widgets.Label(r, "Dominion_Dip_HeadOfState".Translate(hos != null ? hos.LabelShortCap : "Dominion_None".Translate().ToString()));
+            Widgets.Label(r, "Dominion_Dip_HeadOfState".Translate(hos != null ? hos.LabelShortCap : "Dominion_None".Translate().ToString()).ToString().Truncate(r.width));
             TooltipHandler.TipRegion(r, hos != null ? (string)"Dominion_Dip_HeadOfState_Desc".Translate() : LeadershipUtility.NoHeadOfStateReason());
 
             r = new Rect(inner.x + w, inner.y + 2f, w - 10f, inner.height - 4f);
@@ -60,9 +60,9 @@ namespace Dominion
 
             Building_LeadershipDesk desk = LeadershipUtility.BestDesk();
             r = new Rect(inner.x + w * 2f, inner.y, w, inner.height);
-            Widgets.Label(r, "Dominion_Dip_Desk".Translate(desk != null ? ("Dominion_DeskTier_" + desk.Tier).Translate().ToString() : "Dominion_None".Translate().ToString()));
+            Widgets.Label(r, "Dominion_Dip_Desk".Translate(desk != null ? ("Dominion_DeskTier_" + desk.Tier).Translate().ToString() : "Dominion_None".Translate().ToString()).ToString().Truncate(r.width));
             r = new Rect(inner.x + w * 3f, inner.y, w, inner.height);
-            Widgets.Label(r, "Dominion_Dip_Comms".Translate(LeadershipUtility.HasComms() ? "Dominion_Yes".Translate() : "Dominion_No".Translate()));
+            Widgets.Label(r, "Dominion_Dip_Comms".Translate(LeadershipUtility.HasComms() ? "Dominion_Yes".Translate() : "Dominion_No".Translate()).ToString().Truncate(r.width));
         }
 
         private void DrawFactionList(Rect rect, List<Faction> factions)
@@ -125,7 +125,8 @@ namespace Dominion
                 string expires = t.expiresTick >= 0
                     ? "Dominion_Dip_Expires".Translate((t.expiresTick - Find.TickManager.TicksGame).ToStringTicksToPeriod(allowSeconds: false)).ToString()
                     : "Dominion_Dip_NoExpiry".Translate().ToString();
-                Widgets.Label(row.LeftPart(0.75f), "  " + t.Label + "  (" + expires + ")");
+                Rect labelRect = row.LeftPart(0.75f);
+                Widgets.Label(labelRect, ("  " + t.Label + "  (" + expires + ")").Truncate(labelRect.width));
                 TooltipHandler.TipRegion(row, t.def.description);
                 if (Widgets.ButtonText(row.RightPart(0.22f), "Dominion_Dip_Cancel".Translate()))
                 {

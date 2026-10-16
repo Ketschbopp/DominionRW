@@ -48,6 +48,9 @@ namespace Dominion
             buffer.Clear();
         }
 
+        /// <summary>Calls to war pending from another save must not carry over.</summary>
+        public override void OnWorldLoaded() => obligations.Clear();
+
         public override void Hourly()
         {
             if (obligations.Count == 0) return;

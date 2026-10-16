@@ -35,6 +35,12 @@ namespace Dominion
         public virtual void Slot(int slot) { }
 
         public virtual void OnEvent(DominionEvent ev) { }
+
+        /// <summary>
+        /// After every world load or new game. Systems are created once per session and reused for every save,
+        /// so anything unsaved they keep must be reset here.
+        /// </summary>
+        public virtual void OnWorldLoaded() { }
     }
 
     public static class SimSystemRegistry

@@ -20,6 +20,21 @@ namespace Dominion
 
         private readonly List<Faction> others = new List<Faction>();
 
+        // Shared enemies are the same for (a,b) and (b,a): computed once per pair per day.
+        private readonly Dictionary<long, int> sharedEnemiesToday = new Dictionary<long, int>();
+        private int sharedEnemiesDay = -1;
+
+        // Settlements rarely move: distances are recomputed for a day after the settlement count changes.
+        private int settlementCountSeen = -1;
+        private int recomputeDistancesUntil = -1;
+
+        public override void OnWorldLoaded()
+        {
+            sharedEnemiesToday.Clear();
+            sharedEnemiesDay = -1;
+            settlementCountSeen = -1;
+        }
+
         public override void DailyFaction(Faction faction)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
@@ -31,8 +46,19 @@ namespace Dominion
             others.AddRange(cache.Simulated);
             if (Faction.OfPlayerSilentFail != null) others.Add(Faction.OfPlayer);
 
-            bool recomputeDistance = DominionMod.Settings.simulationDetail != SimulationDetail.Low
-                                     || GenDate.DaysPassed % 3 == faction.loadID % 3;
+            int day = GenDate.DaysPassed;
+            if (day != sharedEnemiesDay)
+            {
+                sharedEnemiesToday.Clear();
+                sharedEnemiesDay = day;
+            }
+            int settlementCount = Find.WorldObjects.Settlements.Count;
+            if (settlementCount != settlementCountSeen)
+            {
+                settlementCountSeen = settlementCount;
+                recomputeDistancesUntil = Find.TickManager.TicksGame + GenDate.TicksPerDay;
+            }
+            bool recomputeDistance = Find.TickManager.TicksGame <= recomputeDistancesUntil;
             int wars = 0;
 
             for (int i = 0; i < others.Count; i++)
@@ -44,7 +70,10 @@ namespace Dominion
                 if (recomputeDistance || r.distance < 0f)
                     r.distance = NearestDistance(cache.SettlementsOf(faction), cache.SettlementsOf(other));
                 r.ideoCompatibility = IdeoCompatibility(faction, other);
-                r.sharedEnemies = CountSharedEnemies(faction, other, cache.Simulated);
+                long pair = RelationState.Key(Mathf.Min(faction.loadID, other.loadID), Mathf.Max(faction.loadID, other.loadID));
+                if (!sharedEnemiesToday.TryGetValue(pair, out int shared))
+                    sharedEnemiesToday[pair] = shared = CountSharedEnemies(faction, other, cache.Simulated);
+                r.sharedEnemies = shared;
                 r.grievance *= 0.98f;
                 if (r.grievance < 0.5f) r.grievance = 0f;
                 r.favour *= 0.98f;

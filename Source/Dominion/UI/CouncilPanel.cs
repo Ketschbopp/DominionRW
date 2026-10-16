@@ -11,6 +11,13 @@ namespace Dominion
     {
         private const float Line = 24f;
         private Vector2 scroll;
+
+        // Members with their vote weight, sorted: weights loop over maps and allies, so not every frame.
+        private readonly UICache<List<(Faction, float)>> memberCache = new UICache<List<(Faction, float)>>(() =>
+        {
+            List<Faction> attending = WorldComponent_Dominion.Instance.Council.attending;
+            return CouncilUtility.Members().Select(f => (f, CouncilUtility.VoteWeight(f, attending))).OrderByDescending(x => x.Item2).ToList();
+        }, 1f);
         private float height = 800f;
 
         public void Draw(Rect rect, WorldComponent_Dominion comp)
@@ -69,14 +76,15 @@ namespace Dominion
 
             l.GapLine();
             l.Label("Dominion_Council_Members".Translate());
-            foreach (Faction f in CouncilUtility.Members().OrderByDescending(f => CouncilUtility.VoteWeight(f, c.attending)))
+            foreach ((Faction f, float weight) in memberCache.Value)
             {
+                if (f == null || f.defeated) continue;
                 Rect row = l.GetRect(Line);
                 FactionUIUtility.DrawFactionIconWithTooltip(new Rect(row.x, row.y + 2f, 20f, 20f), f);
                 string present = c.phase == CouncilPhase.Announced ? (c.attending.Contains(f) ? "  ✓" : "  …") : "";
                 int violations = c.ViolationsBy(f);
                 Widgets.Label(new Rect(row.x + 24f, row.y, row.width - 24f, Line),
-                    f.Name + "  " + "Dominion_Council_Weight".Translate(CouncilUtility.VoteWeight(f, c.attending).ToString("F1")) + present
+                    f.Name + "  " + "Dominion_Council_Weight".Translate(weight.ToString("F1")) + present
                     + (violations > 0 ? "  " + "Dominion_Council_ViolationCount".Translate(violations).Colorize(ColorLibrary.RedReadable) : ""));
             }
 

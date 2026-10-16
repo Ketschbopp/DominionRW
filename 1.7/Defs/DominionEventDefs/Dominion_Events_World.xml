@@ -194,6 +194,7 @@
       <mtbDays>400</mtbDays>
       <stability>0~30</stability>
       <partner>MostStable</partner>
+      <partnerRequired>true</partnerRequired>
       <populationShare>-0.02</populationShare>
       <populationToPartner>true</populationToPartner>
       <partnerStabilityOffset>-2</partnerStabilityOffset>

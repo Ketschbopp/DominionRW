@@ -24,40 +24,59 @@ namespace Dominion
 
         public override void DailyGlobal()
         {
-            if (!DominionMod.Settings.councilEnabled) return;
             CouncilState c = State;
             int now = Find.TickManager.TicksGame;
             int day = GenDate.TicksPerDay;
+
+            // Decrees: compliance and expiry. Decrees still run out when the council is switched off,
+            // so their effects do not become permanent.
+            for (int i = c.decrees.Count - 1; i >= 0; i--)
+            {
+                if (i >= c.decrees.Count) continue;
+                Decree d = c.decrees[i];
+                try
+                {
+                    if (d.expiresTick >= 0 && now >= d.expiresTick) Expire(d);
+                    else if (DominionMod.Settings.councilEnabled) d.def.Worker.DailyCheck(d);
+                }
+                catch (System.Exception e)
+                {
+                    DLog.WarningOnce($"Decree {d.def?.defName} failed its daily check: {e}", d.id ^ 0x5D3);
+                }
+            }
+
+            if (!DominionMod.Settings.councilEnabled) return;
 
             if (c.nextSessionTick < 0)
                 c.nextSessionTick = now + Mathf.Max(AnnounceLeadDays + 5, DominionMod.Settings.councilIntervalDays / 2) * day;
 
             if (c.phase == CouncilPhase.Idle && now >= c.nextSessionTick - AnnounceLeadDays * day)
                 Announce();
-
-            // Decrees: compliance and expiry.
-            foreach (Decree d in c.decrees.ToList())
-            {
-                if (d.expiresTick >= 0 && now >= d.expiresTick)
-                {
-                    Expire(d);
-                    continue;
-                }
-                d.def.Worker.DailyCheck(d);
-            }
         }
 
         public override void Hourly()
         {
             CouncilState c = State;
-            if (c.phase == CouncilPhase.Announced && Find.TickManager.TicksGame >= c.nextSessionTick)
+            if (c.phase != CouncilPhase.Announced) return;
+            if (!DominionMod.Settings.councilEnabled)
+            {
+                Close(null); // switched off while a session was announced
+                return;
+            }
+            if (Find.TickManager.TicksGame >= c.nextSessionTick)
                 OpenSession();
         }
 
         public override void OnEvent(DominionEvent ev)
         {
-            foreach (Decree d in State.decrees.ToList())
-                d.def.Worker.OnEvent(d, ev);
+            // Runs for every event in the game: no allocation, and a decree may expire or be removed meanwhile.
+            List<Decree> decrees = State.decrees;
+            for (int i = decrees.Count - 1; i >= 0; i--)
+            {
+                if (i >= decrees.Count) continue;
+                try { decrees[i].def.Worker.OnEvent(decrees[i], ev); }
+                catch (System.Exception e) { DLog.WarningOnce($"Decree {decrees[i].def?.defName} failed on {ev.def.defName}: {e}", decrees[i].id ^ 0x5D4); }
+            }
         }
 
         // ---------------------------------------------------------------- announcement
@@ -68,6 +87,8 @@ namespace Dominion
             List<Faction> members = CouncilUtility.Members().ToList();
             if (members.Count < 2) return;
             if (sessionInTicks > 0) c.nextSessionTick = Find.TickManager.TicksGame + sessionInTicks;
+            // If the announcement was delayed (too few members, no host), delegates still get the full lead time.
+            else c.nextSessionTick = Mathf.Max(c.nextSessionTick, Find.TickManager.TicksGame + AnnounceLeadDays * GenDate.TicksPerDay);
 
             c.host = ChooseHost(members, c.sessionNumber);
             if (c.host == null) return;
@@ -193,6 +214,7 @@ namespace Dominion
 
         private static void OpenSession()
         {
+            weightCache.Invalidate();
             CouncilState c = State;
             if (c.host == null || c.host.defeated)
             {
@@ -217,8 +239,14 @@ namespace Dominion
         {
             CouncilState c = State;
             var report = new StringBuilder();
+            weightCache.Invalidate();
             foreach (Motion m in c.agenda)
             {
+                if (m.def.Worker.InvalidReason(m.targets) != null)
+                {
+                    report.AppendLine("✗ " + m.Summary + "  " + "Dominion_Council_MotionVoid".Translate().ToString());
+                    continue;
+                }
                 Tally(m, playerVotes, out float yes, out float no);
                 bool passed = !m.vetoed && yes > no && yes > 0f && m.def.Worker.InvalidReason(m.targets) == null;
                 string vetoNote = m.vetoed ? " " + "Dominion_Council_Vetoed".Translate().ToString() : "";
@@ -230,6 +258,9 @@ namespace Dominion
             Close(report.ToString());
         }
 
+        // The session window tallies every frame; weights barely move during a session.
+        private static readonly UICache<Faction, float> weightCache = new UICache<Faction, float>(f => CouncilUtility.VoteWeight(f, State.attending), 2f);
+
         public static void Tally(Motion m, Dictionary<Motion, int> playerVotes, out float yes, out float no)
         {
             CouncilState c = State;
@@ -237,7 +268,7 @@ namespace Dominion
             foreach (Faction f in c.attending)
             {
                 int vote = f.IsPlayer ? (playerVotes.TryGetValue(m, out int v) ? v : 0) : CouncilUtility.AIVote(f, m);
-                float w = CouncilUtility.VoteWeight(f, c.attending);
+                float w = weightCache.Get(f);
                 if (vote > 0) yes += w;
                 else if (vote < 0) no += w;
             }
@@ -253,9 +284,10 @@ namespace Dominion
                 def = m.def,
                 targets = new List<Faction>(m.targets),
                 passedTick = now,
-                expiresTick = m.def.permanent ? -1 : now + Mathf.Max(30, m.def.durationDays) * GenDate.TicksPerDay,
+                expiresTick = m.def.permanent ? -1 : now + m.def.durationDays * GenDate.TicksPerDay,
             };
-            c.decrees.Add(d);
+            // durationDays 0 means the motion acts once (e.g. censure) and leaves no decree behind.
+            if (m.def.permanent || m.def.durationDays > 0) c.decrees.Add(d);
             EventBus.Raise(DominionEventDefOf.Dominion_DecreePassed, m.sponsor, m.targets.FirstOrDefault(), detail: m.Summary);
             m.def.Worker.OnPassed(d);
         }

@@ -111,6 +111,8 @@ namespace Dominion
         /// <summary>A player caravan stops a delegation. It is an act of war: the escort fights on a real map.</summary>
         public static void Intercept(Delegation d, Caravan caravan)
         {
+            // The world map keeps running while the menu is open: the delegation may have moved on or arrived.
+            if (d == null || d.Destroyed || caravan == null || caravan.Destroyed || caravan.Tile != d.Tile) return;
             Faction f = d.Faction;
             Faction player = Faction.OfPlayer;
             if (!f.HostileTo(player))
@@ -130,7 +132,7 @@ namespace Dominion
 
             // The envoy, or the leader in person if travelling to a summit.
             Pawn leader = f.leader;
-            if (d.purpose == DelegationPurpose.SummitToPlayer && leader != null && !leader.Spawned && Find.WorldPawns.Contains(leader))
+            if (d.purpose == DelegationPurpose.SummitToPlayer && VisitorUtility.LeaderIsFree(leader))
             {
                 Find.WorldPawns.RemovePawn(leader);
                 enemies.Add(leader);
@@ -163,11 +165,22 @@ namespace Dominion
             return map ?? Find.AnyPlayerHomeMap;
         }
 
+        /// <summary>Whether visitors can walk in on this map at all. Check before taking pawns out of the world.</summary>
+        public static bool CanHostVisitors(Map map) => map != null && TryFindEntry(map, out _);
+
+        private static bool TryFindEntry(Map map, out IntVec3 edge) =>
+            CellFinder.TryFindRandomEdgeCellWith(c => c.Standable(map) && map.reachability.CanReachColony(c), map,
+                CellFinder.EdgeRoadChance_Friendly, out edge);
+
+        /// <summary>A faction leader who is free in the world: not in a caravan, not anyone's prisoner, not on a map.</summary>
+        public static bool LeaderIsFree(Pawn leader) =>
+            leader != null && !leader.Dead && !leader.Spawned && !leader.Discarded && !leader.IsPrisoner && leader.GetCaravan() == null
+            && Find.WorldPawns.Contains(leader) && Find.WorldPawns.GetSituation(leader) == WorldPawnSituation.Free;
+
         public static bool SpawnVisitors(Faction f, Map map, List<Pawn> pawns, int durationTicks)
         {
             if (map == null || pawns.Count == 0) return false;
-            if (!CellFinder.TryFindRandomEdgeCellWith(c => c.Standable(map) && map.reachability.CanReachColony(c), map,
-                    CellFinder.EdgeRoadChance_Friendly, out IntVec3 edge))
+            if (!TryFindEntry(map, out IntVec3 edge))
                 return false;
             foreach (Pawn p in pawns)
                 GenSpawn.Spawn(p, CellFinder.RandomClosewalkCellNear(edge, map, 5, null), map);

@@ -21,7 +21,11 @@ namespace Dominion
             foreach (Tab t in Enum.GetValues(typeof(Tab)))
             {
                 Tab captured = t;
-                tabs.Add(new TabRecord(("Dominion_SettingsTab_" + t).Translate(), () => current = captured, current == t));
+                tabs.Add(new TabRecord(("Dominion_SettingsTab_" + t).Translate(), () =>
+                {
+                    current = captured;
+                    scroll = Vector2.zero;
+                }, current == t));
             }
 
             Rect body = inRect;

@@ -29,6 +29,7 @@ Early development (M0: framework).</description>
     <li>
       <packageId>jaeger972.factionterritories</packageId>
       <displayName>Faction Territories and Vassalage</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/3626725895</steamWorkshopUrl>
     </li>
   </modDependencies>
   <loadAfter>

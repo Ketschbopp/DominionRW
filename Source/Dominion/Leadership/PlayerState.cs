@@ -39,6 +39,14 @@ namespace Dominion
 
         public void ExposeData()
         {
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                // Never save references to things that are gone: they warn on every load.
+                if (chosenHeadOfState != null && chosenHeadOfState.Discarded)
+                    chosenHeadOfState = null;
+                if (capital != null && capital.Destroyed) capital = null;
+                chosenDiplomats?.RemoveAll(p => p == null || p.Discarded);
+            }
             Scribe_Values.Look(ref influence, "influence", 20f);
             Scribe_References.Look(ref chosenHeadOfState, "chosenHeadOfState");
             Scribe_References.Look(ref capital, "capital");

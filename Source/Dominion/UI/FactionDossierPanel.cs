@@ -15,6 +15,8 @@ namespace Dominion
 
         private static readonly List<RelationRow> rows = new List<RelationRow>();
         private static readonly List<Faction> others = new List<Faction>();
+        private static Faction rowsFaction;
+        private static float rowsNextTime;
 
         private struct RelationRow
         {
@@ -44,8 +46,20 @@ namespace Dominion
             else Locked(relations, "Dominion_Dossier_Opinions".Translate(), IntelUtility.BlackOpsIntel);
         }
 
-        private static void DrawProfile(Rect rect, Faction f, FactionState s)
+        private static Vector2 profileScroll;
+        private static float profileHeight = 400f;
+        private static Faction profileFaction;
+
+        // The profile has more rows than fit at small window sizes: it scrolls.
+        private static void DrawProfile(Rect outer, Faction f, FactionState s)
         {
+            if (profileFaction != f)
+            {
+                profileFaction = f;
+                profileScroll = Vector2.zero;
+            }
+            Rect rect = new Rect(0f, 0f, outer.width - 16f, Mathf.Max(profileHeight, outer.height));
+            Widgets.BeginScrollView(outer, ref profileScroll, rect);
             var l = new Listing_Standard { maxOneColumn = true };
             l.Begin(rect);
             Text.Font = GameFont.Medium;
@@ -75,7 +89,9 @@ namespace Dominion
             Row(l, "Dominion_Col_Military".Translate(), f, IntelUtility.RestrictedIntel, () => s.militaryStrength.ToString("F0"));
             Row(l, "Dominion_Dossier_Territory".Translate(), s.territoryTiles + " / " + s.settlementCount);
             Row(l, "Dominion_Dossier_VassalOutposts".Translate(), s.vassalOutposts.ToString());
+            profileHeight = l.CurHeight + 4f;
             l.End();
+            Widgets.EndScrollView();
         }
 
         /// <summary>A row whose value is only shown with at least <paramref name="needed"/> intel on the faction.</summary>
@@ -126,17 +142,24 @@ namespace Dominion
             Rect title = new Rect(rect.x, rect.y, rect.width, Line);
             Widgets.Label(title, "Dominion_Dossier_Opinions".Translate());
 
-            rows.Clear();
-            others.Clear();
-            others.AddRange(comp.Cache.Simulated);
-            if (Faction.OfPlayerSilentFail != null) others.Add(Faction.OfPlayer);
-            foreach (Faction other in others)
+            // Rebuilt twice a second rather than every frame.
+            float realNow = Time.realtimeSinceStartup;
+            if (rowsFaction != f || realNow >= rowsNextTime)
             {
-                if (other == f) continue;
-                RelationState r = comp.TryGetRelation(f, other);
-                if (r != null) rows.Add(new RelationRow { other = other, rel = r });
+                rowsFaction = f;
+                rowsNextTime = realNow + 0.5f;
+                rows.Clear();
+                others.Clear();
+                others.AddRange(comp.Cache.Simulated);
+                if (Faction.OfPlayerSilentFail != null) others.Add(Faction.OfPlayer);
+                foreach (Faction other in others)
+                {
+                    if (other == f) continue;
+                    RelationState r = comp.TryGetRelation(f, other);
+                    if (r != null) rows.Add(new RelationRow { other = other, rel = r });
+                }
+                rows.SortByDescending(x => x.rel.opinion);
             }
-            rows.SortByDescending(x => x.rel.opinion);
 
             Rect outRect = new Rect(rect.x, rect.y + Line, rect.width, rect.height - Line);
             Rect view = new Rect(0f, 0f, outRect.width - 16f, rows.Count * Line);

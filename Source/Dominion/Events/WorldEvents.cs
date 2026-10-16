@@ -81,6 +81,21 @@ namespace Dominion
 
         private static List<DominionEventDef> worldDefs;
 
+        // Spreading is queued and fired on the next hour, so the news of the outbreak comes before the news of its spread.
+        private static readonly List<(DominionEventDef def, Faction faction)> pendingSpread = new List<(DominionEventDef, Faction)>();
+
+        public override void OnWorldLoaded() => pendingSpread.Clear();
+
+        public override void Hourly()
+        {
+            if (pendingSpread.Count == 0) return;
+            var todo = new List<(DominionEventDef def, Faction faction)>(pendingSpread);
+            pendingSpread.Clear();
+            foreach ((DominionEventDef def, Faction f) in todo)
+                if (f != null && !f.defeated && !WorldComponent_Dominion.Instance.GetState(f).InCrisis)
+                    Fire(def, f, null, SpreadSource);
+        }
+
         private static List<DominionEventDef> WorldDefs
         {
             get
@@ -276,7 +291,7 @@ namespace Dominion
                 RelationState r = comp.TryGetRelation(from, g);
                 if (r == null || r.distance < 0f || r.distance > def.world.spreadDistance) continue;
                 if (comp.GetState(g).InCrisis || !Rand.Chance(def.world.spreadChance)) continue;
-                Fire(def, g, null, SpreadSource);
+                pendingSpread.Add((def, g));
             }
         }
     }

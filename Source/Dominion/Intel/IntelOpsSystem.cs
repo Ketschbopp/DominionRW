@@ -77,6 +77,12 @@ namespace Dominion
 
         public override void Hourly()
         {
+            if (Svc.returning.Count > 0)
+            {
+                var back = new List<Pawn>(Svc.returning);
+                Svc.returning.Clear();
+                ReturnAgents(back);
+            }
             int now = Find.TickManager.TicksGame;
             foreach (Operation op in Svc.operations.ToList())
                 if (now >= op.endTick) Resolve(op);
@@ -125,8 +131,14 @@ namespace Dominion
         /// <summary>Agents come home, walking in at the capital.</summary>
         private static void ReturnAgents(List<Pawn> agents)
         {
+            if (agents.Count == 0) return;
             Map map = VisitorUtility.PlayerCapitalMap();
-            if (map == null || agents.Count == 0) return;
+            if (map == null)
+            {
+                foreach (Pawn p in agents)
+                    if (!p.Dead && !Svc.returning.Contains(p)) Svc.returning.Add(p);
+                return;
+            }
             if (!CellFinder.TryFindRandomEdgeCellWith(c => c.Standable(map) && map.reachability.CanReachColony(c), map,
                     CellFinder.EdgeRoadChance_Friendly, out IntVec3 edge))
                 edge = DropCellFinder.TradeDropSpot(map);

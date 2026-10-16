@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RimWorld;
+using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
@@ -34,13 +35,22 @@ namespace Dominion
             return list;
         }
 
-        public static bool AnyHostages(Faction f) => HeldByThem(f).Count > 0 || HeldByUs(f).Count > 0;
+        // Asked by the Diplomacy tab for every faction, every frame.
+        private static readonly UICache<Faction, bool> anyCache = new UICache<Faction, bool>(f => HeldByThem(f).Count > 0 || HeldByUs(f).Count > 0);
+        private static readonly UICache<Faction, float> acceptCache = new UICache<Faction, float>(f => ComputeAcceptance(f, 0f));
+
+        public static bool AnyHostages(Faction f) => f != null && anyCache.Get(f);
+
+        /// <summary>Acceptance without a personal bonus, cached for UI.</summary>
+        public static float CachedAcceptance(Faction f) => acceptCache.Get(f);
 
         /// <summary>
         /// Chance they agree to exchange everyone. Freeing their people without asking anything back is always accepted.
         /// Holding their leader is strong leverage.
         /// </summary>
-        public static float ExchangeAcceptance(Faction f, float bonus = 0f)
+        public static float ExchangeAcceptance(Faction f, float bonus = 0f) => ComputeAcceptance(f, bonus);
+
+        private static float ComputeAcceptance(Faction f, float bonus)
         {
             List<Pawn> theirs = HeldByThem(f), ours = HeldByUs(f);
             if (theirs.Count == 0 && ours.Count == 0) return 0f;
@@ -51,8 +61,10 @@ namespace Dominion
         }
 
         /// <summary>Frees everyone on both sides. Returns (freed by them, freed by us).</summary>
-        public static void Exchange(Faction f, out int returned, out int released)
+        public static void Exchange(Faction f, out int returned, out int released, Caravan caravan = null)
         {
+            anyCache.Invalidate();
+            acceptCache.Invalidate();
             List<Pawn> theirs = HeldByThem(f), ours = HeldByUs(f);
             released = 0;
             foreach (Pawn p in ours)
@@ -63,14 +75,20 @@ namespace Dominion
 
             returned = 0;
             var walkers = new List<Pawn>();
-            foreach (Pawn p in theirs)
-            {
-                f.kidnapped.RemoveKidnappedPawn(p);
-                if (Find.WorldPawns.Contains(p)) Find.WorldPawns.RemovePawn(p);
-                walkers.Add(p);
-                returned++;
-            }
             Map map = VisitorUtility.PlayerCapitalMap();
+            bool toCaravan = map == null && caravan != null && !caravan.Destroyed;
+            // With nowhere to put them they stay where they are, rather than vanishing.
+            if (map != null || toCaravan)
+            {
+                foreach (Pawn p in theirs)
+                {
+                    f.kidnapped.RemoveKidnappedPawn(p);
+                    if (Find.WorldPawns.Contains(p)) Find.WorldPawns.RemovePawn(p);
+                    if (toCaravan) caravan.AddPawn(p, true);
+                    else walkers.Add(p);
+                    returned++;
+                }
+            }
             if (map != null && walkers.Count > 0)
             {
                 if (CellFinder.TryFindRandomEdgeCellWith(c => c.Standable(map) && map.reachability.CanReachColony(c), map,
@@ -96,7 +114,11 @@ namespace Dominion
     {
         public override bool Visible(Faction f) => HostageUtility.AnyHostages(f);
 
-        public override float? AcceptanceChance(Faction f) => HostageUtility.ExchangeAcceptance(f, LeadershipUtility.AcceptanceBonus());
+        public override float? AcceptanceChance(Faction f)
+        {
+            float c = HostageUtility.CachedAcceptance(f);
+            return c <= 0f || c >= 1f ? c : Mathf.Clamp(c + LeadershipUtility.AcceptanceBonus(), 0.05f, 0.95f);
+        }
 
         public override void Execute(Faction f)
         {

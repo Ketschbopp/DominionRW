@@ -45,6 +45,12 @@ namespace Dominion
             }
             else
                 s.expiresTick = Find.TickManager.TicksGame + AbroadWindowDays * GenDate.TicksPerDay;
+            // Arriving at once can also mean it was called off at once (no way in); the cancellation already said so.
+            if (Registry.Get(s.id) == null)
+            {
+                reason = null;
+                return false;
+            }
             return true;
         }
 
@@ -64,9 +70,14 @@ namespace Dominion
             Summit s = Registry.Get(summitId);
             if (s == null) return;
             Map map = VisitorUtility.PlayerCapitalMap();
+            if (f.defeated || !VisitorUtility.CanHostVisitors(map))
+            {
+                Cancel(s.id, "Dominion_Summit_CancelledNoRoute".Translate());
+                return;
+            }
             Pawn principal = null;
             Pawn leader = f.leader;
-            if (leader != null && !leader.Dead && !leader.Spawned && Find.WorldPawns.Contains(leader))
+            if (VisitorUtility.LeaderIsFree(leader))
             {
                 Find.WorldPawns.RemovePawn(leader);
                 principal = leader;
@@ -74,6 +85,13 @@ namespace Dominion
             List<Pawn> party = VisitorUtility.MakeEnvoyParty(f, principal, 3);
             if (party.Count == 0 || !VisitorUtility.SpawnVisitors(f, map, party, VisitDurationTicks + GenDate.TicksPerHour * 4))
             {
+                // Put everyone back: the leader returns to the world, generated guards are discarded.
+                foreach (Pawn p in party)
+                {
+                    if (p.Spawned) continue;
+                    if (p == principal) Find.WorldPawns.PassToWorld(p, PawnDiscardDecideMode.KeepForever);
+                    else if (!p.Discarded) p.Discard();
+                }
                 Cancel(s.id, "Dominion_Summit_CancelledNoRoute".Translate());
                 return;
             }
@@ -92,6 +110,11 @@ namespace Dominion
             for (int i = all.Count - 1; i >= 0; i--)
             {
                 Summit s = all[i];
+                if (s.faction == null || s.faction.defeated)
+                {
+                    Cancel(s.id, "Dominion_Summit_CancelledFactionGone".Translate());
+                    continue;
+                }
                 if (s.status == SummitStatus.InSession) continue;
                 if (s.status == SummitStatus.LeaderPresent)
                 {
@@ -128,7 +151,11 @@ namespace Dominion
         {
             Summit s = SummitAbroadAt(settlement);
             Pawn hos = LeadershipUtility.HeadOfState();
-            if (s == null) return;
+            if (s == null)
+            {
+                Messages.Message("Dominion_Mission_NoLongerPossible".Translate(settlement.Faction?.Name ?? "?"), caravan, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
             if (envoy != hos || !caravan.PawnsListForReading.Contains(hos))
             {
                 Messages.Message("Dominion_Summit_NeedsHeadOfState".Translate(), caravan, MessageTypeDefOf.RejectInput, historical: false);
@@ -155,7 +182,7 @@ namespace Dominion
             Summit s = Registry.Get(id);
             if (s == null) return;
             Registry.All.Remove(s);
-            Messages.Message("Dominion_Summit_Cancelled".Translate(s.faction.Name, reason), MessageTypeDefOf.NegativeEvent, historical: true);
+            Messages.Message("Dominion_Summit_Cancelled".Translate(s.faction?.Name ?? "?", reason), MessageTypeDefOf.NegativeEvent, historical: true);
         }
     }
 
@@ -183,7 +210,7 @@ namespace Dominion
                         && (t.requiredResearch == null || t.requiredResearch.IsFinished))
                         options.Add(AgendaOption(f, SummitAgenda.Treaty, t));
             }
-            if (HostageUtility.AnyHostages(f))
+            if (!hostile && HostageUtility.AnyHostages(f))
                 options.Add(AgendaOption(f, SummitAgenda.Hostages, null));
             Find.WindowStack.Add(new FloatMenu(options));
         }
@@ -191,6 +218,8 @@ namespace Dominion
         private FloatMenuOption AgendaOption(Faction f, SummitAgenda agenda, TreatyDef treaty)
         {
             string label = agenda == SummitAgenda.Treaty ? treaty.LabelCap.ToString() : ("Dominion_SummitAgenda_" + agenda).Translate().ToString();
+            if (agenda == SummitAgenda.Treaty)
+                label += " " + "Dominion_Dip_Cost".Translate((def.influenceCost + treaty.influenceCost * 0.5f).ToString("F0"));
             return new FloatMenuOption(label + " (" + "Dominion_Summit_AttendChance".Translate(SummitSystem.AttendChance(f, agenda).ToStringPercent()) + ")", () =>
             {
                 var venues = new List<FloatMenuOption>();
@@ -203,11 +232,18 @@ namespace Dominion
 
         private void Arrange(Faction f, SummitAgenda agenda, TreatyDef treaty, SummitVenue venue)
         {
-            Commit(f);
+            // A treaty signed in person costs half its usual influence on top of the summit itself.
+            float extra = agenda == SummitAgenda.Treaty && treaty != null ? treaty.influenceCost * 0.5f : 0f;
+            if (WorldComponent_Dominion.Instance.Player.influence < def.influenceCost + extra)
+            {
+                Report("Dominion_Action_NeedsInfluence".Translate((def.influenceCost + extra).ToString("F0")), false);
+                return;
+            }
+            Commit(f, extra);
             if (SummitSystem.Arrange(f, agenda, treaty, venue, out string reason))
                 Find.LetterStack.ReceiveLetter("Dominion_Summit_ArrangedLabel".Translate(), ("Dominion_Summit_Arranged_" + venue).Translate(f.Name,
                     SummitSystem.AbroadWindowDays), LetterDefOf.NeutralEvent, null, f);
-            else
+            else if (!reason.NullOrEmpty())
                 Report(reason, false);
         }
     }

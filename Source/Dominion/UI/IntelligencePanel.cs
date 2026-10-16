@@ -128,7 +128,7 @@ namespace Dominion
 
             Widgets.Label(new Rect(inRect.x, y, inRect.width, Line), "Dominion_Ops_ChooseAgents".Translate());
             y += Line;
-            List<Pawn> candidates = Candidates();
+            List<Pawn> candidates = candidateCache.Value;
             Rect outRect = new Rect(inRect.x, y, inRect.width, inRect.yMax - y - 90f);
             Rect view = new Rect(0f, 0f, outRect.width - 16f, candidates.Count * Line);
             Widgets.BeginScrollView(outRect, ref scroll, view);
@@ -157,7 +157,9 @@ namespace Dominion
             if (reason != null)
             {
                 GUI.color = new Color(1f, 0.6f, 0.4f);
-                Widgets.Label(new Rect(inRect.x, y2 + Line, inRect.width, Line), reason);
+                Rect reasonRect = new Rect(inRect.x, y2 + Line, inRect.width, Line);
+                Widgets.Label(reasonRect, reason.Truncate(reasonRect.width));
+                TooltipHandler.TipRegion(reasonRect, reason);
                 GUI.color = Color.white;
             }
             if (Widgets.ButtonText(new Rect(inRect.center.x - 100f, inRect.yMax - 36f, 200f, 34f), "Dominion_Ops_Launch".Translate(), active: reason == null)
@@ -167,6 +169,9 @@ namespace Dominion
                 Close();
             }
         }
+
+        // The candidate scan walks every colonist on every home map; the dialog draws every frame.
+        private static readonly UICache<List<Pawn>> candidateCache = new UICache<List<Pawn>>(Candidates, 1f);
 
         private static List<Pawn> Candidates()
         {

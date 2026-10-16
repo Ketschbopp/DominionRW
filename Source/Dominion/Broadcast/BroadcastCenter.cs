@@ -129,10 +129,8 @@ namespace Dominion
             if (t.Faction != pawn.Faction || t.IsForbidden(pawn) || t.IsBurning()) return false;
             if (!forced)
             {
-                BroadcastState b = WorldComponent_Dominion.Instance.Broadcast;
-                string key = BroadcastState.Key(c.program, c.program.needsTarget ? c.target : null);
-                foreach (KeyValuePair<string, float> kv in b.Airtime)
-                    if (kv.Key == key && kv.Value >= EnoughAirtime) return false;
+                if (WorldComponent_Dominion.Instance.Broadcast.AirtimeFor(c.program, c.program.needsTarget ? c.target : null) >= EnoughAirtime)
+                    return false;
             }
             return pawn.CanReserve(t, 1, -1, null, forced);
         }

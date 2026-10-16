@@ -22,6 +22,12 @@ namespace Dominion
         public Dictionary<int, UnifyPath> lastStatus = new Dictionary<int, UnifyPath>();
         public HashSet<int> lastHostile = new HashSet<int>();
 
+        /// <summary>Factions that lost a settlement to the player in battle (vanilla settlement defeat).</summary>
+        public HashSet<int> beatenByPlayer = new HashSet<int>();
+
+        /// <summary>The most settlements each major faction has had, to judge subjugation fairly.</summary>
+        public Dictionary<int, int> peakSettlements = new Dictionary<int, int>();
+
         /// <summary>The player was told the Federation can be proclaimed.</summary>
         public bool offered;
 
@@ -38,6 +44,8 @@ namespace Dominion
             Scribe_Collections.Look(ref fallenNames, "fallenNames", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref lastStatus, "lastStatus", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref lastHostile, "lastHostile", LookMode.Value);
+            Scribe_Collections.Look(ref beatenByPlayer, "beatenByPlayer", LookMode.Value);
+            Scribe_Collections.Look(ref peakSettlements, "peakSettlements", LookMode.Value, LookMode.Value);
             Scribe_Values.Look(ref offered, "offered");
             Scribe_Values.Look(ref proclaimed, "proclaimed");
             Scribe_Values.Look(ref proclaimedTick, "proclaimedTick", -1);
@@ -47,6 +55,8 @@ namespace Dominion
                 fallenNames ??= new Dictionary<int, string>();
                 lastStatus ??= new Dictionary<int, UnifyPath>();
                 lastHostile ??= new HashSet<int>();
+                beatenByPlayer ??= new HashSet<int>();
+                peakSettlements ??= new Dictionary<int, int>();
             }
         }
     }

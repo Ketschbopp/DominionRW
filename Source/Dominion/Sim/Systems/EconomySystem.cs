@@ -18,6 +18,8 @@ namespace Dominion
 
         private float worldWealthPerHead = -1f;
 
+        public override void OnWorldLoaded() => worldWealthPerHead = -1f;
+
         public override void DailyGlobal()
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;

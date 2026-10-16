@@ -171,8 +171,10 @@ namespace Dominion
             {
                 if (f == null) continue;
                 FactionUIUtility.DrawFactionIconWithTooltip(new Rect(x, y, 22f, 22f), f);
-                float w = Text.CalcSize(f.Name).x;
-                Widgets.Label(new Rect(x + 26f, y, w + 4f, 22f), f.Name);
+                float room = rect.xMax - (x + 26f);
+                if (room < 40f) break;
+                float w = Mathf.Min(Text.CalcSize(f.Name).x, room - 4f);
+                Widgets.Label(new Rect(x + 26f, y, w + 4f, 22f), f.Name.Truncate(w + 4f));
                 x += 26f + w + 16f;
             }
             y += 28f;

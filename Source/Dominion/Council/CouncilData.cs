@@ -102,6 +102,9 @@ namespace Dominion
         /// <summary>Factions that complied after the decree passed (for decrees that need an action).</summary>
         public List<Faction> complied = new List<Faction>();
 
+        /// <summary>Members the decree itself made act (e.g. embargoes imposed for sanctions), undone when it expires.</summary>
+        public List<Faction> imposed = new List<Faction>();
+
         public string Summary => def.Summarize(targets);
 
         public bool InGrace => Find.TickManager.TicksGame < passedTick + def.graceDays * GenDate.TicksPerDay;
@@ -117,8 +120,11 @@ namespace Dominion
             Scribe_Values.Look(ref expiresTick, "expiresTick", -1);
             Scribe_Collections.Look(ref violators, "violators", LookMode.Reference);
             Scribe_Collections.Look(ref complied, "complied", LookMode.Reference);
+            Scribe_Collections.Look(ref imposed, "imposed", LookMode.Reference);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
+                imposed ??= new List<Faction>();
+                imposed.RemoveAll(t => t == null);
                 targets ??= new List<Faction>();
                 violators ??= new List<Faction>();
                 complied ??= new List<Faction>();
@@ -178,9 +184,10 @@ namespace Dominion
                 attending ??= new List<Faction>();
                 decrees ??= new List<Decree>();
                 pastViolations ??= new Dictionary<int, int>();
-                agenda.RemoveAll(m => m?.def == null);
+                // A motion or decree whose target faction is gone (mod removed, faction deleted) cannot be voted on or enforced.
+                agenda.RemoveAll(m => m?.def == null || m.targets.Count != m.def.targetCount);
                 attending.RemoveAll(f => f == null);
-                decrees.RemoveAll(d => d?.def == null);
+                decrees.RemoveAll(d => d?.def == null || d.targets.Count != d.def.targetCount);
             }
         }
     }

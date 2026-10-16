@@ -1,5 +1,6 @@
 using HarmonyLib;
 using RimWorld;
+using RimWorld.Planet;
 using Verse;
 
 namespace Dominion
@@ -18,6 +19,8 @@ namespace Dominion
         public static void Postfix(Faction __instance, Faction other, FactionRelationKind previousKind)
         {
             if (Current.ProgramState != ProgramState.Playing || other == null) return;
+            // Quest factions come and go; keeping them in the log leaves dangling references in the save.
+            if (__instance.temporary || other.temporary || __instance.Hidden || other.Hidden) return;
 
             FactionRelationKind now = __instance.RelationKindWith(other);
             if (now == previousKind) return;
@@ -59,6 +62,19 @@ namespace Dominion
         {
             if (Current.ProgramState != ProgramState.Playing) return;
             EventBus.Raise(DominionEventDefOf.Dominion_LeaderDied, __instance);
+        }
+    }
+
+    /// <summary>The player defeated a faction settlement on its map: remembered for the unification ending (conquest).</summary>
+    [HarmonyPatch(typeof(SettlementDefeatUtility), nameof(SettlementDefeatUtility.CheckDefeated))]
+    public static class Patch_SettlementDefeated
+    {
+        public static void Prefix(Settlement factionBase, out Faction __state) => __state = factionBase?.Faction;
+
+        public static void Postfix(Settlement factionBase, Faction __state)
+        {
+            if (__state == null || __state.IsPlayer || factionBase == null || !factionBase.Destroyed) return;
+            WorldComponent_Dominion.Instance?.Unification.beatenByPlayer.Add(__state.loadID);
         }
     }
 }
