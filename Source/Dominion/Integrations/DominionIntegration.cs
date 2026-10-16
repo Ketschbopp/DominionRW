@@ -26,6 +26,9 @@ namespace Dominion
 
         public abstract string Label { get; }
 
+        /// <summary>Other package ids of the same mod (forks, renamed releases). Any of them activates the integration.</summary>
+        public virtual string[] AlternatePackageIds => null;
+
         /// <summary>Required mods are listed in About.xml modDependencies and cannot be switched off.</summary>
         public virtual bool Required => false;
 

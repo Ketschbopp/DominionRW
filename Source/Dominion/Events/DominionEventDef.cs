@@ -154,6 +154,7 @@ namespace Dominion
         public static DominionEventDef Dominion_TechnologyStolen;
         public static DominionEventDef Dominion_PuppetInstalled;
         public static DominionEventDef Dominion_HostageRescued;
+        public static DominionEventDef Dominion_VisitIncident;
 
         static DominionEventDefOf()
         {

@@ -288,4 +288,17 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_VisitIncident</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] protests [DETAIL] by visitors from [FACTION_B]</li>
+        <li>headline-&gt;Guests of [FACTION_A] accused of [DETAIL]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has lodged a complaint about [DETAIL] by visitors from [FACTION_B]. [vi_detail] [closing]</li>
+        <li>vi_detail-&gt;Its hospitality, it says, has been abused.</li>
+        <li>vi_detail-&gt;[LEADER_A] is said to be furious.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>

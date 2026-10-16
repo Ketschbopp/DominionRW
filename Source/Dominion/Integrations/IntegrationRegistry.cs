@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
@@ -60,7 +61,7 @@ namespace Dominion
 
         private static void Activate(DominionIntegration integration)
         {
-            if (!IsModActive(integration.PackageId))
+            if (!IsModActive(integration.PackageId) && !(integration.AlternatePackageIds?.Any(IsModActive) ?? false))
             {
                 integration.Status = IntegrationStatus.NotInstalled;
                 if (integration.Required)

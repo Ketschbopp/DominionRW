@@ -136,6 +136,18 @@ namespace Dominion
                     Cancel(s.id, "Dominion_Summit_CancelledNoShow".Translate(s.faction.Name));
                 }
             }
+
+            // Visit Settlements: a head of state visiting their capital attends in person.
+            Integration_VisitSettlements vs = IntegrationRegistry.Get<Integration_VisitSettlements>();
+            if (vs != null && vs.IsActive)
+            {
+                Summit atVisit = vs.SummitAtVisit(out Pawn visitingHead);
+                if (atVisit != null)
+                {
+                    Pawn theirs = atVisit.faction.leader;
+                    Open(atVisit, visitingHead, theirs != null && !theirs.Dead && !theirs.IsPrisoner ? theirs : null);
+                }
+            }
         }
 
         /// <summary>A summit waiting for the player at this settlement, if it is the faction's capital.</summary>

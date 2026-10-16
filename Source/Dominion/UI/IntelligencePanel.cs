@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
@@ -194,6 +195,26 @@ namespace Dominion
             {
                 IntelOpsSystem.Launch(op, target, team, thirdParty);
                 Close();
+            }
+
+            // Visit Settlements: colonists already visiting one of the target's settlements can do it in person, now.
+            Integration_VisitSettlements vs = IntegrationRegistry.Get<Integration_VisitSettlements>();
+            if (op != null && op.allowPhysical && target != null && vs != null && vs.IsActive)
+            {
+                foreach ((Settlement s, Map map) in vs.ActiveVisits())
+                {
+                    if (s.Faction != target) continue;
+                    FloatMenuAcceptanceReport ok = PhysicalOps.CanStartOnVisit(op, s, map);
+                    Rect visitRect = new Rect(inRect.x, inRect.yMax - 36f, inRect.width / 2f - 110f, 34f);
+                    string label = "Dominion_Ops_RunOnVisit".Translate(s.Label, PhysicalOps.VisitAgents(map).Count);
+                    if (Widgets.ButtonText(visitRect, label.Truncate(visitRect.width), active: ok.Accepted) && ok.Accepted)
+                    {
+                        PhysicalOps.BeginOnVisit(op, s, map);
+                        Close();
+                    }
+                    TooltipHandler.TipRegion(visitRect, label + "\n\n" + (ok.Accepted ? "Dominion_Ops_RunOnVisit_Desc".Translate().ToString() : ok.FailReason ?? ""));
+                    break;
+                }
             }
         }
 

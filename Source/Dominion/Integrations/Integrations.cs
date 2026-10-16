@@ -110,33 +110,6 @@ namespace Dominion
         }
     }
 
-    /// <summary>Visit Settlements: time your colonists spend inside a faction's settlement builds knowledge and ties.</summary>
-    public class Integration_VisitSettlements : DominionIntegration
-    {
-        public override string PackageId => "alt4s.VisitSettlements";
-        public override string Label => "Visit Settlements";
-
-        protected internal override void Bind(Binder b)
-        {
-            Type data = b.Type("VisitSettlements.WorldComponent_SettlementData");
-            b.Field(data, "settlementMaps");
-        }
-
-        public override void DailyGlobal()
-        {
-            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            foreach (Map map in Find.Maps)
-            {
-                if (!(map.Parent is Settlement s) || s.Faction == null || s.Faction.IsPlayer) continue;
-                if (map.mapPawns.FreeColonistsSpawnedCount == 0) continue;
-                FactionState fs = comp.GetState(s.Faction);
-                fs.playerIntel = Mathf.Min(100f, fs.playerIntel + 2f);
-                comp.GetRelation(s.Faction, Faction.OfPlayer).favour += 0.5f;
-                BroadcastSystem.AddCulture(s.Faction, 0.5f);
-            }
-        }
-    }
-
     /// <summary>RimToll: resentment over tolls sours a faction's view of you.</summary>
     public class Integration_RimToll : DominionIntegration
     {
