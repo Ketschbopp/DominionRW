@@ -19,12 +19,10 @@ namespace Dominion
             IntelService svc = comp.Intel;
             Rect view = new Rect(0f, 0f, rect.width - 16f, height);
             Widgets.BeginScrollView(rect, ref scroll, view);
-            var l = new Listing_Standard();
+            var l = new Listing_Standard { maxOneColumn = true };
             l.Begin(view);
 
-            Text.Font = GameFont.Medium;
-            l.Label("Dominion_Ops_Title".Translate());
-            Text.Font = GameFont.Small;
+            DominionTheme.Header(l, "Dominion_Ops_Title".Translate());
 
             ResearchProjectDef research = DominionResearchDefOf.Dominion_IntelligenceNetworks;
             if (!research.IsFinished)

@@ -224,7 +224,7 @@ namespace Dominion
             FactionState s = comp.GetState(loser);
             s.stability = Mathf.Max(0f, s.stability - 12f);
             s.legitimacy = Mathf.Max(0f, s.legitimacy - 10f);
-            s.economyIndex = Mathf.Max(10f, s.economyIndex * 0.92f);
+            EconomyEffects.Shock(loser, -0.08f);
         }
 
         private static void AddLine(List<string> lines, string line)
@@ -252,7 +252,7 @@ namespace Dominion
             if (reg.originalOwner.Count == 0) return list;
             foreach (Settlement s in Find.WorldObjects.Settlements)
             {
-                if (s.Faction == null || !reg.originalOwner.TryGetValue(s.ID, out int origId)) continue;
+                if (s.Faction == null || !reg.originalOwner.TryGetValue(s.Tile.tileId, out int origId)) continue;
                 Faction orig = comp.Cache.FactionById(origId);
                 if ((s.Faction == w.attacker && orig == w.defender) || (s.Faction == w.defender && orig == w.attacker))
                     list.Add(s);

@@ -82,6 +82,32 @@ def warband():
     img.save(world / "Dominion_Warband.png")
 
 
+def capital_overlay():
+    """World map overlay for capitals: a double ring with notches (outline) and a small crown. White, tinted in code."""
+    ov = ROOT / "Textures" / "UI" / "Overlays"
+    ov.mkdir(parents=True, exist_ok=True)
+    s = 256
+    img = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    white = (255, 255, 255, 255)
+    d.ellipse([10, 10, s - 10, s - 10], outline=white, width=12)
+    d.ellipse([32, 32, s - 32, s - 32], outline=(255, 255, 255, 170), width=5)
+    for i in range(8):  # notches like a seal
+        a = i * math.pi / 4
+        cx, cy = s / 2 + math.cos(a) * (s / 2 - 16), s / 2 + math.sin(a) * (s / 2 - 16)
+        d.ellipse([cx - 9, cy - 9, cx + 9, cy + 9], fill=white)
+    img.save(ov / "Dominion_CapitalRing.png")
+
+    img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    dark = (40, 30, 10, 255)
+    d.polygon([(6, 52), (6, 20), (20, 34), (32, 10), (44, 34), (58, 20), (58, 52)], fill=white, outline=dark)
+    d.rectangle([6, 46, 58, 56], fill=white, outline=dark)
+    for x in (6, 32, 58):
+        d.ellipse([x - 5, (20 if x != 32 else 10) - 5, x + 5, (20 if x != 32 else 10) + 5], fill=white, outline=dark)
+    img.save(ov / "Dominion_CapitalCrown.png")
+
+
 def broadcast():
     img, d = base()
     d.line([(64, 120), (64, 50)], fill=INK, width=8)
@@ -97,6 +123,7 @@ if __name__ == "__main__":
     broadcast()
     delegation()
     warband()
+    capital_overlay()
     head_of_state()
     capital()
     diplomacy()

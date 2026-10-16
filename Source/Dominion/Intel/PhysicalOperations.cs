@@ -166,7 +166,11 @@ namespace Dominion
                 DLog.Warning("Could not open the map of " + s.Label + " for an operation: " + e);
                 return;
             }
-            if (def.silverCost > 0) PaySilver(caravan, def.silverCost);
+            if (def.silverCost > 0)
+            {
+                PaySilver(caravan, def.silverCost);
+                EconomyEffects.Receive(s.Faction, def.silverCost);
+            }
             CaravanEnterMapUtility.Enter(caravan, map, CaravanEnterMode.Edge, CaravanDropInventoryMode.DoNotDrop, false, null);
             Start(def, s, map, agents);
         }
@@ -175,7 +179,7 @@ namespace Dominion
         public static void BeginOnVisit(OperationDef def, Settlement s, Map map)
         {
             if (!CanStartOnVisit(def, s, map).Accepted) return;
-            if (def.silverCost > 0) DiplomacyHelpers.TakeSilver(def.silverCost);
+            if (def.silverCost > 0) EconomyEffects.Transfer(Faction.OfPlayer, s.Faction, def.silverCost);
             Start(def, s, map, VisitAgents(map));
         }
 
@@ -194,6 +198,7 @@ namespace Dominion
                 endTick = int.MaxValue,
                 physical = true,
                 settlement = s,
+                tile = s.Tile.tileId,
                 alerted = f.HostileTo(Faction.OfPlayer),
             };
             Svc.operations.Add(op);
@@ -301,6 +306,15 @@ namespace Dominion
         public static void Check(Operation op, bool hourly)
         {
             Map map = op.settlement?.Map;
+            if (map == null && op.tile >= 0)
+                map = Find.Maps.FirstOrDefault(m => m.Tile.tileId == op.tile);
+            // The base was wiped out with the captive still alive: they are free.
+            bool baseGone = op.settlement == null || op.settlement.Destroyed;
+            if (baseGone && !op.achieved && op.def.objective == PhysicalObjective.RescueHostage && op.hostage != null && op.hostage.Spawned && !op.hostage.Dead)
+            {
+                op.hostage.guest?.SetGuestStatus(null, GuestStatus.Guest);
+                Achieve(op);
+            }
             List<Pawn> onMap = map == null ? new List<Pawn>() : op.agents.Where(p => p != null && !p.Dead && p.Spawned && p.Map == map).ToList();
             Faction f = op.target;
 

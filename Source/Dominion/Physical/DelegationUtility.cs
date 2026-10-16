@@ -49,7 +49,7 @@ namespace Dominion
         public static bool AnyPending(Faction a, Faction b)
         {
             foreach (WorldObject o in Find.WorldObjects.AllWorldObjects)
-                if (o is Delegation d && ((d.Faction == a && d.target == b) || (d.Faction == b && d.target == a)))
+                if (o is Delegation d && d.purpose == DelegationPurpose.Agreement && ((d.Faction == a && d.target == b) || (d.Faction == b && d.target == a)))
                     return true;
             return false;
         }
@@ -114,23 +114,14 @@ namespace Dominion
         public static void Intercept(Delegation d, Caravan caravan)
         {
             // The world map keeps running while the menu is open: the delegation may have moved on or arrived.
-            if (d == null || d.Destroyed || caravan == null || caravan.Destroyed || caravan.Tile != d.Tile) return;
+            if (d == null || d.Destroyed || caravan == null || caravan.Destroyed || !InterceptUtility.InReach(caravan, d)) return;
             Faction f = d.Faction;
             Faction player = Faction.OfPlayer;
             if (!f.HostileTo(player))
                 DiplomacyUtility.SetRelationKind(player, f, FactionRelationKind.Hostile, player, "Dominion_Reason_Intercepted".Translate());
 
-            var enemies = new List<Pawn>();
             FactionState s = WorldComponent_Dominion.Instance.GetState(f);
-            var parms = new PawnGroupMakerParms
-            {
-                groupKind = PawnGroupKindDefOf.Combat,
-                faction = f,
-                tile = caravan.Tile,
-                points = Mathf.Clamp(200f + s.militaryStrength * 0.5f, 200f, 1200f),
-                generateFightersOnly = true,
-            };
-            enemies.AddRange(PawnGroupMakerUtility.GeneratePawns(parms, false));
+            List<Pawn> enemies = InterceptUtility.GenerateFighters(f, Mathf.Clamp(200f + s.militaryStrength * 0.5f, 200f, 1200f), caravan.Tile);
 
             // The envoy, or the leader in person if travelling to a summit.
             Pawn leader = f.leader;

@@ -18,4 +18,10 @@
     <reportString>running a broadcast.</reportString>
     <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
   </JobDef>
+  <JobDef>
+    <defName>Dominion_RadioOrder</defName>
+    <driverClass>Dominion.JobDriver_RadioOrder</driverClass>
+    <reportString>working the radio desk.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
 </Defs>

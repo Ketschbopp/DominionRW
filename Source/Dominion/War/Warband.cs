@@ -26,7 +26,7 @@ namespace Dominion
     /// player has intel on its faction or it comes near the player's settlements or caravans. A player caravan on the
     /// same tile can intercept it, which is a battle (and an act of war if the two are not already at war).
     /// </summary>
-    public class Warband : WorldObject
+    public class Warband : WorldObject, IInterceptable
     {
         public const int TicksPerTile = 2500;
         public const float NearPlayerTiles = 8f;
@@ -121,7 +121,7 @@ namespace Dominion
             Tile = new PlanetTile(path[index]);
             visibleCheckedTick = -99999;
 
-            if (!warnedPlayer && target != null && target.IsPlayer && TicksToArrival < GenDate.TicksPerDay && VisibleToPlayer)
+            if (!warnedPlayer && mission == WarbandMission.RaidPlayer && target != null && target.IsPlayer && TicksToArrival < GenDate.TicksPerDay && VisibleToPlayer)
             {
                 warnedPlayer = true;
                 Find.LetterStack.ReceiveLetter("Dominion_Warband_ApproachingLabel".Translate(),
@@ -198,21 +198,18 @@ namespace Dominion
             foreach (FloatMenuOption o in base.GetFloatMenuOptions(caravan))
                 yield return o;
             if (!caravan.IsPlayerControlled || Faction == null || Faction.IsPlayer || !VisibleToPlayer) yield break;
-            string label = Faction.HostileTo(Faction.OfPlayer)
-                ? "Dominion_Warband_Intercept".Translate(Faction.Name)
-                : "Dominion_Warband_InterceptActOfWar".Translate(Faction.Name);
-            if (caravan.Tile == Tile)
-                yield return new FloatMenuOption(label, () => WarbandUtility.Intercept(this, caravan));
-            else if (!Blockading)
-                yield return new FloatMenuOption("Dominion_Warband_MoveToIntercept".Translate(), () =>
-                {
-                    int ahead = Mathf.Min(path.Count - 1, index + 3);
-                    caravan.pather.StartPath(new PlanetTile(path[ahead]), null, repathImmediately: true);
-                });
-            else
-                yield return new FloatMenuOption("Dominion_Warband_MoveToIntercept".Translate(), () =>
-                    caravan.pather.StartPath(Tile, null, repathImmediately: true));
+            bool actOfWar = !Faction.HostileTo(Faction.OfPlayer);
+            string label = (InterceptUtility.IsPursuing(caravan, this) ? "Dominion_Intercept_Pursuing" : "Dominion_Warband_Intercept").Translate(Faction.Name).ToString()
+                           + (actOfWar ? " " + "Dominion_Intercept_ActOfWarTag".Translate().ToString() : "");
+            FloatMenuOption opt = InterceptUtility.Option(caravan, this, label, actOfWar);
+            if (opt != null) yield return opt;
         }
+
+        public PlanetTile TileAhead(int steps) => path.Count == 0 || Blockading ? Tile : new PlanetTile(path[Mathf.Min(path.Count - 1, index + steps)]);
+
+        public bool CanBeIntercepted => !Destroyed && Faction != null && !Faction.IsPlayer && !Faction.defeated && VisibleToPlayer;
+
+        public void Engage(Caravan caravan) => WarbandUtility.Intercept(this, caravan);
 
         public override void ExposeData()
         {
@@ -357,13 +354,31 @@ namespace Dominion
         {
             Faction enemy = w.target;
             if (enemy == null || enemy.IsPlayer || !w.Faction.HostileTo(enemy)) return;
-            FactionState s = WorldComponent_Dominion.Instance.GetState(enemy);
-            s.economyIndex = Mathf.Max(10f, s.economyIndex * 0.99f);
-            IntegrationRegistry.Get<Integration_EconomicsDemography>()?.TryConsumeWealth(enemy, 150f);
+            EconomyEffects.DestroyGoods(enemy, 150f);
             WarUtility.AddScore(w.Faction, enemy, 1.5f);
         }
 
-        /// <summary>An abstract battle at an AI settlement. The garrison has the advantage of walls.</summary>
+        /// <summary>Chance an attacking force of <paramref name="points"/> takes the settlement. The garrison has walls.</summary>
+        public static float SiegeChance(float points, Faction attacker, Faction defender, Settlement s)
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            FactionState ds = comp.GetState(defender);
+            int count = Mathf.Max(1, comp.Cache.SettlementsOf(defender).Count);
+            float garrison = Mathf.Clamp(ds.militaryStrength * 5f / count, 150f, 3000f) + 150f;
+            if (s != null && ds.capital == s) garrison *= 1.5f;
+            if (Find.TickManager.TicksGame < ds.sabotagedUntilTick) garrison *= 0.85f;
+            float attack = points * MilitarySystem.TechFactor(attacker.def.techLevel) / MilitarySystem.TechFactor(defender.def.techLevel);
+            return Mathf.Clamp(attack / (attack + garrison * 1.2f), 0.05f, 0.95f);
+        }
+
+        /// <summary>The force besieging a tile: the Dominion warband that started it, or what the attacker can field.</summary>
+        public static float SiegePointsAt(int tile, Faction attacker) =>
+            WorldComponent_Dominion.Instance.Wars.siegePoints.TryGetValue(tile, out float p) ? p : FieldPoints(attacker);
+
+        /// <summary>
+        /// The warband reaches an AI settlement. With Faction Territories it becomes an FTV base invasion: it shows on the
+        /// map, the player can join it, and it is decided with Dominion's odds. Otherwise the battle is fought off-map now.
+        /// </summary>
         private static void Siege(Warband w)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
@@ -374,21 +389,33 @@ namespace Dominion
             if (s == null || defender.IsPlayer) return;
             if (s.HasMap) return; // the player is there; no battle off-screen on a map they can see
 
+            War war = comp.Wars.Find(attacker, defender);
+            var ftv = IntegrationRegistry.Get<Integration_FactionTerritories>();
+            if (ftv != null && ftv.CanInvade && DominionMod.Settings.warOccupation && ftv.TryStartInvasion(s, attacker))
+            {
+                comp.Wars.siegePoints[s.Tile.tileId] = w.points;
+                if (war != null) war.battles++;
+                return; // the ownership watch reports the outcome
+            }
+            ResolveBattle(attacker, defender, s, w.points);
+        }
+
+        /// <summary>An off-map battle at an AI settlement: losses, war score, and occupation (or plunder) if the attacker wins.</summary>
+        public static void ResolveBattle(Faction attacker, Faction defender, Settlement s, float points)
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             FactionState ds = comp.GetState(defender);
             FactionState atk = comp.GetState(attacker);
-            int count = Mathf.Max(1, comp.Cache.SettlementsOf(defender).Count);
-            float garrison = Mathf.Clamp(ds.militaryStrength * 5f / count, 150f, 3000f) + 150f;
-            if (ds.capital == s) garrison *= 1.5f;
-            float attack = w.points * MilitarySystem.TechFactor(attacker.def.techLevel) / MilitarySystem.TechFactor(defender.def.techLevel);
-            float chance = Mathf.Clamp(attack / (attack + garrison * 1.2f), 0.05f, 0.95f);
-            bool won = Rand.Chance(chance);
+            bool won = Rand.Chance(SiegeChance(points, attacker, defender, s));
+            float garrison = Mathf.Clamp(ds.militaryStrength * 5f / Mathf.Max(1, comp.Cache.SettlementsOf(defender).Count), 150f, 3000f);
 
             Faction winner = won ? attacker : defender, loser = won ? defender : attacker;
             var ed = IntegrationRegistry.Get<Integration_EconomicsDemography>();
-            ed?.ModifyPopulation(attacker, -Mathf.RoundToInt(Mathf.Clamp(w.points / 150f, 1f, 15f) * (won ? 0.5f : 1f)));
+            ed?.ModifyPopulation(attacker, -Mathf.RoundToInt(Mathf.Clamp(points / 150f, 1f, 15f) * (won ? 0.5f : 1f)));
             ed?.ModifyPopulation(defender, -Mathf.RoundToInt(Mathf.Clamp(garrison / 150f, 1f, 15f) * (won ? 1f : 0.5f)));
             atk.warWeariness = Mathf.Min(100f, atk.warWeariness + 2f);
             ds.warWeariness = Mathf.Min(100f, ds.warWeariness + 2f);
+            EconomyEffects.Shock(loser, -0.02f);
 
             War war = comp.Wars.Find(attacker, defender);
             if (war != null) war.battles++;
@@ -396,10 +423,17 @@ namespace Dominion
             WarUtility.AddScore(winner, loser, won ? 10f : 8f);
 
             if (!won) return;
+            // The victors carry off what they can.
+            EconomyEffects.Transfer(defender, attacker, Mathf.RoundToInt(Mathf.Clamp(ds.wealth * 0.02f / Mathf.Max(1, ds.settlementCount), 100f, 1500f)));
             if (WarUtility.CanOccupy(s, attacker))
                 WarUtility.Occupy(s, attacker);
-            else if (war != null)
-                war.AddScore(attacker, 10f); // their last stronghold holds out, but barely
+            else
+            {
+                // Their last stronghold holds out, but barely; with Pillage & Plunder, it is sacked.
+                // A sack is scored by the Pillage & Plunder hook; without it, the near-miss still counts for something.
+                bool sacked = IntegrationRegistry.Get<Integration_PillageAndPlunder>()?.TryPlunder(attacker, s) ?? false;
+                if (!sacked && war != null) war.AddScore(attacker, 10f);
+            }
         }
 
         /// <summary>The warband reaches the player's colony: a raid, sized like any other raid on it.</summary>
@@ -424,7 +458,7 @@ namespace Dominion
         /// <summary>A player caravan attacks the warband: a real battle on a caravan map.</summary>
         public static void Intercept(Warband w, Caravan caravan)
         {
-            if (w == null || w.Destroyed || caravan == null || caravan.Destroyed || caravan.Tile != w.Tile) return;
+            if (w == null || w.Destroyed || caravan == null || caravan.Destroyed || !InterceptUtility.InReach(caravan, w)) return;
             Faction f = w.Faction;
             Faction player = Faction.OfPlayer;
             if (!f.HostileTo(player))
@@ -433,16 +467,7 @@ namespace Dominion
                 DiplomacyUtility.SetRelationKind(player, f, FactionRelationKind.Hostile, player, "Dominion_Reason_WarbandIntercepted".Translate());
             }
 
-            float pts = Mathf.Clamp(w.points, f.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat), 3000f);
-            var parms = new PawnGroupMakerParms
-            {
-                groupKind = PawnGroupKindDefOf.Combat,
-                faction = f,
-                tile = caravan.Tile,
-                points = pts,
-                generateFightersOnly = true,
-            };
-            List<Pawn> enemies = PawnGroupMakerUtility.GeneratePawns(parms, false).ToList();
+            List<Pawn> enemies = InterceptUtility.GenerateFighters(f, Mathf.Min(w.points, 3000f), caravan.Tile);
             EventBus.Raise(DominionEventDefOf.Dominion_WarbandIntercepted, player, f, caravan.Tile.tileId, detail: w.target?.Name);
             WarUtility.AddScore(player, f, 6f);
             w.Destroy();

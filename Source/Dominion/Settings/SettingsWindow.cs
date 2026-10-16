@@ -36,7 +36,7 @@ namespace Dominion
             Rect inner = body.ContractedBy(12f);
             Rect view = new Rect(0f, 0f, inner.width - 16f, lastContentHeight);
             Widgets.BeginScrollView(inner, ref scroll, view);
-            var l = new Listing_Standard();
+            var l = new Listing_Standard { maxOneColumn = true };
             l.Begin(view);
 
             switch (current)
@@ -63,6 +63,7 @@ namespace Dominion
         private static void DrawGeneral(Listing_Standard l, DominionSettings s)
         {
             l.CheckboxLabeled("Dominion_Setting_DebugLogging".Translate(), ref s.debugLogging, "Dominion_Setting_DebugLogging_Desc".Translate());
+            l.CheckboxLabeled("Dominion_Setting_ShowCapitals".Translate(), ref s.showCapitals, "Dominion_Setting_ShowCapitals_Desc".Translate());
             l.Gap();
             if (l.ButtonText("Dominion_Setting_ResetDefaults".Translate()))
                 s.ResetToDefaults();

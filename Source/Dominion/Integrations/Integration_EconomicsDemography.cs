@@ -10,7 +10,7 @@ namespace Dominion
     /// Required. Economics &amp; Demography is the source of every faction's population and wealth.
     /// Calls go through reflection, but only once per faction per day, so the cost is negligible.
     /// </summary>
-    public class Integration_EconomicsDemography : DominionIntegration
+    public partial class Integration_EconomicsDemography : DominionIntegration
     {
         public override string PackageId => "helldan.economicsdemography";
         public override string Label => "Economics & Demography";
@@ -26,6 +26,10 @@ namespace Dominion
         private FieldInfo inflationField;
         private FieldInfo priceModifiersField;
         private MethodInfo tryConsumeWealth;
+        private FieldInfo silverField;
+        private MethodInfo setWealthDirty;
+        private MethodInfo produceGoods;
+        private bool productionPatched;
 
         private readonly object[] oneArg = new object[1];
 
@@ -43,6 +47,107 @@ namespace Dominion
             getTotalWealth = b.Method(stockpile, "GetTotalWealth", Type.EmptyTypes);
             priceModifiersField = b.Field(manager, "globalPriceModifiers");
             tryConsumeWealth = b.Method(stockpile, "TryConsumeWealth");
+            silverField = b.Field(stockpile, "silver");
+            setWealthDirty = b.Method(stockpile, "SetWealthDirty", Type.EmptyTypes);
+            // Optional: without it, Dominion's economic climate only changes its own index, not E&D's production.
+            produceGoods = manager?.GetMethod("ProduceGoodsCategorized", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            b.Note(produceGoods != null ? "production hook: ProduceGoodsCategorized" : "production hook not found (climate will not reach E&D production)");
+            BindGoods(stockpile, b);
+        }
+
+        /// <summary>Dominion's economic climate scales E&amp;D's production for each faction.</summary>
+        protected internal override void OnActivated()
+        {
+            if (produceGoods == null || productionPatched) return;
+            try
+            {
+                DominionMod.Harmony.Patch(produceGoods,
+                    prefix: new HarmonyLib.HarmonyMethod(typeof(Integration_EconomicsDemography), nameof(ProductionPrefix)));
+                productionPatched = true;
+            }
+            catch (Exception e)
+            {
+                DLog.Warning("Could not hook Economics & Demography production: " + e.Message);
+            }
+        }
+
+        /// <summary>Harmony prefix on WorldPopulationManager.ProduceGoodsCategorized: the labour force works harder or less.</summary>
+        public static void ProductionPrefix(Faction f, ref int adults, ref float elders, ref float kids)
+        {
+            try
+            {
+                if (f == null || WorldComponent_Dominion.Instance == null) return;
+                float factor = EconomyEffects.ProductionFactor(f);
+                if (Mathf.Approximately(factor, 1f)) return;
+                adults = Mathf.Max(0, Mathf.RoundToInt(adults * factor));
+                elders *= factor;
+                kids *= factor;
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("Production hook failed: " + e.Message, 0x0ED5);
+            }
+        }
+
+        private object StockpileOf(Faction f)
+        {
+            object manager = IsActive ? Manager : null;
+            if (manager == null || f == null) return null;
+            try
+            {
+                oneArg[0] = f;
+                return getStockpile.Invoke(manager, oneArg);
+            }
+            finally
+            {
+                oneArg[0] = null;
+            }
+        }
+
+        /// <summary>Adds silver to a faction's E&amp;D stockpile (tribute, reparations, aid received).</summary>
+        public void AddSilver(Faction f, int amount)
+        {
+            if (amount <= 0 || f == null || f.IsPlayer) return;
+            try
+            {
+                object stock = StockpileOf(f);
+                if (stock == null) return;
+                silverField.SetValue(stock, (int)silverField.GetValue(stock) + amount);
+                setWealthDirty?.Invoke(stock, null);
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("Adding E&D silver failed: " + e.Message, 0x0ED6);
+            }
+        }
+
+        /// <summary>Takes up to <paramref name="amount"/> silver from a faction's stockpile. Returns what was taken.</summary>
+        public int TakeSilver(Faction f, int amount)
+        {
+            if (amount <= 0 || f == null || f.IsPlayer) return 0;
+            try
+            {
+                object stock = StockpileOf(f);
+                if (stock == null) return 0;
+                int have = (int)silverField.GetValue(stock);
+                int taken = Mathf.Clamp(amount, 0, have);
+                silverField.SetValue(stock, have - taken);
+                setWealthDirty?.Invoke(stock, null);
+                return taken;
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("Taking E&D silver failed: " + e.Message, 0x0ED7);
+                return 0;
+            }
+        }
+
+        /// <summary>People move with a settlement that changes hands: the share living there goes to the new owner.</summary>
+        public void MovePopulation(Faction from, Faction to, int amount)
+        {
+            if (amount <= 0 || from == null || to == null || from == to) return;
+            ModifyPopulation(from, -amount);
+            if (!to.IsPlayer) ModifyPopulation(to, amount);
         }
 
         private object Manager => instanceField?.GetValue(null);
@@ -150,6 +255,7 @@ namespace Dominion
         /// </summary>
         public override void OnEvent(DominionEvent ev)
         {
+            OnEventGoods(ev);
             if (!DominionMod.Settings.emigration || ev.primary == null || ev.primary.IsPlayer) return;
             float share;
             if (ev.def == DominionEventDefOf.Dominion_Riots) share = 0.01f;

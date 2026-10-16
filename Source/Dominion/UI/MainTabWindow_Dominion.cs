@@ -27,7 +27,7 @@ namespace Dominion
         private Vector2 dossierScroll;
         private Faction selected;
 
-        public override Vector2 RequestedTabSize => new Vector2(1000f, 720f);
+        public override Vector2 RequestedTabSize => new Vector2(1000f, 720f + DominionHeader.Height + 6f);
 
         public override void DoWindowContents(Rect inRect)
         {
@@ -50,8 +50,13 @@ namespace Dominion
                 tabs.Add(new TabRecord("Dominion_Tab_Events".Translate(), () => Select(Tab.Events), current == Tab.Events));
             tabs.Add(new TabRecord("Dominion_Tab_Integrations".Translate(), () => Select(Tab.Integrations), current == Tab.Integrations));
 
+            DominionHeader.Draw(new Rect(inRect.x, inRect.y, inRect.width, DominionHeader.Height), WorldComponent_Dominion.Instance, n =>
+            {
+                Select(Tab.News);
+                newsPanel.Open(n, WorldComponent_Dominion.Instance.News);
+            });
             Rect body = inRect;
-            body.yMin += TabDrawer.TabHeight;
+            body.yMin += DominionHeader.Height + 6f + TabDrawer.TabHeight;
             Widgets.DrawMenuSection(body);
             TabDrawer.DrawTabs(body, tabs);
             body = body.ContractedBy(10f);

@@ -20,6 +20,7 @@ namespace Dominion
         private BroadcastState broadcast = new BroadcastState();
         private UnificationState unification = new UnificationState();
         private WarRegistry wars = new WarRegistry();
+        private RadioOrders radioOrders = new RadioOrders();
 
         /// <summary>0..100. How well the player's radio receivers cover the airwaves; raised by monitoring, decays daily.</summary>
         public float radioCoverage;
@@ -43,6 +44,7 @@ namespace Dominion
         public BroadcastState Broadcast => broadcast;
         public UnificationState Unification => unification;
         public WarRegistry Wars => wars;
+        public RadioOrders RadioOrders => radioOrders;
         public DominionScheduler Scheduler => scheduler;
 
         /// <summary>Lookups refreshed at most once a day. Always call through here.</summary>
@@ -157,6 +159,7 @@ namespace Dominion
             Scribe_Deep.Look(ref unification, "unification");
             Scribe_Deep.Look(ref wars, "wars");
             Scribe_Values.Look(ref radioCoverage, "radioCoverage");
+            Scribe_Deep.Look(ref radioOrders, "radioOrders");
 
             if (Scribe.mode == LoadSaveMode.Saving)
             {
@@ -178,6 +181,7 @@ namespace Dominion
                 broadcast ??= new BroadcastState();
                 unification ??= new UnificationState();
                 wars ??= new WarRegistry();
+                radioOrders ??= new RadioOrders();
                 factionStates = new Dictionary<int, FactionState>();
                 if (statesList != null)
                     foreach (FactionState s in statesList)

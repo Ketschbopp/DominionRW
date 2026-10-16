@@ -41,4 +41,18 @@
     </requiredCapacities>
     <canBeDoneByMechs>false</canBeDoneByMechs>
   </WorkGiverDef>
+  <WorkGiverDef>
+    <defName>Dominion_RadioOrder</defName>
+    <label>issue radio advisories and investigate rumours</label>
+    <giverClass>Dominion.WorkGiver_RadioOrder</giverClass>
+    <workType>Research</workType>
+    <priorityInType>45</priorityInType>
+    <verb>work the radio desk at</verb>
+    <gerund>working the radio desk at</gerund>
+    <requiredCapacities>
+      <li>Talking</li>
+      <li>Hearing</li>
+    </requiredCapacities>
+    <canBeDoneByMechs>false</canBeDoneByMechs>
+  </WorkGiverDef>
 </Defs>

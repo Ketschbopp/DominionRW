@@ -176,6 +176,7 @@ namespace Dominion
             Scribe_References.Look(ref host, "host");
             Scribe_Collections.Look(ref agenda, "agenda", LookMode.Deep);
             Scribe_Collections.Look(ref attending, "attending", LookMode.Reference);
+            if (Scribe.mode == LoadSaveMode.Saving && playerDelegate != null && playerDelegate.Discarded) playerDelegate = null;
             Scribe_References.Look(ref playerDelegate, "playerDelegate");
             Scribe_Collections.Look(ref decrees, "decrees", LookMode.Deep);
             Scribe_Values.Look(ref nextDecreeId, "nextDecreeId");

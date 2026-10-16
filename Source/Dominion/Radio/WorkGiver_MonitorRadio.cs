@@ -40,6 +40,7 @@ namespace Dominion
     {
         public static JobDef Dominion_MonitorRadio;
         public static JobDef Dominion_GovernAtDesk;
+        public static JobDef Dominion_RadioOrder;
 
         static DominionJobDefOf()
         {

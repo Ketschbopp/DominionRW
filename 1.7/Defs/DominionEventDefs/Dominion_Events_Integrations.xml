@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Events raised by integrations with other mods (Source/Dominion/Integrations). They do nothing on their own when
+       raised from the dev menu: the integration applies the effects. -->
+
+  <!-- Faction Territories and Vassalage: expansion -->
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SettlementConstructionBegun</defName>
+    <label>settlement being founded</label>
+    <description>A faction has begun building a new settlement at the edge of its territory (Faction Territories expansion). The site can be attacked until it is finished.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.35</newsworthiness>
+    <newsRules>Dominion_News_SettlementConstructionBegun</newsRules>
+    <headline>{0} builds a new settlement near {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SettlementFounded</defName>
+    <label>new settlement founded</label>
+    <description>A faction has finished building a new settlement (Faction Territories expansion).</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.45</newsworthiness>
+    <newsRules>Dominion_News_SettlementFounded</newsRules>
+    <headline>{0} founds {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_ConstructionRaided</defName>
+    <label>construction site attacked</label>
+    <description>A faction's settlement construction site has been attacked (Faction Territories expansion). The builders hold a grievance, and it counts in any war between the two.</description>
+    <category>Military</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_ConstructionRaided</newsRules>
+    <headline>{0} attacks settlers of {1} near {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <!-- RimMarket: trade routes -->
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_ConvoyLost</defName>
+    <label>trade convoy lost</label>
+    <description>A RimMarket trade convoy has been destroyed on its way to your colony. Its faction holds a grievance against the attackers, if they are known.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.4</newsworthiness>
+    <newsRules>Dominion_News_ConvoyLost</newsRules>
+    <headline>Trade convoy of {0} from {2} destroyed by {1}</headline>
+  </Dominion.DominionEventDef>
+</Defs>

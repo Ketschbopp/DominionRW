@@ -85,7 +85,9 @@ namespace Dominion
             Row(l, "Dominion_Dossier_ActiveWars".Translate(), f, IntelUtility.RestrictedIntel, () => s.activeWars.ToString());
             Row(l, "Dominion_Dossier_Population".Translate(), f, IntelUtility.RestrictedIntel, () => s.population + " / " + s.totalLiving);
             Row(l, "Dominion_Dossier_Wealth".Translate(), f, IntelUtility.SecretIntel, () => s.wealth.ToStringMoney());
-            Row(l, "Dominion_Col_Economy".Translate(), f, IntelUtility.RestrictedIntel, () => s.economyIndex.ToString("F0"));
+            Row(l, "Dominion_Col_Economy".Translate(), f, IntelUtility.RestrictedIntel, () => s.economyIndex.ToString("F0") + "  (" + s.climate.ToStringPercentSigned() + ")");
+            if (IntelUtility.Knows(f, IntelUtility.RestrictedIntel))
+                TooltipHandler.TipRegion(new Rect(0f, l.CurHeight - Line, l.ColumnWidth, Line), () => ClimateTip(f, s), f.loadID ^ 0x5C1);
             Row(l, "Dominion_Col_Military".Translate(), f, IntelUtility.RestrictedIntel, () => s.militaryStrength.ToString("F0"));
             Row(l, "Dominion_Dossier_Territory".Translate(), s.territoryTiles + " / " + s.settlementCount);
             Row(l, "Dominion_Dossier_VassalOutposts".Translate(), s.vassalOutposts.ToString());
@@ -105,6 +107,14 @@ namespace Dominion
             Widgets.Label(r.LeftPart(0.48f), label);
             GUI.color = Color.white;
             Widgets.Label(r.RightPart(0.52f), value);
+        }
+
+        private static string ClimateTip(Faction f, FactionState s)
+        {
+            var sb = new System.Text.StringBuilder("Dominion_Climate_Header".Translate(s.climate.ToStringPercentSigned()).ToString());
+            sb.AppendLine();
+            EconomyEffects.ComputeClimate(f, s, WorldComponent_Dominion.Instance, sb);
+            return sb.ToString();
         }
 
         private static void Locked(Rect rect, string title, float needed)

@@ -182,12 +182,12 @@ namespace Dominion
         {
             Faction former = s.Faction;
             WarRegistry reg = Registry;
-            if (!reg.originalOwner.ContainsKey(s.ID)) reg.originalOwner[s.ID] = former.loadID;
-            bool liberated = reg.originalOwner[s.ID] == occupier.loadID;
+            if (!reg.originalOwner.ContainsKey(s.Tile.tileId)) reg.originalOwner[s.Tile.tileId] = former.loadID;
+            bool liberated = reg.originalOwner[s.Tile.tileId] == occupier.loadID;
             ChangeOwner(s, occupier);
             if (liberated)
             {
-                reg.originalOwner.Remove(s.ID);
+                reg.originalOwner.Remove(s.Tile.tileId);
                 EventBus.Raise(DominionEventDefOf.Dominion_SettlementReturned, occupier, former, s.Tile.tileId, detail: s.Label);
             }
             else
@@ -202,7 +202,7 @@ namespace Dominion
             if (s == null || s.Destroyed || to == null || to.defeated || s.Faction == to || s.HasMap) return;
             Faction from = s.Faction;
             ChangeOwner(s, to);
-            Registry.originalOwner.Remove(s.ID);
+            Registry.originalOwner.Remove(s.Tile.tileId);
             EventBus.Raise(DominionEventDefOf.Dominion_SettlementReturned, to, from, s.Tile.tileId, detail: s.Label);
         }
 
@@ -211,7 +211,21 @@ namespace Dominion
         {
             if (s == null || s.Destroyed || to == null || s.Faction == to || s.HasMap) return;
             ChangeOwner(s, to);
-            Registry.originalOwner.Remove(s.ID);
+            Registry.originalOwner.Remove(s.Tile.tileId);
+        }
+
+        /// <summary>
+        /// The economic side of a settlement changing hands (E&amp;D): most of the people living there stay and now belong to
+        /// the new owner, and part of the town's share of the old owner's stores is captured.
+        /// </summary>
+        public static void SettlementChangedHands(Faction from, Faction to)
+        {
+            if (from == null || to == null || from.IsPlayer || !Comp.TryGetState(from, out FactionState fs)) return;
+            int towns = Mathf.Max(1, fs.settlementCount);
+            IntegrationRegistry.Get<Integration_EconomicsDemography>()?.MovePopulation(from, to, Mathf.RoundToInt(Mathf.Max(fs.totalLiving, fs.population) / (float)towns * 0.6f));
+            int stores = Mathf.RoundToInt(Mathf.Clamp(fs.wealth / towns * 0.3f, 0f, 5000f));
+            if (stores > 0 && !to.IsPlayer) EconomyEffects.Transfer(from, to, stores);
+            EconomyEffects.Shock(from, -0.03f, destroyGoods: false);
         }
 
         private static AccessTools.FieldRef<Settlement, Material> cachedMat;
@@ -219,7 +233,10 @@ namespace Dominion
 
         private static void ChangeOwner(Settlement s, Faction to)
         {
+            Faction from = s.Faction;
             s.SetFaction(to);
+            OwnershipWatch.Note(s);
+            SettlementChangedHands(from, to);
             // The old owner's goods and people are not the new owner's.
             try { s.trader?.TryDestroyStock(); }
             catch (System.Exception e) { DLog.WarningOnce("Clearing a captured settlement's stock failed: " + e.Message, 0x7A01); }
@@ -232,6 +249,7 @@ namespace Dominion
             }
             if (cachedMat != null) cachedMat(s) = null; // redraw with the new owner's colours
             Comp.Cache.Rebuild();
+            IntegrationRegistry.Get<Integration_FactionTerritories>()?.RefreshTerritory();
         }
 
         // ---------------------------------------------------------------- payments
@@ -244,29 +262,18 @@ namespace Dominion
             return w;
         }
 
-        /// <summary>A one-time war payment. Returns a line for the terms, or null if nothing changed hands.</summary>
+        /// <summary>A one-time war payment, moved as real silver (E&amp;D stockpiles, drop pods, the colony). A line for the terms, or null.</summary>
         public static string Pay(Faction payer, Faction receiver, float scale = 1f)
         {
-            WorldComponent_Dominion comp = Comp;
-            var ed = IntegrationRegistry.Get<Integration_EconomicsDemography>();
-            if (payer.IsPlayer)
-            {
-                int amount = Mathf.RoundToInt(Mathf.Clamp(PlayerHomeWealth() * 0.02f, 200f, 2000f) * scale);
-                int taken = DiplomacyHelpers.TakeSilver(amount);
-                if (!receiver.IsPlayer) comp.GetState(receiver).economyIndex *= 1.02f;
-                return taken > 0 ? "Dominion_Terms_PlayerPaid".Translate(taken, receiver.Name).ToString() : null;
-            }
-            FactionState ps = comp.GetState(payer);
-            int value = Mathf.RoundToInt(Mathf.Clamp(ps.wealth * 0.02f, 300f, 3000f) * scale);
-            ed?.TryConsumeWealth(payer, value);
-            ps.economyIndex = Mathf.Max(10f, ps.economyIndex * 0.95f);
-            if (receiver.IsPlayer)
-            {
-                if (!DiplomacyHelpers.DropSilver(value)) return null;
-                return "Dominion_Terms_PaidToPlayer".Translate(payer.Name, value).ToString();
-            }
-            FactionState rs = comp.GetState(receiver);
-            rs.economyIndex = Mathf.Min(300f, rs.economyIndex * 1.04f);
+            int value = payer.IsPlayer
+                ? Mathf.RoundToInt(Mathf.Clamp(PlayerHomeWealth() * 0.02f, 200f, 2000f) * scale)
+                : Mathf.RoundToInt(Mathf.Clamp(Comp.GetState(payer).wealth * 0.02f, 300f, 3000f) * scale);
+            int moved = EconomyEffects.Transfer(payer, receiver, value);
+            if (!payer.IsPlayer) EconomyEffects.Shock(payer, -0.04f, destroyGoods: false);
+            if (!receiver.IsPlayer) EconomyEffects.Shock(receiver, 0.03f);
+            if (moved <= 0) return null;
+            if (payer.IsPlayer) return "Dominion_Terms_PlayerPaid".Translate(moved, receiver.Name).ToString();
+            if (receiver.IsPlayer) return "Dominion_Terms_PaidToPlayer".Translate(payer.Name, moved).ToString();
             return "Dominion_Terms_Paid".Translate(payer.Name, receiver.Name).ToString();
         }
     }

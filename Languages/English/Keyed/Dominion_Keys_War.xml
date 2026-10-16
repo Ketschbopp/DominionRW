@@ -203,6 +203,69 @@
   <Dominion_VisitIncident_Encroaching>building on their land</Dominion_VisitIncident_Encroaching>
   <Dominion_VisitIncident_Prying>prying into their stores</Dominion_VisitIncident_Prying>
 
+  <!-- Interception -->
+  <Dominion_Intercept_Pursuing>Keep chasing the {0} party</Dominion_Intercept_Pursuing>
+  <Dominion_Intercept_ActOfWarTag>(an act of war)</Dominion_Intercept_ActOfWarTag>
+  <Dominion_Intercept_ActOfWarConfirm>{0} is not at war with you. Attacking its people on the road is an act of war: you will be at war the moment your caravan catches them.</Dominion_Intercept_ActOfWarConfirm>
+  <Dominion_Intercept_Ordered>{0} sets off after the {1}. The fight starts as soon as they catch up.</Dominion_Intercept_Ordered>
+
+  <!-- Capitals -->
+  <Dominion_Capital_Tooltip>{0}: capital of {1}</Dominion_Capital_Tooltip>
+  <Dominion_Capital_Inspect>Capital of {0}</Dominion_Capital_Inspect>
+  <Dominion_Setting_ShowCapitals>Mark capitals on the world map</Dominion_Setting_ShowCapitals>
+  <Dominion_Setting_ShowCapitals_Desc>Draws a gold outline and a crown around every faction's capital, yours included.</Dominion_Setting_ShowCapitals_Desc>
+
+  <!-- Economic climate -->
+  <Dominion_Climate_Header>Economic climate (also scales Economics &amp; Demography production): {0}</Dominion_Climate_Header>
+  <Dominion_Climate_Shock>lasting shocks (wars, disasters, sabotage, booms)</Dominion_Climate_Shock>
+  <Dominion_Climate_ShortShocks>recent sabotage and disasters (wear off in days)</Dominion_Climate_ShortShocks>
+  <Dominion_Climate_Wars>wars</Dominion_Climate_Wars>
+  <Dominion_Climate_Embargoes>embargoes against it</Dominion_Climate_Embargoes>
+  <Dominion_Climate_ColdWars>cold wars</Dominion_Climate_ColdWars>
+  <Dominion_Climate_Blockade>blockade</Dominion_Climate_Blockade>
+  <Dominion_Climate_Sabotage>sabotage</Dominion_Climate_Sabotage>
+  <Dominion_Climate_Crisis>crisis</Dominion_Climate_Crisis>
+  <Dominion_Climate_Treaties>treaties and tribute</Dominion_Climate_Treaties>
+  <Dominion_Climate_Council>council decrees</Dominion_Climate_Council>
+  <Dominion_Climate_Stability>stability</Dominion_Climate_Stability>
+  <Dominion_Climate_Mods>other mods</Dominion_Climate_Mods>
+  <Dominion_Reason_MissileStrike>missile strike</Dominion_Reason_MissileStrike>
+
+  <!-- The Rimward Courier (news tab) -->
+  <Dominion_News_EditionLine>Edition No. {0}  ·  {1}  ·  Weather: {2}  ·  Price: {3} silver</Dominion_News_EditionLine>
+  <Dominion_News_StopPressTag>STOP PRESS</Dominion_News_StopPressTag>
+  <Dominion_News_Ago>{0} ago</Dominion_News_Ago>
+  <Dominion_News_Dateline>{0} — {1}</Dominion_News_Dateline>
+  <Dominion_News_PlaceRim>Somewhere on the rim</Dominion_News_PlaceRim>
+  <Dominion_News_Classifieds>— CLASSIFIEDS —</Dominion_News_Classifieds>
+  <Dominion_News_Static>The radio crackles with static. Somewhere out there, something is happening.</Dominion_News_Static>
+  <Dominion_News_WeatherUnknown>unknown</Dominion_News_WeatherUnknown>
+  <Dominion_News_LetterSignature>— The Rimward Courier, edition No. {0}</Dominion_News_LetterSignature>
+  <Dominion_NewsDesk_General>Rim desk</Dominion_NewsDesk_General>
+  <Dominion_NewsDesk_Diplomacy>Foreign affairs</Dominion_NewsDesk_Diplomacy>
+  <Dominion_NewsDesk_War>War desk</Dominion_NewsDesk_War>
+  <Dominion_NewsDesk_Military>Military affairs</Dominion_NewsDesk_Military>
+  <Dominion_NewsDesk_Economy>Markets and trade</Dominion_NewsDesk_Economy>
+  <Dominion_NewsDesk_Politics>Politics</Dominion_NewsDesk_Politics>
+  <Dominion_NewsDesk_Espionage>Shadows and secrets</Dominion_NewsDesk_Espionage>
+  <Dominion_NewsDesk_Disaster>Catastrophe</Dominion_NewsDesk_Disaster>
+  <Dominion_NewsDesk_Culture>Culture and society</Dominion_NewsDesk_Culture>
+  <Dominion_NewsDesk_Council>Rim Council</Dominion_NewsDesk_Council>
+  <Dominion_News_Byline_TravelerGossip>Overheard by {0} at a caravan fire</Dominion_News_Byline_TravelerGossip>
+  <Dominion_News_Byline_RadioIntercept>Transcribed from the radio by {0}</Dominion_News_Byline_RadioIntercept>
+  <Dominion_News_Byline_DiplomaticDispatch>From a diplomatic dispatch, edited by {0}</Dominion_News_Byline_DiplomaticDispatch>
+  <Dominion_News_Byline_IntelReport>Filed by one of our agents (name withheld). Redactions by {0}</Dominion_News_Byline_IntelReport>
+  <Dominion_News_Byline_Leak>From a source who asked not to be named, via {0}</Dominion_News_Byline_Leak>
+  <Dominion_News_Byline_Correction>A correction, with apologies, from {0}</Dominion_News_Byline_Correction>
+
+  <!-- Dominion window header -->
+  <Dominion_Header_Subtitle>The affairs of {0}</Dominion_Header_Subtitle>
+  <Dominion_Header_HeadOfState>Head of state: {0}</Dominion_Header_HeadOfState>
+  <Dominion_Header_Capital>Capital: {0}</Dominion_Header_Capital>
+  <Dominion_Header_Influence>Influence {0} / {1}</Dominion_Header_Influence>
+  <Dominion_Header_Stats>Your wars: {0}  ·  Wars on the rim: {1}  ·  Your treaties: {2}  ·  Factions: {3}  ·  Unread news: {4}</Dominion_Header_Stats>
+  <Dominion_Header_Latest>LATEST:</Dominion_Header_Latest>
+
   <!-- Settings -->
   <Dominion_Setting_AiCovertOps>AI covert actions</Dominion_Setting_AiCovertOps>
   <Dominion_Setting_AiCovertOps_Desc>AI intelligence services also sabotage, incite riots, stage false flags, coups and assassinations, against each other and against you.</Dominion_Setting_AiCovertOps_Desc>
@@ -221,4 +284,77 @@
   <Dominion_Setting_JointWars_Desc>Factions at war ask their allies and puppets to join, you included.</Dominion_Setting_JointWars_Desc>
   <Dominion_Setting_ColdWars>Cold wars</Dominion_Setting_ColdWars>
   <Dominion_Setting_ColdWars_Desc>Bitter rivals of similar strength enter cold wars: arms races, propaganda, border skirmishes and proxy wars.</Dominion_Setting_ColdWars_Desc>
+
+  <!-- Radio desk: advisories and rumour investigations -->
+  <Dominion_Radio_DeskTitle>Radio desk</Dominion_Radio_DeskTitle>
+  <Dominion_Radio_OrdersQueued>Radio orders queued: {0}</Dominion_Radio_OrdersQueued>
+  <Dominion_Radio_Upset>{0} colonists rattled by the news</Dominion_Radio_Upset>
+  <Dominion_Radio_NeedResearch>Needs research: {0}.</Dominion_Radio_NeedResearch>
+  <Dominion_Radio_NeedReceiver>Build a radio receiver first.</Dominion_Radio_NeedReceiver>
+  <Dominion_Radio_ClickToCancel>Click to cancel.</Dominion_Radio_ClickToCancel>
+  <Dominion_Radio_AdvisoryCaption>colony advisory</Dominion_Radio_AdvisoryCaption>
+  <Dominion_Radio_IssueAdvisory>Issue advisory</Dominion_Radio_IssueAdvisory>
+  <Dominion_Radio_CancelAdvisory>Cancel advisory</Dominion_Radio_CancelAdvisory>
+  <Dominion_Radio_IssueAdvisory_Desc>Have a colonist go on the colony radio and talk everyone through the latest news: what it means, what it does not, and why there is no need to panic.
+
+A colonist with research work enabled reads it at a radio receiver. If it lands (better with high Social), it clears moods from bad news and foreign propaganda, cheers people up, and for {0} days colonists shrug off new bad news. A clumsy advisory makes things a little worse.
+
+Colonists currently upset by the news: {1}.</Dominion_Radio_IssueAdvisory_Desc>
+  <Dominion_Radio_AdvisoryInForce>Advisory in force for another {0}.</Dominion_Radio_AdvisoryInForce>
+  <Dominion_Radio_AdvisoryQueued>Advisory queued. The next colonist free for research work will take it to the radio.</Dominion_Radio_AdvisoryQueued>
+  <Dominion_Radio_AdvisoryDone>{PAWN_nameDef} went on the air with a colony advisory. It landed: {1} worried colonists calmed down, and bad news will not rattle anyone for {2} days.</Dominion_Radio_AdvisoryDone>
+  <Dominion_Radio_AdvisoryFailed>{PAWN_nameDef}'s radio advisory fell flat. If anything, people are more nervous now.</Dominion_Radio_AdvisoryFailed>
+  <Dominion_Radio_Investigate>Investigate rumour</Dominion_Radio_Investigate>
+  <Dominion_Radio_Investigate_Desc>Send the story to the radio desk. A colonist with research work enabled calls around on the radio (contacts, traders, other stations) until it is confirmed or exposed as false.
+
+Success is likelier with high Intellectual and good radio coverage. An inconclusive result can be tried again. Exposing a false rumour runs a correction at once and clears the worry it caused.</Dominion_Radio_Investigate_Desc>
+  <Dominion_Radio_InvestigateOption>Investigate: {0}</Dominion_Radio_InvestigateOption>
+  <Dominion_Radio_InvestigateCancelOption>Stop investigating: {0}</Dominion_Radio_InvestigateCancelOption>
+  <Dominion_Radio_NoRumours>No unverified rumours to investigate</Dominion_Radio_NoRumours>
+  <Dominion_Radio_InvestigateQueued>Sent to the radio desk: "{0}"</Dominion_Radio_InvestigateQueued>
+  <Dominion_Radio_InvestigateNote>Unverified. Stamp it to have the radio desk check the story.</Dominion_Radio_InvestigateNote>
+  <Dominion_Radio_InquiryNote>The radio desk is on it: {0} done.</Dominion_Radio_InquiryNote>
+  <Dominion_Radio_InvestigateTrue>{PAWN_nameDef} checked the rumour on the radio. It is true: "{1}"</Dominion_Radio_InvestigateTrue>
+  <Dominion_Radio_InvestigateFalse>{PAWN_nameDef} exposed a false rumour over the radio: "{1}". A correction is going out.</Dominion_Radio_InvestigateFalse>
+  <Dominion_Radio_InvestigateInconclusive>{PAWN_nameDef} could not get a straight answer on the radio about "{1}". It can be tried again.</Dominion_Radio_InvestigateInconclusive>
+  <Dominion_Radio_ReportAdvisory>reading a colony advisory on the radio.</Dominion_Radio_ReportAdvisory>
+  <Dominion_Radio_ReportInvestigate>chasing a rumour on the radio.</Dominion_Radio_ReportInvestigate>
+
+  <!-- News flavour: colonist reactions and "what it means for us" -->
+  <Dominion_News_Vox>"{0}," says {1}, {2} at {3}.</Dominion_News_Vox>
+  <Dominion_Vox_OurColony>our colony</Dominion_Vox_OurColony>
+  <Dominion_Vox_Role_Leader>our leader</Dominion_Vox_Role_Leader>
+  <Dominion_Vox_Role_Colonist>a colonist</Dominion_Vox_Role_Colonist>
+  <Dominion_Vox_Role_Shooting>our best shot</Dominion_Vox_Role_Shooting>
+  <Dominion_Vox_Role_Melee>a brawler</Dominion_Vox_Role_Melee>
+  <Dominion_Vox_Role_Construction>a builder</Dominion_Vox_Role_Construction>
+  <Dominion_Vox_Role_Mining>a miner</Dominion_Vox_Role_Mining>
+  <Dominion_Vox_Role_Cooking>the cook</Dominion_Vox_Role_Cooking>
+  <Dominion_Vox_Role_Plants>a farmer</Dominion_Vox_Role_Plants>
+  <Dominion_Vox_Role_Animals>the animal handler</Dominion_Vox_Role_Animals>
+  <Dominion_Vox_Role_Crafting>a crafter</Dominion_Vox_Role_Crafting>
+  <Dominion_Vox_Role_Artistic>the resident artist</Dominion_Vox_Role_Artistic>
+  <Dominion_Vox_Role_Medicine>the doctor</Dominion_Vox_Role_Medicine>
+  <Dominion_Vox_Role_Social>our negotiator</Dominion_Vox_Role_Social>
+  <Dominion_Vox_Role_Intellectual>a researcher</Dominion_Vox_Role_Intellectual>
+  <Dominion_News_AdviceTitle>What it means for {0}</Dominion_News_AdviceTitle>
+  <Dominion_Advice_Standing>{0}: {1} (goodwill {2}), {3}.</Dominion_Advice_Standing>
+  <Dominion_Advice_RelAlly>our ally</Dominion_Advice_RelAlly>
+  <Dominion_Advice_RelHostile>hostile to us</Dominion_Advice_RelHostile>
+  <Dominion_Advice_RelNeutral>neutral towards us</Dominion_Advice_RelNeutral>
+  <Dominion_Advice_Days>about {0} days' travel away</Dominion_Advice_Days>
+  <Dominion_Advice_DaysUnknown>distance unknown</Dominion_Advice_DaysUnknown>
+  <Dominion_Advice_WarUs>We are part of this. Check the War tab, keep the walls manned and the hospital beds made.</Dominion_Advice_WarUs>
+  <Dominion_Advice_WarAlly>An ally is involved and may call on us for help. The War tab shows how it is going.</Dominion_Advice_WarAlly>
+  <Dominion_Advice_WarNear>The fighting is close. Expect more raiders, refugees and nervous traders around us.</Dominion_Advice_WarNear>
+  <Dominion_Advice_WarFar>Far enough away not to worry about, for now.</Dominion_Advice_WarFar>
+  <Dominion_Advice_EconomyDown>{0}'s economy is running at {1} of normal: their traders will have less to sell and want more for it.</Dominion_Advice_EconomyDown>
+  <Dominion_Advice_EconomyOk>{0}'s economy is holding up for now.</Dominion_Advice_EconomyOk>
+  <Dominion_Advice_Crisis>{0} is in crisis for about another {1}.</Dominion_Advice_Crisis>
+  <Dominion_Advice_Unstable>{0} is unstable ({1}/100). Unstable neighbours raid more and keep fewer promises.</Dominion_Advice_Unstable>
+  <Dominion_Advice_Stable>{0} looks steady enough ({1}/100 stability).</Dominion_Advice_Stable>
+  <Dominion_Advice_Espionage>Someone is playing games in the dark. The Intelligence tab shows how exposed we are.</Dominion_Advice_Espionage>
+  <Dominion_Advice_Peace>Trade along their routes should pick up again.</Dominion_Advice_Peace>
+  <Dominion_Advice_Mood>This will rattle the colony ({0}). A colony advisory on the radio can calm people down.</Dominion_Advice_Mood>
+  <Dominion_Advice_MoodShielded>A colony advisory is in force, so nobody will lose sleep over it.</Dominion_Advice_MoodShielded>
 </LanguageData>

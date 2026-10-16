@@ -16,6 +16,14 @@
         <li>closing-&gt;The situation is developing.</li>
         <li>closing-&gt;Caravan masters are already adjusting their routes.</li>
         <li>closing-&gt;[observers] expect the consequences to be felt for some time.</li>
+        <li>closing-&gt;The Courier will report further developments, caravans permitting.</li>
+        <li>closing-&gt;Readers are advised to remain calm and keep their rifles oiled.</li>
+        <li>closing-&gt;[observers] declined to comment, citing the weather, the hour and "everything else".</li>
+        <li>closing-&gt;More news as soon as the next trader stops talking about his prices.</li>
+        <li>closing-&gt;As ever on the rim, nobody is quite sure who is winning.</li>
+        <li>observers-&gt;well-fed sources</li>
+        <li>observers-&gt;a man at the caravan fire who seemed to know a lot</li>
+        <li>observers-&gt;veteran mercenaries</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
@@ -480,7 +488,8 @@
       <rulesStrings>
         <li>headline-&gt;[DETAIL] of [FACTION_A] looted</li>
         <li>headline-&gt;[FACTION_A] counts losses at [DETAIL]</li>
-        <li>story-&gt;[LEAD] the settlement of [DETAIL], held by [FACTION_A], has been looted. Its markets are expected to take weeks to recover. [closing]</li>
+        <li>headline-&gt;[FACTION_B] sacks [DETAIL]</li>
+        <li>story-&gt;[LEAD] the settlement of [DETAIL], held by [FACTION_A], has been looted by [FACTION_B]. Its markets are expected to take weeks to recover. [closing]</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>

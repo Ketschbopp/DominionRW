@@ -23,7 +23,9 @@ namespace Dominion
 
             if (!valid && current != null)
             {
-                Faction captor = current.Destroyed ? null : current.Faction;
+                // Some mods (FTV invasions) replace a captured settlement with a new one on the same tile.
+                Faction captor = current.Destroyed ? Find.WorldObjects.SettlementAt(current.Tile)?.Faction : current.Faction;
+                if (captor == faction) captor = null;
                 s.capital = null;
                 s.capitalTile = -1;
                 EventBus.Raise(DominionEventDefOf.Dominion_CapitalLost, faction, captor, current.Tile.tileId);
@@ -33,7 +35,8 @@ namespace Dominion
                 // The capital was destroyed before a save: the reference came back empty, but the tile was remembered.
                 int tile = s.capitalTile;
                 s.capitalTile = -1;
-                EventBus.Raise(DominionEventDefOf.Dominion_CapitalLost, faction, null, tile);
+                Faction captor = Find.WorldObjects.SettlementAt(new PlanetTile(tile))?.Faction;
+                EventBus.Raise(DominionEventDefOf.Dominion_CapitalLost, faction, captor == faction ? null : captor, tile);
             }
 
             if (settlements.Count == 0) return;

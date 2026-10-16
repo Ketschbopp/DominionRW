@@ -25,7 +25,7 @@ namespace Dominion
         {
             Rect view = new Rect(0f, 0f, rect.width - 16f, height);
             Widgets.BeginScrollView(rect, ref scroll, view);
-            var l = new Listing_Standard();
+            var l = new Listing_Standard { maxOneColumn = true };
             l.Begin(view);
             if (Time.realtimeSinceStartup > termsTime)
             {
@@ -69,14 +69,7 @@ namespace Dominion
             Widgets.EndScrollView();
         }
 
-        private static void Header(Listing_Standard l, string text)
-        {
-            l.Gap(6f);
-            Text.Font = GameFont.Medium;
-            l.Label(text);
-            Text.Font = GameFont.Small;
-            l.GapLine(4f);
-        }
+        private static void Header(Listing_Standard l, string text) => DominionTheme.Header(l, text);
 
         private static void None(Listing_Standard l)
         {

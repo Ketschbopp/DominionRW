@@ -30,6 +30,12 @@ namespace Dominion
 
         // Economy and strength. economyIndex: 100 = world average wealth per head.
         public float economyIndex = 100f;
+
+        /// <summary>A lasting economic shock (-0.6..0.4) from wars, disasters, sabotage or booms. Fades over about a month.</summary>
+        public float economyShock;
+
+        /// <summary>Short economic blows (sabotage, disasters) that wear off on a fixed day instead of fading slowly.</summary>
+        public List<TimedShock> timedShocks = new List<TimedShock>();
         public float militaryStrength;
         public int population;
         public int totalLiving;
@@ -73,6 +79,11 @@ namespace Dominion
 
         public bool InCrisis => crisis != null && crisisUntilTick > Find.TickManager.TicksGame;
 
+        /// <summary>In crisis, or out of it for less than <see cref="AidGraceDays"/>: aid still helps with the recovery.</summary>
+        public bool NeedsAid => crisis != null && crisisUntilTick + AidGraceDays * GenDate.TicksPerDay > Find.TickManager.TicksGame;
+
+        public const int AidGraceDays = 10;
+
         /// <summary>Tracks leader changes so legitimacy resets for a new leader.</summary>
         public Pawn lastKnownLeader;
 
@@ -80,6 +91,9 @@ namespace Dominion
         [Unsaved] public int activeWars;
         [Unsaved] public float effectiveAggression;
         [Unsaved] public int coldWars;
+
+        /// <summary>Today's economic climate (see EconomyEffects): scales E&amp;D production and the economy index.</summary>
+        [Unsaved] public float climate;
 
         public FactionState() { }
 
@@ -145,6 +159,8 @@ namespace Dominion
 
             Scribe_Deep.Look(ref personality, "personality");
             Scribe_Values.Look(ref economyIndex, "economyIndex", 100f);
+            Scribe_Values.Look(ref economyShock, "economyShock");
+            Scribe_Collections.Look(ref timedShocks, "timedShocks", LookMode.Deep);
             Scribe_Values.Look(ref militaryStrength, "militaryStrength");
             Scribe_Values.Look(ref population, "population");
             Scribe_Values.Look(ref totalLiving, "totalLiving");
@@ -152,6 +168,11 @@ namespace Dominion
             Scribe_Values.Look(ref territoryTiles, "territoryTiles");
             Scribe_Values.Look(ref vassalOutposts, "vassalOutposts");
             Scribe_Values.Look(ref settlementCount, "settlementCount");
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                if (capital != null && capital.Destroyed) capital = null;
+                if (lastKnownLeader != null && lastKnownLeader.Discarded) lastKnownLeader = null;
+            }
             Scribe_References.Look(ref capital, "capital");
             Scribe_Values.Look(ref capitalTile, "capitalTile", -1);
             Scribe_Values.Look(ref playerIntel, "playerIntel");
@@ -178,6 +199,7 @@ namespace Dominion
                     if (faction != null) personality.SeedFrom(faction);
                 }
                 if (blocs == null || blocs.Length != BlocCount) blocs = new float[BlocCount];
+                timedShocks ??= new List<TimedShock>();
                 // The effective personality is not saved; rebuild it now so it is right before this faction's slot runs.
                 if (faction != null)
                 {
@@ -185,6 +207,28 @@ namespace Dominion
                     catch (System.Exception e) { DLog.WarningOnce("Refreshing personality after load failed: " + e.Message, faction.loadID ^ 0x7E1); }
                 }
             }
+        }
+    }
+
+    /// <summary>An economic blow that is strongest at first and gone after its duration. Saved.</summary>
+    public class TimedShock : IExposable
+    {
+        public float amount;
+        public int startTick;
+        public int untilTick;
+
+        /// <summary>What is left of it now: the full amount at the start, nothing at the end.</summary>
+        public float Current(int now)
+        {
+            if (now >= untilTick || untilTick <= startTick) return 0f;
+            return amount * (untilTick - now) / (float)(untilTick - startTick);
+        }
+
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref amount, "amount");
+            Scribe_Values.Look(ref startTick, "startTick");
+            Scribe_Values.Look(ref untilTick, "untilTick");
         }
     }
 }

@@ -50,14 +50,17 @@ namespace Dominion
     /// <summary>Wrecks depots, power or workshops: economy and military take a blow, and E&amp;D stockpiles burn.</summary>
     public class Operation_Sabotage : OperationWorker
     {
+        /// <summary>How long sabotage hurts: the economy and the army recover after about six days.</summary>
+        public const int SabotageDays = 6;
+
         public override void Succeed(Operation op)
         {
             float m = Mult(op);
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             FactionState s = comp.GetState(op.target);
-            s.economyIndex = Mathf.Max(10f, s.economyIndex * (1f - 0.08f * m));
-            s.sabotagedUntilTick = Find.TickManager.TicksGame + Mathf.RoundToInt(20f * m) * GenDate.TicksPerDay;
-            IntegrationRegistry.Get<Integration_EconomicsDemography>()?.TryConsumeWealth(op.target, 1500f * m);
+            EconomyEffects.Shock(op.target, -0.08f * m, days: SabotageDays);
+            s.sabotagedUntilTick = Find.TickManager.TicksGame + SabotageDays * GenDate.TicksPerDay;
+            EconomyEffects.DestroyGoods(op.target, 1500f * m);
             WarUtility.AddScore(Faction.OfPlayer, op.target, 5f * m);
         }
     }

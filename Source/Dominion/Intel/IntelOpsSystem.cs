@@ -75,7 +75,8 @@ namespace Dominion
                 return;
             }
             comp.Player.AddInfluence(-def.influenceCost);
-            if (def.silverCost > 0) DiplomacyHelpers.TakeSilver(def.silverCost);
+            // Bribes and agitators' pay end up in their economy.
+            if (def.silverCost > 0) EconomyEffects.Transfer(Faction.OfPlayer, target, def.silverCost);
             int now = Find.TickManager.TicksGame;
             var op = new Operation
             {
@@ -295,8 +296,8 @@ namespace Dominion
             }
             else if (roll < 0.7f)
             {
-                rs.economyIndex = Mathf.Max(10f, rs.economyIndex * 0.96f);
-                rs.sabotagedUntilTick = Find.TickManager.TicksGame + 10 * GenDate.TicksPerDay;
+                EconomyEffects.Shock(rival, -0.04f, days: Operation_Sabotage.SabotageDays);
+                rs.sabotagedUntilTick = Find.TickManager.TicksGame + Operation_Sabotage.SabotageDays * GenDate.TicksPerDay;
                 WarUtility.AddScore(f, rival, 4f);
                 EventBus.Raise(DominionEventDefOf.Dominion_Sabotage, rival, f, secrecy: Secrecy.Secret);
             }
@@ -337,7 +338,7 @@ namespace Dominion
             }
             if (!propaganda && DominionMod.Settings.aiCovertOps && Rand.Chance(0.4f) && SabotagePlayer(f))
                 return;
-            if (propaganda && DominionMod.Settings.colonistNewsThoughts && !comp.Broadcast.CounterProgrammingActive)
+            if (propaganda && DominionMod.Settings.colonistNewsThoughts && !comp.Broadcast.CounterProgrammingActive && !comp.RadioOrders.AdvisoryInForce)
             {
                 foreach (Map map in Find.Maps)
                     if (map.IsPlayerHome)

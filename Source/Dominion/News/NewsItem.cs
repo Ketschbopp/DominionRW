@@ -42,6 +42,9 @@ namespace Dominion
         /// <summary>For corrections: the item being corrected.</summary>
         public int correctsId = -1;
 
+        /// <summary>The colony checked it over the radio and got a definite answer.</summary>
+        public bool investigated;
+
         public bool delivered;
         public bool read;
 
@@ -49,6 +52,9 @@ namespace Dominion
 
         public string headline;
         public string story;
+
+        /// <summary>"What it means for us": practical notes written from the game state at delivery. May be null.</summary>
+        public string advice;
 
         public bool Hidden => arrivesTick < 0;
 
@@ -89,11 +95,13 @@ namespace Dominion
             Scribe_Values.Look(ref truthful, "truthful", true);
             Scribe_Values.Look(ref corrected, "corrected");
             Scribe_Values.Look(ref correctsId, "correctsId", -1);
+            Scribe_Values.Look(ref investigated, "investigated");
             Scribe_Values.Look(ref delivered, "delivered");
             Scribe_Values.Look(ref read, "read");
             Scribe_Values.Look(ref detail, "detail");
             Scribe_Values.Look(ref headline, "headline");
             Scribe_Values.Look(ref story, "story");
+            Scribe_Values.Look(ref advice, "advice");
         }
     }
 }

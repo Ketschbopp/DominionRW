@@ -26,7 +26,7 @@ namespace Dominion
     /// player if it involves them or they have enough intel on its faction, and it can be intercepted by a
     /// player caravan on the same tile, which ends the mission and starts a fight.
     /// </summary>
-    public class Delegation : WorldObject
+    public class Delegation : WorldObject, IInterceptable
     {
         public const int TicksPerTile = 2000;
         public const float VisibleIntel = IntelUtility.RestrictedIntel;
@@ -143,16 +143,19 @@ namespace Dominion
             foreach (FloatMenuOption o in base.GetFloatMenuOptions(caravan))
                 yield return o;
             if (!caravan.IsPlayerControlled || Faction == null || Faction.IsPlayer || !VisibleToPlayer) yield break;
-            if (caravan.Tile == Tile)
-                yield return new FloatMenuOption("Dominion_Delegation_Intercept".Translate(Faction.Name), () => DelegationUtility.Intercept(this, caravan));
-            else
-                yield return new FloatMenuOption("Dominion_Delegation_MoveToIntercept".Translate(), () =>
-                {
-                    // Head for a tile a little ahead on its route.
-                    int ahead = Mathf.Min(path.Count - 1, index + 3);
-                    caravan.pather.StartPath(new PlanetTile(path[ahead]), null, repathImmediately: true);
-                });
+            // Any distance: the caravan gives chase, and the fight starts when it catches up.
+            bool actOfWar = !Faction.HostileTo(Faction.OfPlayer);
+            string label = (InterceptUtility.IsPursuing(caravan, this) ? "Dominion_Intercept_Pursuing" : "Dominion_Delegation_Intercept").Translate(Faction.Name).ToString()
+                           + (actOfWar ? " " + "Dominion_Intercept_ActOfWarTag".Translate().ToString() : "");
+            FloatMenuOption opt = InterceptUtility.Option(caravan, this, label, actOfWar);
+            if (opt != null) yield return opt;
         }
+
+        public PlanetTile TileAhead(int steps) => path.Count == 0 ? Tile : new PlanetTile(path[Mathf.Min(path.Count - 1, index + steps)]);
+
+        public bool CanBeIntercepted => !Destroyed && Faction != null && !Faction.IsPlayer && !Faction.defeated && VisibleToPlayer;
+
+        public void Engage(Caravan caravan) => DelegationUtility.Intercept(this, caravan);
 
         public override void ExposeData()
         {

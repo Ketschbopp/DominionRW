@@ -34,6 +34,7 @@ namespace Dominion
         {
             int taken = DiplomacyHelpers.TakeSilver(amount);
             if (taken <= 0) return;
+            EconomyEffects.Receive(f, taken);
             Commit(f);
             int goodwill = Mathf.Min(15, Mathf.RoundToInt(taken / 40f));
             f.TryAffectGoodwillWith(Faction.OfPlayer, goodwill, canSendMessage: false, canSendHostilityLetter: false);
@@ -258,8 +259,8 @@ namespace Dominion
             if (Rand.Chance(AcceptanceChance(f).Value))
             {
                 FactionState s = Comp.GetState(f);
-                int amount = Mathf.Clamp(Mathf.RoundToInt(s.wealth * 0.01f), 100, 1000);
-                if (!DiplomacyHelpers.DropSilver(amount))
+                int amount = EconomyEffects.Transfer(f, Faction.OfPlayer, Mathf.Clamp(Mathf.RoundToInt(s.wealth * 0.01f), 100, 1000));
+                if (amount <= 0)
                 {
                     Report("Dominion_Tribute_NoColony".Translate(f.Name), false);
                     return;

@@ -104,6 +104,9 @@ namespace Dominion
         // Physical operations: played on the target settlement's map.
         public bool physical;
         public Settlement settlement;
+
+        /// <summary>The settlement's tile: its map outlives the settlement if the player wipes the base out.</summary>
+        public int tile = -1;
         public Thing objective;
         public Pawn hostage;
         public bool targetIsLeader;
@@ -126,7 +129,9 @@ namespace Dominion
             Scribe_References.Look(ref thirdParty, "thirdParty");
             Scribe_Values.Look(ref physical, "physical");
             Scribe_References.Look(ref settlement, "settlement");
+            Scribe_Values.Look(ref tile, "tile", -1);
             Scribe_References.Look(ref objective, "objective");
+            if (Scribe.mode == LoadSaveMode.Saving && hostage != null && hostage.Discarded) hostage = null;
             Scribe_References.Look(ref hostage, "hostage");
             Scribe_Values.Look(ref targetIsLeader, "targetIsLeader");
             Scribe_Values.Look(ref alerted, "alerted");

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
+using HarmonyLib;
 using RimWorld.Planet;
 using Verse;
 
@@ -10,7 +12,7 @@ namespace Dominion
     /// Required. Faction Territories and Vassalage owns territory and vassal outposts. Tile ownership is
     /// read through a compiled delegate, because the territory scan calls it for every world tile once a day.
     /// </summary>
-    public class Integration_FactionTerritories : DominionIntegration
+    public partial class Integration_FactionTerritories : DominionIntegration
     {
         public override string PackageId => "jaeger972.factionterritories";
         public override string Label => "Faction Territories and Vassalage";
@@ -31,6 +33,15 @@ namespace Dominion
         private MethodInfo tryPurchase;
         private MethodInfo goodwillCost;
         private MethodInfo executeVassalisation;
+
+        // Optional: territory refresh and FTV invasions (its own base sieges).
+        private MethodInfo requestRegenerate;
+        private Type invasionType;
+        private MethodInfo tryCreateInvasion;
+        private FieldInfo invasionAttacker;
+        private FieldInfo invasionDefender;
+        private MethodInfo rollWinner;
+        private bool rollPatched;
 
         protected internal override void Bind(Binder b)
         {
@@ -62,6 +73,101 @@ namespace Dominion
             b.Method(vassalise, "CanVassaliseSettlement");
             executeVassalisation = b.Method(vassalise, "ExecuteVassalisation");
             b.Method(vassalise, "ExecuteCedeToFactionAtTile");
+
+            // Optional members: missing ones only switch off the feature that needs them.
+            Type util = AccessTools.TypeByName("FactionTerritories.FactionTerritoriesUtility");
+            requestRegenerate = util?.GetMethod("RequestRegenerate", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(bool) }, null);
+            Type inv = AccessTools.TypeByName("FactionTerritories.Invasions.Utility");
+            invasionType = AccessTools.TypeByName("FactionTerritories.Invasions.Invasion");
+            tryCreateInvasion = inv?.GetMethod("TryCreateForSettlement", BindingFlags.Public | BindingFlags.Static);
+            rollWinner = inv?.GetMethod("RollWinner", BindingFlags.NonPublic | BindingFlags.Static);
+            invasionAttacker = invasionType?.GetField("attackerFactionLoadId");
+            invasionDefender = invasionType?.GetField("defenderFactionLoadId");
+            b.Note(requestRegenerate != null ? "territory refresh: RequestRegenerate" : "territory refresh not found");
+            b.Note(tryCreateInvasion != null && invasionAttacker != null ? "invasions: warbands besiege through FTV" : "invasions not found: warband sieges stay abstract");
+            b.Note(rollWinner != null ? "invasion outcomes use Dominion's military strength" : "invasion outcome hook not found");
+            BindExpansion(b);
+        }
+
+        protected internal override void OnActivated()
+        {
+            PatchExpansion();
+            if (rollWinner == null || rollPatched) return;
+            try
+            {
+                DominionMod.Harmony.Patch(rollWinner, prefix: new HarmonyMethod(typeof(Integration_FactionTerritories), nameof(RollWinnerPrefix)));
+                rollPatched = true;
+            }
+            catch (Exception e)
+            {
+                DLog.Warning("Could not hook FTV invasion outcomes: " + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// FTV decides an invasion it resolves off-map from tech level alone; between factions Dominion simulates, the
+        /// odds come from the attacking force (a Dominion warband's, if one started it) against the garrison.
+        /// </summary>
+        public static bool RollWinnerPrefix(RimWorld.Faction attacker, RimWorld.Faction defender, float attackerWeight, float defenderWeight, int tile, ref RimWorld.Faction __result)
+        {
+            try
+            {
+                if (WorldComponent_Dominion.Instance == null || attacker == null || defender == null) return true;
+                if (!DominionScheduler.IsSimulated(attacker) || !DominionScheduler.IsSimulated(defender)) return true;
+                Settlement s = Find.WorldObjects.SettlementAt(new PlanetTile(tile));
+                // A battle fought out on a real map is decided by who is left standing: leave that to FTV.
+                if (s != null && s.HasMap) return true;
+                float points = WarbandUtility.SiegePointsAt(tile, attacker);
+                float chance = WarbandUtility.SiegeChance(points, attacker, defender, s);
+                // Blend with FTV's own weighting so its numbers still matter.
+                if (attackerWeight + defenderWeight > 0f)
+                    chance = 0.6f * chance + 0.4f * attackerWeight / (attackerWeight + defenderWeight);
+                __result = Rand.Chance(chance) ? attacker : defender;
+                return false;
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("FTV invasion outcome hook failed: " + e.Message, 0x0F75);
+                return true;
+            }
+        }
+
+        /// <summary>Asks FTV to redraw territory after Dominion moved a settlement to another owner.</summary>
+        public void RefreshTerritory()
+        {
+            if (!IsActive || requestRegenerate == null) return;
+            try { requestRegenerate.Invoke(null, new object[] { true }); }
+            catch (Exception e) { DLog.WarningOnce("FTV territory refresh failed: " + e.Message, 0x0F76); }
+        }
+
+        public bool CanInvade => IsActive && tryCreateInvasion != null;
+
+        /// <summary>Starts an FTV base invasion: the siege shows on the map, the player can join it, and FTV resolves it.</summary>
+        public bool TryStartInvasion(Settlement s, RimWorld.Faction attacker)
+        {
+            if (!CanInvade || s == null || attacker == null) return false;
+            try
+            {
+                return (bool)tryCreateInvasion.Invoke(null, new object[] { s, attacker, Find.TickManager.TicksGame });
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("Starting an FTV invasion failed: " + e.Message, 0x0F77);
+                return false;
+            }
+        }
+
+        /// <summary>FTV invasions on the map right now: (tile, attacker load id, defender load id).</summary>
+        public IEnumerable<(int tile, int attacker, int defender, int id)> Invasions()
+        {
+            if (!IsActive || invasionType == null || invasionAttacker == null) yield break;
+            List<WorldObject> all = Find.WorldObjects.AllWorldObjects;
+            for (int i = 0; i < all.Count; i++)
+            {
+                WorldObject o = all[i];
+                if (!invasionType.IsInstanceOfType(o) || o.Destroyed) continue;
+                yield return (o.Tile.tileId, (int)invasionAttacker.GetValue(o), (int)invasionDefender.GetValue(o), o.ID);
+            }
         }
 
         public bool CanReadTerritory => ownerByInt != null || ownerByPlanetTile != null;
@@ -90,7 +196,8 @@ namespace Dominion
                 foreach (object o in outposts)
                 {
                     if (o == null) continue;
-                    int master = ParseLoadId(outpostMasterId.GetValue(o) as string);
+                    // Outposts belong to their master (the player, in FTV); MasterFactionLoadIDString is the original owner.
+                    int master = (o as WorldObject)?.Faction?.loadID ?? ParseLoadId(outpostMasterId.GetValue(o) as string);
                     int original = (int)outpostOriginalId.GetValue(o);
                     visit(master, original);
                 }
@@ -136,7 +243,10 @@ namespace Dominion
             if (!IsActive || s == null) return false;
             try
             {
-                return (bool)tryPurchase.Invoke(null, new object[] { s });
+                RimWorld.Faction before = s.Faction;
+                bool ok = (bool)tryPurchase.Invoke(null, new object[] { s });
+                if (ok) WarUtility.SettlementChangedHands(before, RimWorld.Faction.OfPlayer);
+                return ok;
             }
             catch (Exception e)
             {
@@ -169,14 +279,18 @@ namespace Dominion
                     else if (t.IsValueType) args[i] = Activator.CreateInstance(t);
                 }
                 object result = executeVassalisation.Invoke(null, args);
-                if (result is bool ok && !ok) return false;
+                // FTV removes the settlement from the world (not Destroy) and puts an outpost in its place.
+                bool changed = result is bool ok ? ok : s.Destroyed || !Find.WorldObjects.Contains(s) || s.Faction != before;
+                if (!changed) return false;
             }
             catch (Exception e)
             {
                 DLog.WarningOnce("FTV cession failed: " + e, 0x0F74);
                 return false;
             }
-            return s.Destroyed || s.Faction != before;
+            // The town's people and goods leave the old owner's books (E&D never sees FTV's Remove).
+            WarUtility.SettlementChangedHands(before, RimWorld.Faction.OfPlayer);
+            return true;
         }
 
         /// <summary>Land and vassals count in the Rim Council: up to +2 for territory, +0.2 per vassal outpost (max +2).</summary>

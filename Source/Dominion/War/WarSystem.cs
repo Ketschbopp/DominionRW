@@ -120,6 +120,12 @@ namespace Dominion
                     pendingPeace.Add((other.attacker, other.defender));
         }
 
+        /// <summary>Caravans chasing delegations or warbands are steered every slot, and fight when they catch up.</summary>
+        public override void Slot(int slot)
+        {
+            if (Comp.Wars.pursuits.Count > 0) InterceptUtility.Tick();
+        }
+
         // ---------------------------------------------------------------- hourly
 
         public override void Hourly()
@@ -159,7 +165,14 @@ namespace Dominion
         {
             WorldComponent_Dominion comp = Comp;
             WarRegistry reg = comp.Wars;
+            foreach (War w in reg.wars)
+                if (w.attacker != null && w.defender != null && (w.attacker.defeated || w.defender.defeated))
+                    WarbandUtility.Recall(w.attacker, w.defender);
             reg.wars.RemoveAll(w => w.attacker == null || w.defender == null || w.attacker.defeated || w.defender.defeated);
+            // A defeated faction's envoys and fighters have nowhere to go.
+            foreach (WorldObject o in Find.WorldObjects.AllWorldObjects.ToList())
+                if ((o is Warband || o is Delegation) && !o.Destroyed && (o.Faction == null || o.Faction.defeated))
+                    o.Destroy();
 
             foreach (Warband w in WarbandUtility.All().ToList())
                 if (w.Blockading) WarbandUtility.BlockadeDay(w);
@@ -171,7 +184,7 @@ namespace Dominion
             if (reg.originalOwner.Count > 0)
             {
                 var alive = new HashSet<int>();
-                foreach (Settlement s in Find.WorldObjects.Settlements) alive.Add(s.ID);
+                foreach (Settlement s in Find.WorldObjects.Settlements) alive.Add(s.Tile.tileId);
                 foreach (KeyValuePair<int, int> kv in reg.originalOwner.ToList())
                 {
                     Faction orig = comp.Cache.FactionById(kv.Value);
@@ -432,14 +445,20 @@ namespace Dominion
             int every = TributeEveryDays * GenDate.TicksPerDay;
             foreach (Treaty t in comp.Treaties.All.ToList())
             {
-                if (t.def.tribute <= 0f || !(t.a.IsPlayer || t.b.IsPlayer)) continue;
+                if (t.def.tribute <= 0f) continue;
                 if (now - Mathf.Max(t.signedTick, t.lastPaymentTick) < every) continue;
                 t.lastPaymentTick = now;
+                if (!t.a.IsPlayer && !t.b.IsPlayer)
+                {
+                    // Between AI factions the tribute is real silver from one E&D stockpile to the other.
+                    EconomyEffects.Transfer(t.a, t.b, Mathf.RoundToInt(Mathf.Clamp(comp.GetState(t.a).wealth * 0.003f, 100f, 600f)));
+                    continue;
+                }
                 if (t.b.IsPlayer)
                 {
                     FactionState s = comp.GetState(t.a);
-                    int amount = Mathf.RoundToInt(Mathf.Clamp(s.wealth * 0.003f, 100f, 600f));
-                    if (DiplomacyHelpers.DropSilver(amount))
+                    int amount = EconomyEffects.Transfer(t.a, t.b, Mathf.RoundToInt(Mathf.Clamp(s.wealth * 0.003f, 100f, 600f)));
+                    if (amount > 0)
                     {
                         EventBus.Raise(DominionEventDefOf.Dominion_TributePaid, t.a, t.b, detail: amount.ToString());
                         Messages.Message("Dominion_Tribute_Arrived".Translate(t.a.Name, amount), MessageTypeDefOf.PositiveEvent, historical: true);
@@ -455,8 +474,7 @@ namespace Dominion
                             LetterDefOf.NegativeEvent, null, t.b);
                         continue;
                     }
-                    DiplomacyHelpers.TakeSilver(amount);
-                    comp.GetState(t.b).economyIndex *= 1.01f;
+                    EconomyEffects.Transfer(t.a, t.b, amount);
                     EventBus.Raise(DominionEventDefOf.Dominion_TributePaid, t.a, t.b, detail: amount.ToString());
                     Messages.Message("Dominion_Tribute_PaidByPlayer".Translate(amount, t.b.Name), MessageTypeDefOf.NeutralEvent, historical: true);
                 }
@@ -476,9 +494,8 @@ namespace Dominion
                     continue;
                 }
                 Faction f = b.settlement.Faction;
-                FactionState s = Comp.GetState(f);
-                s.economyIndex = Mathf.Max(10f, s.economyIndex * 0.99f);
-                IntegrationRegistry.Get<Integration_EconomicsDemography>()?.TryConsumeWealth(f, 150f);
+                // The blockade itself is in the economic climate (E&D production falls); spoiled goods on top.
+                EconomyEffects.DestroyGoods(f, 150f);
                 WarUtility.AddScore(Faction.OfPlayer, f, 1.5f);
                 // The garrison may sally out.
                 if (Rand.Chance(0.1f)) Sortie(b);

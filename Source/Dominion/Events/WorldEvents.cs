@@ -57,6 +57,9 @@ namespace Dominion
         public float partnerFavourTowardFaction;
         public float partnerStabilityOffset;
 
+        /// <summary>Days the economic effect lasts; 0 = a lasting shock that fades over about a month.</summary>
+        public int economyDays;
+
         /// <summary>Chance the faction's leader dies (assassination attempts).</summary>
         public float leaderDeathChance;
 
@@ -226,7 +229,8 @@ namespace Dominion
 
             s.stability = Mathf.Clamp(s.stability + w.stabilityOffset, 0f, 100f);
             s.legitimacy = Mathf.Clamp(s.legitimacy + w.legitimacyOffset, 0f, 100f);
-            s.economyIndex = Mathf.Clamp(s.economyIndex * w.economyFactor, 10f, 300f);
+            // A lasting shock that reaches E&D: losses burn stockpile goods, booms raise production for weeks.
+            if (w.economyFactor != 1f) EconomyEffects.Shock(f, w.economyFactor - 1f, days: w.economyDays);
             if (w.blocShift != 0f)
             {
                 s.blocs[(int)w.bloc] = Mathf.Max(0f, s.blocs[(int)w.bloc] + w.blocShift);
@@ -283,7 +287,9 @@ namespace Dominion
                 comp.GetRelation(f, donor).favour += 8f;
                 FactionState s = comp.GetState(f);
                 s.stability = Mathf.Min(100f, s.stability + 2f);
-                ds.economyIndex *= 0.99f;
+                // Real silver changes hands (E&D stockpiles), and it softens the blow.
+                EconomyEffects.Transfer(donor, f, Mathf.RoundToInt(Mathf.Clamp(ds.wealth * 0.01f, 200f, 1500f)));
+                EconomyEffects.Shock(f, 0.03f);
                 EventBus.Raise(DominionEventDefOf.Dominion_AidSent, donor, f);
                 return; // one donor makes the news
             }

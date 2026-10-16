@@ -265,4 +265,26 @@
     <newsRules>Dominion_News_VisitIncident</newsRules>
     <headline>{0} protests {2} by visitors from {1}</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SiegeBegan</defName>
+    <label>siege</label>
+    <description>A faction has laid siege to an enemy settlement (a Faction Territories base invasion). The player can join the fight.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_SiegeBegan</newsRules>
+    <headline>{0} besieges {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_MissileStrike</defName>
+    <label>missile strike</label>
+    <description>A faction has struck another with a missile (InterRim Ballistic Missile). An act of war; strategic weapons outrage the whole world.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>1</newsworthiness>
+    <newsRules>Dominion_News_MissileStrike</newsRules>
+    <headline>{0} launches a missile strike on {2}</headline>
+  </Dominion.DominionEventDef>
 </Defs>
