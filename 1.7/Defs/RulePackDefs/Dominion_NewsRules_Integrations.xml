@@ -57,4 +57,37 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Starvation</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Hunger in [FACTION_A]</li>
+        <li>headline-&gt;[FACTION_A] runs out of food</li>
+        <li>headline-&gt;Empty granaries in [CAPITAL_A]</li>
+        <li>story-&gt;[LEAD] the stores of [FACTION_A] can no longer feed its people. [st_detail] [st_politics] [closing]</li>
+        <li>st_detail-&gt;Families are said to be eating seed grain and boiling leather.</li>
+        <li>st_detail-&gt;Rationing has been ordered, and the queues are long and angry.</li>
+        <li>st_detail-&gt;The old and the very young are suffering first.</li>
+        <li>st_detail-&gt;Traders report that the markets of [CAPITAL_A] have nothing left to sell.</li>
+        <li>st_politics-&gt;[LEADER_A] is under growing pressure to do something, anything.</li>
+        <li>st_politics-&gt;[observers] warn that hungry people do not stay patient for long.</li>
+        <li>st_politics-&gt;Relief caravans, from anyone, would be welcomed.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_PirateTheft</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] raids the stores of [FACTION_B]</li>
+        <li>headline-&gt;Raiders hit [FACTION_B] warehouses</li>
+        <li>story-&gt;[LEAD] raiders of [FACTION_A] have broken into the stores of [FACTION_B] and carried off [DETAIL]. [pt_detail] [closing]</li>
+        <li>pt_detail-&gt;Guards were reportedly asleep, drunk, or both.</li>
+        <li>pt_detail-&gt;[FACTION_B] has promised to hunt the thieves down.</li>
+        <li>pt_detail-&gt;Merchants are hiring more guards and charging more for everything.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>

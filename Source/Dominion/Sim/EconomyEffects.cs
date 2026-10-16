@@ -95,7 +95,8 @@ namespace Dominion
             Add(-0.04f * EmbargoesAgainst(f, comp), "Dominion_Climate_Embargoes");
             Add(-0.02f * Mathf.Min(3, s.coldWars), "Dominion_Climate_ColdWars");
             Add(Blockaded(f, comp) ? -0.12f : 0f, "Dominion_Climate_Blockade");
-            Add(s.InCrisis ? -0.08f : 0f, "Dominion_Climate_Crisis");
+            // Starvation is not counted here: cutting a starving faction's production would only deepen it.
+            Add(s.InCrisis && s.crisis != IntegrationEventDefOf.Dominion_Starvation ? -0.08f : 0f, "Dominion_Climate_Crisis");
             Add(TreatyBonus(f, comp), "Dominion_Climate_Treaties");
             Add(CouncilUtility.EconomyBonus(f), "Dominion_Climate_Council");
             Add((s.stability - 50f) / 400f, "Dominion_Climate_Stability");
@@ -133,7 +134,7 @@ namespace Dominion
             return n;
         }
 
-        private static bool Blockaded(Faction f, WorldComponent_Dominion comp)
+        internal static bool Blockaded(Faction f, WorldComponent_Dominion comp)
         {
             foreach (Blockade b in comp.Wars.blockades)
                 if (b.settlement != null && b.settlement.Faction == f && b.StillValid) return true;

@@ -50,4 +50,28 @@
     <newsRules>Dominion_News_ConvoyLost</newsRules>
     <headline>Trade convoy of {0} from {2} destroyed by {1}</headline>
   </Dominion.DominionEventDef>
+
+  <!-- Economics & Demography -->
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Starvation</defName>
+    <label>starvation</label>
+    <description>A faction cannot feed and supply its people from its stores (Economics &amp; Demography upkeep shortfall). People are dying, stability and legitimacy fall each day it lasts, and relief aid is welcome.</description>
+    <category>Disaster</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_Starvation</newsRules>
+    <headline>Hunger in {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_PirateTheft</defName>
+    <label>stores plundered</label>
+    <description>Raiders have carried off part of a faction's stores (Economics &amp; Demography). The losses hurt its economy for a few days.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <newsRules>Dominion_News_PirateTheft</newsRules>
+    <headline>{0} raids the stores of {1}</headline>
+  </Dominion.DominionEventDef>
 </Defs>

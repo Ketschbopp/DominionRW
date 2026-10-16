@@ -53,11 +53,15 @@ namespace Dominion
             produceGoods = manager?.GetMethod("ProduceGoodsCategorized", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             b.Note(produceGoods != null ? "production hook: ProduceGoodsCategorized" : "production hook not found (climate will not reach E&D production)");
             BindGoods(stockpile, b);
+            BindLinks(manager, stockpile, b);
         }
+
+        protected internal override void OnWorldLoaded() => ResetLinks();
 
         /// <summary>Dominion's economic climate scales E&amp;D's production for each faction.</summary>
         protected internal override void OnActivated()
         {
+            PatchLinks();
             if (produceGoods == null || productionPatched) return;
             try
             {
@@ -77,6 +81,7 @@ namespace Dominion
             try
             {
                 if (f == null || WorldComponent_Dominion.Instance == null) return;
+                NoteProduction(f);
                 float factor = EconomyEffects.ProductionFactor(f);
                 if (Mathf.Approximately(factor, 1f)) return;
                 adults = Mathf.Max(0, Mathf.RoundToInt(adults * factor));
