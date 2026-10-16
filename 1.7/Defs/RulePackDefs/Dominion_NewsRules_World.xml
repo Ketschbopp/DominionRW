@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <RulePackDef>
+    <defName>Dominion_News_Scandal</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Scandal rocks [FACTION_A]</li>
+        <li>headline-&gt;Government of [FACTION_A] embroiled in scandal</li>
+        <li>story-&gt;[LEAD] a scandal has engulfed the government of [FACTION_A]. [sc_detail] [closing]</li>
+        <li>sc_detail-&gt;Officials are accused of selling favours.</li>
+        <li>sc_detail-&gt;Leaked letters have embarrassed [LEADER_A].</li>
+        <li>sc_detail-&gt;Public trust in the government has fallen sharply.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SuccessionCrisis</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Succession crisis in [FACTION_A]</li>
+        <li>story-&gt;[LEAD] with the authority of [LEADER_A] in doubt, rival claimants in [FACTION_A] are openly disputing the succession. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_OfficialDefects</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Senior official of [FACTION_A] defects to [FACTION_B]</li>
+        <li>story-&gt;[LEAD] a senior official of [FACTION_A] has fled to [FACTION_B] and asked for protection. [FACTION_A] demands their return. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_ReformMovement</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Reformers march in [FACTION_A]</li>
+        <li>story-&gt;[LEAD] crowds in [CAPITAL_A] are demanding political reform. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SecessionMovement</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Separatists stir in [FACTION_A]</li>
+        <li>story-&gt;[LEAD] outlying settlements of [FACTION_A] are talking of going their own way. [LEADER_A] has called for unity. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_ReligiousSchism</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Schism divides the faithful of [FACTION_A]</li>
+        <li>story-&gt;[LEAD] a bitter dispute over doctrine has split the faithful of [FACTION_A]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_CulturalFestival</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Festival season in [FACTION_A]</li>
+        <li>headline-&gt;Celebrations fill the streets of [CAPITAL_A]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] is celebrating its great festival, and [LEADER_A] has joined the crowds. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Famine</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Famine strikes [FACTION_A]</li>
+        <li>headline-&gt;Hunger spreads in [FACTION_A]</li>
+        <li>story-&gt;[LEAD] food has run short across the lands of [FACTION_A] and people are going hungry. Aid would be welcome. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_PlagueOutbreak</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Plague breaks out in [FACTION_A]</li>
+        <li>headline-&gt;Sickness spreads through [FACTION_A]</li>
+        <li>story-&gt;[LEAD] a sickness is spreading through the settlements of [FACTION_A]. Healers are overwhelmed and medicine is short. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_NaturalDisaster</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Disaster hits [DETAIL]</li>
+        <li>headline-&gt;[FACTION_A] counts the cost at [DETAIL]</li>
+        <li>story-&gt;[LEAD] [disaster] has struck [DETAIL], a settlement of [FACTION_A]. Rebuilding will take time. [closing]</li>
+        <li>disaster-&gt;a flood</li>
+        <li>disaster-&gt;an earthquake</li>
+        <li>disaster-&gt;a great fire</li>
+        <li>disaster-&gt;a violent storm</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_RefugeeWave</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Refugees flee [FACTION_A]</li>
+        <li>story-&gt;[LEAD] families are leaving [FACTION_A] in large numbers, many heading for the lands of [FACTION_B]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_TradeBoom</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Trade boom in [FACTION_A]</li>
+        <li>story-&gt;[LEAD] the markets of [FACTION_A] are busier than they have been in years. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_GoodHarvest</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Bumper harvest in [FACTION_A]</li>
+        <li>story-&gt;[LEAD] granaries across [FACTION_A] are full after an exceptional harvest. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_MarketCrash</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Markets crash in [FACTION_A]</li>
+        <li>story-&gt;[LEAD] prices have collapsed in the markets of [FACTION_A], wiping out fortunes overnight. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_AidSent</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] sends aid to [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has sent food and medicine to [FACTION_B], which is struggling with a crisis. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+</Defs>

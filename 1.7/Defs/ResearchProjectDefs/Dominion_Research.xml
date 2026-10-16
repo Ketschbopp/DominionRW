@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ResearchTabDef>
+    <defName>Dominion_ResearchTab</defName>
+    <label>dominion</label>
+  </ResearchTabDef>
+
+  <ResearchProjectDef>
+    <defName>Dominion_RadioMonitoring</defName>
+    <label>radio monitoring</label>
+    <description>Listen in on the planet's radio traffic: faction broadcasts, trader chatter and military bands. Unlocks the radio receiver. News reaches you faster and you learn more about every faction.</description>
+    <baseCost>700</baseCost>
+    <techLevel>Industrial</techLevel>
+    <prerequisites>
+      <li>Electricity</li>
+    </prerequisites>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>0</researchViewX>
+    <researchViewY>0</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>Dominion_WorldCommsProtocols</defName>
+    <label>world communications protocols</label>
+    <description>Learn the protocols and call signs factions use to talk to each other. Raises your intel on every faction.</description>
+    <baseCost>1200</baseCost>
+    <techLevel>Industrial</techLevel>
+    <prerequisites>
+      <li>Dominion_RadioMonitoring</li>
+    </prerequisites>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>1</researchViewX>
+    <researchViewY>0</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>Dominion_SignalDecoding</defName>
+    <label>signal decoding</label>
+    <description>Break the simple ciphers on military and government channels. A large boost to intel, so restricted events start reaching you.</description>
+    <baseCost>2000</baseCost>
+    <techLevel>Industrial</techLevel>
+    <prerequisites>
+      <li>Dominion_WorldCommsProtocols</li>
+      <li>MicroelectronicsBasics</li>
+    </prerequisites>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>2</researchViewX>
+    <researchViewY>0</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>Dominion_IntelligenceAgency</defName>
+    <label>intelligence agency</label>
+    <description>Organise analysts, informants and archives into a proper intelligence service. Raises intel further, makes your operations more likely to succeed and foreign agents easier to catch.</description>
+    <baseCost>3000</baseCost>
+    <techLevel>Industrial</techLevel>
+    <prerequisites>
+      <li>Dominion_SignalDecoding</li>
+    </prerequisites>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>3</researchViewX>
+    <researchViewY>0</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>Dominion_DiplomaticCorps</defName>
+    <label>diplomatic corps</label>
+    <description>Train envoys in protocol, negotiation and etiquette. The foundation for formal treaties and summits.</description>
+    <baseCost>1000</baseCost>
+    <techLevel>Medieval</techLevel>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>0</researchViewX>
+    <researchViewY>1</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>Dominion_IntelligenceNetworks</defName>
+    <label>intelligence networks</label>
+    <description>Learn to run informants, contacts and agents abroad. Unlocks intelligence operations and counter-intelligence in the Dominion tab.</description>
+    <baseCost>1200</baseCost>
+    <techLevel>Medieval</techLevel>
+    <prerequisites>
+      <li>Dominion_DiplomaticCorps</li>
+    </prerequisites>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>1</researchViewX>
+    <researchViewY>1</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>Dominion_Broadcasting</defName>
+    <label>broadcasting</label>
+    <description>Build a studio and transmitter to put your own programmes on the air: news for your colonists, culture for your neighbours, programmes for a chosen foreign audience, counter-programming and entertainment. Programmes play on your televisions and shape what newspapers print.</description>
+    <baseCost>1500</baseCost>
+    <techLevel>Industrial</techLevel>
+    <prerequisites>
+      <li>Dominion_RadioMonitoring</li>
+    </prerequisites>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>1</researchViewX>
+    <researchViewY>2</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>Dominion_PlanetaryFederation</defName>
+    <label>planetary federation</label>
+    <description>Draft the constitution of a federation spanning the whole planet, with your colony at its head. Lets you put the Federation Charter before the Rim Council; once it passes, factions can sign Federation membership with you. Unite the world to win.</description>
+    <baseCost>4000</baseCost>
+    <techLevel>Industrial</techLevel>
+    <prerequisites>
+      <li>Dominion_DiplomaticCorps</li>
+      <li>Dominion_WorldCommsProtocols</li>
+    </prerequisites>
+    <tab>Dominion_ResearchTab</tab>
+    <researchViewX>2</researchViewX>
+    <researchViewY>1</researchViewY>
+  </ResearchProjectDef>
+</Defs>

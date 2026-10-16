@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- headline: {0} is the primary faction, {1} the secondary. Grammar-based news replaces these in M2. -->
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DebugTest</defName>
+    <label>test event</label>
+    <description>A test event raised from the dev menu.</description>
+    <category>General</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.1</newsworthiness>
+    <newsRules>Dominion_News_DebugTest</newsRules>
+    <headline>Test event involving {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_WarDeclared</defName>
+    <label>war declared</label>
+    <description>Two factions have become hostile.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <newsRules>Dominion_News_WarDeclared</newsRules>
+    <headline>{0} and {1} are now at war</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_PeaceMade</defName>
+    <label>peace made</label>
+    <description>Two hostile factions are no longer at war.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_PeaceMade</newsRules>
+    <headline>{0} and {1} end hostilities</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_RelationsWarmed</defName>
+    <label>alliance formed</label>
+    <description>Two factions have become allies.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_RelationsWarmed</newsRules>
+    <headline>{0} and {1} become allies</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_LeaderDied</defName>
+    <label>leader died</label>
+    <description>A faction's leader has died.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_LeaderDied</newsRules>
+    <headline>The leader of {0} has died</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_AllianceBroken</defName>
+    <label>alliance broken</label>
+    <description>An alliance between two factions has ended.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_AllianceBroken</newsRules>
+    <headline>{0} ends its alliance with {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Riots</defName>
+    <label>riots</label>
+    <description>Unrest has turned into riots. Stability and legitimacy fall, and the economy suffers.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_Riots</newsRules>
+    <headline>Riots break out in {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Coup</defName>
+    <label>coup</label>
+    <description>The military or a palace faction has seized power and installed a new leader.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <newsRules>Dominion_News_Coup</newsRules>
+    <headline>Coup in {0}: a new leader seizes power</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Revolution</defName>
+    <label>revolution</label>
+    <description>The government has fallen to a revolution. A new leader and a new form of government take over.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>1</newsworthiness>
+    <newsRules>Dominion_News_Revolution</newsRules>
+    <headline>Revolution in {0}: the government falls</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_CapitalLost</defName>
+    <label>capital lost</label>
+    <description>A faction has lost its capital, destroyed or captured. Stability and legitimacy fall sharply.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.95</newsworthiness>
+    <newsRules>Dominion_News_CapitalLost</newsRules>
+    <headline>{0} loses its capital</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_CapitalEstablished</defName>
+    <label>new capital</label>
+    <description>A faction has moved its seat of government.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.4</newsworthiness>
+    <newsRules>Dominion_News_CapitalEstablished</newsRules>
+    <headline>{0} proclaims a new capital</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_NewsCorrection</defName>
+    <label>news correction</label>
+    <description>Earlier reports have turned out to be false.</description>
+    <category>General</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <debugHidden>true</debugHidden>
+    <newsRules>Dominion_News_Correction</newsRules>
+    <headline>Earlier reports about {0} were false</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TreatySigned</defName>
+    <label>treaty signed</label>
+    <description>Two factions have signed a treaty.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_TreatySigned</newsRules>
+    <headline>{0} and {1} sign a treaty: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TreatyCancelled</defName>
+    <label>treaty cancelled</label>
+    <description>A faction has formally withdrawn from a treaty.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_TreatyCancelled</newsRules>
+    <headline>{0} withdraws from its {2} with {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TreatyBroken</defName>
+    <label>treaty broken</label>
+    <description>A faction has broken a treaty. Every faction thinks less of it.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.85</newsworthiness>
+    <newsRules>Dominion_News_TreatyBroken</newsRules>
+    <headline>{0} breaks its {2} with {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TreatyExpired</defName>
+    <label>treaty expired</label>
+    <description>A treaty has run its course.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <newsRules>Dominion_News_TreatyExpired</newsRules>
+    <headline>The {2} between {0} and {1} expires</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_EmbargoDeclared</defName>
+    <label>embargo declared</label>
+    <description>A faction has stopped all trade with another.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_EmbargoDeclared</newsRules>
+    <headline>{0} declares an embargo on {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_EmbargoLifted</defName>
+    <label>embargo lifted</label>
+    <description>A faction has resumed trade with another.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.4</newsworthiness>
+    <newsRules>Dominion_News_EmbargoLifted</newsRules>
+    <headline>{0} lifts its embargo on {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_BordersChanged</defName>
+    <label>border policy changed</label>
+    <description>A faction has changed its border policy toward another.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.4</newsworthiness>
+    <newsRules>Dominion_News_BordersChanged</newsRules>
+    <headline>{0} sets its borders with {1} to {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Denounced</defName>
+    <label>denunciation</label>
+    <description>A faction has publicly denounced another.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_Denounced</newsRules>
+    <headline>{0} denounces {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TributePaid</defName>
+    <label>tribute paid</label>
+    <description>A faction has paid tribute under threat.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_TributePaid</newsRules>
+    <headline>{0} pays tribute of {2} silver to {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DelegationDispatched</defName>
+    <label>delegation sets out</label>
+    <description>A diplomatic delegation has set out for another faction.</description>
+    <category>Diplomacy</category>
+    <secrecy>Restricted</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <newsRules>Dominion_News_DelegationDispatched</newsRules>
+    <headline>A delegation from {0} sets out for {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DelegationIntercepted</defName>
+    <label>delegation intercepted</label>
+    <description>A diplomatic delegation was attacked on the road.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <newsRules>Dominion_News_DelegationIntercepted</newsRules>
+    <headline>{0} intercepts a delegation from {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SummitHeld</defName>
+    <label>summit</label>
+    <description>Two leaders met in person and reached an agreement.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_SummitHeld</newsRules>
+    <headline>Summit between {0} and {1}: agreement on {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SummitFailed</defName>
+    <label>summit failed</label>
+    <description>A summit between two leaders ended without agreement.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_SummitFailed</newsRules>
+    <headline>Summit between {0} and {1} ends without agreement</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_HostagesExchanged</defName>
+    <label>hostage exchange</label>
+    <description>Two factions have exchanged prisoners and captives.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_HostagesExchanged</newsRules>
+    <headline>{0} and {1} exchange hostages</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_EnvoyMission</defName>
+    <label>envoy mission</label>
+    <description>An envoy has visited a foreign settlement on a diplomatic mission.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <newsRules>Dominion_News_EnvoyMission</newsRules>
+    <headline>Envoys of {0} visit {1}: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_EnvoyCaptured</defName>
+    <label>envoy captured</label>
+    <description>A faction has seized another faction's envoy.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_EnvoyCaptured</newsRules>
+    <headline>{0} seizes an envoy of {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_CouncilConvened</defName>
+    <label>Rim Council convened</label>
+    <description>The Rim Council has been called to session.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_CouncilConvened</newsRules>
+    <headline>The Rim Council will meet in the lands of {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DecreePassed</defName>
+    <label>decree passed</label>
+    <description>The Rim Council has passed a decree that binds all members.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_DecreePassed</newsRules>
+    <headline>Rim Council decree: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_MotionRejected</defName>
+    <label>motion rejected</label>
+    <description>The Rim Council voted down a motion.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_MotionRejected</newsRules>
+    <headline>Rim Council rejects: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DecreeViolated</defName>
+    <label>decree violated</label>
+    <description>A member of the Rim Council has broken a decree. Every member thinks less of it.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.85</newsworthiness>
+    <newsRules>Dominion_News_DecreeViolated</newsRules>
+    <headline>{0} violates a Rim Council decree</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DecreeExpired</defName>
+    <label>decree expired</label>
+    <description>A Rim Council decree has run its course.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <newsRules>Dominion_News_DecreeExpired</newsRules>
+    <headline>Rim Council decree expires: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_AgentsExposed</defName>
+    <label>agents exposed</label>
+    <description>A faction has uncovered foreign agents working against it.</description>
+    <category>Espionage</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_AgentsExposed</newsRules>
+    <headline>{0} exposes agents of {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_ForeignAgentsCaught</defName>
+    <label>foreign agents caught</label>
+    <description>Your counter-intelligence caught foreign agents.</description>
+    <category>Espionage</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_ForeignAgentsCaught</newsRules>
+    <headline>{0} catches agents of {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_PowerStruggle</defName>
+    <label>power struggle</label>
+    <description>A struggle for power has broken out in a faction's leadership.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.55</newsworthiness>
+    <newsRules>Dominion_News_PowerStruggle</newsRules>
+    <headline>{0}: power struggle in the leadership</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SettlementLooted</defName>
+    <label>settlement looted</label>
+    <description>A faction settlement has been looted and its economy is recovering.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_SettlementLooted</newsRules>
+    <headline>{2} of {0} looted</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_VassalOutpostGained</defName>
+    <label>vassal outpost gained</label>
+    <description>A faction has taken a settlement under its rule as a vassal outpost.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_VassalOutpostGained</newsRules>
+    <headline>{0} takes a new vassal outpost</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_VassalOutpostLost</defName>
+    <label>vassal outpost lost</label>
+    <description>A faction has lost one of its vassal outposts.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_VassalOutpostLost</newsRules>
+    <headline>{0} loses a vassal outpost</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Emigration</defName>
+    <label>emigration</label>
+    <description>Unrest has driven people to leave a faction.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.35</newsworthiness>
+    <newsRules>Dominion_News_Emigration</newsRules>
+    <headline>People flee unrest in {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FederationCharter</defName>
+    <label>Federation Charter</label>
+    <description>The Rim Council has adopted the Federation Charter.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.95</newsworthiness>
+    <newsRules>Dominion_News_FederationCharter</newsRules>
+    <headline>Rim Council adopts the Federation Charter</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FederationJoined</defName>
+    <label>joined the Federation</label>
+    <description>A faction has joined the player's Federation.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <newsRules>Dominion_News_FederationJoined</newsRules>
+    <headline>{0} joins the Federation</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FederationLeft</defName>
+    <label>left the Federation</label>
+    <description>A faction has left the player's Federation.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.85</newsworthiness>
+    <newsRules>Dominion_News_FederationLeft</newsRules>
+    <headline>{0} leaves the Federation</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FederationProclaimed</defName>
+    <label>Federation proclaimed</label>
+    <description>The planetary Federation has been proclaimed.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>1.0</newsworthiness>
+    <newsRules>Dominion_News_FederationProclaimed</newsRules>
+    <headline>The Federation is proclaimed</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FactionAbsorbed</defName>
+    <label>faction absorbed</label>
+    <description>A major faction has become part of the player's realm.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_FactionAbsorbed</newsRules>
+    <headline>{0} absorbed into the realm of {1}</headline>
+  </Dominion.DominionEventDef>
+</Defs>

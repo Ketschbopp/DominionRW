@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- The Leadership Desk can only be made of wood, steel or gold (see Patches/Dominion_DeskMaterials.xml). -->
+  <StuffCategoryDef>
+    <defName>Dominion_DeskMaterials</defName>
+    <label>desk materials</label>
+    <noun>material</noun>
+  </StuffCategoryDef>
+</Defs>

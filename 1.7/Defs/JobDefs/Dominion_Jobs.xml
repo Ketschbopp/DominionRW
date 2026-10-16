@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <JobDef>
+    <defName>Dominion_MonitorRadio</defName>
+    <driverClass>Dominion.JobDriver_MonitorRadio</driverClass>
+    <reportString>monitoring the radio.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  <JobDef>
+    <defName>Dominion_GovernAtDesk</defName>
+    <driverClass>Dominion.JobDriver_GovernAtDesk</driverClass>
+    <reportString>attending to affairs of state.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  <JobDef>
+    <defName>Dominion_OperateBroadcast</defName>
+    <driverClass>Dominion.JobDriver_OperateBroadcast</driverClass>
+    <reportString>running a broadcast.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+</Defs>

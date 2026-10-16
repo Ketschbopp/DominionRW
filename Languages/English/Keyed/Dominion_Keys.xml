@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Main tab -->
+  <Dominion_Tab_Overview>Overview</Dominion_Tab_Overview>
+  <Dominion_Tab_Events>Events</Dominion_Tab_Events>
+  <Dominion_Tab_Integrations>Integrations</Dominion_Tab_Integrations>
+  <Dominion_Col_Faction>Faction</Dominion_Col_Faction>
+  <Dominion_Col_Relation>Relation to you</Dominion_Col_Relation>
+  <Dominion_NoEvents>Nothing has happened yet.</Dominion_NoEvents>
+
+  <!-- Event categories -->
+  <Dominion_EventCategory_General>General</Dominion_EventCategory_General>
+  <Dominion_EventCategory_Diplomacy>Diplomacy</Dominion_EventCategory_Diplomacy>
+  <Dominion_EventCategory_War>War</Dominion_EventCategory_War>
+  <Dominion_EventCategory_Military>Military</Dominion_EventCategory_Military>
+  <Dominion_EventCategory_Economy>Economy</Dominion_EventCategory_Economy>
+  <Dominion_EventCategory_Politics>Politics</Dominion_EventCategory_Politics>
+  <Dominion_EventCategory_Espionage>Espionage</Dominion_EventCategory_Espionage>
+  <Dominion_EventCategory_Disaster>Disaster</Dominion_EventCategory_Disaster>
+  <Dominion_EventCategory_Culture>Culture</Dominion_EventCategory_Culture>
+  <Dominion_EventCategory_Council>Council</Dominion_EventCategory_Council>
+
+  <!-- Integrations -->
+  <Dominion_IntegrationStatus_Pending>Not checked</Dominion_IntegrationStatus_Pending>
+  <Dominion_IntegrationStatus_NotInstalled>Not installed</Dominion_IntegrationStatus_NotInstalled>
+  <Dominion_IntegrationStatus_Disabled>Switched off</Dominion_IntegrationStatus_Disabled>
+  <Dominion_IntegrationStatus_Failed>Failed (version mismatch?)</Dominion_IntegrationStatus_Failed>
+  <Dominion_IntegrationStatus_Active>Active</Dominion_IntegrationStatus_Active>
+  <Dominion_Integration_Required>[required]</Dominion_Integration_Required>
+
+  <!-- Settings -->
+  <Dominion_SettingsCategory>Dominion</Dominion_SettingsCategory>
+  <Dominion_SettingsTab_General>General</Dominion_SettingsTab_General>
+  <Dominion_SettingsTab_Simulation>Simulation</Dominion_SettingsTab_Simulation>
+  <Dominion_SettingsTab_Council>Council</Dominion_SettingsTab_Council>
+  <Dominion_SettingsTab_Leadership>Leadership</Dominion_SettingsTab_Leadership>
+  <Dominion_SettingsTab_Culture>Culture</Dominion_SettingsTab_Culture>
+  <Dominion_SettingsTab_Integrations>Integrations</Dominion_SettingsTab_Integrations>
+  <Dominion_SettingsTab_Performance>Performance</Dominion_SettingsTab_Performance>
+
+  <Dominion_Setting_DebugLogging>Verbose logging</Dominion_Setting_DebugLogging>
+  <Dominion_Setting_DebugLogging_Desc>Write every event and simulation step to the log. For troubleshooting only.</Dominion_Setting_DebugLogging_Desc>
+  <Dominion_Setting_ResetDefaults>Reset all settings to defaults</Dominion_Setting_ResetDefaults>
+
+  <Dominion_Setting_SimulationDetail>Simulation detail</Dominion_Setting_SimulationDetail>
+  <Dominion_Setting_SimulationDetail_Desc>Lower detail does less work per faction each day. Use Low for worlds with very many factions.</Dominion_Setting_SimulationDetail_Desc>
+  <Dominion_SimulationDetail_Low>Low</Dominion_SimulationDetail_Low>
+  <Dominion_SimulationDetail_Normal>Normal</Dominion_SimulationDetail_Normal>
+  <Dominion_SimulationDetail_High>High</Dominion_SimulationDetail_High>
+  <Dominion_Setting_EventLogCap>Events kept in history: {0}</Dominion_Setting_EventLogCap>
+
+  <Dominion_Setting_CouncilInterval>Days between Rim Council sessions: {0}</Dominion_Setting_CouncilInterval>
+  <Dominion_Setting_CouncilMinTech>Lowest tech level with a Rim Council seat: {0}</Dominion_Setting_CouncilMinTech>
+  <Dominion_Setting_CouncilMinTech_Desc>Factions below this tech level have no seat. By default tribals are excluded. A tribal vassal is represented by its overlord.</Dominion_Setting_CouncilMinTech_Desc>
+  <Dominion_Setting_CouncilNoVeto>No faction has a veto. Votes are weighted by population, economy, military and allies. (In dev mode, the player can veto for testing.)</Dominion_Setting_CouncilNoVeto>
+
+  <Dominion_Setting_HeadOfState>Your head of state is:</Dominion_Setting_HeadOfState>
+  <Dominion_HeadOfStateMode_IdeoLeader>The leader of your ideology</Dominion_HeadOfStateMode_IdeoLeader>
+  <Dominion_HeadOfStateMode_ChosenAtDesk>Chosen at the Leadership Desk</Dominion_HeadOfStateMode_ChosenAtDesk>
+  <Dominion_Setting_Diplomats>Your diplomats are:</Dominion_Setting_Diplomats>
+  <Dominion_DiplomatMode_IdeoRole>Pawns holding the Diplomat ideology role</Dominion_DiplomatMode_IdeoRole>
+  <Dominion_DiplomatMode_ChosenAtDesk>Chosen at the Leadership Desk</Dominion_DiplomatMode_ChosenAtDesk>
+  <Dominion_Setting_NoIdeologyFallback>Ideology is not active, so both are chosen at the Leadership Desk.</Dominion_Setting_NoIdeologyFallback>
+
+  <Dominion_Setting_AllowIdeoReforms>Your culture counts as ideological affinity</Dominion_Setting_AllowIdeoReforms>
+  <Dominion_Setting_AllowIdeoReforms_Desc>Influence mainly changes a faction's politics. With this on, your cultural influence on a faction also counts a little as shared ideology, raising its opinion of you. (Changing other factions' precepts is planned but not in yet.)</Dominion_Setting_AllowIdeoReforms_Desc>
+  <Dominion_Setting_IdeoReformMinDays>Minimum days between reforms of one faction: {0}</Dominion_Setting_IdeoReformMinDays>
+
+  <Dominion_Setting_IntegrationsHeader>Connections to other mods. Required mods cannot be switched off.</Dominion_Setting_IntegrationsHeader>
+  <Dominion_Setting_IntegrationsRestart>Changes take effect after restarting the game.</Dominion_Setting_IntegrationsRestart>
+
+  <Dominion_Setting_Profiling>Profile Dominion's performance</Dominion_Setting_Profiling>
+  <Dominion_Setting_Profiling_Desc>Measures how long each Dominion system takes. See the report in the dev menu under Dominion. Has a tiny cost while on.</Dominion_Setting_Profiling_Desc>
+
+  <!-- M1: overview and dossier -->
+  <Dominion_Col_Government>Government</Dominion_Col_Government>
+  <Dominion_Col_Stability>Stability</Dominion_Col_Stability>
+  <Dominion_Col_Economy>Economy</Dominion_Col_Economy>
+  <Dominion_Col_Military>Military</Dominion_Col_Military>
+  <Dominion_None>None</Dominion_None>
+  <Dominion_Dossier_NotYetSimulated>This faction has not been simulated yet. Its first daily update comes within a day.</Dominion_Dossier_NotYetSimulated>
+  <Dominion_Dossier_Leader>Leader</Dominion_Dossier_Leader>
+  <Dominion_Dossier_Capital>Capital</Dominion_Dossier_Capital>
+  <Dominion_Dossier_Legitimacy>Legitimacy</Dominion_Dossier_Legitimacy>
+  <Dominion_Dossier_WarWeariness>War weariness</Dominion_Dossier_WarWeariness>
+  <Dominion_Dossier_ActiveWars>Active wars</Dominion_Dossier_ActiveWars>
+  <Dominion_Dossier_Population>Population (adults / all)</Dominion_Dossier_Population>
+  <Dominion_Dossier_Wealth>Wealth</Dominion_Dossier_Wealth>
+  <Dominion_Dossier_Territory>Territory (tiles / settlements)</Dominion_Dossier_Territory>
+  <Dominion_Dossier_VassalOutposts>Vassal outposts held</Dominion_Dossier_VassalOutposts>
+  <Dominion_Dossier_Personality>Personality</Dominion_Dossier_Personality>
+  <Dominion_Dossier_Blocs>Political blocs</Dominion_Dossier_Blocs>
+  <Dominion_Dossier_Opinions>Opinion of others</Dominion_Dossier_Opinions>
+  <Dominion_Dossier_OpinionBreakdown>Opinion: {0} (moving toward {1})\n\nIdeological compatibility: {2}\nDistance between nearest settlements: {3} tiles\nShared enemies: {4}\nGrievances: {5}\nOwn former settlements held as their vassal outposts: {6}</Dominion_Dossier_OpinionBreakdown>
+  <Dominion_Tag_War>war</Dominion_Tag_War>
+  <Dominion_Tag_Hostile>hostile</Dominion_Tag_Hostile>
+  <Dominion_Tag_Ally>ally</Dominion_Tag_Ally>
+  <Dominion_Tag_Truce>truce</Dominion_Tag_Truce>
+  <Dominion_Trait_Aggression>Aggression</Dominion_Trait_Aggression>
+  <Dominion_Trait_Greed>Greed</Dominion_Trait_Greed>
+  <Dominion_Trait_Honour>Honour</Dominion_Trait_Honour>
+  <Dominion_Trait_Paranoia>Paranoia</Dominion_Trait_Paranoia>
+
+  <!-- Governments -->
+  <Dominion_Government_Tribal>Tribal confederacy</Dominion_Government_Tribal>
+  <Dominion_Government_Autocracy>Autocracy</Dominion_Government_Autocracy>
+  <Dominion_Government_Monarchy>Monarchy</Dominion_Government_Monarchy>
+  <Dominion_Government_Theocracy>Theocracy</Dominion_Government_Theocracy>
+  <Dominion_Government_Council>Council</Dominion_Government_Council>
+  <Dominion_Government_Republic>Republic</Dominion_Government_Republic>
+  <Dominion_Government_Junta>Military junta</Dominion_Government_Junta>
+  <Dominion_Government_Corporate>Corporate state</Dominion_Government_Corporate>
+
+  <!-- Blocs -->
+  <Dominion_Bloc_Hawks>Hawks</Dominion_Bloc_Hawks>
+  <Dominion_Bloc_Hawks_Desc>Favour war and expansion. Grow during wars and with aggressive leaders.</Dominion_Bloc_Hawks_Desc>
+  <Dominion_Bloc_Doves>Doves</Dominion_Bloc_Doves>
+  <Dominion_Bloc_Doves_Desc>Favour peace. Grow with war weariness and push for ceasefires.</Dominion_Bloc_Doves_Desc>
+  <Dominion_Bloc_Merchants>Merchants</Dominion_Bloc_Merchants>
+  <Dominion_Bloc_Merchants_Desc>Favour trade and stable relations. Grow with a strong economy and greedy leaders.</Dominion_Bloc_Merchants_Desc>
+  <Dominion_Bloc_Zealots>Zealots</Dominion_Bloc_Zealots>
+  <Dominion_Bloc_Zealots_Desc>Put the faith first. Strong in religious and proselytising ideologies.</Dominion_Bloc_Zealots_Desc>
+  <Dominion_Bloc_Reformists>Reformists</Dominion_Bloc_Reformists>
+  <Dominion_Bloc_Reformists_Desc>Want the system changed. Grow when stability and legitimacy are low, and weaken stability.</Dominion_Bloc_Reformists_Desc>
+
+  <!-- Relation change reasons -->
+  <Dominion_Reason_War>war declared</Dominion_Reason_War>
+  <Dominion_Reason_Peace>peace agreed</Dominion_Reason_Peace>
+  <Dominion_Reason_BreakAlliance>alliance ended</Dominion_Reason_BreakAlliance>
+
+  <!-- M1 settings -->
+  <Dominion_Setting_AiDiplomacy>AI factions conduct diplomacy</Dominion_Setting_AiDiplomacy>
+  <Dominion_Setting_AiDiplomacy_Desc>AI factions declare war, make peace, ally and break alliances with each other on their own. Your own relations are never changed by this.</Dominion_Setting_AiDiplomacy_Desc>
+  <Dominion_Setting_AiAggression>AI aggression: {0}</Dominion_Setting_AiAggression>
+  <Dominion_Setting_PoliticalEvents>Riots, coups and revolutions</Dominion_Setting_PoliticalEvents>
+  <Dominion_Setting_PoliticalEvents_Desc>Unstable factions can suffer riots, coups and revolutions. Revolutions change a faction's government and leader; factions are never split.</Dominion_Setting_PoliticalEvents_Desc>
+  <Dominion_Setting_StabilityDrift>Stability change speed: {0}</Dominion_Setting_StabilityDrift>
+
+  <!-- M2: news and intel -->
+  <Dominion_Tab_News>News</Dominion_Tab_News>
+  <Dominion_SettingsTab_News>News</Dominion_SettingsTab_News>
+  <Dominion_News_Empty>No news has reached the colony yet. Research radio monitoring and build a radio receiver to hear more, and sooner.</Dominion_News_Empty>
+  <Dominion_News_SelectReport>Select a report to read it.</Dominion_News_SelectReport>
+  <Dominion_News_AllCategories>All categories</Dominion_News_AllCategories>
+  <Dominion_News_AllFactions>All factions</Dominion_News_AllFactions>
+  <Dominion_News_ShowRumors>Show rumors</Dominion_News_ShowRumors>
+  <Dominion_News_UnreadOnly>Unread only</Dominion_News_UnreadOnly>
+  <Dominion_News_MarkAllRead>Mark all read</Dominion_News_MarkAllRead>
+  <Dominion_News_Reported>Reached us: {0}</Dominion_News_Reported>
+  <Dominion_News_LetterFooter>Source: {0}. Confidence: {1}.</Dominion_News_LetterFooter>
+  <Dominion_News_Message>News: {0}</Dominion_News_Message>
+  <Dominion_News_LaterFalse>Later reports showed this was false.</Dominion_News_LaterFalse>
+  <Dominion_News_Corrects>This corrects: "{0}"</Dominion_News_Corrects>
+  <Dominion_News_LeadConfirmed>It has been confirmed that</Dominion_News_LeadConfirmed>
+  <Dominion_News_LeadRumor>Unconfirmed reports suggest that</Dominion_News_LeadRumor>
+  <Dominion_News_UnknownParty>an unknown party</Dominion_News_UnknownParty>
+  <Dominion_News_ItsLeadership>its leaders</Dominion_News_ItsLeadership>
+
+  <Dominion_NewsConfidence_Rumor>Rumour</Dominion_NewsConfidence_Rumor>
+  <Dominion_NewsConfidence_Confirmed>Confirmed</Dominion_NewsConfidence_Confirmed>
+  <Dominion_NewsSource_TravelerGossip>traveller gossip</Dominion_NewsSource_TravelerGossip>
+  <Dominion_NewsSource_RadioIntercept>radio intercept</Dominion_NewsSource_RadioIntercept>
+  <Dominion_NewsSource_DiplomaticDispatch>diplomatic dispatch</Dominion_NewsSource_DiplomaticDispatch>
+  <Dominion_NewsSource_IntelReport>intelligence report</Dominion_NewsSource_IntelReport>
+  <Dominion_NewsSource_Leak>leak</Dominion_NewsSource_Leak>
+  <Dominion_NewsSource_Correction>correction</Dominion_NewsSource_Correction>
+
+  <Dominion_NotifyMode_Silent>Silent</Dominion_NotifyMode_Silent>
+  <Dominion_NotifyMode_Message>Message</Dominion_NotifyMode_Message>
+  <Dominion_NotifyMode_Letter>Letter</Dominion_NotifyMode_Letter>
+
+  <Dominion_Dossier_Intel>Your intel</Dominion_Dossier_Intel>
+  <Dominion_Dossier_Locked>You need intel {0} on this faction to see this.</Dominion_Dossier_Locked>
+  <Dominion_Intel_Unknown>unknown (needs intel {0})</Dominion_Intel_Unknown>
+  <Dominion_Radio_Coverage>Radio coverage: {0}%</Dominion_Radio_Coverage>
+
+  <Dominion_Setting_NewsLogCap>Reports kept in the news feed: {0}</Dominion_Setting_NewsLogCap>
+  <Dominion_Setting_FalseRumors>False rumours</Dominion_Setting_FalseRumors>
+  <Dominion_Setting_FalseRumors_Desc>Little-known factions attract baseless rumours, reported as unconfirmed. They are corrected once you learn enough about the faction.</Dominion_Setting_FalseRumors_Desc>
+  <Dominion_Setting_NewsThoughts>Colonists react to news</Dominion_Setting_NewsThoughts>
+  <Dominion_Setting_NewsThoughts_Desc>Wars and unrest near the colony, peace, and attacks on allies affect your colonists' mood.</Dominion_Setting_NewsThoughts_Desc>
+  <Dominion_Setting_LetterForMajor>Letters for major news</Dominion_Setting_LetterForMajor>
+  <Dominion_Setting_LetterForMajor_Desc>Major news (wars, coups, revolutions, lost capitals, broken treaties, Federation news and other major events) arrives as a letter even in categories set to Message.</Dominion_Setting_LetterForMajor_Desc>
+  <Dominion_Setting_NotifyHeader>How each kind of news reaches you:</Dominion_Setting_NotifyHeader>
+
+  <!-- M3: diplomacy -->
+  <Dominion_Tab_Diplomacy>Diplomacy</Dominion_Tab_Diplomacy>
+  <Dominion_Tab_Treaties>Treaties</Dominion_Tab_Treaties>
+  <Dominion_Yes>yes</Dominion_Yes>
+  <Dominion_No>no</Dominion_No>
+  <Dominion_Action_Cooldown>Available again in {0}.</Dominion_Action_Cooldown>
+  <Dominion_Action_Invalid>Not possible with this faction.</Dominion_Action_Invalid>
+  <Dominion_Action_NeedsComms>Needs a powered comms console or a Leadership Desk.</Dominion_Action_NeedsComms>
+  <Dominion_Action_NeedsDesk>Needs a Leadership Desk.</Dominion_Action_NeedsDesk>
+  <Dominion_Action_NeedsInfluence>Needs {0} influence.</Dominion_Action_NeedsInfluence>
+  <Dominion_Action_NeedsResearch>Needs research: {0}.</Dominion_Action_NeedsResearch>
+  <Dominion_Action_NeedsSilver>Needs {0} silver.</Dominion_Action_NeedsSilver>
+  <Dominion_Action_NotWhileHostile>Not possible while at war.</Dominion_Action_NotWhileHostile>
+  <Dominion_Action_PermanentEnemy>They will never make peace.</Dominion_Action_PermanentEnemy>
+  <Dominion_ActionTier_Basic>Basic (comms console or desk)</Dominion_ActionTier_Basic>
+  <Dominion_ActionTier_Advanced>Statecraft (desk and head of state)</Dominion_ActionTier_Advanced>
+  <Dominion_Border_Open>open</Dominion_Border_Open>
+  <Dominion_Border_Restricted>restricted</Dominion_Border_Restricted>
+  <Dominion_Border_Closed>closed</Dominion_Border_Closed>
+  <Dominion_Border_Open_Desc>visitors and traders welcome</Dominion_Border_Open_Desc>
+  <Dominion_Border_Restricted_Desc>traders only</Dominion_Border_Restricted_Desc>
+  <Dominion_Border_Closed_Desc>no visitors, no traders, no trade</Dominion_Border_Closed_Desc>
+  <Dominion_Border_Current>(current)</Dominion_Border_Current>
+  <Dominion_Col_Treaty>Treaty</Dominion_Col_Treaty>
+  <Dominion_Col_Party>Party</Dominion_Col_Party>
+  <Dominion_Col_Expires>Expires</Dominion_Col_Expires>
+  <Dominion_Compliment_Success>{0} appreciated your kind words.</Dominion_Compliment_Success>
+  <Dominion_Compliment_Fail>Your compliment to {0} fell flat.</Dominion_Compliment_Fail>
+  <Dominion_DeskTier_Wood>wood</Dominion_DeskTier_Wood>
+  <Dominion_DeskTier_Steel>steel</Dominion_DeskTier_Steel>
+  <Dominion_DeskTier_Gold>gold</Dominion_DeskTier_Gold>
+  <Dominion_Desk_Tier>Desk: {0}</Dominion_Desk_Tier>
+  <Dominion_Desk_HeadOfState>Head of state: {0}</Dominion_Desk_HeadOfState>
+  <Dominion_Desk_Influence>Influence: {0} / {1}</Dominion_Desk_Influence>
+  <Dominion_Desk_ChooseHeadOfState>Choose head of state</Dominion_Desk_ChooseHeadOfState>
+  <Dominion_Desk_ChooseHeadOfState_Desc>Pick the colonist who leads your colony in diplomacy. Their Social skill makes others more willing to agree, and they earn influence working at this desk.</Dominion_Desk_ChooseHeadOfState_Desc>
+  <Dominion_Desk_MakeCapital>Make this colony the capital</Dominion_Desk_MakeCapital>
+  <Dominion_Desk_MakeCapital_Desc>Your capital is where envoys come and where tribute is delivered.</Dominion_Desk_MakeCapital_Desc>
+  <Dominion_Desk_CapitalSet>{0} is now your capital.</Dominion_Desk_CapitalSet>
+  <Dominion_Desk_NoColonists>No free colonists here.</Dominion_Desk_NoColonists>
+  <Dominion_Desk_OpenDiplomacy>Diplomacy</Dominion_Desk_OpenDiplomacy>
+  <Dominion_Desk_OpenDiplomacy_Desc>Open the Dominion tab.</Dominion_Desk_OpenDiplomacy_Desc>
+  <Dominion_HeadOfState_NoIdeoLeader>Your ideology has no leader. Assign one, or set the head of state option to "Chosen at the Leadership Desk" in the mod settings.</Dominion_HeadOfState_NoIdeoLeader>
+  <Dominion_HeadOfState_NoneChosen>No head of state. Choose one at the Leadership Desk.</Dominion_HeadOfState_NoneChosen>
+  <Dominion_Dip_HeadOfState>Head of state: {0}</Dominion_Dip_HeadOfState>
+  <Dominion_Dip_HeadOfState_Desc>Your head of state earns influence at the Leadership Desk, and their Social skill improves acceptance chances.</Dominion_Dip_HeadOfState_Desc>
+  <Dominion_Dip_Influence>Influence: {0} / {1}</Dominion_Dip_Influence>
+  <Dominion_Dip_Influence_Desc>Influence is spent on diplomacy. Your head of state earns it by working at the Leadership Desk (statecraft work).</Dominion_Dip_Influence_Desc>
+  <Dominion_Dip_Desk>Desk: {0}</Dominion_Dip_Desk>
+  <Dominion_Dip_Comms>Comms console: {0}</Dominion_Dip_Comms>
+  <Dominion_Dip_Standing>Relation: {0} ({1})   Their opinion of you: {2}</Dominion_Dip_Standing>
+  <Dominion_Dip_TreatiesWithYou>Treaties with you:</Dominion_Dip_TreatiesWithYou>
+  <Dominion_Dip_Expires>expires in {0}</Dominion_Dip_Expires>
+  <Dominion_Dip_NoExpiry>no expiry</Dominion_Dip_NoExpiry>
+  <Dominion_Dip_Cancel>Cancel</Dominion_Dip_Cancel>
+  <Dominion_Dip_CancelConfirm>Cancel the {0} with {1}? This is not a violation, but they will resent it.</Dominion_Dip_CancelConfirm>
+  <Dominion_Dip_Borders>Borders: yours to them {0}, theirs to you {1}</Dominion_Dip_Borders>
+  <Dominion_Dip_Embargo>Embargo: by you {0}, by them {1}</Dominion_Dip_Embargo>
+  <Dominion_Dip_Prices>Trade prices with them: you buy at {0}, sell at {1}</Dominion_Dip_Prices>
+  <Dominion_Dip_Actions>Actions</Dominion_Dip_Actions>
+  <Dominion_Dip_Cost>{0} influence</Dominion_Dip_Cost>
+  <Dominion_Dip_Chance>Chance they agree: {0}</Dominion_Dip_Chance>
+  <Dominion_Gift_Amount>{0} silver</Dominion_Gift_Amount>
+  <Dominion_Gift_Sent>You sent {0} silver to {1}. Goodwill +{2}.</Dominion_Gift_Sent>
+  <Dominion_Insult_Done>You insulted {0}. They will not forget it.</Dominion_Insult_Done>
+  <Dominion_Obligation_Title>Defensive obligation</Dominion_Obligation_Title>
+  <Dominion_Obligation_Text>{1} has declared war on {0}, your partner in {2}. They expect you to honour it and join the war.
+
+Refusing breaks the treaty, and every faction will think less of you.</Dominion_Obligation_Text>
+  <Dominion_Obligation_Honour>Honour the treaty: declare war on {0}</Dominion_Obligation_Honour>
+  <Dominion_Obligation_Refuse>Refuse (breaks the treaty)</Dominion_Obligation_Refuse>
+  <Dominion_Offer_Title>Offer from {0}</Dominion_Offer_Title>
+  <Dominion_Offer_Text>{0} proposes {1}.
+
+{2}</Dominion_Offer_Text>
+  <Dominion_Offer_Accept>Accept</Dominion_Offer_Accept>
+  <Dominion_Offer_Decline>Decline</Dominion_Offer_Decline>
+  <Dominion_Peace_Accepted>{0} has agreed to peace. A 30-day truce begins.</Dominion_Peace_Accepted>
+  <Dominion_Peace_Refused>{0} refused your offer of peace.</Dominion_Peace_Refused>
+  <Dominion_Treaties_None>No treaties you know of.</Dominion_Treaties_None>
+  <Dominion_Treaty_AlreadySigned>already signed</Dominion_Treaty_AlreadySigned>
+  <Dominion_Treaty_AtWar>at war</Dominion_Treaty_AtWar>
+  <Dominion_Treaty_Incompatible>conflicts with the {0}</Dominion_Treaty_Incompatible>
+  <Dominion_Treaty_Option>{0} ({1} influence, chance {2})</Dominion_Treaty_Option>
+  <Dominion_Treaty_Accepted>{0} has signed the {1}.</Dominion_Treaty_Accepted>
+  <Dominion_Treaty_Refused>{0} rejected the {1}.</Dominion_Treaty_Refused>
+  <Dominion_Tribute_Paid>{0} gave in and paid {1} silver. It is on its way by drop pod.</Dominion_Tribute_Paid>
+  <Dominion_Tribute_Refused>{0} refused your demand.</Dominion_Tribute_Refused>
+  <Dominion_War_Confirm>Declare war on {0}?</Dominion_War_Confirm>
+  <Dominion_War_BreaksTreaties>This breaks your treaties with them: {0}. Every faction will think less of you.</Dominion_War_BreaksTreaties>
+
+  <!-- M4: physical diplomacy -->
+  <Dominion_Delegation_Label>delegation of {0}</Dominion_Delegation_Label>
+  <Dominion_Delegation_Inspect>Travelling to {0}. Arrives in about {1}.</Dominion_Delegation_Inspect>
+  <Dominion_Delegation_Intercept>Intercept the delegation of {0} (act of war)</Dominion_Delegation_Intercept>
+  <Dominion_Delegation_MoveToIntercept>Move ahead of the delegation to intercept it</Dominion_Delegation_MoveToIntercept>
+  <Dominion_Delegation_PassingCaravan>A delegation of {0} is passing {1}. Select the caravan and right-click the delegation to intercept it.</Dominion_Delegation_PassingCaravan>
+  <Dominion_Delegation_InterceptedLabel>Delegation intercepted</Dominion_Delegation_InterceptedLabel>
+  <Dominion_Delegation_InterceptedText>Your caravan has stopped a delegation of {0}. Their escort is fighting back. Whatever they were travelling to agree will not happen, and {0} will treat this as an act of war.</Dominion_Delegation_InterceptedText>
+  <Dominion_Reason_Intercepted>delegation intercepted</Dominion_Reason_Intercepted>
+  <Dominion_Desk_AssignDiplomats>Assign diplomats</Dominion_Desk_AssignDiplomats>
+  <Dominion_Desk_AssignDiplomats_Desc>Choose which colonists may act as envoys. A caravan carrying a diplomat (or your head of state) can go on diplomatic missions to other settlements.</Dominion_Desk_AssignDiplomats_Desc>
+  <Dominion_EnvoyCaptured_Label>Envoy captured</Dominion_EnvoyCaptured_Label>
+  <Dominion_EnvoyCaptured_Text>The peace talks failed, and {1} has taken {0} captive. You may be able to get them back in a hostage exchange.</Dominion_EnvoyCaptured_Text>
+  <Dominion_Hostages_Detail>{0} returned, {1} released</Dominion_Hostages_Detail>
+  <Dominion_Hostages_Done>Hostage exchange with {0}: {1} of your people are coming home, {2} of theirs released.</Dominion_Hostages_Done>
+  <Dominion_Hostages_Refused>{0} refused the hostage exchange.</Dominion_Hostages_Refused>
+  <Dominion_Mission_Chance>chance {0}</Dominion_Mission_Chance>
+  <Dominion_Mission_Report>travelling to {0} on a diplomatic mission</Dominion_Mission_Report>
+  <Dominion_Mission_NoEnvoy>This caravan has no one who can speak for the colony.</Dominion_Mission_NoEnvoy>
+  <Dominion_Mission_ImproveRelations_Done>{0} spent time with the leaders of {1}. Relations have improved.</Dominion_Mission_ImproveRelations_Done>
+  <Dominion_Mission_GatherIntel_Done>{0} kept their eyes open while visiting {1}. You know more about them now.</Dominion_Mission_GatherIntel_Done>
+  <Dominion_Offer_EnvoyArrived>{0}, an envoy of {1}, has arrived at your colony with a proposal.</Dominion_Offer_EnvoyArrived>
+  <Dominion_Mission_ImproveRelations>Diplomatic mission to {0}: improve relations</Dominion_Mission_ImproveRelations>
+  <Dominion_Mission_NegotiateTreaty>Negotiate {1} with {0} in person</Dominion_Mission_NegotiateTreaty>
+  <Dominion_Mission_PeaceTalks>Peace talks with {0} (risky)</Dominion_Mission_PeaceTalks>
+  <Dominion_Mission_GatherIntel>Diplomatic visit to {0}: gather intelligence</Dominion_Mission_GatherIntel>
+  <Dominion_Mission_ExchangeHostages>Exchange hostages with {0}</Dominion_Mission_ExchangeHostages>
+  <Dominion_Mission_AttendSummit>Attend the summit with {0}</Dominion_Mission_AttendSummit>
+  <Dominion_MissionShort_ImproveRelations>goodwill talks</Dominion_MissionShort_ImproveRelations>
+  <Dominion_MissionShort_NegotiateTreaty>treaty talks</Dominion_MissionShort_NegotiateTreaty>
+  <Dominion_MissionShort_PeaceTalks>peace talks</Dominion_MissionShort_PeaceTalks>
+  <Dominion_MissionShort_GatherIntel>observation</Dominion_MissionShort_GatherIntel>
+  <Dominion_MissionShort_ExchangeHostages>a hostage exchange</Dominion_MissionShort_ExchangeHostages>
+  <Dominion_MissionShort_AttendSummit>a summit</Dominion_MissionShort_AttendSummit>
+  <Dominion_SummitAgenda_Relations>better relations</Dominion_SummitAgenda_Relations>
+  <Dominion_SummitAgenda_Peace>peace</Dominion_SummitAgenda_Peace>
+  <Dominion_SummitAgenda_Treaty>a treaty</Dominion_SummitAgenda_Treaty>
+  <Dominion_SummitAgenda_Hostages>a hostage exchange</Dominion_SummitAgenda_Hostages>
+  <Dominion_SummitVenue_PlayerCapital>Host it at your capital (their leader travels to you)</Dominion_SummitVenue_PlayerCapital>
+  <Dominion_SummitVenue_TheirCapital>Meet at the capital of {0} (your head of state travels by caravan)</Dominion_SummitVenue_TheirCapital>
+  <Dominion_Summit_AttendChance>chance they come: {0}</Dominion_Summit_AttendChance>
+  <Dominion_Summit_AlreadyArranged>A summit with {0} is already arranged.</Dominion_Summit_AlreadyArranged>
+  <Dominion_Summit_Declined>{0} declined to meet.</Dominion_Summit_Declined>
+  <Dominion_Summit_ArrangedLabel>Summit arranged</Dominion_Summit_ArrangedLabel>
+  <Dominion_Summit_Arranged_PlayerCapital>{0} has agreed to a summit at your capital. Their leader is travelling to you now. When they arrive, have your head of state at the capital.</Dominion_Summit_Arranged_PlayerCapital>
+  <Dominion_Summit_Arranged_TheirCapital>{0} has agreed to a summit at their capital. Send your head of state there by caravan within {1} days, then right-click their capital to attend.</Dominion_Summit_Arranged_TheirCapital>
+  <Dominion_Summit_ArrivedLabel>Summit guests arrived</Dominion_Summit_ArrivedLabel>
+  <Dominion_Summit_ArrivedText>{0} of {1} has arrived for the summit on {2}. The talks begin as soon as your head of state is on the same map. They will wait for about a day.</Dominion_Summit_ArrivedText>
+  <Dominion_Summit_Cancelled>The summit with {0} was called off: {1}</Dominion_Summit_Cancelled>
+  <Dominion_Summit_CancelledIntercepted>their delegation was intercepted</Dominion_Summit_CancelledIntercepted>
+  <Dominion_Summit_CancelledNoRoute>their party could not reach your colony</Dominion_Summit_CancelledNoRoute>
+  <Dominion_Summit_CancelledNoShow>your head of state never came, and {0} is offended</Dominion_Summit_CancelledNoShow>
+  <Dominion_Summit_CancelledVisitorGone>their representative is gone</Dominion_Summit_CancelledVisitorGone>
+  <Dominion_Summit_NeedsHeadOfState>Only your head of state can attend a summit.</Dominion_Summit_NeedsHeadOfState>
+  <Dominion_Summit_Title>Summit with {0}</Dominion_Summit_Title>
+  <Dominion_Summit_Agenda>On the table: {0}</Dominion_Summit_Agenda>
+  <Dominion_Summit_Round>Round {0} of {1}</Dominion_Summit_Round>
+  <Dominion_Summit_Rapport>Rapport: {0}</Dominion_Summit_Rapport>
+  <Dominion_Summit_FinalChance>Chance the proposal is accepted: {0}</Dominion_Summit_FinalChance>
+  <Dominion_Summit_TheirRepresentative>their representative</Dominion_Summit_TheirRepresentative>
+  <Dominion_Summit_Opening>{0} of {1} takes a seat across the table. The talks will cover {2}.</Dominion_Summit_Opening>
+  <Dominion_Summit_Propose>Make the final proposal: {0}</Dominion_Summit_Propose>
+  <Dominion_Summit_Leave>Leave</Dominion_Summit_Leave>
+  <Dominion_Summit_WalkOutButton>Walk out</Dominion_Summit_WalkOutButton>
+  <Dominion_Summit_WalkOut>{0} gets up and leaves the table. The other side will not forget the insult.</Dominion_Summit_WalkOut>
+  <Dominion_SummitResult_Fail>{0} shakes their head. There will be no agreement today.</Dominion_SummitResult_Fail>
+  <Dominion_SummitResult_Success_Relations>{0} rises and clasps hands with you. Relations between your peoples are warmer than they have been in a long time.</Dominion_SummitResult_Success_Relations>
+  <Dominion_SummitResult_Success_Peace>{0} agrees: the war is over. A truce begins at once.</Dominion_SummitResult_Success_Peace>
+  <Dominion_SummitResult_Success_Treaty>{0} signs. The {1} is agreed.</Dominion_SummitResult_Success_Treaty>
+  <Dominion_SummitResult_Success_Hostages>{0} agrees to the exchange. Captives on both sides will go home.</Dominion_SummitResult_Success_Hostages>
+  <Dominion_SummitMoveLabel_CommonGround>Appeal to common ground</Dominion_SummitMoveLabel_CommonGround>
+  <Dominion_SummitMoveLabel_CommonGround_Desc>Talk about what your peoples share. Better with a skilled speaker and a similar ideology.</Dominion_SummitMoveLabel_CommonGround_Desc>
+  <Dominion_SummitMove_CommonGround>{0} speaks of the interests your peoples share.</Dominion_SummitMove_CommonGround>
+  <Dominion_SummitMove_CommonGround_Success>{0} nods slowly. "There is truth in that."</Dominion_SummitMove_CommonGround_Success>
+  <Dominion_SummitMove_CommonGround_Fail>{0} is unmoved. "Words cost nothing."</Dominion_SummitMove_CommonGround_Fail>
+  <Dominion_SummitMoveLabel_Flattery>Flatter them</Dominion_SummitMoveLabel_Flattery>
+  <Dominion_SummitMoveLabel_Flattery_Desc>Praise their leader and their people. Paranoid leaders see through it.</Dominion_SummitMoveLabel_Flattery_Desc>
+  <Dominion_SummitMove_Flattery>{0} praises their achievements at length.</Dominion_SummitMove_Flattery>
+  <Dominion_SummitMove_Flattery_Success>{0} smiles despite themselves.</Dominion_SummitMove_Flattery_Success>
+  <Dominion_SummitMove_Flattery_Fail>{0}'s eyes narrow. "What do you want?"</Dominion_SummitMove_Flattery_Fail>
+  <Dominion_SummitMoveLabel_Concession>Offer a concession</Dominion_SummitMoveLabel_Concession>
+  <Dominion_SummitMoveLabel_Concession_Desc>Give something up front: 300 silver, or 10 influence if you lack the silver. Greedy leaders love it.</Dominion_SummitMoveLabel_Concession_Desc>
+  <Dominion_SummitMove_Concession>{0} makes a gesture of goodwill and puts a gift on the table.</Dominion_SummitMove_Concession>
+  <Dominion_SummitMove_Concession_Success>{0} accepts the gift with evident pleasure.</Dominion_SummitMove_Concession_Success>
+  <Dominion_SummitMove_Concession_Fail>{0} accepts the gift, but only out of courtesy.</Dominion_SummitMove_Concession_Fail>
+  <Dominion_SummitMoveLabel_Threat>Threaten</Dominion_SummitMoveLabel_Threat>
+  <Dominion_SummitMoveLabel_Threat_Desc>Make clear what happens if they refuse. Works only if you are about as strong as them or stronger; honourable leaders resent it.</Dominion_SummitMoveLabel_Threat_Desc>
+  <Dominion_SummitMove_Threat>{0} reminds them, coldly, of your strength.</Dominion_SummitMove_Threat>
+  <Dominion_SummitMove_Threat_Success>{0} goes pale and becomes far more accommodating.</Dominion_SummitMove_Threat_Success>
+  <Dominion_SummitMove_Threat_Fail>{0} stands up, furious. "You dare threaten us at this table?"</Dominion_SummitMove_Threat_Fail>
+  <Dominion_SummitMoveLabel_Apology>Apologise for past wrongs</Dominion_SummitMoveLabel_Apology>
+  <Dominion_SummitMoveLabel_Apology_Desc>Acknowledge their grievances. Honourable leaders value it, and their grievances shrink.</Dominion_SummitMoveLabel_Apology_Desc>
+  <Dominion_SummitMove_Apology>{0} acknowledges the wrongs of the past.</Dominion_SummitMove_Apology>
+  <Dominion_SummitMove_Apology_Success>{0} is visibly moved. "That took courage."</Dominion_SummitMove_Apology_Success>
+  <Dominion_SummitMove_Apology_Fail>{0} waves it away. "Too little, too late."</Dominion_SummitMove_Apology_Fail>
+  <Dominion_SummitMoveLabel_Leverage>Mention the prisoners</Dominion_SummitMoveLabel_Leverage>
+  <Dominion_SummitMoveLabel_Leverage_Desc>Remind them that you hold some of their people. Effective, but the honourable call it blackmail.</Dominion_SummitMoveLabel_Leverage_Desc>
+  <Dominion_SummitMove_Leverage>{0} mentions, almost in passing, the prisoners you hold.</Dominion_SummitMove_Leverage>
+  <Dominion_SummitMove_Leverage_Success>{0} understands perfectly and softens their stance.</Dominion_SummitMove_Leverage_Success>
+  <Dominion_SummitMove_Leverage_Fail>{0} bristles. "You will not blackmail us."</Dominion_SummitMove_Leverage_Fail>
+  <Dominion_SummitMoveLabel_SharedEnemies>Point to common enemies</Dominion_SummitMoveLabel_SharedEnemies>
+  <Dominion_SummitMoveLabel_SharedEnemies_Desc>Remind them of the enemies you share.</Dominion_SummitMoveLabel_SharedEnemies_Desc>
+  <Dominion_SummitMove_SharedEnemies>{0} raises the threat you both face.</Dominion_SummitMove_SharedEnemies>
+  <Dominion_SummitMove_SharedEnemies_Success>{0} agrees. "On that, we stand together."</Dominion_SummitMove_SharedEnemies_Success>
+  <Dominion_SummitMove_SharedEnemies_Fail>{0} shrugs. "Our enemies are our own business."</Dominion_SummitMove_SharedEnemies_Fail>
+  <Dominion_SummitMoveLabel_IdeologyAppeal>Appeal to shared beliefs</Dominion_SummitMoveLabel_IdeologyAppeal>
+  <Dominion_SummitMoveLabel_IdeologyAppeal_Desc>Speak of the faith and values you have in common.</Dominion_SummitMoveLabel_IdeologyAppeal_Desc>
+  <Dominion_SummitMove_IdeologyAppeal>{0} speaks of the beliefs your peoples share.</Dominion_SummitMove_IdeologyAppeal>
+  <Dominion_SummitMove_IdeologyAppeal_Success>{0} warms to you. "We understand each other."</Dominion_SummitMove_IdeologyAppeal_Success>
+  <Dominion_SummitMove_IdeologyAppeal_Fail>{0} disagrees on the finer points, at length.</Dominion_SummitMove_IdeologyAppeal_Fail>
+  <Dominion_SummitMoveLabel_Candour>Speak plainly</Dominion_SummitMoveLabel_Candour>
+  <Dominion_SummitMoveLabel_Candour_Desc>Be completely honest, even where it hurts. Honourable leaders respect it.</Dominion_SummitMoveLabel_Candour_Desc>
+  <Dominion_SummitMove_Candour>{0} lays out your position without any embellishment.</Dominion_SummitMove_Candour>
+  <Dominion_SummitMove_Candour_Success>{0} appreciates the honesty.</Dominion_SummitMove_Candour_Success>
+  <Dominion_SummitMove_Candour_Fail>{0} finds your bluntness rude.</Dominion_SummitMove_Candour_Fail>
+  <Dominion_SummitIncident_0>A protester breaks into the hall, shouting, and has to be dragged out. The mood sours.</Dominion_SummitIncident_0>
+  <Dominion_SummitIncident_1>A messenger hurries in with news for {0}. Whatever it is, it changes the mood.</Dominion_SummitIncident_1>
+  <Dominion_SummitIncident_2>Guards foil a plot against the summit. The shared danger draws both sides closer.</Dominion_SummitIncident_2>
+  <Dominion_SummitIncident_3>An interpreter mangles a key phrase, and it takes a while to clear up the misunderstanding.</Dominion_SummitIncident_3>
+  <Dominion_SummitIncident_4>A shared meal between rounds goes well. Even {0} laughs once.</Dominion_SummitIncident_4>
+
+  <!-- M5: Rim Council -->
+  <Dominion_Tab_Council>Rim Council</Dominion_Tab_Council>
+  <Dominion_Setting_CouncilEnabled>Rim Council sessions</Dominion_Setting_CouncilEnabled>
+  <Dominion_Council_Title>The Rim Council</Dominion_Council_Title>
+  <Dominion_Council_YouAreMember>Your colony has a seat. Your vote weight: {0}.</Dominion_Council_YouAreMember>
+  <Dominion_Council_YouAreNotMember>Your colony has no seat yet. Members need tech level {0} or higher, or the {1} research.</Dominion_Council_YouAreNotMember>
+  <Dominion_Council_Disabled>Council sessions are switched off in the mod settings.</Dominion_Council_Disabled>
+  <Dominion_Council_SessionAnnounced>Next session: at the capital of {0}, in {1}.</Dominion_Council_SessionAnnounced>
+  <Dominion_Council_NextSession>The next session will be announced; it meets in about {0}.</Dominion_Council_NextSession>
+  <Dominion_Council_Present>Delegations present: {0}</Dominion_Council_Present>
+  <Dominion_Council_Agenda>Agenda:</Dominion_Council_Agenda>
+  <Dominion_Council_ProposeMotion>Propose a motion</Dominion_Council_ProposeMotion>
+  <Dominion_Council_Decrees>Decrees in force:</Dominion_Council_Decrees>
+  <Dominion_Council_Violators>violated by: {0}</Dominion_Council_Violators>
+  <Dominion_Council_Members>Members (vote weight):</Dominion_Council_Members>
+  <Dominion_Council_Weight>weight {0}</Dominion_Council_Weight>
+  <Dominion_Council_ViolationCount>violations: {0}</Dominion_Council_ViolationCount>
+  <Dominion_Council_Attend_NotMember>You have no seat, so you cannot attend.</Dominion_Council_Attend_NotMember>
+  <Dominion_Council_Attend_YouHost>You are hosting. Delegates will arrive at your capital. Have your head of state (or a diplomat) there when the session opens.</Dominion_Council_Attend_YouHost>
+  <Dominion_Council_Attend_Registered>Your delegate {0} is registered and will speak for you.</Dominion_Council_Attend_Registered>
+  <Dominion_Council_Attend_Travel>To vote, send your head of state or a diplomat by caravan to the capital of {0} and choose "Attend the Rim Council" there before the session opens.</Dominion_Council_Attend_Travel>
+  <Dominion_Council_NoMotions>No motions on the agenda.</Dominion_Council_NoMotions>
+  <Dominion_Council_ProposedBy>proposed by {0}</Dominion_Council_ProposedBy>
+  <Dominion_Council_NoTargets>(no valid targets)</Dominion_Council_NoTargets>
+  <Dominion_Council_MotionAdded>Motion added to the agenda: {0}</Dominion_Council_MotionAdded>
+  <Dominion_Council_NoSessionAnnounced>No session has been announced yet.</Dominion_Council_NoSessionAnnounced>
+  <Dominion_Council_NotMember>Your colony has no seat on the Rim Council.</Dominion_Council_NotMember>
+  <Dominion_Council_AgendaFull>The agenda is full.</Dominion_Council_AgendaFull>
+  <Dominion_Council_AlreadyOnAgenda>That motion is already on the agenda.</Dominion_Council_AlreadyOnAgenda>
+  <Dominion_Council_WrongTargets>not valid for this motion</Dominion_Council_WrongTargets>
+  <Dominion_Council_NotForOutlaws>outlaws are beyond the Rim Council</Dominion_Council_NotForOutlaws>
+  <Dominion_Council_NotAtWar>they are not at war</Dominion_Council_NotAtWar>
+  <Dominion_Council_AlreadyInForce>already in force</Dominion_Council_AlreadyInForce>
+  <Dominion_Council_AnnounceLabel>Rim Council convened</Dominion_Council_AnnounceLabel>
+  <Dominion_Council_AnnounceText>The Rim Council will meet at the capital of {0} in {1} days.\n\nOn the agenda:\n{2}</Dominion_Council_AnnounceText>
+  <Dominion_Council_Announce_PlayerHosts>It is your turn to host. Delegates will travel to your capital. Have your head of state (or a diplomat) there when the session opens.</Dominion_Council_Announce_PlayerHosts>
+  <Dominion_Council_Announce_Attend>Only members present can vote. Send your head of state or a diplomat by caravan to the capital of {0} and register there before the session.</Dominion_Council_Announce_Attend>
+  <Dominion_Council_Announce_NotMember>Your colony has no seat on the Rim Council.</Dominion_Council_Announce_NotMember>
+  <Dominion_Council_Registered>{0} is registered as your delegate to the Rim Council.</Dominion_Council_Registered>
+  <Dominion_Council_ResultsLabel>Rim Council results</Dominion_Council_ResultsLabel>
+  <Dominion_Council_ResultsText>The Rim Council met at the capital of {0}. Delegations attending: {1}.
+
+{2}</Dominion_Council_ResultsText>
+  <Dominion_Council_VoteResult>(yes {0}, no {1})</Dominion_Council_VoteResult>
+  <Dominion_Council_Vetoed>[vetoed in dev mode]</Dominion_Council_Vetoed>
+  <Dominion_Council_SessionTitle>Session of the Rim Council at the capital of {0}</Dominion_Council_SessionTitle>
+  <Dominion_Council_SessionInfo>{0} speaks for your colony. Delegations present: {1}. Your vote weight: {2}. Influence: {3}.</Dominion_Council_SessionInfo>
+  <Dominion_Council_Projected>If voted now: yes {0}, no {1}</Dominion_Council_Projected>
+  <Dominion_Council_Yes>Yes</Dominion_Council_Yes>
+  <Dominion_Council_No>No</Dominion_Council_No>
+  <Dominion_Council_Abstain>Abstain</Dominion_Council_Abstain>
+  <Dominion_Council_Lobby>Lobby ({0} influence)</Dominion_Council_Lobby>
+  <Dominion_Council_LobbyNeedsVote>Cast a yes or no vote first; lobbying pushes members towards your vote.</Dominion_Council_LobbyNeedsVote>
+  <Dominion_Council_LobbyOption>{0}: leaning {1} (chance {2})</Dominion_Council_LobbyOption>
+  <Dominion_Council_LobbySuccess>{0} has been persuaded.</Dominion_Council_LobbySuccess>
+  <Dominion_Council_LobbyFail>{0} was not persuaded, and did not appreciate the attempt.</Dominion_Council_LobbyFail>
+  <Dominion_Council_NoOneToLobby>No other delegations present.</Dominion_Council_NoOneToLobby>
+  <Dominion_Council_DevVeto>Dev: veto</Dominion_Council_DevVeto>
+  <Dominion_Council_CloseSession>Close the session and count the votes</Dominion_Council_CloseSession>
+  <Dominion_Decree_DutyLabel>Council decree</Dominion_Decree_DutyLabel>
+  <Dominion_Decree_Refuse>Refuse (violates the decree)</Dominion_Decree_Refuse>
+  <Dominion_Decree_Sanctions_Duty>The Rim Council has imposed sanctions on {0}. As a member you must embargo them within {1} days (Diplomacy tab), or you will be in violation.</Dominion_Decree_Sanctions_Duty>
+  <Dominion_Decree_Slavery_Duty>The Rim Council has banned slavery. You have {0} days to free your slaves, or you will be in violation.</Dominion_Decree_Slavery_Duty>
+  <Dominion_Decree_Ceasefire_Ask>The Rim Council has ordered a ceasefire between you and {0}. Will you make peace?</Dominion_Decree_Ceasefire_Ask>
+  <Dominion_Decree_Ceasefire_Accept>Accept the ceasefire</Dominion_Decree_Ceasefire_Accept>
+  <Dominion_Decree_Defense_Ask>The Rim Council has called on all members to stand together against {0}. Will you declare war on them? (An embargo also counts as standing with the Council.)</Dominion_Decree_Defense_Ask>
+  <Dominion_Decree_Defense_Accept>Declare war on {0}</Dominion_Decree_Defense_Accept>
+  <Dominion_Mission_AttendCouncil>Attend the Rim Council at the capital of {0}</Dominion_Mission_AttendCouncil>
+  <Dominion_MissionShort_AttendCouncil>the Rim Council</Dominion_MissionShort_AttendCouncil>
+
+  <!-- M6: intelligence -->
+  <Dominion_Tab_Intelligence>Intelligence</Dominion_Tab_Intelligence>
+  <Dominion_Ops_Title>Intelligence service</Dominion_Ops_Title>
+  <Dominion_Ops_NeedsResearch>Research {0} to run intelligence operations.</Dominion_Ops_NeedsResearch>
+  <Dominion_Ops_Plan>Plan an operation</Dominion_Ops_Plan>
+  <Dominion_Ops_CounterIntelButton>Counter-intelligence sweep ({0} influence)</Dominion_Ops_CounterIntelButton>
+  <Dominion_Ops_CounterIntelUntil>Counter-intelligence active ({0} left)</Dominion_Ops_CounterIntelUntil>
+  <Dominion_Ops_CounterIntel_Desc>For {0} days, foreign agents are far more likely to be caught.</Dominion_Ops_CounterIntel_Desc>
+  <Dominion_Ops_CounterIntelActive>A sweep is already under way.</Dominion_Ops_CounterIntelActive>
+  <Dominion_Ops_Running>Operations under way:</Dominion_Ops_Running>
+  <Dominion_Ops_RunningLine>{0} in {1}: {2}, back in {3}</Dominion_Ops_RunningLine>
+  <Dominion_Ops_Networks>Networks and intel:</Dominion_Ops_Networks>
+  <Dominion_Ops_NetworkLevel>network {0}</Dominion_Ops_NetworkLevel>
+  <Dominion_Ops_YourIntel>intel {0}</Dominion_Ops_YourIntel>
+  <Dominion_Ops_ChooseTarget>Choose a faction</Dominion_Ops_ChooseTarget>
+  <Dominion_Ops_ChooseAgents>Agents (they leave the colony until the operation ends):</Dominion_Ops_ChooseAgents>
+  <Dominion_Ops_Terms>Takes {0} days. Costs {1}. Relevant skill: {2}. Up to {3} agents.</Dominion_Ops_Terms>
+  <Dominion_Ops_Chance>Chance of success: {0}. Risk of exposure if it fails: {1}.</Dominion_Ops_Chance>
+  <Dominion_Ops_Launch>Send the agents</Dominion_Ops_Launch>
+  <Dominion_Ops_NoTarget>Choose a target faction.</Dominion_Ops_NoTarget>
+  <Dominion_Ops_NoAgents>Choose at least one agent.</Dominion_Ops_NoAgents>
+  <Dominion_Ops_TooManyAgents>At most {0} agents.</Dominion_Ops_TooManyAgents>
+  <Dominion_Ops_AlreadyRunning>That operation is already under way there.</Dominion_Ops_AlreadyRunning>
+  <Dominion_Ops_Launched>Agents set out to {0} in {1}. They will be back in about {2} days.</Dominion_Ops_Launched>
+  <Dominion_Ops_ReportLabel>Report: {0}</Dominion_Ops_ReportLabel>
+  <Dominion_Ops_Success>Operation "{0}" in {1} succeeded.</Dominion_Ops_Success>
+  <Dominion_Ops_Failure>Operation "{0}" in {1} failed.</Dominion_Ops_Failure>
+  <Dominion_Ops_Exposed>Worse, {0} found out who was behind it. They are not pleased.</Dominion_Ops_Exposed>
+  <Dominion_Ops_Detained>{0} was detained by {1}. A hostage exchange may get them back.</Dominion_Ops_Detained>
+  <Dominion_Ops_NetworkUncovered>{0} has uncovered part of your network.</Dominion_Ops_NetworkUncovered>
+  <Dominion_Ops_CaughtLabel>Foreign agents caught</Dominion_Ops_CaughtLabel>
+  <Dominion_Ops_CaughtText>Your people caught agents of {0} snooping around the colony. Every faction will hear of it.</Dominion_Ops_CaughtText>
+  <Dominion_Setting_AiIntelligence>AI intelligence services</Dominion_Setting_AiIntelligence>
+  <Dominion_Setting_AiIntelligence_Desc>AI factions run intelligence operations against you and against each other.</Dominion_Setting_AiIntelligence_Desc>
+  <Dominion_Setting_OperationSuccess>Operation success: {0}</Dominion_Setting_OperationSuccess>
+
+  <!-- M8: broadcasting and culture -->
+  <Dominion_Broadcast_Program>Programme: {0}</Dominion_Broadcast_Program>
+  <Dominion_Broadcast_Target>Audience: {0}</Dominion_Broadcast_Target>
+  <Dominion_Broadcast_Target_Desc>Choose which faction's people this programme is made for.</Dominion_Broadcast_Target_Desc>
+  <Dominion_Broadcast_Inspect>On air: {0}</Dominion_Broadcast_Inspect>
+  <Dominion_Broadcast_NoTarget>no audience chosen</Dominion_Broadcast_NoTarget>
+  <Dominion_Dossier_Culture>Your cultural influence</Dominion_Dossier_Culture>
+  <Dominion_Newspaper_Title>The Rim Herald: {0}</Dominion_Newspaper_Title>
+  <Dominion_Newspaper_Slant>Your broadcasters are currently airing: {0}.</Dominion_Newspaper_Slant>
+
+
+  <!-- M9: integrations -->
+  <Dominion_Dossier_Governor>Capital governor</Dominion_Dossier_Governor>
+  <Dominion_Mission_NegotiateVassalage>Negotiate vassalage with {0}</Dominion_Mission_NegotiateVassalage>
+  <Dominion_MissionShort_NegotiateVassalage>vassalage talks</Dominion_MissionShort_NegotiateVassalage>
+  <Dominion_Mission_VassalageUnavailable>This settlement cannot become your vassal outpost.</Dominion_Mission_VassalageUnavailable>
+  <Dominion_Vassalage_Accepted>{0} agreed to hand {1} over as your vassal outpost.</Dominion_Vassalage_Accepted>
+  <Dominion_Vassalage_Refused>{0} refused to give up {1}.</Dominion_Vassalage_Refused>
+  <Dominion_Setting_Emigration>Emigration after unrest</Dominion_Setting_Emigration>
+  <Dominion_Setting_Emigration_Desc>Riots and revolutions make a few people leave the faction (Economics &amp; Demography). They settle with the most stable friendly neighbour.</Dominion_Setting_Emigration_Desc>
+  <Dominion_Setting_EmbargoDrain>Embargoes drain stockpiles</Dominion_Setting_EmbargoDrain>
+  <Dominion_Setting_EmbargoDrain_Desc>Each embargo against a faction removes a small share of its Economics &amp; Demography stockpile every day.</Dominion_Setting_EmbargoDrain_Desc>
+
+  <!-- M10: Federation and ending -->
+  <Dominion_Tab_Federation>Federation</Dominion_Tab_Federation>
+  <Dominion_Federation_Title>The Federation</Dominion_Federation_Title>
+  <Dominion_Federation_EndingOff>The unification ending is switched off in the settings. Progress is still tracked.</Dominion_Federation_EndingOff>
+  <Dominion_Federation_StepResearch>Research {0}</Dominion_Federation_StepResearch>
+  <Dominion_Federation_StepCharter>Pass the Federation Charter at the Rim Council (propose it as a motion)</Dominion_Federation_StepCharter>
+  <Dominion_Federation_StepCharterNoCouncil>The Rim Council is switched off or cannot meet: the Charter is in force once the research is done</Dominion_Federation_StepCharterNoCouncil>
+  <Dominion_Federation_Progress>Unification</Dominion_Federation_Progress>
+  <Dominion_Federation_Breakdown>Federation members: {0}   Subjugated: {1}   Conquered: {2}   Major factions: {3}</Dominion_Federation_Breakdown>
+  <Dominion_Federation_Rules>A major faction is unified when it joins the Federation (sign Federation membership by comms, envoy or summit), when you hold at least as many of its settlements as vassal outposts as it has left (and, once it is gone, at least half of what it once had), or when it falls while at war with you after you have beaten one of its settlements in battle.</Dominion_Federation_Rules>
+  <Dominion_Federation_Opinion>(opinion {0})</Dominion_Federation_Opinion>
+  <Dominion_Federation_Proclaim>Proclaim the Federation</Dominion_Federation_Proclaim>
+  <Dominion_Federation_Proclaimed>The Federation was proclaimed {0} ago.</Dominion_Federation_Proclaimed>
+  <Dominion_Federation_Later>Not yet</Dominion_Federation_Later>
+  <Dominion_Federation_ReadyLabel>The world is united</Dominion_Federation_ReadyLabel>
+  <Dominion_Federation_ReadyText>{0} of {1} major factions now stand with you. You can proclaim the Federation and end your story here, or carry on and proclaim it later from the Federation tab.
+
+The game continues after the credits either way.</Dominion_Federation_ReadyText>
+  <Dominion_Federation_CharterLabel>Federation Charter adopted</Dominion_Federation_CharterLabel>
+  <Dominion_Federation_CharterText>The Rim Council has adopted the Federation Charter. Any major faction may now sign Federation membership with you, through the comms console, an envoy or a summit. Friends may also ask to join on their own.</Dominion_Federation_CharterText>
+  <Dominion_Federation_NoCharter>needs the Federation Charter in force</Dominion_Federation_NoCharter>
+  <Dominion_Federation_NotEligible>only major factions can join</Dominion_Federation_NotEligible>
+  <Dominion_Federation_OnlyPlayer>only with the Federation's founder</Dominion_Federation_OnlyPlayer>
+  <Dominion_UnifyStatus_None>Independent</Dominion_UnifyStatus_None>
+  <Dominion_UnifyStatus_None_Desc>Not yet unified. Raise their opinion of you and offer Federation membership, take their settlements as vassal outposts, or defeat them.</Dominion_UnifyStatus_None_Desc>
+  <Dominion_UnifyStatus_Federation>Federation member</Dominion_UnifyStatus_Federation>
+  <Dominion_UnifyStatus_Federation_Desc>Signed Federation membership. A member who comes to dislike you may leave.</Dominion_UnifyStatus_Federation_Desc>
+  <Dominion_UnifyStatus_Subjugated>Subjugated</Dominion_UnifyStatus_Subjugated>
+  <Dominion_UnifyStatus_Subjugated_Desc>You hold at least as many of their former settlements as vassal outposts as they have left.</Dominion_UnifyStatus_Subjugated_Desc>
+  <Dominion_UnifyStatus_Conquered>Conquered</Dominion_UnifyStatus_Conquered>
+  <Dominion_UnifyStatus_Conquered_Desc>Fell while at war with you, after you defeated one of their settlements yourself.</Dominion_UnifyStatus_Conquered_Desc>
+  <Dominion_UnifyPath_Federation>by joining the Federation</Dominion_UnifyPath_Federation>
+  <Dominion_UnifyPath_Subjugated>as vassals</Dominion_UnifyPath_Subjugated>
+  <Dominion_UnifyPath_Conquered>by conquest</Dominion_UnifyPath_Conquered>
+  <Dominion_Ending_Intro>The Federation of {0}
+
+{1} peoples now stand under one banner: {2} who joined freely, {3} who were made vassals, {4} who were conquered.</Dominion_Ending_Intro>
+  <Dominion_Ending_Federation>It was built with words, not walls. Summit by summit and treaty by treaty, {1} convinced the rival powers that they were stronger together than apart. The Rim Council became a parliament, and the old borders became lines on a map that no one patrols any more.</Dominion_Ending_Federation>
+  <Dominion_Ending_Subjugated>It was built on obligation. One settlement at a time, {0} took the old powers under its protection until there was no one left to resist. The vassals pay their dues and keep their peace, and if they grumble, they grumble quietly.</Dominion_Ending_Subjugated>
+  <Dominion_Ending_Conquered>It was built by the sword. The rival powers that would not bend were broken, and {1} rules what remains. Order has come to the planet; whether it is loved is another matter.</Dominion_Ending_Conquered>
+  <Dominion_Ending_Mixed>It was built every way there was: some peoples signed the charter willingly, some were bound as vassals, and some were defeated. {1} learned to use every tool, and in the end the planet answers to {0}.</Dominion_Ending_Mixed>
+  <Dominion_Ending_Outro>The story of the colony goes on, but the age of feuding powers is over.</Dominion_Ending_Outro>
+  <Dominion_Mission_DeliverAid>Deliver aid to {0}</Dominion_Mission_DeliverAid>
+  <Dominion_MissionShort_DeliverAid>aid delivery</Dominion_MissionShort_DeliverAid>
+  <Dominion_Aid_Done>{0} gratefully received your aid worth {1}.</Dominion_Aid_Done>
+  <Dominion_Aid_NoCrisis>{0} is not in crisis</Dominion_Aid_NoCrisis>
+  <Dominion_Aid_NotEnough>The caravan needs at least {0} worth of medicine, food or silver to deliver.</Dominion_Aid_NotEnough>
+  <Dominion_SettingsTab_Events>World events</Dominion_SettingsTab_Events>
+  <Dominion_SettingsTab_Ending>Ending</Dominion_SettingsTab_Ending>
+  <Dominion_Setting_WorldEvents>World events</Dominion_Setting_WorldEvents>
+  <Dominion_Setting_WorldEvents_Desc>Scandals, famines, plagues, disasters, trade booms, festivals and more happen to factions on their own, depending on their state.</Dominion_Setting_WorldEvents_Desc>
+  <Dominion_Setting_WorldEventFrequency>World event frequency: {0}</Dominion_Setting_WorldEventFrequency>
+  <Dominion_Setting_PlagueSpread>Plagues spread</Dominion_Setting_PlagueSpread>
+  <Dominion_Setting_PlagueSpread_Desc>An outbreak can spread to nearby factions.</Dominion_Setting_PlagueSpread_Desc>
+  <Dominion_Setting_EndingEnabled>Unification ending</Dominion_Setting_EndingEnabled>
+  <Dominion_Setting_EndingEnabled_Desc>Unite the major factions under your Federation to win. The game goes on after the credits.</Dominion_Setting_EndingEnabled_Desc>
+  <Dominion_Setting_EndingShare>Share of major factions needed: {0}</Dominion_Setting_EndingShare>
+  <Dominion_Setting_EndingOutlaws>Outlaws count as major factions</Dominion_Setting_EndingOutlaws>
+  <Dominion_Setting_EndingOutlaws_Desc>Pirates and other permanent enemies must be dealt with too. They can never join, so they must be subjugated or conquered.</Dominion_Setting_EndingOutlaws_Desc>
+
+  <!-- Review pass -->
+  <Dominion_Summit_CancelledFactionGone>the faction no longer exists</Dominion_Summit_CancelledFactionGone>
+  <Dominion_Summit_ConcessionUnaffordable>You no longer have the silver or influence for a concession.</Dominion_Summit_ConcessionUnaffordable>
+  <Dominion_Mission_NoLongerPossible>The mission to {0} is no longer possible: things changed while the caravan was travelling.</Dominion_Mission_NoLongerPossible>
+  <Dominion_Tribute_NoColony>{0} agreed to pay tribute, but you have no colony to deliver it to.</Dominion_Tribute_NoColony>
+  <Dominion_Offer_TooLate>The {0} can no longer be signed: {1}.</Dominion_Offer_TooLate>
+  <Dominion_Council_MotionVoid>(void: no longer valid)</Dominion_Council_MotionVoid>
+
+  <!-- Second review pass -->
+  <Dominion_News_UnknownCapital>the capital</Dominion_News_UnknownCapital>
+  <Dominion_News_NewGovernment>a new government</Dominion_News_NewGovernment>
+  <Dominion_News_NoMatch>No reports match these filters.</Dominion_News_NoMatch>
+  <Dominion_Council_Passed>Passed:</Dominion_Council_Passed>
+  <Dominion_Council_Rejected>Rejected:</Dominion_Council_Rejected>
+  <Dominion_Council_Present_Tag>(present)</Dominion_Council_Present_Tag>
+  <Dominion_Council_Expected_Tag>(expected)</Dominion_Council_Expected_Tag>
+  <Dominion_Council_Leaning_Yes>towards yes</Dominion_Council_Leaning_Yes>
+  <Dominion_Council_Leaning_No>towards no</Dominion_Council_Leaning_No>
+  <Dominion_Council_Leaning_Abstain>undecided</Dominion_Council_Leaning_Abstain>
+  <Dominion_Council_AlreadyLobbied>already lobbied</Dominion_Council_AlreadyLobbied>
+  <Dominion_Desk_DiplomatTag>[diplomat]</Dominion_Desk_DiplomatTag>
+  <Dominion_Ops_ExposedAfterSuccess>However, {0} found out who was behind it. They are not pleased.</Dominion_Ops_ExposedAfterSuccess>
+  <Dominion_Ops_CostInfluence>{0} influence</Dominion_Ops_CostInfluence>
+  <Dominion_Ops_CostWithSilver>{0} influence and {1} silver</Dominion_Ops_CostWithSilver>
+  <Dominion_PeaceOffer_Title>{0} sues for peace</Dominion_PeaceOffer_Title>
+  <Dominion_PeaceOffer_Text>Worn down by the war, {0} offers to make peace.</Dominion_PeaceOffer_Text>
+  <Dominion_Desk_CannotGovern>{0} is incapable of social work and can never govern here. Choose another head of state.</Dominion_Desk_CannotGovern>
+  <Dominion_Desk_StatecraftOff>{0} has Statecraft switched off in the work tab, so earns no influence.</Dominion_Desk_StatecraftOff>
+  <Dominion_Ops_LastColonists>Someone must stay behind: you cannot send your last colonists away.</Dominion_Ops_LastColonists>
+</LanguageData>

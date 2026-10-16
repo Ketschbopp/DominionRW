@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <WorkGiverDef>
+    <defName>Dominion_MonitorRadio</defName>
+    <label>monitor radio receiver</label>
+    <giverClass>Dominion.WorkGiver_MonitorRadio</giverClass>
+    <workType>Research</workType>
+    <priorityInType>40</priorityInType>
+    <verb>monitor</verb>
+    <gerund>monitoring</gerund>
+    <requiredCapacities>
+      <li>Manipulation</li>
+      <li>Hearing</li>
+    </requiredCapacities>
+    <canBeDoneByMechs>false</canBeDoneByMechs>
+  </WorkGiverDef>
+  <WorkGiverDef>
+    <defName>Dominion_GovernAtDesk</defName>
+    <label>govern at leadership desk</label>
+    <giverClass>Dominion.WorkGiver_GovernAtDesk</giverClass>
+    <workType>Dominion_Statecraft</workType>
+    <priorityInType>50</priorityInType>
+    <verb>govern</verb>
+    <gerund>governing</gerund>
+    <requiredCapacities>
+      <li>Talking</li>
+    </requiredCapacities>
+    <canBeDoneByMechs>false</canBeDoneByMechs>
+  </WorkGiverDef>
+  <WorkGiverDef>
+    <defName>Dominion_OperateBroadcast</defName>
+    <label>run broadcasts</label>
+    <giverClass>Dominion.WorkGiver_OperateBroadcast</giverClass>
+    <workType>Research</workType>
+    <priorityInType>35</priorityInType>
+    <verb>broadcast</verb>
+    <gerund>broadcasting</gerund>
+    <requiredCapacities>
+      <li>Talking</li>
+      <li>Manipulation</li>
+    </requiredCapacities>
+    <canBeDoneByMechs>false</canBeDoneByMechs>
+  </WorkGiverDef>
+</Defs>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <WorldObjectDef>
+    <defName>Dominion_Delegation</defName>
+    <label>delegation</label>
+    <description>A diplomatic party on the road: envoys, sometimes a leader, and their escort. A caravan of yours on the same tile can intercept it, which is an act of war.</description>
+    <worldObjectClass>Dominion.Delegation</worldObjectClass>
+    <texture>World/Dominion_Delegation</texture>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/Dominion_Delegation</expandingIconTexture>
+    <expandingIconPriority>55</expandingIconPriority>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <canHaveFaction>true</canHaveFaction>
+    <selectable>true</selectable>
+  </WorldObjectDef>
+</Defs>

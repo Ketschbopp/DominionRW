@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MainButtonDef>
+    <defName>Dominion</defName>
+    <label>dominion</label>
+    <description>World news, factions, diplomacy, intelligence, the Rim Council and your Federation.</description>
+    <tabWindowClass>Dominion.MainTabWindow_Dominion</tabWindowClass>
+    <workerClass>Dominion.MainButtonWorker_Dominion</workerClass>
+    <order>55</order>
+    <validWithoutMap>true</validWithoutMap>
+  </MainButtonDef>
+</Defs>

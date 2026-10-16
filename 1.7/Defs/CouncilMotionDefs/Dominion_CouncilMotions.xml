@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Rim Council motions. Behaviour is in the worker class; numbers and text are here. -->
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_Sanctions</defName>
+    <label>sanctions</label>
+    <description>Every member must embargo the named faction for 60 days, and its economy suffers. Members who keep trading are in violation.</description>
+    <workerClass>Dominion.CouncilMotion_Sanctions</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>60</durationDays>
+    <graceDays>5</graceDays>
+    <proposeCost>20</proposeCost>
+    <aiProposeChance>0.35</aiProposeChance>
+    <summary>Sanctions on {0}</summary>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_Censure</defName>
+    <label>censure</label>
+    <description>A formal condemnation. Every member thinks less of the named faction, and its leader loses legitimacy.</description>
+    <workerClass>Dominion.CouncilMotion_Censure</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>0</durationDays>
+    <graceDays>0</graceDays>
+    <proposeCost>10</proposeCost>
+    <aiProposeChance>0.3</aiProposeChance>
+    <summary>Censure of {0}</summary>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_Ceasefire</defName>
+    <label>ceasefire order</label>
+    <description>Orders two warring factions to make peace within 7 days and keep it for 60. Refusing, or restarting the war, is a violation.</description>
+    <workerClass>Dominion.CouncilMotion_Ceasefire</workerClass>
+    <targetCount>2</targetCount>
+    <durationDays>60</durationDays>
+    <graceDays>7</graceDays>
+    <proposeCost>15</proposeCost>
+    <aiProposeChance>0.4</aiProposeChance>
+    <summary>Ceasefire between {0} and {1}</summary>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_CollectiveDefense</defName>
+    <label>collective defence</label>
+    <description>Names an aggressor. Within 10 days every member must stand against it, by war or by embargo, or be in violation. Allies and pact partners of the aggressor, and members already fighting two wars, are excused.</description>
+    <workerClass>Dominion.CouncilMotion_CollectiveDefense</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>60</durationDays>
+    <graceDays>10</graceDays>
+    <proposeCost>25</proposeCost>
+    <aiProposeChance>0.35</aiProposeChance>
+    <summary>Collective defence against {0}</summary>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_TradeStandard</defName>
+    <label>common trade standard</label>
+    <description>For 120 days, members trade with each other on better terms (5% better prices) and their economies grow 2%.</description>
+    <workerClass>Dominion.CouncilMotion_TradeStandard</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>120</durationDays>
+    <graceDays>0</graceDays>
+    <proposeCost>15</proposeCost>
+    <aiProposeChance>0.3</aiProposeChance>
+    <summary>A common trade standard</summary>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_DiplomaticImmunity</defName>
+    <label>diplomatic immunity</label>
+    <description>For 180 days, attacking delegations or seizing envoys is a violation of council law.</description>
+    <workerClass>Dominion.CouncilMotion_DiplomaticImmunity</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>180</durationDays>
+    <graceDays>0</graceDays>
+    <proposeCost>10</proposeCost>
+    <aiProposeChance>0.4</aiProposeChance>
+    <summary>Diplomatic immunity for envoys</summary>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_BanSlavery</defName>
+    <label>ban on slavery</label>
+    <description>For 180 days, members may not keep slaves. Members found with slaves after 10 days are in violation.</description>
+    <workerClass>Dominion.CouncilMotion_BanSlavery</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>180</durationDays>
+    <graceDays>10</graceDays>
+    <proposeCost>15</proposeCost>
+    <aiProposeChance>0.25</aiProposeChance>
+    <summary>A ban on slavery</summary>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_FederationCharter</defName>
+    <label>Federation Charter</label>
+    <description>Founds a planetary federation led by your colony. Once passed, any major faction may sign Federation membership with you. Only you can propose it, after researching Planetary Federation. It never expires.</description>
+    <workerClass>Dominion.CouncilMotion_FederationCharter</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>0</durationDays>
+    <permanent>true</permanent>
+    <graceDays>0</graceDays>
+    <proposeCost>40</proposeCost>
+    <aiProposeChance>0</aiProposeChance>
+    <summary>The Federation Charter</summary>
+  </Dominion.CouncilMotionDef>
+</Defs>
