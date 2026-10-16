@@ -5,8 +5,7 @@ using Verse;
 namespace Dominion
 {
     /// <summary>
-    /// An abstract military strength per faction, used by the AI to judge wars. Real forces (warbands)
-    /// come in M7 and will feed back into this.
+    /// An abstract military strength per faction, used by the AI to judge wars and to size its warbands.
     /// </summary>
     public class MilitarySystem : SimSystem
     {
@@ -33,7 +32,10 @@ namespace Dominion
             float baseForce = s.settlementCount * 8f + s.population * 0.5f + s.vassalOutposts * 4f + s.territoryTiles * 0.01f;
             float economy = Mathf.Sqrt(Mathf.Max(10f, s.economyIndex) / 100f);
             float weariness = 1f - s.warWeariness / 200f;
-            s.militaryStrength = baseForce * TechFactor(faction.def.techLevel) * economy * weariness;
+            // A cold war is an arms race; sabotage leaves the army short of supplies for a while.
+            float armsRace = 1f + Mathf.Min(0.2f, s.coldWars * 0.08f);
+            float sabotage = Find.TickManager.TicksGame < s.sabotagedUntilTick ? 0.85f : 1f;
+            s.militaryStrength = baseForce * TechFactor(faction.def.techLevel) * economy * weariness * armsRace * sabotage;
         }
     }
 }

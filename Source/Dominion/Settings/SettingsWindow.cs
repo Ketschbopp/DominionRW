@@ -9,7 +9,7 @@ namespace Dominion
     /// <summary>Tabbed mod settings. New modules add a tab here.</summary>
     public static class SettingsWindow
     {
-        private enum Tab { General, Simulation, News, Council, Leadership, Culture, Events, Ending, Integrations, Performance }
+        private enum Tab { General, Simulation, News, Espionage, War, Council, Leadership, Culture, Events, Ending, Integrations, Performance }
 
         private static Tab current = Tab.General;
         private static Vector2 scroll;
@@ -44,6 +44,8 @@ namespace Dominion
                 case Tab.General: DrawGeneral(l, s); break;
                 case Tab.Simulation: DrawSimulation(l, s); break;
                 case Tab.News: DrawNews(l, s); break;
+                case Tab.Espionage: DrawEspionage(l, s); break;
+                case Tab.War: DrawWar(l, s); break;
                 case Tab.Council: DrawCouncil(l, s); break;
                 case Tab.Leadership: DrawLeadership(l, s); break;
                 case Tab.Culture: DrawCulture(l, s); break;
@@ -87,12 +89,36 @@ namespace Dominion
             s.stabilityDriftSpeed = l.Slider(s.stabilityDriftSpeed, 0.1f, 3f);
         }
 
-        private static void DrawNews(Listing_Standard l, DominionSettings s)
+        private static void DrawEspionage(Listing_Standard l, DominionSettings s)
         {
             l.CheckboxLabeled("Dominion_Setting_AiIntelligence".Translate(), ref s.aiIntelligence, "Dominion_Setting_AiIntelligence_Desc".Translate());
+            if (s.aiIntelligence)
+                l.CheckboxLabeled("Dominion_Setting_AiCovertOps".Translate(), ref s.aiCovertOps, "Dominion_Setting_AiCovertOps_Desc".Translate());
             l.Label("Dominion_Setting_OperationSuccess".Translate(s.operationSuccess.ToStringPercent()));
             s.operationSuccess = l.Slider(s.operationSuccess, 0.25f, 2f);
-            l.GapLine();
+            l.Label("Dominion_Setting_PhysicalDetection".Translate(s.physicalDetection.ToStringPercent()), tooltip: "Dominion_Setting_PhysicalDetection_Desc".Translate());
+            s.physicalDetection = l.Slider(s.physicalDetection, 0f, 3f);
+        }
+
+        private static void DrawWar(Listing_Standard l, DominionSettings s)
+        {
+            l.CheckboxLabeled("Dominion_Setting_Warbands".Translate(), ref s.warbands, "Dominion_Setting_Warbands_Desc".Translate());
+            if (s.warbands)
+            {
+                l.Label("Dominion_Setting_WarbandFrequency".Translate(s.warbandFrequency.ToStringPercent()));
+                s.warbandFrequency = l.Slider(s.warbandFrequency, 0.1f, 3f);
+                l.CheckboxLabeled("Dominion_Setting_WarbandRaids".Translate(), ref s.warbandRaidsOnPlayer, "Dominion_Setting_WarbandRaids_Desc".Translate());
+                l.CheckboxLabeled("Dominion_Setting_Occupation".Translate(), ref s.warOccupation, "Dominion_Setting_Occupation_Desc".Translate());
+            }
+            l.Gap();
+            l.Label("Dominion_Setting_CapitulationScore".Translate(s.capitulationScore.ToString("F0")), tooltip: "Dominion_Setting_CapitulationScore_Desc".Translate());
+            s.capitulationScore = Mathf.Round(l.Slider(s.capitulationScore, 40f, 100f) / 5f) * 5f;
+            l.CheckboxLabeled("Dominion_Setting_JointWars".Translate(), ref s.aiJointWars, "Dominion_Setting_JointWars_Desc".Translate());
+            l.CheckboxLabeled("Dominion_Setting_ColdWars".Translate(), ref s.coldWars, "Dominion_Setting_ColdWars_Desc".Translate());
+        }
+
+        private static void DrawNews(Listing_Standard l, DominionSettings s)
+        {
             l.Label("Dominion_Setting_NewsLogCap".Translate(s.newsLogCap));
             s.newsLogCap = (int)l.Slider(s.newsLogCap, 50, 2000);
             l.CheckboxLabeled("Dominion_Setting_FalseRumors".Translate(), ref s.falseRumors, "Dominion_Setting_FalseRumors_Desc".Translate());

@@ -6,12 +6,12 @@ using Verse;
 namespace Dominion
 {
     /// <summary>
-    /// The Dominion main tab: overview with faction dossiers, event log and integration status.
-    /// Diplomacy, treaties, intelligence, council and news tabs arrive in later milestones.
+    /// The Dominion main tab: news, faction dossiers, diplomacy, treaties, wars, the council, intelligence, the
+    /// Federation, the event log (dev mode) and integration status.
     /// </summary>
     public class MainTabWindow_Dominion : MainTabWindow
     {
-        private enum Tab { News, Overview, Diplomacy, Treaties, Council, Intelligence, Federation, Events, Integrations }
+        private enum Tab { News, Overview, Diplomacy, Treaties, War, Council, Intelligence, Federation, Events, Integrations }
 
         private const float RowHeight = 26f;
 
@@ -22,6 +22,7 @@ namespace Dominion
         private readonly CouncilPanel councilPanel = new CouncilPanel();
         private readonly IntelligencePanel intelligencePanel = new IntelligencePanel();
         private readonly FederationPanel federationPanel = new FederationPanel();
+        private readonly WarPanel warPanel = new WarPanel();
         private Vector2 scroll;
         private Vector2 dossierScroll;
         private Faction selected;
@@ -40,6 +41,7 @@ namespace Dominion
                 new TabRecord("Dominion_Tab_Overview".Translate(), () => Select(Tab.Overview), current == Tab.Overview),
                 new TabRecord("Dominion_Tab_Diplomacy".Translate(), () => Select(Tab.Diplomacy), current == Tab.Diplomacy),
                 new TabRecord("Dominion_Tab_Treaties".Translate(), () => Select(Tab.Treaties), current == Tab.Treaties),
+                new TabRecord("Dominion_Tab_War".Translate(), () => Select(Tab.War), current == Tab.War),
                 new TabRecord("Dominion_Tab_Council".Translate(), () => Select(Tab.Council), current == Tab.Council),
                 new TabRecord("Dominion_Tab_Intelligence".Translate(), () => Select(Tab.Intelligence), current == Tab.Intelligence),
                 new TabRecord("Dominion_Tab_Federation".Translate(), () => Select(Tab.Federation), current == Tab.Federation),
@@ -71,6 +73,9 @@ namespace Dominion
                     break;
                 case Tab.Treaties:
                     if (WorldComponent_Dominion.Instance != null) treatiesPanel.Draw(body, WorldComponent_Dominion.Instance);
+                    break;
+                case Tab.War:
+                    if (WorldComponent_Dominion.Instance != null) warPanel.Draw(body, WorldComponent_Dominion.Instance);
                     break;
                 case Tab.Federation:
                     if (WorldComponent_Dominion.Instance != null) federationPanel.Draw(body, WorldComponent_Dominion.Instance);

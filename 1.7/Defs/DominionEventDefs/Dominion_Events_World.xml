@@ -265,4 +265,22 @@
     <newsRules>Dominion_News_AidSent</newsRules>
     <headline>{0} sends aid to {1}</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_AssassinationAttempt</defName>
+    <label>assassination attempt</label>
+    <description>Someone tried to kill a faction's leader.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.75</newsworthiness>
+    <newsRules>Dominion_News_AssassinationAttempt</newsRules>
+    <headline>Attempt on the life of {0}'s leader</headline>
+    <world>
+      <mtbDays>900</mtbDays>
+      <legitimacy>0~60</legitimacy>
+      <stabilityOffset>-4</stabilityOffset>
+      <legitimacyOffset>-3</legitimacyOffset>
+      <leaderDeathChance>0.3</leaderDeathChance>
+    </world>
+  </Dominion.DominionEventDef>
 </Defs>

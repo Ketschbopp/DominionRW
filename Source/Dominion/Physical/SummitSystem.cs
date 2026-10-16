@@ -207,7 +207,7 @@ namespace Dominion
             {
                 options.Add(AgendaOption(f, SummitAgenda.Relations, null));
                 foreach (TreatyDef t in DefDatabase<TreatyDef>.AllDefsListForReading)
-                    if (WorldComponent_Dominion.Instance.Treaties.CannotSignReason(t, Faction.OfPlayer, f) == null
+                    if (!t.imposed && WorldComponent_Dominion.Instance.Treaties.CannotSignReason(t, Faction.OfPlayer, f) == null
                         && (t.requiredResearch == null || t.requiredResearch.IsFinished))
                         options.Add(AgendaOption(f, SummitAgenda.Treaty, t));
             }

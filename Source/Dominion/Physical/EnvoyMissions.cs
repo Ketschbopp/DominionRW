@@ -37,7 +37,7 @@ namespace Dominion
                     if (hostile) continue;
                     foreach (TreatyDef treaty in DefDatabase<TreatyDef>.AllDefsListForReading)
                     {
-                        if (EnvoyMissions.TreatyBlockedReason(treaty, f) != null) continue;
+                        if (treaty.imposed || EnvoyMissions.TreatyBlockedReason(treaty, f) != null) continue;
                         TreatyDef t = treaty;
                         foreach (FloatMenuOption o in Option(caravan, settlement, mission, t))
                             yield return o;

@@ -354,8 +354,8 @@ Debug category **Dominion** includes:
 | **M3: Diplomacy UI** ✅ | Dominion tab, dossiers, actions, treaties, embargo and border rights, Leadership Desk |
 | **M4: Physical diplomacy** ✅ | Envoys, delegations, summits plus the dialogue system, hostage exchange |
 | **M5: Rim Council** ✅ | Sessions, motions, voting, decrees, violations |
-| **M6: Intelligence** ✅ (gathering scope) | Operations (abstract first, then physical maps), counter-intel, exposure |
-| **M7: War** | War goals, war score, warbands and interception, occupation, cold war, joint wars |
+| **M6: Intelligence** ✅ | Operations (abstract first, then physical maps), counter-intel, exposure |
+| **M7: War** ✅ | War goals, war score, warbands and interception, occupation, cold war, joint wars |
 | **M8: Broadcast and culture** ✅ | Broadcast Center, programs, TV and newspaper hooks, ideo influence |
 | **M9: Integrations** ✅ | One integration per sub-milestone (the core bindings for E&D and FTV land in M1, since both are required): FTV (full) → E&D (full) → Simple Leadership → VOE → Visit Settlements → RimMarket → RimToll → RimCourt → IRBM → CBF → VBE → P&P |
 | **M10: Ending and polish** ✅ | Unification ending, events catalogue, balancing, translation keys |
@@ -490,9 +490,9 @@ AI members comply by honour (and war weariness or hawkishness, as relevant); the
 
 **Violations:** every other member's opinion of the violator falls (6 + 8 × honour), the player loses 5 goodwill with each member, and an AI violator loses legitimacy. Violations make sanctions and censure motions against the violator more likely.
 
-## 9f. M6 implementation notes (intelligence gathering)
+## 9f. M6 implementation notes (intelligence and covert operations)
 
-M6 was built as **intelligence gathering**. The covert-action operations listed in §5.5 are not implemented.
+M6 was first built as intelligence gathering; the covert operations of §5.5 were added with M7 (see the end of this section).
 
 - **Research:** *Intelligence networks* (Medieval, after Diplomatic Corps) unlocks the Intelligence tab.
 - **Operations** (`OperationDef`, data plus a worker). Up to three agents leave the colony for the duration, as world pawns, and walk back in at the capital:
@@ -511,6 +511,23 @@ M6 was built as **intelligence gathering**. The covert-action operations listed 
 - **AI services:**
   - AI factions run operations on the player (1% + aggression × 1% per day, +1% if they dislike you). Caught at 20% + sweep + 10% with Intelligence Agency + intel/300; when caught, every faction's opinion of the culprit falls. Uncaught propaganda gives colonists a small mood debuff.
   - AI factions also gather intelligence on their rivals. When agents are caught, it is reported as a *secret* event, which the player only hears about with intel 50 or more.
+
+**Covert operations.** `OperationDef` says whether an operation runs off-map (`allowAbstract`), in person (`allowPhysical`) or both, what the agents must do on the map (`objective`), whether it needs a faction to blame, a minimum network, a maximum target stability, the event it raises on success, and whether it is a hostile act. Doing it in person multiplies the reward by 1.5.
+
+| Operation | Mode | Cost | On success |
+|---|---|---|---|
+| Gather intelligence | both (in person: reach their archives) | 8 influence | As before; in person ×1.5 |
+| Incite riots | off-map, 5 days | 15 influence + 300 silver | Stability −10, reformists +5%, riots; a shaky regime (stability < 20, legitimacy < 45) may fall to a coup (30%) |
+| Stage a coup | off-map, 10 days; network 30+, stability ≤ 45 | 40 influence + 1000 silver | Coup, and the new regime signs a **puppet** treaty with you: favour and opinion at least 30 |
+| False flag | off-map, 6 days; choose a faction to blame | 25 influence | Target's grievance against the blamed +35, opinion −20; the world hears that the blamed faction's agents were caught; an aggressive target may declare war on them |
+| Steal technology | both (in person: reach a workshop) | 15 influence | 30% of your current project (more against more advanced factions, ×1.5 in person). Needs a faction at least as advanced as you |
+| Assassinate the leader | in person only | 25 influence | The leader dies (or, if away, a senior official: stability and legitimacy −8) |
+| Sabotage | in person only | 15 influence | Economy −12%, military −15% for 30 days, 2,250 silver of E&D stockpile destroyed, war score +7.5 |
+| Rescue a captive | in person only | 5 influence | A colonist they hold is freed |
+
+- **In person.** A caravan carrying the agents (every able colonist in it) picks *Covert operation* at one of the target's settlements. On arrival the settlement map opens and the caravan walks in. The target is marked: the leader (brought in from the world if free; otherwise the toughest humanlike there), a building (power and batteries first for sabotage, the most valuable one for theft), or the captive, spawned as their prisoner. Killing or destroying the target, or standing next to it, completes the objective. Unless the faction is already at war with you, its guards are not hostile; every hour each agent on the map has a 1.5% chance (× 0.5 + paranoia, ×2 once the deed is done, ×0.7 with Intelligence Agency, × the detection setting) of being noticed, and then the faction declares war. The operation ends when no agent is left on the map: success if the objective was reached, exposed if the alarm was raised (or by the def's chance after success). A captive not rescued goes back to their cell. One in-person operation at a time.
+- **Exposure** of a hostile act costs twice the favour and grievance, and the target may declare war (15% + 30% × aggression). Off-map, an agent may still be detained (40%). A false flag that comes out also angers the faction that was blamed.
+- **AI services** that get past the rival's defences sometimes act instead of only gathering: incite riots (stability −6), sabotage (economy −4%, military weakened 10 days, war score), false flags against the rival's other enemies, coups against shaky rivals and assassinations, more often between factions at war or in a cold war. All are secret or black-ops events. Spies interested in you are more active in a cold war or a war, and may sabotage a building in your colony (it breaks down).
 
 ## 9g. M8 implementation notes
 
@@ -580,7 +597,48 @@ Change counters (power events, plundered settlements, vassal outposts) are not s
 
 **Aid.** A faction in crisis can be helped: friendly AI factions with a healthy economy may send aid (news, favour, stability), and the player can take a caravan with an envoy to one of its settlements and **deliver aid**: medicine, then food, then silver, at least 300 and up to 1500 silver worth. Favour up to +25, goodwill +2 to +12, cultural influence +5, their stability +4, and the crisis ends.
 
-*Assassination attempts, border skirmishes and arms-race incidents are left out of the catalogue: they belong with war (M7), which is not implemented. Visitable world sites are handled through the faction's own settlements (aid deliveries) rather than separate site objects.*
+*Assassination attempts* were added with M7 (legitimacy ≤ 60, mtb 900 days: stability −4, legitimacy −3, a 30% chance the leader dies; `leaderDeathChance` in the `<world>` block). Border skirmishes and arms races come from cold wars (§9j). *Visitable world sites are handled through the faction's own settlements (aid deliveries) rather than separate site objects.*
+
+## 9j. M7 implementation notes (war)
+
+**War records.** Every declaration (vanilla, AI, player, a joined war) opens a `War`: attacker, defender, goal, war score (−100 defender won … +100 attacker won), battles, and the ally it was joined for, if any. Permanent enemies and quest factions never get one. Old saves adopt every war Dominion knew was active.
+
+**Goals.** The player picks one when declaring war; the AI weighs them by personality and situation:
+
+| Goal | AI weight | If the attacker wins |
+|---|---|---|
+| Punitive | 0.4 + grievance/100 | Loser: stability −12, legitimacy −10, economy −8% (you: −20 influence) |
+| Conquest | 0.2 + aggression + 0.4 if within 30 tiles + 0.3 × greed; not against you | The target settlement (the defender's nearest, not the capital) is ceded. To you it becomes an FTV vassal outpost; if FTV cannot do it, they pay instead |
+| Vassalisation | stronger by 1.4× or more; not against you | A **puppet** treaty. Against you: you pay tribute |
+| Tribute | 0.2 + greed | A payment now and a **tribute** treaty for 180 days |
+| Regime change | ideologies clash, or the defender is unstable | A coup in the loser, and the new regime likes the winner. Against you: −30 influence |
+| Liberation | the defender holds settlements taken from the attacker | Every settlement the loser took from others goes back |
+
+A winning defender, or a faction that joined for an ally, takes reparations. A payment is 2% of the payer's wealth (300–3000; from you 2% of home wealth, 200–2000), drop-podded to you or moved between economies.
+
+**Score** comes from battles (+10 for a win, +8 for holding), occupations (+15, and a lost capital +20 more), the defeat of a settlement by you (+25), deaths in combat (0.6 per humanlike, 10 for a leader, at most 12 a day), intercepting a warband (+6), blockades (+1.5 a day), sabotage, proxy funding (+10) and reinforcements (+6). It also drifts each day toward the stronger side (up to 0.6) and against the wearier one. What one side gains in a joined war, half goes to the ally's own war.
+
+**Peace.** When peace is made (AI delegation, your proposal, a summit, a ceasefire decree), the side ahead by 25 or more sets the terms; below that it is a white peace and occupied settlements go back. Occupied settlements stay with the winner after a capitulation, a conquest, or a lead of 50. War score now counts in peace acceptance (yours: −30% to +40%) and in the AI's own peace chances. When a war ends, wars joined for either side wind down too (you are offered peace).
+
+**Capitulation.** At the capitulation score (setting, default 75) the AI loser gives up (25% a day, more when weary or dovish) on the winner's terms, with a 60-day truce. With you on either side you are asked, at most every 15 days.
+
+**Warbands** (`Warband` world object, 2,500 ticks a tile, at most 2 per faction). Each day of a war each AI side may send one: chance (5% + 12% × aggression) × frequency × (1 − weariness/150). Strength is 5 × military strength × (1 − weariness/200), 250–3000 points. Missions:
+- **Siege** (the conquest target, the settlements to liberate, or one of ours they hold, else the nearest): an abstract battle, attack ÷ (attack + 1.2 × garrison), garrison = 5 × strength ÷ settlements (+50% at the capital). Both lose population through E&D and gain weariness. A win occupies the settlement (`Settlement.SetFaction`; never the player's, never a faction's last one, never a settlement with an open map).
+- **Blockade** (15%): six days at the enemy capital, economy −1% and war score +1.5 a day.
+- **Raid** on the player's capital (with the setting, half as likely, at most one at a time, 12 days apart): a vanilla raid sized by the storyteller.
+- **Reinforce:** an ally at peace marches to its friend's capital (+6 score in its wars).
+
+Warbands are drawn when they involve you, when you have intel 25 or more on their faction, or within 8 tiles of your colonies or caravans. One marching on you sends a letter a day before it arrives. A caravan on the same tile can intercept it: a caravan battle against its full strength, and an act of war if you were at peace.
+
+**Blockades by the player:** a caravan with a fighter at an enemy settlement can blockade it: economy −1%, 150 silver of stockpile and +1.5 war score a day, while it stays. Each day the garrison may sally out (10%).
+
+**Joint wars.** Two days into a war each AI side asks its allies and puppets, once each. AI allies join with 15% + 35% × honour (+20% if they dislike the enemy, −15% per war they already fight, ×0.3 with a pact with the enemy; puppets 90%); a refusal costs favour and is news. You are asked by dialog. You can ask others with **Call to arms** (15 influence). Defensive pacts now join through the same path.
+
+**Puppets and tribute.** `Dominion_Puppet` (imposed: puppet pays 2% economy, never attacks, joins wars, counts as subjugated for the Federation, +15 intel) and `Dominion_Tribute` (180 days, 4% economy; with you, silver every 15 days: 0.3% of their wealth (100–600), or from you 0.5% of home wealth (150–1000), and not paying breaks the treaty). A puppet that dislikes its overlord (opinion < −25) and is stable (45+) may break free (2% a day); an AI overlord may answer with war.
+
+**Cold wars.** Two AI peers (strength ratio 0.5–2) whose opinions of each other are both below −45 enter one (2% a day); it thaws when both rise above −20 (10% a day) and ends if it turns hot. Each side: an arms race (military +8% per cold war, up to +20%; economy −2% each), hawks grow, propaganda battles, border skirmishes between neighbours (grievance both ways, news), and proxy wars (funding whoever fights the rival: +6 score to them). A cold war makes declaring war 1.5× more likely. You can declare one (10 influence) or offer to end it, and fund a **proxy war** (500 silver, 15 influence, +10 score to your proxy; leaks one time in four).
+
+**Interfaces:** a War tab (wars with goal, score bar and the terms a peace would bring now, peace and call-to-arms buttons; cold wars; warbands in sight; occupied settlements; blockades), a goal menu when declaring war, settings (War and Espionage tabs) and dev actions.
 
 ## 10. Decisions log
 
@@ -602,21 +660,19 @@ Change counters (power events, plundered settlements, vassal outposts) are not s
 
 ## 11. Status after M10 and the review pass
 
-**Nothing has been tested in game yet.** Everything builds against the 1.7 reference assemblies and every def, key and texture is checked by script, but no save has been loaded. The first in-game session is the most important next step.
+**Nothing has been tested in game yet** (M7 and the covert operations included). Everything builds against the 1.7 reference assemblies and every def, key and texture is checked by script, but no save has been loaded. The first in-game session is the most important next step.
 
 ### Left out on purpose
 
-- **M7 War** as a whole: war goals and war score, warbands and their interception, occupation, cold war and proxy wars, joint wars, blockades. Wars today are vanilla hostility (plus the Declare war action, the ceasefire and collective defense motions, and defensive pacts that call allies in).
-- **Covert operations** from §5.5: assassination, sabotage, inciting riots, coups and puppets, false flags, rescue or extraction, stealing technology, and physical (on-map) operations. Built: establish network, gather intel, propaganda, bribe official, counter-intelligence.
+- *(M7 war and the covert operations of §5.5 were added after this review; see §9f and §9j.)* Still left out: naval blockades, VOE outposts intercepting warbands, IRBM missile strikes as war acts, RimCourt trials for captured operatives, and physical coups.
 - **Hostile broadcasting**: the propaganda program aimed at a faction's stability and the disinformation program.
-- **World events tied to war**: assassination attempts, border skirmishes, arms races.
 
 ### Deferred, still to do
 
 | Area | Missing |
 |---|---|
 | Diplomacy actions | threaten, apologise, military access, research cooperation, political marriage (RimCourt), guarantee of independence, loans, investment, release vassal, annexation |
-| Vassalage | faction-level vassals and puppets (only FTV settlement vassalage exists); tribal vassals sitting in the council through their overlord |
+| Vassalage | puppets exist (war goal, coups); releasing or annexing them; tribal vassals sitting in the council through their overlord |
 | Rim Council | non-proliferation (IRBM), plague quarantine, recognition of territory, peacekeeping coalition and admit-member motions |
 | Culture | real precept changes in other factions' ideologies (reforms only move opinion today); a dedicated Diplomat role precept; precepts gating actions (e.g. pacifists declaring war) |
 | Summits | in-summit incidents beyond the current ones (protest, betrayal); Visit Settlements as a venue; hostage exchanges at an agreed time and place (today they happen at once) |

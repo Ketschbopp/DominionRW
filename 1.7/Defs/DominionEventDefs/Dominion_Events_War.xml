@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- War (M7) and covert operations (M6). {0} primary faction, {1} secondary, {2} detail. -->
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_JoinedWar</defName>
+    <label>joined war</label>
+    <description>A faction has entered a war on the side of an ally.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.75</newsworthiness>
+    <newsRules>Dominion_News_JoinedWar</newsRules>
+    <headline>{0} joins the war against {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_CallToArmsRefused</defName>
+    <label>call to arms refused</label>
+    <description>A faction declined to join an ally's war.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.45</newsworthiness>
+    <newsRules>Dominion_News_CallToArmsRefused</newsRules>
+    <headline>{0} refuses to join {1}'s war</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_WarbandMarching</defName>
+    <label>warband on the march</label>
+    <description>A faction has sent an army into the field.</description>
+    <category>Military</category>
+    <secrecy>Restricted</secrecy>
+    <newsworthiness>0.35</newsworthiness>
+    <newsRules>Dominion_News_WarbandMarching</newsRules>
+    <headline>A warband of {0} marches against {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Reinforcements</defName>
+    <label>reinforcements sent</label>
+    <description>A faction has sent troops to help an ally at war.</description>
+    <category>Military</category>
+    <secrecy>Restricted</secrecy>
+    <newsworthiness>0.35</newsworthiness>
+    <newsRules>Dominion_News_Reinforcements</newsRules>
+    <headline>{0} sends troops to aid {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_BattleFought</defName>
+    <label>battle</label>
+    <description>A battle was fought at a settlement.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_BattleFought</newsRules>
+    <headline>{0} defeats {1} at {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SettlementOccupied</defName>
+    <label>settlement occupied</label>
+    <description>A settlement has been taken by an enemy faction.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.85</newsworthiness>
+    <newsRules>Dominion_News_SettlementOccupied</newsRules>
+    <headline>{0} occupies {2}, taken from {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SettlementReturned</defName>
+    <label>settlement returned</label>
+    <description>A settlement has gone back to its former owner.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_SettlementReturned</newsRules>
+    <headline>{2} returns to {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_WarbandIntercepted</defName>
+    <label>warband intercepted</label>
+    <description>A caravan intercepted a faction's warband.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_WarbandIntercepted</newsRules>
+    <headline>{0} intercepts a warband of {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Blockade</defName>
+    <label>blockade</label>
+    <description>A faction is blockading an enemy settlement.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.55</newsworthiness>
+    <newsRules>Dominion_News_Blockade</newsRules>
+    <headline>{0} blockades {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Capitulation</defName>
+    <label>capitulation</label>
+    <description>A faction has surrendered and accepted its enemy's terms.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.95</newsworthiness>
+    <newsRules>Dominion_News_Capitulation</newsRules>
+    <headline>{0} capitulates to {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_PeaceTerms</defName>
+    <label>peace terms</label>
+    <description>A war ended in a peace that favoured one side.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_PeaceTerms</newsRules>
+    <headline>Peace favours {0}: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_PuppetFreed</defName>
+    <label>puppet breaks free</label>
+    <description>A puppet regime has thrown off its overlord.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_PuppetFreed</newsRules>
+    <headline>{0} breaks free of {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_PuppetInstalled</defName>
+    <label>puppet installed</label>
+    <description>A foreign power has installed a friendly government.</description>
+    <category>Politics</category>
+    <secrecy>Secret</secrecy>
+    <newsworthiness>0.85</newsworthiness>
+    <newsRules>Dominion_News_PuppetInstalled</newsRules>
+    <headline>A puppet regime rules {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_ColdWarBegan</defName>
+    <label>cold war</label>
+    <description>Two factions have entered a cold war: rivalry, an arms race and propaganda, short of open war.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <newsRules>Dominion_News_ColdWarBegan</newsRules>
+    <headline>Cold war between {0} and {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_ColdWarEnded</defName>
+    <label>cold war ends</label>
+    <description>A cold war has ended with a thaw.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_ColdWarEnded</newsRules>
+    <headline>Thaw between {0} and {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_ArmsRace</defName>
+    <label>arms race</label>
+    <description>Rivals are racing to out-arm each other.</description>
+    <category>Military</category>
+    <secrecy>Restricted</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_ArmsRace</newsRules>
+    <headline>Arms race between {0} and {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_BorderSkirmish</defName>
+    <label>border skirmish</label>
+    <description>Rival patrols clashed on the border.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_BorderSkirmish</newsRules>
+    <headline>Border clash between {0} and {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_ProxyWar</defName>
+    <label>proxy war</label>
+    <description>A faction is secretly funding a war against its rival.</description>
+    <category>Espionage</category>
+    <secrecy>Secret</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_ProxyWar</newsRules>
+    <headline>{0} funds {2} against {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Assassination</defName>
+    <label>assassination</label>
+    <description>A faction's leader or a senior official has been assassinated.</description>
+    <category>Espionage</category>
+    <secrecy>BlackOps</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <newsRules>Dominion_News_Assassination</newsRules>
+    <headline>Assassination in {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Sabotage</defName>
+    <label>sabotage</label>
+    <description>Saboteurs struck a faction's stores, power or workshops.</description>
+    <category>Espionage</category>
+    <secrecy>Secret</secrecy>
+    <newsworthiness>0.55</newsworthiness>
+    <newsRules>Dominion_News_Sabotage</newsRules>
+    <headline>Sabotage in {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FalseFlag</defName>
+    <label>false flag</label>
+    <description>A faction staged an incident and blamed someone else.</description>
+    <category>Espionage</category>
+    <secrecy>BlackOps</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_FalseFlag</newsRules>
+    <headline>False flag: {1} framed {2} in {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TechnologyStolen</defName>
+    <label>technology stolen</label>
+    <description>Foreign agents have stolen research.</description>
+    <category>Espionage</category>
+    <secrecy>Secret</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_TechnologyStolen</newsRules>
+    <headline>Research stolen from {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_HostageRescued</defName>
+    <label>hostage rescued</label>
+    <description>A captive was freed by a rescue team.</description>
+    <category>Espionage</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_HostageRescued</newsRules>
+    <headline>Daring rescue in {1}</headline>
+  </Dominion.DominionEventDef>
+</Defs>

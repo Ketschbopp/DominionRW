@@ -73,6 +73,13 @@ namespace Dominion
                     float mine = fs.warWeariness / 100f * 0.6f + fs.Bloc(Bloc.Doves) * 0.5f + (r.opinion + 100f) / 400f + p.honour * 0.1f;
                     float theirs = os.warWeariness / 100f * 0.6f + os.Bloc(Bloc.Doves) * 0.5f + (back.opinion + 100f) / 400f;
                     float chance = Mathf.Min(mine, theirs) * (active ? 0.04f : 0.01f);
+                    // The side that is losing wants out; the side that is winning wants its terms.
+                    War war = comp.Wars.Find(f, other);
+                    if (war != null)
+                    {
+                        float score = war.ScoreFor(f);
+                        chance *= score < 0f ? 1f - score / 25f : score > 40f ? 0.4f : 1f;
+                    }
                     if (!Rand.Chance(chance)) return false;
                     DelegationUtility.DispatchAgreement(f, other, AgreementKind.Peace);
                     return true;
@@ -109,6 +116,7 @@ namespace Dominion
                     float utility = hatred * fs.effectiveAggression * strength * proximity * stable * (1f - fs.warWeariness / 100f);
                     // Breaking a pact is possible, but only for the dishonourable and the desperate.
                     if (treaties.AnyNonAggression(f, other)) utility *= (1f - p.honour) * 0.3f;
+                    if (r.ColdWar) utility *= 1.5f;
                     if (!Rand.Chance(Mathf.Min(0.1f, utility * 0.03f * settings.aiAggression))) return false;
                     DiplomacyUtility.SetRelationKind(f, other, FactionRelationKind.Hostile, f, "Dominion_Reason_War".Translate());
                     return true;
