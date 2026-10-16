@@ -16,6 +16,7 @@ namespace Dominion
         public static void Resolve(NewsItem n)
         {
             if (n.def == null) return;
+            n.advice = NewsFlavor.Advice(n);
             if (n.def.newsRules == null)
             {
                 n.headline = Fallback(n);
@@ -47,6 +48,7 @@ namespace Dominion
             }
             if (n.headline.NullOrEmpty()) n.headline = Fallback(n);
             if (n.story.NullOrEmpty()) n.story = n.def.description;
+            NewsFlavor.Decorate(n, req);
         }
 
         private static string Fallback(NewsItem n)

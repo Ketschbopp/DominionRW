@@ -308,6 +308,7 @@ namespace Dominion
                     y += h + 4f;
                 }
             }
+            y = DrawAdvice(n, y, w);
             DominionTheme.InkLabel(new Rect(0f, y, w, 18f),
                 "Dominion_News_LetterFooter".Translate(NewsText.SourceLabel(n.source), NewsNotifier.ConfidenceLabel(n.confidence)),
                 DominionTheme.InkFaded, GameFont.Tiny);
@@ -330,6 +331,23 @@ namespace Dominion
         }
 
         private float storyHeight;
+
+        /// <summary>A boxed "what it means for us" panel, like a sidebar in a real paper.</summary>
+        private static float DrawAdvice(NewsItem n, float y, float w)
+        {
+            if (n.advice.NullOrEmpty()) return y;
+            Text.Font = GameFont.Small;
+            float textH = Text.CalcHeight(n.advice, w - 24f);
+            Rect box = new Rect(4f, y + 4f, w - 8f, textH + 30f);
+            Widgets.DrawBoxSolid(box, DominionTheme.PaperShade);
+            GUI.color = new Color(0.2f, 0.16f, 0.12f, 0.7f);
+            Widgets.DrawBox(box);
+            GUI.color = Color.white;
+            DominionTheme.InkLabel(new Rect(box.x + 10f, box.y + 5f, box.width - 20f, 18f),
+                "Dominion_News_AdviceTitle".Translate(NewsFlavor.ColonyName()).ToString().ToUpper(), DominionTheme.InkRed, GameFont.Tiny);
+            DominionTheme.InkLabel(new Rect(box.x + 10f, box.y + 23f, box.width - 20f, textH), n.advice);
+            return box.yMax + 10f;
+        }
 
         /// <summary>For unverified rumours: a stamp to send the story to the radio desk for checking.</summary>
         private static float DrawInvestigation(NewsItem n, float y, float w)

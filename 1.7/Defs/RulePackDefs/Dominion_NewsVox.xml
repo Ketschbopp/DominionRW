@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!--
+    Colonist reactions and street-level asides for The Rimward Courier. Resolved by NewsText after the story.
+    Roots: vox (a colonist's quote, without quotation marks) and aside (a one-line detail).
+    Constants: CAT = the event category (War, Military, Diplomacy, Economy, Politics, Espionage, Disaster, Culture, Council, General)
+               TONE = the quoted colonist's temper from their traits (grim, sunny, callous, kind, greedy, plain)
+    Symbols: COLONIST, COLONY, FACTION_A, FACTION_B, LEADER_A, CAPITAL_A, plus everything the news packs get.
+    Unconstrained rules can be picked for any story; constrained ones only when they fit.
+  -->
+  <RulePackDef>
+    <defName>Dominion_NewsVox</defName>
+    <rulePack>
+      <rulesStrings>
+        <!-- ============ any story ============ -->
+        <li>vox->I read it twice. Still don't know what it means for dinner.</li>
+        <li>vox->Can't say I'd heard of [FACTION_A] before today. Now I wish I hadn't.</li>
+        <li>vox->Interesting. Anyway, has anyone seen my good hat?</li>
+        <li>vox->Put it on the pile with everything else that's going to get us killed.</li>
+        <li>vox(TONE==grim)->Mark my words, this ends with all of us in a ditch.</li>
+        <li>vox(TONE==grim)->Bad news travels fast. Good news, apparently, doesn't travel at all.</li>
+        <li>vox(TONE==grim)->I've started sleeping with my boots on. This isn't helping.</li>
+        <li>vox(TONE==sunny)->Could be worse! Could be raining. Oh, it is raining. Still could be worse!</li>
+        <li>vox(TONE==sunny)->Every cloud has a silver lining, and every raider has silver in his pockets.</li>
+        <li>vox(TONE==sunny)->I'm sure it'll all work out. It usually does. Mostly. Sometimes.</li>
+        <li>vox(TONE==callous)->People die every day. Some of them even deserve it.</li>
+        <li>vox(TONE==callous)->Doesn't bother me. Does it bother you? Why?</li>
+        <li>vox(TONE==kind)->I hope the ordinary folk out there are all right. They never get a say in any of this.</li>
+        <li>vox(TONE==kind)->Someone should send them blankets. Or soup. Soup is always right.</li>
+        <li>vox(TONE==greedy)->Where there's trouble, there's a market. What's silver going for these days?</li>
+        <li>vox(TONE==greedy)->Does anyone over there need anything? At a fair price. My fair price.</li>
+
+        <!-- ============ war ============ -->
+        <li>vox(CAT==War)->Another war. Wake me when it's over, or when it's here. Whichever is first.</li>
+        <li>vox(CAT==War)->[FACTION_A] against [FACTION_B]. My money's on the crows.</li>
+        <li>vox(CAT==War)->If they're busy fighting each other, they're not busy fighting us. I'll drink to that.</li>
+        <li>vox(CAT==War)->I'm going to go check the turrets. No reason. Just checking them.</li>
+        <li>vox(CAT==War)->Someone tell the cook to stock up on pemmican. Wars make everyone hungry.</li>
+        <li>vox(CAT==War,TONE==grim)->It'll spill over. They always spill over. And we're downhill.</li>
+        <li>vox(CAT==War,TONE==grim)->Let me guess: the refugees come here, then the raiders follow the refugees.</li>
+        <li>vox(CAT==War,TONE==sunny)->At least the gravediggers will have steady work.</li>
+        <li>vox(CAT==War,TONE==callous)->Finally, something worth reading. Are there pictures?</li>
+        <li>vox(CAT==War,TONE==callous)->I could go over there and help. Either side. I'm not fussy.</li>
+        <li>vox(CAT==War,TONE==kind)->All those people, and for what? A hill? A grudge? It makes me sick.</li>
+        <li>vox(CAT==War,TONE==greedy)->Wars need steel, medicine and boots. We have steel, medicine and boots.</li>
+        <li>vox(CAT==Military)->If they're marching, I'd rather know which way.</li>
+        <li>vox(CAT==Military)->That many fighters in one place? Someone's having a very bad week soon.</li>
+        <li>vox(CAT==Military,TONE==grim)->They'll march past us. Or into us. Fifty-fifty.</li>
+        <li>vox(CAT==Military,TONE==callous)->Lot of gear walking around out there. Shame if it got lost.</li>
+
+        <!-- ============ diplomacy and council ============ -->
+        <li>vox(CAT==Diplomacy)->Treaties are just wars that haven't been scheduled yet.</li>
+        <li>vox(CAT==Diplomacy)->Good. Fewer people shooting means more people trading.</li>
+        <li>vox(CAT==Diplomacy)->Fancy words on fancy paper. I'll believe it when the caravans come back.</li>
+        <li>vox(CAT==Diplomacy)->Someone should send [LEADER_A] a fruit basket. Not a nice one. Just a basket.</li>
+        <li>vox(CAT==Diplomacy,TONE==grim)->Every handshake out here has a knife in the other hand.</li>
+        <li>vox(CAT==Diplomacy,TONE==sunny)->See? People can get along. Some of them. Briefly.</li>
+        <li>vox(CAT==Diplomacy,TONE==greedy)->Friendly factions buy more. I'm all for friendship.</li>
+        <li>vox(CAT==Council)->A council, voting on things. Like a family dinner, but with more knives.</li>
+        <li>vox(CAT==Council)->I don't remember voting for any of them. I don't remember voting at all.</li>
+        <li>vox(CAT==Council,TONE==grim)->Committees. That's how the world ends: by committee.</li>
+
+        <!-- ============ politics ============ -->
+        <li>vox(CAT==Politics)->Leaders come, leaders go. The mud stays the same.</li>
+        <li>vox(CAT==Politics)->I'd riot too if I had to live in [CAPITAL_A].</li>
+        <li>vox(CAT==Politics)->Unstable neighbours are the worst kind. Ask anyone who has had them.</li>
+        <li>vox(CAT==Politics)->Whoever's in charge over there, I hope they're bad at raiding.</li>
+        <li>vox(CAT==Politics,TONE==grim)->Next will be worse. Next is always worse.</li>
+        <li>vox(CAT==Politics,TONE==callous)->If you ask me, they should have done it sooner and messier.</li>
+        <li>vox(CAT==Politics,TONE==kind)->Change is hard on people. I hope it's a gentle one.</li>
+
+        <!-- ============ economy and disaster ============ -->
+        <li>vox(CAT==Economy)->So prices are going up again. Of course they are.</li>
+        <li>vox(CAT==Economy)->I've been saying for years we should keep more silver under the floor.</li>
+        <li>vox(CAT==Economy)->Their loss is our... no, wait, we trade with them. It's also our loss.</li>
+        <li>vox(CAT==Economy,TONE==greedy)->Buy low, sell high. Today is a buy low day. For someone.</li>
+        <li>vox(CAT==Economy,TONE==grim)->Next the caravans stop coming. Then we eat the furniture.</li>
+        <li>vox(CAT==Disaster)->Poor devils. And here I was complaining about the cooking.</li>
+        <li>vox(CAT==Disaster)->Let's keep our own fields watered and our own doors shut for a while.</li>
+        <li>vox(CAT==Disaster)->Hope it isn't catching. Whatever it is. Is it catching?</li>
+        <li>vox(CAT==Disaster)->Puts a bad harvest in perspective, doesn't it.</li>
+        <li>vox(CAT==Disaster,TONE==kind)->We should send them something. We have spare medicine, don't we?</li>
+        <li>vox(CAT==Disaster,TONE==callous)->Fewer of them means more for us. Don't look at me like that.</li>
+        <li>vox(CAT==Disaster,TONE==greedy)->Desperate people pay double for food. Just saying.</li>
+        <li>vox(CAT==Disaster,TONE==sunny)->They'll rebuild. People always do. Then something else happens.</li>
+
+        <!-- ============ espionage and culture ============ -->
+        <li>vox(CAT==Espionage)->Spies. Everywhere. Possibly in this room. I'm not saying it's you.</li>
+        <li>vox(CAT==Espionage)->If it's in the paper, it wasn't much of a secret, was it.</li>
+        <li>vox(CAT==Espionage)->I'm locking my room tonight. And checking under the bed.</li>
+        <li>vox(CAT==Espionage,TONE==grim)->If they can do that to [FACTION_A], they can do it to us.</li>
+        <li>vox(CAT==Espionage,TONE==callous)->Clean work. Professional. I'd like to meet whoever did it.</li>
+        <li>vox(CAT==Culture)->A festival? I've forgotten what fun looks like. Is it the thing with the music?</li>
+        <li>vox(CAT==Culture)->Big arguments over small gods. Same as ever.</li>
+        <li>vox(CAT==Culture,TONE==sunny)->Good for them. Everyone deserves a party.</li>
+
+        <li>vox(CAT==General)->Fine, I was wrong. Again. Happy?</li>
+        <li>vox(CAT==General)->So it never happened? Then why did I hide the silver?</li>
+
+        <!-- ============ asides ============ -->
+        <li>aside->A trader passing through confirmed the story in exchange for a hot meal and a dry corner.</li>
+        <li>aside->This report reached us in a sealed tin, slightly chewed.</li>
+        <li>aside->Our correspondent wishes it known that the tea was terrible.</li>
+        <li>aside->The original dispatch was partly illegible; the gaps have been filled with educated guesses.</li>
+        <li>aside(CAT==War)->Witnesses report that at least one muffalo was conscripted by mistake.</li>
+        <li>aside(CAT==War)->Local gravediggers have raised their prices.</li>
+        <li>aside(CAT==War)->Refugees on the road say both sides claim to be winning.</li>
+        <li>aside(CAT==War)->Black-market prices for medicine have doubled on the nearest routes.</li>
+        <li>aside(CAT==Military)->Travellers are advised to keep off the main roads and away from anything with a banner.</li>
+        <li>aside(CAT==Military)->The marching column was reportedly visible from three hills away, mostly because of the noise.</li>
+        <li>aside(CAT==Diplomacy)->Both delegations claim to have had the better seats.</li>
+        <li>aside(CAT==Diplomacy)->Refreshments at the talks were described as adequate and suspiciously well guarded.</li>
+        <li>aside(CAT==Politics)->Portraits of the old leadership were seen being used as firewood.</li>
+        <li>aside(CAT==Politics)->Street vendors in [CAPITAL_A] report brisk trade in new flags.</li>
+        <li>aside(CAT==Economy)->Caravan masters have begun charging "uncertainty fees".</li>
+        <li>aside(CAT==Economy)->A merchant was overheard offering to buy the news itself, at a discount.</li>
+        <li>aside(CAT==Disaster)->Healers in the area are asking for herbal medicine, clean water and patience.</li>
+        <li>aside(CAT==Disaster)->Survivors say the worst part was not the disaster, but the neighbours' advice.</li>
+        <li>aside(CAT==Espionage)->Officials deny everything, including things nobody asked about.</li>
+        <li>aside(CAT==Espionage)->A suspicious quantity of fake moustaches was found nearby.</li>
+        <li>aside(CAT==Culture)->Attendance was high, the music loud and the beer of questionable origin.</li>
+        <li>aside(CAT==Council)->The session ran long; three delegates were found asleep and one was found missing.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+</Defs>

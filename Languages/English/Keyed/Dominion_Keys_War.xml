@@ -319,4 +319,42 @@ Success is likelier with high Intellectual and good radio coverage. An inconclus
   <Dominion_Radio_InvestigateInconclusive>{PAWN_nameDef} could not get a straight answer on the radio about "{1}". It can be tried again.</Dominion_Radio_InvestigateInconclusive>
   <Dominion_Radio_ReportAdvisory>reading a colony advisory on the radio.</Dominion_Radio_ReportAdvisory>
   <Dominion_Radio_ReportInvestigate>chasing a rumour on the radio.</Dominion_Radio_ReportInvestigate>
+
+  <!-- News flavour: colonist reactions and "what it means for us" -->
+  <Dominion_News_Vox>"{0}," says {1}, {2} at {3}.</Dominion_News_Vox>
+  <Dominion_Vox_OurColony>our colony</Dominion_Vox_OurColony>
+  <Dominion_Vox_Role_Leader>our leader</Dominion_Vox_Role_Leader>
+  <Dominion_Vox_Role_Colonist>a colonist</Dominion_Vox_Role_Colonist>
+  <Dominion_Vox_Role_Shooting>our best shot</Dominion_Vox_Role_Shooting>
+  <Dominion_Vox_Role_Melee>a brawler</Dominion_Vox_Role_Melee>
+  <Dominion_Vox_Role_Construction>a builder</Dominion_Vox_Role_Construction>
+  <Dominion_Vox_Role_Mining>a miner</Dominion_Vox_Role_Mining>
+  <Dominion_Vox_Role_Cooking>the cook</Dominion_Vox_Role_Cooking>
+  <Dominion_Vox_Role_Plants>a farmer</Dominion_Vox_Role_Plants>
+  <Dominion_Vox_Role_Animals>the animal handler</Dominion_Vox_Role_Animals>
+  <Dominion_Vox_Role_Crafting>a crafter</Dominion_Vox_Role_Crafting>
+  <Dominion_Vox_Role_Artistic>the resident artist</Dominion_Vox_Role_Artistic>
+  <Dominion_Vox_Role_Medicine>the doctor</Dominion_Vox_Role_Medicine>
+  <Dominion_Vox_Role_Social>our negotiator</Dominion_Vox_Role_Social>
+  <Dominion_Vox_Role_Intellectual>a researcher</Dominion_Vox_Role_Intellectual>
+  <Dominion_News_AdviceTitle>What it means for {0}</Dominion_News_AdviceTitle>
+  <Dominion_Advice_Standing>{0}: {1} (goodwill {2}), {3}.</Dominion_Advice_Standing>
+  <Dominion_Advice_RelAlly>our ally</Dominion_Advice_RelAlly>
+  <Dominion_Advice_RelHostile>hostile to us</Dominion_Advice_RelHostile>
+  <Dominion_Advice_RelNeutral>neutral towards us</Dominion_Advice_RelNeutral>
+  <Dominion_Advice_Days>about {0} days' travel away</Dominion_Advice_Days>
+  <Dominion_Advice_DaysUnknown>distance unknown</Dominion_Advice_DaysUnknown>
+  <Dominion_Advice_WarUs>We are part of this. Check the War tab, keep the walls manned and the hospital beds made.</Dominion_Advice_WarUs>
+  <Dominion_Advice_WarAlly>An ally is involved and may call on us for help. The War tab shows how it is going.</Dominion_Advice_WarAlly>
+  <Dominion_Advice_WarNear>The fighting is close. Expect more raiders, refugees and nervous traders around us.</Dominion_Advice_WarNear>
+  <Dominion_Advice_WarFar>Far enough away not to worry about, for now.</Dominion_Advice_WarFar>
+  <Dominion_Advice_EconomyDown>{0}'s economy is running at {1} of normal: their traders will have less to sell and want more for it.</Dominion_Advice_EconomyDown>
+  <Dominion_Advice_EconomyOk>{0}'s economy is holding up for now.</Dominion_Advice_EconomyOk>
+  <Dominion_Advice_Crisis>{0} is in crisis for about another {1}.</Dominion_Advice_Crisis>
+  <Dominion_Advice_Unstable>{0} is unstable ({1}/100). Unstable neighbours raid more and keep fewer promises.</Dominion_Advice_Unstable>
+  <Dominion_Advice_Stable>{0} looks steady enough ({1}/100 stability).</Dominion_Advice_Stable>
+  <Dominion_Advice_Espionage>Someone is playing games in the dark. The Intelligence tab shows how exposed we are.</Dominion_Advice_Espionage>
+  <Dominion_Advice_Peace>Trade along their routes should pick up again.</Dominion_Advice_Peace>
+  <Dominion_Advice_Mood>This will rattle the colony ({0}). A colony advisory on the radio can calm people down.</Dominion_Advice_Mood>
+  <Dominion_Advice_MoodShielded>A colony advisory is in force, so nobody will lose sleep over it.</Dominion_Advice_MoodShielded>
 </LanguageData>

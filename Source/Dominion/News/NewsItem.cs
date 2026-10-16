@@ -53,6 +53,9 @@ namespace Dominion
         public string headline;
         public string story;
 
+        /// <summary>"What it means for us": practical notes written from the game state at delivery. May be null.</summary>
+        public string advice;
+
         public bool Hidden => arrivesTick < 0;
 
         public EventCategory Category => def?.category ?? EventCategory.General;
@@ -98,6 +101,7 @@ namespace Dominion
             Scribe_Values.Look(ref detail, "detail");
             Scribe_Values.Look(ref headline, "headline");
             Scribe_Values.Look(ref story, "story");
+            Scribe_Values.Look(ref advice, "advice");
         }
     }
 }
