@@ -118,6 +118,9 @@ namespace Dominion
             n != null && n.confidence == NewsConfidence.Rumor && !n.corrected && n.correctsId < 0 && !n.investigated &&
             !IntelUtility.InvolvesPlayer(n.primary, n.secondary);
 
+        /// <summary>Cached for the UI: counting walks every colonist's memories.</summary>
+        public static readonly UICache<int> UpsetColonists = new UICache<int>(ColonistsWithBadNews, 1f);
+
         public static int ColonistsWithBadNews()
         {
             int count = 0;
@@ -217,6 +220,8 @@ namespace Dominion
             if (n.truthful)
             {
                 n.confidence = NewsConfidence.Confirmed;
+                // Rewrite it: the original text was written as an unconfirmed report.
+                NewsText.Resolve(n);
                 Messages.Message("Dominion_Radio_InvestigateTrue".Translate(listener.Named("PAWN"), n.headline), listener, MessageTypeDefOf.NeutralEvent);
                 return;
             }

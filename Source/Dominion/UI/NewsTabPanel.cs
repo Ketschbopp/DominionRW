@@ -87,7 +87,7 @@ namespace Dominion
             DominionTheme.InkLabel(new Rect(left.x, left.y, left.width, 16f), "Dominion_Radio_DeskTitle".Translate().ToString().ToUpper(), DominionTheme.InkRed, GameFont.Tiny);
             DominionTheme.InkLabel(new Rect(left.x, left.y + 15f, left.width, 16f), "Dominion_Radio_Coverage".Translate(comp.radioCoverage.ToString("F0")), DominionTheme.InkFaded, GameFont.Tiny);
             DominionTheme.InkLabel(new Rect(left.x, left.y + 29f, left.width, 16f), "Dominion_Radio_OrdersQueued".Translate(orders.Orders.Count), DominionTheme.InkFaded, GameFont.Tiny);
-            int upset = RadioOrderUtility.ColonistsWithBadNews();
+            int upset = RadioOrderUtility.UpsetColonists.Value;
             if (upset > 0)
                 DominionTheme.InkLabel(new Rect(left.x, left.y + 43f, left.width, 16f), "Dominion_Radio_Upset".Translate(upset), DominionTheme.InkRed, GameFont.Tiny);
 
@@ -159,6 +159,20 @@ namespace Dominion
             return r.xMax;
         }
 
+        /// <summary>Shows a story in the article column and marks it read.</summary>
+        public void Open(NewsItem n, NewsLog log)
+        {
+            if (n == null) return;
+            selected = n;
+            storyScroll = Vector2.zero;
+            log.MarkRead(n);
+            // Make sure the filters do not hide it straight away.
+            categoryFilter = null;
+            factionFilter = null;
+            unreadOnly = false;
+            if (n.confidence == NewsConfidence.Rumor) showRumors = true;
+        }
+
         private void Filter(NewsLog log)
         {
             shown.Clear();
@@ -218,11 +232,7 @@ namespace Dominion
                 TooltipHandler.TipRegion(row, n.headline);
 
                 if (Widgets.ButtonInvisible(row))
-                {
-                    selected = n;
-                    storyScroll = Vector2.zero;
-                    log.MarkRead(n);
-                }
+                    Open(n, log);
             }
             Widgets.EndScrollView();
         }
@@ -368,7 +378,7 @@ namespace Dominion
             RadioOrder order = null;
             foreach (RadioOrder o in orders.Orders)
                 if (o.kind == RadioOrderKind.Investigate && o.newsId == n.id) order = o;
-            string note = queued
+            string note = queued && order != null
                 ? "Dominion_Radio_InquiryNote".Translate((order.progress / order.WorkNeeded).ToStringPercent())
                 : "Dominion_Radio_InvestigateNote".Translate();
             DominionTheme.InkLabel(new Rect(stamp.xMax + 10f, y + 4f, w - stamp.xMax - 12f, 40f), note, DominionTheme.InkFaded, GameFont.Tiny);

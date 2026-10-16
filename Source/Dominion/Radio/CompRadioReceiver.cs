@@ -34,7 +34,7 @@ namespace Dominion
         }
 
         /// <summary>Called by the monitoring job every <paramref name="delta"/> ticks.</summary>
-        public void Notify_Monitored(Pawn pawn, int delta)
+        public void Notify_Monitored(Pawn pawn, float delta)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (comp == null) return;
@@ -54,7 +54,7 @@ namespace Dominion
             var advisory = new Command_Action
             {
                 defaultLabel = (orders.AdvisoryQueued ? "Dominion_Radio_CancelAdvisory" : "Dominion_Radio_IssueAdvisory").Translate(),
-                defaultDesc = "Dominion_Radio_IssueAdvisory_Desc".Translate(RadioOrders.AdvisoryDays, RadioOrderUtility.ColonistsWithBadNews()),
+                defaultDesc = "Dominion_Radio_IssueAdvisory_Desc".Translate(RadioOrders.AdvisoryDays, RadioOrderUtility.UpsetColonists.Value),
                 icon = DominionTheme.GizmoAdvisory,
                 action = RadioOrderUtility.OrderAdvisory,
             };

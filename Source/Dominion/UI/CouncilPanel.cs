@@ -25,7 +25,7 @@ namespace Dominion
             CouncilState c = comp.Council;
             Rect view = new Rect(0f, 0f, rect.width - 16f, height);
             Widgets.BeginScrollView(rect, ref scroll, view);
-            var l = new Listing_Standard();
+            var l = new Listing_Standard { maxOneColumn = true };
             l.Begin(view);
 
             DominionTheme.Header(l, "Dominion_Council_Title".Translate());

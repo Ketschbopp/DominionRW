@@ -338,7 +338,7 @@ namespace Dominion
             }
             if (!propaganda && DominionMod.Settings.aiCovertOps && Rand.Chance(0.4f) && SabotagePlayer(f))
                 return;
-            if (propaganda && DominionMod.Settings.colonistNewsThoughts && !comp.Broadcast.CounterProgrammingActive)
+            if (propaganda && DominionMod.Settings.colonistNewsThoughts && !comp.Broadcast.CounterProgrammingActive && !comp.RadioOrders.AdvisoryInForce)
             {
                 foreach (Map map in Find.Maps)
                     if (map.IsPlayerHome)

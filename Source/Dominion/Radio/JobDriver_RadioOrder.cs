@@ -48,7 +48,7 @@ namespace Dominion
                 o.progress += delta * RadioOrderUtility.WorkSpeed(pawn, o);
                 pawn.skills?.Learn(RadioOrderUtility.Skill(o), 0.04f * delta);
                 // Being on the air also keeps the receiver tuned.
-                Receiver?.Notify_Monitored(pawn, delta / 2);
+                Receiver?.Notify_Monitored(pawn, delta * 0.5f);
                 if (o.progress >= o.WorkNeeded)
                 {
                     RadioOrderUtility.Complete(o, pawn);

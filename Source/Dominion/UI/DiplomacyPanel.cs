@@ -94,7 +94,7 @@ namespace Dominion
         {
             Rect view = new Rect(0f, 0f, rect.width - 16f, detailHeight);
             Widgets.BeginScrollView(rect, ref detailScroll, view);
-            var l = new Listing_Standard();
+            var l = new Listing_Standard { maxOneColumn = true };
             l.Begin(view);
 
             Text.Font = GameFont.Medium;

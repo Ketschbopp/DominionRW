@@ -36,7 +36,7 @@ namespace Dominion
             Rect inner = body.ContractedBy(12f);
             Rect view = new Rect(0f, 0f, inner.width - 16f, lastContentHeight);
             Widgets.BeginScrollView(inner, ref scroll, view);
-            var l = new Listing_Standard();
+            var l = new Listing_Standard { maxOneColumn = true };
             l.Begin(view);
 
             switch (current)

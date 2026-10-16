@@ -50,7 +50,11 @@ namespace Dominion
                 tabs.Add(new TabRecord("Dominion_Tab_Events".Translate(), () => Select(Tab.Events), current == Tab.Events));
             tabs.Add(new TabRecord("Dominion_Tab_Integrations".Translate(), () => Select(Tab.Integrations), current == Tab.Integrations));
 
-            DominionHeader.Draw(new Rect(inRect.x, inRect.y, inRect.width, DominionHeader.Height), WorldComponent_Dominion.Instance, () => Select(Tab.News));
+            DominionHeader.Draw(new Rect(inRect.x, inRect.y, inRect.width, DominionHeader.Height), WorldComponent_Dominion.Instance, n =>
+            {
+                Select(Tab.News);
+                newsPanel.Open(n, WorldComponent_Dominion.Instance.News);
+            });
             Rect body = inRect;
             body.yMin += DominionHeader.Height + 6f + TabDrawer.TabHeight;
             Widgets.DrawMenuSection(body);

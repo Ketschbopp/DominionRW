@@ -16,7 +16,7 @@ namespace Dominion
         // Counting wars and unread news is cheap, but there is no need to do it every frame.
         private static readonly UICache<string> statsCache = new UICache<string>(Stats, 1f);
 
-        public static void Draw(Rect rect, WorldComponent_Dominion comp, Action openNews)
+        public static void Draw(Rect rect, WorldComponent_Dominion comp, Action<NewsItem> openNews)
         {
             DominionTheme.DrawPaper(rect);
             Rect inner = rect.ContractedBy(6f, 5f);
@@ -74,7 +74,7 @@ namespace Dominion
                 if (Mouse.IsOver(ticker)) Widgets.DrawBoxSolid(ticker, DominionTheme.PaperShade);
                 DominionTheme.InkLabel(head2, latest.headline.Truncate(head2.width), latest.read ? DominionTheme.InkFaded : DominionTheme.Ink);
                 TooltipHandler.TipRegion(ticker, latest.headline);
-                if (Widgets.ButtonInvisible(ticker)) openNews?.Invoke();
+                if (Widgets.ButtonInvisible(ticker)) openNews?.Invoke(latest);
             }
         }
 
