@@ -398,7 +398,7 @@ Relation changes go through vanilla base goodwill and `SetRelationDirect` on bot
 | Intelligence report | Restricted or higher | 12–48 h |
 | Traveler gossip | Everything else | 1–4 days |
 
-A report is *Confirmed* if it came by radio or dispatch or intel is 30+ above what was needed, otherwise a *Rumor*. Events the player cannot see stay hidden for up to 30 days and surface if intel grows, or leak (4% / 2% / 0.5% per day for Restricted / Secret / BlackOps).
+With vanilla's **Tube television** researched, every report that is not hidden arrives within 1–4 hours, whatever its source (news already on its way catches up). A report is *Confirmed* if it came by radio or dispatch or intel is 30+ above what was needed, otherwise a *Rumor*. Events the player cannot see stay hidden for up to 30 days and surface if intel grows, or leak (4% / 2% / 0.5% per day for Restricted / Secret / BlackOps).
 
 **False rumors.** Each day, each faction the player has under 40 intel on adds a 2% chance of a baseless rumor (war, riots, coup, leader's death). Once intel on that faction reaches 50 a correction is published, and the original report is marked as false.
 

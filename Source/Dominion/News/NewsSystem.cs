@@ -21,6 +21,23 @@ namespace Dominion
 
         private static readonly List<NewsItem> due = new List<NewsItem>();
 
+        private static ResearchProjectDef tubeTelevision;
+        private static bool tubeTelevisionLooked;
+
+        /// <summary>Vanilla's Tube television research is done (any mod that keeps its defName counts).</summary>
+        public static bool TelevisionResearched
+        {
+            get
+            {
+                if (!tubeTelevisionLooked)
+                {
+                    tubeTelevision = DefDatabase<ResearchProjectDef>.GetNamedSilentFail("TubeTelevision");
+                    tubeTelevisionLooked = true;
+                }
+                return tubeTelevision != null && tubeTelevision.IsFinished;
+            }
+        }
+
         public override void OnEvent(DominionEvent ev)
         {
             if (ev.def == null || ev.def.debugHidden && ev.def != DominionEventDefOf.Dominion_DebugTest) return;
@@ -79,6 +96,8 @@ namespace Dominion
             // Confirmed when intel clearly exceeds what was needed, or the source is direct.
             bool direct = item.source == NewsSource.RadioIntercept || item.source == NewsSource.DiplomaticDispatch;
             item.confidence = direct || intel >= required + 30f ? NewsConfidence.Confirmed : NewsConfidence.Rumor;
+            // With television (vanilla Tube television research), the world's news reaches the colony within hours.
+            if (TelevisionResearched) delay = Mathf.Min(delay, Rand.Range(1 * hour, 4 * hour));
             item.arrivesTick = now + delay;
             item.expiresTick = -1;
         }
@@ -89,6 +108,13 @@ namespace Dominion
             List<NewsItem> pending = comp.News.Pending;
             if (pending.Count == 0) return;
             int now = Find.TickManager.TicksGame;
+            // News already on the slow road when television arrives catches up too.
+            if (TelevisionResearched)
+            {
+                int latest = now + 4 * GenDate.TicksPerHour;
+                for (int i = 0; i < pending.Count; i++)
+                    if (!pending[i].Hidden && pending[i].arrivesTick > latest) pending[i].arrivesTick = latest;
+            }
             due.Clear();
             for (int i = 0; i < pending.Count; i++)
                 if (!pending[i].Hidden && pending[i].arrivesTick <= now)
