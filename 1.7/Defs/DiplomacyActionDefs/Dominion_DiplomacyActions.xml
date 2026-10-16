@@ -111,4 +111,26 @@
     <order>5</order>
   </Dominion.DiplomacyActionDef>
 
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_HostageExchange</defName>
+    <label>propose hostage exchange</label>
+    <description>Offer to free the prisoners you hold from this faction in return for your colonists they hold. Freeing their people without asking for anything back always works and earns goodwill. Holding their leader is strong leverage.</description>
+    <workerClass>Dominion.DiplomacyAction_HostageExchange</workerClass>
+    <tier>Basic</tier>
+    <influenceCost>5</influenceCost>
+    <cooldownDays>10</cooldownDays>
+    <order>6</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_ProposeSummit</defName>
+    <label>propose summit</label>
+    <description>Invite their leader to meet yours in person, at your capital or theirs. Summits are played out in rounds of talks; good rapport makes the final proposal far more likely to succeed. Your head of state must attend.</description>
+    <workerClass>Dominion.DiplomacyAction_ProposeSummit</workerClass>
+    <tier>Advanced</tier>
+    <influenceCost>30</influenceCost>
+    <cooldownDays>30</cooldownDays>
+    <requiredResearch>Dominion_DiplomaticCorps</requiredResearch>
+    <order>0</order>
+  </Dominion.DiplomacyActionDef>
 </Defs>

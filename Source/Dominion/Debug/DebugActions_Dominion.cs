@@ -234,6 +234,52 @@ namespace Dominion
             return nodes;
         }
 
+        [DebugAction(Category, "Force summit with...", allowedGameStates = AllowedGameStates.Playing)]
+        private static List<DebugActionNode> ForceSummit()
+        {
+            var nodes = new List<DebugActionNode>();
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp == null) return nodes;
+            foreach (Faction f in comp.Cache.Simulated)
+            {
+                var node = new DebugActionNode(f.Name);
+                foreach (SummitVenue venue in System.Enum.GetValues(typeof(SummitVenue)))
+                {
+                    Faction cf = f;
+                    SummitVenue cv = venue;
+                    node.AddChild(new DebugActionNode(venue.ToString(), DebugActionType.Action, () =>
+                    {
+                        SummitAgenda agenda = cf.HostileTo(Faction.OfPlayer) ? SummitAgenda.Peace : SummitAgenda.Relations;
+                        if (!SummitSystem.Arrange(cf, agenda, null, cv, out string reason, force: true))
+                            Messages.Message(reason, MessageTypeDefOf.RejectInput, historical: false);
+                    }));
+                }
+                nodes.Add(node);
+            }
+            return nodes;
+        }
+
+        [DebugAction(Category, "Dispatch alliance delegation...", allowedGameStates = AllowedGameStates.Playing)]
+        private static List<DebugActionNode> DispatchDelegation()
+        {
+            var nodes = new List<DebugActionNode>();
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp == null) return nodes;
+            foreach (Faction a in comp.Cache.Simulated)
+            {
+                var node = new DebugActionNode(a.Name);
+                foreach (Faction b in comp.Cache.Simulated)
+                {
+                    if (a == b) continue;
+                    Faction ca = a, cb = b;
+                    node.AddChild(new DebugActionNode(b.Name, DebugActionType.Action,
+                        () => DelegationUtility.DispatchAgreement(ca, cb, AgreementKind.Alliance)));
+                }
+                nodes.Add(node);
+            }
+            return nodes;
+        }
+
         [DebugAction(Category, "Integration self-test")]
         private static void SelfTest() => DLog.Message(IntegrationRegistry.SelfTestReport());
 

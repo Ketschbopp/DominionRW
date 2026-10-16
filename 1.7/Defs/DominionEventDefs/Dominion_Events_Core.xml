@@ -233,4 +233,81 @@
     <newsRules>Dominion_News_TributePaid</newsRules>
     <headline>{0} pays tribute of {2} silver to {1}</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DelegationDispatched</defName>
+    <label>delegation sets out</label>
+    <description>A diplomatic delegation has set out for another faction.</description>
+    <category>Diplomacy</category>
+    <secrecy>Restricted</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <newsRules>Dominion_News_DelegationDispatched</newsRules>
+    <headline>A delegation from {0} sets out for {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DelegationIntercepted</defName>
+    <label>delegation intercepted</label>
+    <description>A diplomatic delegation was attacked on the road.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <newsRules>Dominion_News_DelegationIntercepted</newsRules>
+    <headline>{0} intercepts a delegation from {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SummitHeld</defName>
+    <label>summit</label>
+    <description>Two leaders met in person and reached an agreement.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_SummitHeld</newsRules>
+    <headline>Summit between {0} and {1}: agreement on {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SummitFailed</defName>
+    <label>summit failed</label>
+    <description>A summit between two leaders ended without agreement.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_SummitFailed</newsRules>
+    <headline>Summit between {0} and {1} ends without agreement</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_HostagesExchanged</defName>
+    <label>hostage exchange</label>
+    <description>Two factions have exchanged prisoners and captives.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_HostagesExchanged</newsRules>
+    <headline>{0} and {1} exchange hostages</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_EnvoyMission</defName>
+    <label>envoy mission</label>
+    <description>An envoy has visited a foreign settlement on a diplomatic mission.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <newsRules>Dominion_News_EnvoyMission</newsRules>
+    <headline>Envoys of {0} visit {1}: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_EnvoyCaptured</defName>
+    <label>envoy captured</label>
+    <description>A faction has seized another faction's envoy.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <newsRules>Dominion_News_EnvoyCaptured</newsRules>
+    <headline>{0} seizes an envoy of {1}</headline>
+  </Dominion.DominionEventDef>
 </Defs>

@@ -273,4 +273,125 @@
   <Dominion_War_Confirm>Declare war on {0}?</Dominion_War_Confirm>
   <Dominion_War_BreaksTreaties>This breaks your treaties with them: {0}. Every faction will think less of you.</Dominion_War_BreaksTreaties>
 
+  <!-- M4: physical diplomacy -->
+  <Dominion_Delegation_Label>delegation of {0}</Dominion_Delegation_Label>
+  <Dominion_Delegation_Inspect>Travelling to {0}. Arrives in about {1}.</Dominion_Delegation_Inspect>
+  <Dominion_Delegation_Intercept>Intercept the delegation of {0} (act of war)</Dominion_Delegation_Intercept>
+  <Dominion_Delegation_MoveToIntercept>Move ahead of the delegation to intercept it</Dominion_Delegation_MoveToIntercept>
+  <Dominion_Delegation_PassingCaravan>A delegation of {0} is passing {1}. Select the caravan and right-click the delegation to intercept it.</Dominion_Delegation_PassingCaravan>
+  <Dominion_Delegation_InterceptedLabel>Delegation intercepted</Dominion_Delegation_InterceptedLabel>
+  <Dominion_Delegation_InterceptedText>Your caravan has stopped a delegation of {0}. Their escort is fighting back. Whatever they were travelling to agree will not happen, and {0} will treat this as an act of war.</Dominion_Delegation_InterceptedText>
+  <Dominion_Reason_Intercepted>delegation intercepted</Dominion_Reason_Intercepted>
+  <Dominion_Desk_AssignDiplomats>Assign diplomats</Dominion_Desk_AssignDiplomats>
+  <Dominion_Desk_AssignDiplomats_Desc>Choose which colonists may act as envoys. A caravan carrying a diplomat (or your head of state) can go on diplomatic missions to other settlements.</Dominion_Desk_AssignDiplomats_Desc>
+  <Dominion_EnvoyCaptured_Label>Envoy captured</Dominion_EnvoyCaptured_Label>
+  <Dominion_EnvoyCaptured_Text>The peace talks failed, and {1} has taken {0} captive. You may be able to get them back in a hostage exchange.</Dominion_EnvoyCaptured_Text>
+  <Dominion_Hostages_Detail>{0} returned, {1} released</Dominion_Hostages_Detail>
+  <Dominion_Hostages_Done>Hostage exchange with {0}: {1} of your people are coming home, {2} of theirs released.</Dominion_Hostages_Done>
+  <Dominion_Hostages_Refused>{0} refused the hostage exchange.</Dominion_Hostages_Refused>
+  <Dominion_Mission_Chance>chance {0}</Dominion_Mission_Chance>
+  <Dominion_Mission_Report>travelling to {0} on a diplomatic mission</Dominion_Mission_Report>
+  <Dominion_Mission_NoEnvoy>This caravan has no one who can speak for the colony.</Dominion_Mission_NoEnvoy>
+  <Dominion_Mission_ImproveRelations_Done>{0} spent time with the leaders of {1}. Relations have improved.</Dominion_Mission_ImproveRelations_Done>
+  <Dominion_Mission_GatherIntel_Done>{0} kept their eyes open while visiting {1}. You know more about them now.</Dominion_Mission_GatherIntel_Done>
+  <Dominion_Offer_EnvoyArrived>{0}, an envoy of {1}, has arrived at your colony with a proposal.</Dominion_Offer_EnvoyArrived>
+  <Dominion_Mission_ImproveRelations>Diplomatic mission to {0}: improve relations</Dominion_Mission_ImproveRelations>
+  <Dominion_Mission_NegotiateTreaty>Negotiate a {1} with {0} in person</Dominion_Mission_NegotiateTreaty>
+  <Dominion_Mission_PeaceTalks>Peace talks with {0} (risky)</Dominion_Mission_PeaceTalks>
+  <Dominion_Mission_GatherIntel>Diplomatic visit to {0}: gather intelligence</Dominion_Mission_GatherIntel>
+  <Dominion_Mission_ExchangeHostages>Exchange hostages with {0}</Dominion_Mission_ExchangeHostages>
+  <Dominion_Mission_AttendSummit>Attend the summit with {0}</Dominion_Mission_AttendSummit>
+  <Dominion_MissionShort_ImproveRelations>goodwill</Dominion_MissionShort_ImproveRelations>
+  <Dominion_MissionShort_NegotiateTreaty>treaty talks</Dominion_MissionShort_NegotiateTreaty>
+  <Dominion_MissionShort_PeaceTalks>peace talks</Dominion_MissionShort_PeaceTalks>
+  <Dominion_MissionShort_GatherIntel>observation</Dominion_MissionShort_GatherIntel>
+  <Dominion_MissionShort_ExchangeHostages>hostage exchange</Dominion_MissionShort_ExchangeHostages>
+  <Dominion_MissionShort_AttendSummit>a summit</Dominion_MissionShort_AttendSummit>
+  <Dominion_SummitAgenda_Relations>better relations</Dominion_SummitAgenda_Relations>
+  <Dominion_SummitAgenda_Peace>peace</Dominion_SummitAgenda_Peace>
+  <Dominion_SummitAgenda_Treaty>a treaty</Dominion_SummitAgenda_Treaty>
+  <Dominion_SummitAgenda_Hostages>a hostage exchange</Dominion_SummitAgenda_Hostages>
+  <Dominion_SummitVenue_PlayerCapital>Host it at your capital (their leader travels to you)</Dominion_SummitVenue_PlayerCapital>
+  <Dominion_SummitVenue_TheirCapital>Meet at the capital of {0} (your head of state travels by caravan)</Dominion_SummitVenue_TheirCapital>
+  <Dominion_Summit_AttendChance>chance they come: {0}</Dominion_Summit_AttendChance>
+  <Dominion_Summit_AlreadyArranged>A summit with {0} is already arranged.</Dominion_Summit_AlreadyArranged>
+  <Dominion_Summit_Declined>{0} declined to meet.</Dominion_Summit_Declined>
+  <Dominion_Summit_ArrangedLabel>Summit arranged</Dominion_Summit_ArrangedLabel>
+  <Dominion_Summit_Arranged_PlayerCapital>{0} has agreed to a summit at your capital. Their leader is travelling to you now. When they arrive, have your head of state at the capital.</Dominion_Summit_Arranged_PlayerCapital>
+  <Dominion_Summit_Arranged_TheirCapital>{0} has agreed to a summit at their capital. Send your head of state there by caravan within {1} days, then right-click their capital to attend.</Dominion_Summit_Arranged_TheirCapital>
+  <Dominion_Summit_ArrivedLabel>Summit guests arrived</Dominion_Summit_ArrivedLabel>
+  <Dominion_Summit_ArrivedText>{0} of {1} has arrived for the summit on {2}. The talks begin as soon as your head of state is on the same map. They will wait for about a day.</Dominion_Summit_ArrivedText>
+  <Dominion_Summit_Cancelled>The summit with {0} was called off: {1}</Dominion_Summit_Cancelled>
+  <Dominion_Summit_CancelledIntercepted>their delegation was intercepted</Dominion_Summit_CancelledIntercepted>
+  <Dominion_Summit_CancelledNoRoute>their party could not reach your colony</Dominion_Summit_CancelledNoRoute>
+  <Dominion_Summit_CancelledNoShow>your head of state never came, and {0} is offended</Dominion_Summit_CancelledNoShow>
+  <Dominion_Summit_CancelledVisitorGone>their representative is gone</Dominion_Summit_CancelledVisitorGone>
+  <Dominion_Summit_NeedsHeadOfState>Only your head of state can attend a summit.</Dominion_Summit_NeedsHeadOfState>
+  <Dominion_Summit_Title>Summit with {0}</Dominion_Summit_Title>
+  <Dominion_Summit_Agenda>On the table: {0}</Dominion_Summit_Agenda>
+  <Dominion_Summit_Round>Round {0} of {1}</Dominion_Summit_Round>
+  <Dominion_Summit_Rapport>Rapport: {0}</Dominion_Summit_Rapport>
+  <Dominion_Summit_FinalChance>Chance the proposal is accepted: {0}</Dominion_Summit_FinalChance>
+  <Dominion_Summit_TheirRepresentative>their representative</Dominion_Summit_TheirRepresentative>
+  <Dominion_Summit_Opening>{0} of {1} takes a seat across the table. The talk will be about {2}.</Dominion_Summit_Opening>
+  <Dominion_Summit_Propose>Make the final proposal: {0}</Dominion_Summit_Propose>
+  <Dominion_Summit_Leave>Leave</Dominion_Summit_Leave>
+  <Dominion_Summit_WalkOutButton>Walk out</Dominion_Summit_WalkOutButton>
+  <Dominion_Summit_WalkOut>{0} gets up and leaves the table. The other side will not forget the insult.</Dominion_Summit_WalkOut>
+  <Dominion_SummitResult_Fail>{0} shakes their head. There will be no agreement today.</Dominion_SummitResult_Fail>
+  <Dominion_SummitResult_Success_Relations>{0} rises and clasps hands with you. Relations between your peoples are warmer than they have been in a long time.</Dominion_SummitResult_Success_Relations>
+  <Dominion_SummitResult_Success_Peace>{0} agrees: the war is over. A truce begins at once.</Dominion_SummitResult_Success_Peace>
+  <Dominion_SummitResult_Success_Treaty>{0} signs. The {1} is agreed.</Dominion_SummitResult_Success_Treaty>
+  <Dominion_SummitResult_Success_Hostages>{0} agrees to the exchange. Captives on both sides will go home.</Dominion_SummitResult_Success_Hostages>
+  <Dominion_SummitMoveLabel_CommonGround>Appeal to common ground</Dominion_SummitMoveLabel_CommonGround>
+  <Dominion_SummitMoveLabel_CommonGround_Desc>Talk about what your peoples share. Better with a skilled speaker and a similar ideology.</Dominion_SummitMoveLabel_CommonGround_Desc>
+  <Dominion_SummitMove_CommonGround>{0} speaks of the interests your peoples share.</Dominion_SummitMove_CommonGround>
+  <Dominion_SummitMove_CommonGround_Success>{0} nods slowly. "There is truth in that."</Dominion_SummitMove_CommonGround_Success>
+  <Dominion_SummitMove_CommonGround_Fail>{0} is unmoved. "Words cost nothing."</Dominion_SummitMove_CommonGround_Fail>
+  <Dominion_SummitMoveLabel_Flattery>Flatter them</Dominion_SummitMoveLabel_Flattery>
+  <Dominion_SummitMoveLabel_Flattery_Desc>Praise their leader and their people. Paranoid leaders see through it.</Dominion_SummitMoveLabel_Flattery_Desc>
+  <Dominion_SummitMove_Flattery>{0} praises their achievements at length.</Dominion_SummitMove_Flattery>
+  <Dominion_SummitMove_Flattery_Success>{0} smiles despite themselves.</Dominion_SummitMove_Flattery_Success>
+  <Dominion_SummitMove_Flattery_Fail>{0}'s eyes narrow. "What do you want?"</Dominion_SummitMove_Flattery_Fail>
+  <Dominion_SummitMoveLabel_Concession>Offer a concession</Dominion_SummitMoveLabel_Concession>
+  <Dominion_SummitMoveLabel_Concession_Desc>Give something up front: 300 silver, or 10 influence if you lack the silver. Greedy leaders love it.</Dominion_SummitMoveLabel_Concession_Desc>
+  <Dominion_SummitMove_Concession>{0} makes a gesture of goodwill and puts a gift on the table.</Dominion_SummitMove_Concession>
+  <Dominion_SummitMove_Concession_Success>{0} accepts the gift with evident pleasure.</Dominion_SummitMove_Concession_Success>
+  <Dominion_SummitMove_Concession_Fail>{0} accepts the gift, but politely.</Dominion_SummitMove_Concession_Fail>
+  <Dominion_SummitMoveLabel_Threat>Threaten</Dominion_SummitMoveLabel_Threat>
+  <Dominion_SummitMoveLabel_Threat_Desc>Make clear what happens if they refuse. Works only if you are stronger; honourable leaders resent it.</Dominion_SummitMoveLabel_Threat_Desc>
+  <Dominion_SummitMove_Threat>{0} reminds them, coldly, of your strength.</Dominion_SummitMove_Threat>
+  <Dominion_SummitMove_Threat_Success>{0} goes pale and becomes far more accommodating.</Dominion_SummitMove_Threat_Success>
+  <Dominion_SummitMove_Threat_Fail>{0} stands up, furious. "You dare threaten us at our own table?"</Dominion_SummitMove_Threat_Fail>
+  <Dominion_SummitMoveLabel_Apology>Apologise for past wrongs</Dominion_SummitMoveLabel_Apology>
+  <Dominion_SummitMoveLabel_Apology_Desc>Acknowledge their grievances. Honourable leaders value it, and their grievances shrink.</Dominion_SummitMoveLabel_Apology_Desc>
+  <Dominion_SummitMove_Apology>{0} acknowledges the wrongs of the past.</Dominion_SummitMove_Apology>
+  <Dominion_SummitMove_Apology_Success>{0} is visibly moved. "That took courage."</Dominion_SummitMove_Apology_Success>
+  <Dominion_SummitMove_Apology_Fail>{0} waves it away. "Too little, too late."</Dominion_SummitMove_Apology_Fail>
+  <Dominion_SummitMoveLabel_Leverage>Mention the prisoners</Dominion_SummitMoveLabel_Leverage>
+  <Dominion_SummitMoveLabel_Leverage_Desc>Remind them that you hold some of their people. Effective, but the honourable call it blackmail.</Dominion_SummitMoveLabel_Leverage_Desc>
+  <Dominion_SummitMove_Leverage>{0} mentions, almost in passing, the prisoners you hold.</Dominion_SummitMove_Leverage>
+  <Dominion_SummitMove_Leverage_Success>{0} understands perfectly and softens their stance.</Dominion_SummitMove_Leverage_Success>
+  <Dominion_SummitMove_Leverage_Fail>{0} bristles. "You will not blackmail us."</Dominion_SummitMove_Leverage_Fail>
+  <Dominion_SummitMoveLabel_SharedEnemies>Point to common enemies</Dominion_SummitMoveLabel_SharedEnemies>
+  <Dominion_SummitMoveLabel_SharedEnemies_Desc>Remind them of the enemies you share.</Dominion_SummitMoveLabel_SharedEnemies_Desc>
+  <Dominion_SummitMove_SharedEnemies>{0} raises the threat you both face.</Dominion_SummitMove_SharedEnemies>
+  <Dominion_SummitMove_SharedEnemies_Success>{0} agrees. "On that, we stand together."</Dominion_SummitMove_SharedEnemies_Success>
+  <Dominion_SummitMove_SharedEnemies_Fail>{0} shrugs. "Our enemies are our own business."</Dominion_SummitMove_SharedEnemies_Fail>
+  <Dominion_SummitMoveLabel_IdeologyAppeal>Appeal to shared beliefs</Dominion_SummitMoveLabel_IdeologyAppeal>
+  <Dominion_SummitMoveLabel_IdeologyAppeal_Desc>Speak of the faith and values you have in common.</Dominion_SummitMoveLabel_IdeologyAppeal_Desc>
+  <Dominion_SummitMove_IdeologyAppeal>{0} speaks of the beliefs your peoples share.</Dominion_SummitMove_IdeologyAppeal>
+  <Dominion_SummitMove_IdeologyAppeal_Success>{0} warms to you. "We understand each other."</Dominion_SummitMove_IdeologyAppeal_Success>
+  <Dominion_SummitMove_IdeologyAppeal_Fail>{0} disagrees on the finer points, at length.</Dominion_SummitMove_IdeologyAppeal_Fail>
+  <Dominion_SummitMoveLabel_Candour>Speak plainly</Dominion_SummitMoveLabel_Candour>
+  <Dominion_SummitMoveLabel_Candour_Desc>Be completely honest, even where it hurts. Honourable leaders respect it.</Dominion_SummitMoveLabel_Candour_Desc>
+  <Dominion_SummitMove_Candour>{0} lays out your position without any embellishment.</Dominion_SummitMove_Candour>
+  <Dominion_SummitMove_Candour_Success>{0} appreciates the honesty.</Dominion_SummitMove_Candour_Success>
+  <Dominion_SummitMove_Candour_Fail>{0} finds your bluntness rude.</Dominion_SummitMove_Candour_Fail>
+  <Dominion_SummitIncident_0>A protester breaks into the hall, shouting, and has to be dragged out. The mood sours.</Dominion_SummitIncident_0>
+  <Dominion_SummitIncident_1>A messenger hurries in with news for {0}. Whatever it is, it changes the mood.</Dominion_SummitIncident_1>
+  <Dominion_SummitIncident_2>Guards foil a plot against the summit. The shared danger draws both sides closer.</Dominion_SummitIncident_2>
+  <Dominion_SummitIncident_3>An interpreter mangles a key phrase, and it takes a while to clear up the misunderstanding.</Dominion_SummitIncident_3>
+  <Dominion_SummitIncident_4>A shared meal between rounds goes well. Even {0} laughs once.</Dominion_SummitIncident_4>
+
 </LanguageData>

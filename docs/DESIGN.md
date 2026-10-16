@@ -352,7 +352,7 @@ Debug category **Dominion** includes:
 | **M1: World sim** ✅ | FactionState, RelationState, stability, economy index, AI personalities, daily AI diplomacy (abstract), capitals, E&D and FTV core bindings |
 | **M2: News** ✅ | News feed tab, visibility and intel, grammar headlines, radio, research tree, colony thoughts |
 | **M3: Diplomacy UI** ✅ | Dominion tab, dossiers, actions, treaties, embargo and border rights, Leadership Desk |
-| **M4: Physical diplomacy** | Envoys, delegations, summits plus the dialogue system, hostage exchange |
+| **M4: Physical diplomacy** ✅ | Envoys, delegations, summits plus the dialogue system, hostage exchange |
 | **M5: Rim Council** | Sessions, motions, voting, decrees, violations |
 | **M6: Espionage** | Operations (abstract first, then physical maps), counter-intel, exposure |
 | **M7: War** | War goals, war score, warbands and interception, occupation, cold war, joint wars |
@@ -425,6 +425,35 @@ A report is *Confirmed* if it came by radio or dispatch or intel is 30+ above wh
 **Opinion inputs added:** treaty opinion bonuses, *favour* (gestures; decays 2%/day), −15 if the other side embargoes you, −8/−3 for its closed or restricted border.
 
 **Prices** are combined in one Harmony postfix on `Tradeable.GetPriceFor`, cached per faction per tick, multiplied on top of other mods' prices.
+
+## 9d. M4 implementation notes
+
+**Envoys.** The head of state can always act as an envoy. Diplomats come from the setting: colonists picked at the Leadership Desk, or (with Ideology) holders of any ideology role other than leader. *A dedicated "Diplomat" role precept is deferred until the mod can be tested in game: a role def needs fields (name generator, icon, requirements) that cannot be verified without the game, and a wrong one breaks loading.*
+
+**Envoy missions.** A caravan carrying an envoy gets options on every foreign settlement (a `WorldObjectComp` added to `Settlement` by XML patch). The caravan travels there and the mission runs on arrival:
+
+| Mission | Influence | Effect |
+|---|---|---|
+| Improve relations | 10 | Favour +10 + 0.8 × Social, goodwill +3 + Social/4 |
+| Negotiate a treaty | treaty cost | Treaty acceptance + in-person bonus (+15%, ±1.5% per Social above/below 8) |
+| Peace talks (hostile) | 20 | Peace acceptance + in-person bonus; on failure, 35% × aggression chance the envoy is taken captive |
+| Gather intelligence | 10 | Intel +10 + Social |
+| Exchange hostages | 5 | See below |
+| Attend summit | — | Opens the summit (head of state only) |
+
+Each mission has a 10-day cooldown per faction.
+
+**Hostages** are real pawns: your colonists in the faction's vanilla kidnapped list, and their people held as prisoners in your colonies. An exchange releases your prisoners (they walk off) and returns your colonists (they walk in at the capital, or arrive by drop pod). Acceptance: 25% + 20% × (your leverage − 0.7 × their captives) + opinion/300; holding their leader counts as 3 extra prisoners. Freeing prisoners without asking anything back always works and earns favour and goodwill. Available over the comms, as an envoy mission, or as a summit agenda.
+
+**Delegations** are world objects that follow a real world path at caravan speed (2,000 ticks per tile). They are drawn only if they involve the player or the player has intel 25 or more on either faction. AI-to-AI peace, alliances and treaties now travel by delegation and take effect on arrival, so they can be stopped. AI treaty offers to the player arrive as an envoy who walks into your capital with guards. A player caravan on the same tile can **intercept** a delegation: this is an act of war, the escort (combat points 200 + strength/2, capped at 1,200) and the envoy, or the leader in person if travelling to a summit, fight on a real caravan battle map, and the mission fails.
+
+**Summits** (statecraft action, 30 influence, 30-day cooldown) have an agenda (better relations, peace, a treaty or a hostage exchange) and a venue:
+- **Your capital:** their leader really travels there as a delegation and walks in with three guards. The talks open as soon as your head of state is on the same map, and the guests wait about a day.
+- **Their capital:** you have 25 days to bring your head of state there by caravan and attend.
+
+Attendance chance is 50% + opinion/150 + leadership bonus; hostile factions come only for peace (25% + weariness/120 + 0.4 × doves).
+
+The **dialogue** runs three rounds. Each round offers up to four approaches drawn from: common ground, flattery, concession (300 silver or 10 influence), threat, apology, leverage (prisoners), shared enemies, shared beliefs, and plain speaking. Each has a success chance and a rapport effect set by the head of state's Social skill and the other leader's personality: the honourable resent threats and blackmail, the greedy like concessions, and the paranoid distrust flattery. There is a 15% chance per round of something happening at the table. Final chance = agenda base + rapport/150 + in-person bonus. Walking out costs favour and adds grievance.
 
 ## 10. Decisions log
 

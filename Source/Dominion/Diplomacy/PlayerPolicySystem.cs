@@ -58,7 +58,10 @@ namespace Dominion
                 if (offer != null)
                 {
                     comp.Player.SetLastOffer(f.loadID, now);
-                    Offer(f, offer);
+                    // The offer travels in person; it is made when the envoy reaches the colony.
+                    Delegation d = DelegationUtility.Dispatch(f, player, DelegationPurpose.OfferToPlayer);
+                    if (d != null) d.treaty = offer;
+                    else Offer(f, offer, null);
                 }
             }
         }
@@ -78,10 +81,23 @@ namespace Dominion
             return wanted.Count > 0 ? wanted.RandomElement() : null;
         }
 
-        private static void Offer(Faction f, TreatyDef treaty)
+        /// <summary>The envoy reaches the colony: they walk in, and the offer is made.</summary>
+        public static void EnvoyArrived(Faction f, TreatyDef treaty)
+        {
+            if (treaty == null || f.HostileTo(Faction.OfPlayer)) return;
+            Map map = VisitorUtility.PlayerCapitalMap();
+            List<Pawn> party = VisitorUtility.MakeEnvoyParty(f);
+            Pawn envoy = party.Count > 0 ? party[0] : null;
+            if (!VisitorUtility.SpawnVisitors(f, map, party, GenDate.TicksPerDay / 2)) envoy = null;
+            Offer(f, treaty, envoy);
+        }
+
+        private static void Offer(Faction f, TreatyDef treaty, Pawn envoy)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            var node = new DiaNode("Dominion_Offer_Text".Translate(f.Name, treaty.label, treaty.description));
+            string text = "Dominion_Offer_Text".Translate(f.Name, treaty.label, treaty.description);
+            if (envoy != null) text = "Dominion_Offer_EnvoyArrived".Translate(envoy.LabelShortCap, f.Name) + "\n\n" + text;
+            var node = new DiaNode(text);
             node.options.Add(new DiaOption("Dominion_Offer_Accept".Translate())
             {
                 action = () =>

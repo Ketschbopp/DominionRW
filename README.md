@@ -8,7 +8,9 @@ Rim World Dominion, a 1.7 RimWorld mod that expands and overhauls diplomacy and 
 
 **M2 (news)** adds the news feed: events reach you late, as rumors or confirmed reports, depending on your intel on the factions involved. There is a Dominion research tab, a radio receiver to monitor, false rumors and corrections, colonist mood reactions, and per-category letters or messages. Faction dossiers only show what your intel allows.
 
-**M3 (diplomacy)** adds the Diplomacy and Treaties tabs: gifts, compliments, insults, peace and war, five treaty types, border policy, embargoes, denunciations and tribute, all costing influence earned by your head of state at the new Leadership Desk (wood, steel or gold). AI factions sign treaties with each other, honour or betray defensive pacts, close borders and embargo you when they dislike you, and offer you treaties when they like you. Embargoes and trade agreements change prices and stop caravans. See [docs/DESIGN.md](docs/DESIGN.md) for the architecture, feature spec, integration plan and roadmap.
+**M3 (diplomacy)** adds the Diplomacy and Treaties tabs: gifts, compliments, insults, peace and war, five treaty types, border policy, embargoes, denunciations and tribute, all costing influence earned by your head of state at the new Leadership Desk (wood, steel or gold). AI factions sign treaties with each other, honour or betray defensive pacts, close borders and embargo you when they dislike you, and offer you treaties when they like you. Embargoes and trade agreements change prices and stop caravans.
+
+**M4 (physical diplomacy)** puts diplomacy on the map: send diplomats or your head of state by caravan on missions to other settlements, exchange real hostages, and hold summits at your capital or theirs. Summits are three rounds of dialogue that depend on your leader's skills and the other leader's personality. AI agreements and offers now travel as delegations you can see (with enough intel) and intercept. See [docs/DESIGN.md](docs/DESIGN.md) for the architecture, feature spec, integration plan and roadmap.
 
 ## Requirements
 
@@ -42,4 +44,4 @@ The DLL is written to `1.7/Assemblies/Dominion.dll` (committed, so the repo fold
 
 ## Testing in game
 
-Enable dev mode, then use the dev menu category **Dominion**: raise any event (including coups, revolutions and riots), force a relation between any two factions, set a faction's stability, run a simulated day, log faction states, the scheduler and the event log, reveal all intel or set intel per faction, deliver pending news, spread a false rumor, fill influence, sign any treaty between any two factions, run the integration self-test, and read the profiler. The **Dominion** tab shows factions, the event log and which integrations are active.
+Enable dev mode, then use the dev menu category **Dominion**: raise any event (including coups, revolutions and riots), force a relation between any two factions, set a faction's stability, run a simulated day, log faction states, the scheduler and the event log, reveal all intel or set intel per faction, deliver pending news, spread a false rumor, fill influence, sign any treaty between any two factions, force a summit, dispatch a delegation, run the integration self-test, and read the profiler. The **Dominion** tab shows factions, the event log and which integrations are active.

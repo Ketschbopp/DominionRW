@@ -53,8 +53,21 @@ def diplomacy():
     img.save(OUT / "Dominion_Diplomacy.png")
 
 
+def delegation():
+    """World map icon: a banner on a pole with the Dominion seal. White so the faction colour tints it."""
+    img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.line([(14, 4), (14, 60)], fill=(255, 255, 255, 255), width=4)
+    d.polygon([(16, 6), (56, 6), (48, 20), (56, 34), (16, 34)], fill=(255, 255, 255, 255), outline=(40, 40, 40, 255))
+    star(d, 32, 20, 9, 4, (60, 60, 60, 255))
+    world = ROOT / "Textures" / "World"
+    world.mkdir(parents=True, exist_ok=True)
+    img.save(world / "Dominion_Delegation.png")
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
+    delegation()
     head_of_state()
     capital()
     diplomacy()

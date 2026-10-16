@@ -40,6 +40,17 @@ namespace Dominion
                 };
             }
 
+            if (!DiplomatUtility.UsesIdeoRoles)
+            {
+                yield return new Command_Action
+                {
+                    defaultLabel = "Dominion_Desk_AssignDiplomats".Translate(),
+                    defaultDesc = "Dominion_Desk_AssignDiplomats_Desc".Translate(),
+                    icon = DominionTex.Diplomacy,
+                    action = AssignDiplomats,
+                };
+            }
+
             yield return new Command_Action
             {
                 defaultLabel = "Dominion_Desk_MakeCapital".Translate(),
@@ -73,6 +84,27 @@ namespace Dominion
                 int social = p.skills?.GetSkill(SkillDefOf.Social)?.Level ?? 0;
                 options.Add(new FloatMenuOption(p.LabelShortCap + " (" + SkillDefOf.Social.LabelCap + " " + social + ")",
                     () => WorldComponent_Dominion.Instance.Player.chosenHeadOfState = captured));
+            }
+            if (options.Count == 0)
+                options.Add(new FloatMenuOption("Dominion_Desk_NoColonists".Translate(), null));
+            Find.WindowStack.Add(new FloatMenu(options));
+        }
+
+        private void AssignDiplomats()
+        {
+            List<Pawn> chosen = WorldComponent_Dominion.Instance.Player.chosenDiplomats;
+            var options = new List<FloatMenuOption>();
+            foreach (Pawn p in Map.mapPawns.FreeColonistsSpawned)
+            {
+                Pawn captured = p;
+                bool isDiplomat = chosen.Contains(p);
+                int social = p.skills?.GetSkill(SkillDefOf.Social)?.Level ?? 0;
+                string label = (isDiplomat ? "✓ " : "") + p.LabelShortCap + " (" + SkillDefOf.Social.LabelCap + " " + social + ")";
+                options.Add(new FloatMenuOption(label, () =>
+                {
+                    if (chosen.Contains(captured)) chosen.Remove(captured);
+                    else chosen.Add(captured);
+                }));
             }
             if (options.Count == 0)
                 options.Add(new FloatMenuOption("Dominion_Desk_NoColonists".Translate(), null));

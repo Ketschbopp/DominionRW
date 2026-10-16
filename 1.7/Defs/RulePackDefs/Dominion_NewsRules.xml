@@ -296,4 +296,88 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_DelegationDispatched</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;A delegation from [FACTION_A] sets out for [FACTION_B]</li>
+        <li>story-&gt;[LEAD] envoys of [FACTION_A] are on the road to [FACTION_B]. [dispatch_detail] [closing]</li>
+        <li>dispatch_detail-&gt;Their purpose has not been announced.</li>
+        <li>dispatch_detail-&gt;[observers] expect talks of some importance.</li>
+        <li>dispatch_detail-&gt;They travel with an armed escort.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_DelegationIntercepted</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] attacks a delegation from [FACTION_B]</li>
+        <li>headline-&gt;Envoys of [FACTION_B] ambushed on the road</li>
+        <li>story-&gt;[LEAD] a delegation from [FACTION_B] was stopped and attacked by [FACTION_A]. [intercept_detail] [closing]</li>
+        <li>intercept_detail-&gt;Attacking envoys is considered among the gravest of insults.</li>
+        <li>intercept_detail-&gt;[FACTION_B] has called it an act of war.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SummitHeld</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Summit between [FACTION_A] and [FACTION_B] ends in agreement</li>
+        <li>headline-&gt;Leaders of [FACTION_A] and [FACTION_B] reach agreement</li>
+        <li>story-&gt;[LEAD] the leaders of [FACTION_A] and [FACTION_B] met in person and came to an agreement on [DETAIL]. [summit_detail] [closing]</li>
+        <li>summit_detail-&gt;Both sides called the talks frank and productive.</li>
+        <li>summit_detail-&gt;The leaders were seen together after the talks.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SummitFailed</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Summit between [FACTION_A] and [FACTION_B] collapses</li>
+        <li>headline-&gt;No agreement at summit of [FACTION_A] and [FACTION_B]</li>
+        <li>story-&gt;[LEAD] the summit between [FACTION_A] and [FACTION_B] on [DETAIL] has ended without agreement. [failed_detail] [closing]</li>
+        <li>failed_detail-&gt;One side is said to have left the table early.</li>
+        <li>failed_detail-&gt;[observers] describe the atmosphere as cold.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_HostagesExchanged</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] and [FACTION_B] exchange hostages</li>
+        <li>story-&gt;[LEAD] [FACTION_A] and [FACTION_B] have exchanged prisoners ([DETAIL]). [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_EnvoyMission</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;Envoys of [FACTION_A] visit [FACTION_B]</li>
+        <li>story-&gt;[LEAD] an envoy of [FACTION_A] has visited [FACTION_B] on a mission of [DETAIL]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_EnvoyCaptured</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] seizes an envoy of [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has taken [DETAIL], an envoy of [FACTION_B], captive during talks. [captured_detail] [closing]</li>
+        <li>captured_detail-&gt;The breach of diplomatic custom has shocked observers.</li>
+        <li>captured_detail-&gt;[FACTION_B] is demanding the envoy's release.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>

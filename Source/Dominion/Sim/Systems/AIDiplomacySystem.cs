@@ -74,7 +74,7 @@ namespace Dominion
                     float theirs = os.warWeariness / 100f * 0.6f + os.Bloc(Bloc.Doves) * 0.5f + (back.opinion + 100f) / 400f;
                     float chance = Mathf.Min(mine, theirs) * (active ? 0.04f : 0.01f);
                     if (!Rand.Chance(chance)) return false;
-                    DiplomacyUtility.SetRelationKind(f, other, FactionRelationKind.Neutral, f, "Dominion_Reason_Peace".Translate());
+                    DelegationUtility.DispatchAgreement(f, other, AgreementKind.Peace);
                     return true;
                 }
 
@@ -82,7 +82,7 @@ namespace Dominion
                 {
                     if (r.opinion > 55f && back.opinion > 50f && (r.sharedEnemies > 0 || p.honour > 0.6f) && Rand.Chance(0.03f))
                     {
-                        DiplomacyUtility.SetRelationKind(f, other, FactionRelationKind.Ally, f, "Dominion_Reason_Alliance".Translate());
+                        DelegationUtility.DispatchAgreement(f, other, AgreementKind.Alliance);
                         return true;
                     }
 
@@ -90,13 +90,13 @@ namespace Dominion
                     if (r.opinion > 30f && back.opinion > 25f && !treaties.Has(f, other, DominionTreatyDefOf.Dominion_TradeAgreement)
                         && Rand.Chance(0.03f * (p.greed + os.personality.greed)))
                     {
-                        treaties.Sign(DominionTreatyDefOf.Dominion_TradeAgreement, f, other, f);
+                        DelegationUtility.DispatchAgreement(f, other, AgreementKind.Treaty, DominionTreatyDefOf.Dominion_TradeAgreement);
                         return true;
                     }
                     if (r.opinion > 5f && back.opinion > 0f && r.distance >= 0f && r.distance < RelationsSystem.NeighbourDistance
                         && p.paranoia > 0.5f && !treaties.Has(f, other, DominionTreatyDefOf.Dominion_NonAggressionPact) && Rand.Chance(0.02f))
                     {
-                        treaties.Sign(DominionTreatyDefOf.Dominion_NonAggressionPact, f, other, f);
+                        DelegationUtility.DispatchAgreement(f, other, AgreementKind.Treaty, DominionTreatyDefOf.Dominion_NonAggressionPact);
                         return true;
                     }
 
@@ -119,7 +119,7 @@ namespace Dominion
                     if (r.opinion > 60f && back.opinion > 50f && !comp.Treaties.Has(f, other, DominionTreatyDefOf.Dominion_DefensivePact)
                         && Rand.Chance(0.02f))
                     {
-                        comp.Treaties.Sign(DominionTreatyDefOf.Dominion_DefensivePact, f, other, f);
+                        DelegationUtility.DispatchAgreement(f, other, AgreementKind.Treaty, DominionTreatyDefOf.Dominion_DefensivePact);
                         return true;
                     }
                     if (r.opinion >= 5f) return false;

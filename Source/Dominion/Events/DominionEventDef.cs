@@ -103,6 +103,13 @@ namespace Dominion
         public static DominionEventDef Dominion_BordersChanged;
         public static DominionEventDef Dominion_Denounced;
         public static DominionEventDef Dominion_TributePaid;
+        public static DominionEventDef Dominion_DelegationDispatched;
+        public static DominionEventDef Dominion_DelegationIntercepted;
+        public static DominionEventDef Dominion_SummitHeld;
+        public static DominionEventDef Dominion_SummitFailed;
+        public static DominionEventDef Dominion_HostagesExchanged;
+        public static DominionEventDef Dominion_EnvoyMission;
+        public static DominionEventDef Dominion_EnvoyCaptured;
 
         static DominionEventDefOf()
         {
