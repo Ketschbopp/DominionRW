@@ -74,4 +74,69 @@
   <Dominion_Setting_Profiling>Profile Dominion's performance</Dominion_Setting_Profiling>
   <Dominion_Setting_Profiling_Desc>Measures how long each Dominion system takes. See the report in the dev menu under Dominion. Has a tiny cost while on.</Dominion_Setting_Profiling_Desc>
 
+  <!-- M1: overview and dossier -->
+  <Dominion_Col_Government>Government</Dominion_Col_Government>
+  <Dominion_Col_Stability>Stability</Dominion_Col_Stability>
+  <Dominion_Col_Economy>Economy</Dominion_Col_Economy>
+  <Dominion_Col_Military>Military</Dominion_Col_Military>
+  <Dominion_None>None</Dominion_None>
+  <Dominion_Dossier_NotYetSimulated>This faction has not been simulated yet. Its first daily update comes within a day.</Dominion_Dossier_NotYetSimulated>
+  <Dominion_Dossier_Leader>Leader</Dominion_Dossier_Leader>
+  <Dominion_Dossier_Capital>Capital</Dominion_Dossier_Capital>
+  <Dominion_Dossier_Legitimacy>Legitimacy</Dominion_Dossier_Legitimacy>
+  <Dominion_Dossier_WarWeariness>War weariness</Dominion_Dossier_WarWeariness>
+  <Dominion_Dossier_ActiveWars>Active wars</Dominion_Dossier_ActiveWars>
+  <Dominion_Dossier_Population>Population (adults / all)</Dominion_Dossier_Population>
+  <Dominion_Dossier_Wealth>Wealth</Dominion_Dossier_Wealth>
+  <Dominion_Dossier_Territory>Territory (tiles / settlements)</Dominion_Dossier_Territory>
+  <Dominion_Dossier_VassalOutposts>Vassal outposts held</Dominion_Dossier_VassalOutposts>
+  <Dominion_Dossier_Personality>Personality</Dominion_Dossier_Personality>
+  <Dominion_Dossier_Blocs>Political blocs</Dominion_Dossier_Blocs>
+  <Dominion_Dossier_Opinions>Opinion of others</Dominion_Dossier_Opinions>
+  <Dominion_Dossier_OpinionBreakdown>Opinion: {0} (moving toward {1})\n\nIdeological compatibility: {2}\nDistance between nearest settlements: {3} tiles\nShared enemies: {4}\nGrievances: {5}\nOwn former settlements held as their vassal outposts: {6}</Dominion_Dossier_OpinionBreakdown>
+  <Dominion_Tag_War>war</Dominion_Tag_War>
+  <Dominion_Tag_Hostile>hostile</Dominion_Tag_Hostile>
+  <Dominion_Tag_Ally>ally</Dominion_Tag_Ally>
+  <Dominion_Tag_Truce>truce</Dominion_Tag_Truce>
+  <Dominion_Trait_Aggression>Aggression</Dominion_Trait_Aggression>
+  <Dominion_Trait_Greed>Greed</Dominion_Trait_Greed>
+  <Dominion_Trait_Honour>Honour</Dominion_Trait_Honour>
+  <Dominion_Trait_Paranoia>Paranoia</Dominion_Trait_Paranoia>
+
+  <!-- Governments -->
+  <Dominion_Government_Tribal>Tribal confederacy</Dominion_Government_Tribal>
+  <Dominion_Government_Autocracy>Autocracy</Dominion_Government_Autocracy>
+  <Dominion_Government_Monarchy>Monarchy</Dominion_Government_Monarchy>
+  <Dominion_Government_Theocracy>Theocracy</Dominion_Government_Theocracy>
+  <Dominion_Government_Council>Council</Dominion_Government_Council>
+  <Dominion_Government_Republic>Republic</Dominion_Government_Republic>
+  <Dominion_Government_Junta>Military junta</Dominion_Government_Junta>
+  <Dominion_Government_Corporate>Corporate state</Dominion_Government_Corporate>
+
+  <!-- Blocs -->
+  <Dominion_Bloc_Hawks>Hawks</Dominion_Bloc_Hawks>
+  <Dominion_Bloc_Hawks_Desc>Favour war and expansion. Grow during wars and with aggressive leaders.</Dominion_Bloc_Hawks_Desc>
+  <Dominion_Bloc_Doves>Doves</Dominion_Bloc_Doves>
+  <Dominion_Bloc_Doves_Desc>Favour peace. Grow with war weariness and push for ceasefires.</Dominion_Bloc_Doves_Desc>
+  <Dominion_Bloc_Merchants>Merchants</Dominion_Bloc_Merchants>
+  <Dominion_Bloc_Merchants_Desc>Favour trade and stable relations. Grow with a strong economy and greedy leaders.</Dominion_Bloc_Merchants_Desc>
+  <Dominion_Bloc_Zealots>Zealots</Dominion_Bloc_Zealots>
+  <Dominion_Bloc_Zealots_Desc>Put the faith first. Strong in religious and proselytising ideologies.</Dominion_Bloc_Zealots_Desc>
+  <Dominion_Bloc_Reformists>Reformists</Dominion_Bloc_Reformists>
+  <Dominion_Bloc_Reformists_Desc>Want the system changed. Grow when stability and legitimacy are low, and weaken stability.</Dominion_Bloc_Reformists_Desc>
+
+  <!-- Relation change reasons -->
+  <Dominion_Reason_War>war declared</Dominion_Reason_War>
+  <Dominion_Reason_Peace>peace agreed</Dominion_Reason_Peace>
+  <Dominion_Reason_Alliance>alliance formed</Dominion_Reason_Alliance>
+  <Dominion_Reason_BreakAlliance>alliance ended</Dominion_Reason_BreakAlliance>
+
+  <!-- M1 settings -->
+  <Dominion_Setting_AiDiplomacy>AI factions conduct diplomacy</Dominion_Setting_AiDiplomacy>
+  <Dominion_Setting_AiDiplomacy_Desc>AI factions declare war, make peace, ally and break alliances with each other on their own. Your own relations are never changed by this.</Dominion_Setting_AiDiplomacy_Desc>
+  <Dominion_Setting_AiAggression>AI aggression: {0}</Dominion_Setting_AiAggression>
+  <Dominion_Setting_PoliticalEvents>Riots, coups and revolutions</Dominion_Setting_PoliticalEvents>
+  <Dominion_Setting_PoliticalEvents_Desc>Unstable factions can suffer riots, coups and revolutions. Revolutions change a faction's government and leader; factions are never split.</Dominion_Setting_PoliticalEvents_Desc>
+  <Dominion_Setting_StabilityDrift>Stability change speed: {0}</Dominion_Setting_StabilityDrift>
+
 </LanguageData>

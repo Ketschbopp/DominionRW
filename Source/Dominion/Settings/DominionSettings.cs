@@ -20,6 +20,10 @@ namespace Dominion
         // Simulation
         public SimulationDetail simulationDetail = SimulationDetail.Normal;
         public int eventLogCap = 500;
+        public bool aiDiplomacyEnabled = true;
+        public float aiAggression = 1f;
+        public bool politicalEventsEnabled = true;
+        public float stabilityDriftSpeed = 1f;
 
         // Rim Council
         public int councilIntervalDays = 60;
@@ -39,6 +43,9 @@ namespace Dominion
         // Optional integrations the player switched off, by package id. Absent means enabled.
         public HashSet<string> disabledIntegrations = new HashSet<string>();
 
+        /// <summary>How many days the AI waits between its own diplomatic moves, scaled by simulation detail.</summary>
+        public float AiCooldownFactor => simulationDetail == SimulationDetail.Low ? 2f : simulationDetail == SimulationDetail.High ? 0.75f : 1f;
+
         public bool IntegrationEnabled(string packageId) => !disabledIntegrations.Contains(packageId);
 
         public void SetIntegrationEnabled(string packageId, bool enabled)
@@ -53,6 +60,10 @@ namespace Dominion
             Scribe_Values.Look(ref debugLogging, "debugLogging");
             Scribe_Values.Look(ref simulationDetail, "simulationDetail", SimulationDetail.Normal);
             Scribe_Values.Look(ref eventLogCap, "eventLogCap", 500);
+            Scribe_Values.Look(ref aiDiplomacyEnabled, "aiDiplomacyEnabled", true);
+            Scribe_Values.Look(ref aiAggression, "aiAggression", 1f);
+            Scribe_Values.Look(ref politicalEventsEnabled, "politicalEventsEnabled", true);
+            Scribe_Values.Look(ref stabilityDriftSpeed, "stabilityDriftSpeed", 1f);
             Scribe_Values.Look(ref councilIntervalDays, "councilIntervalDays", 60);
             Scribe_Values.Look(ref councilMinTechLevel, "councilMinTechLevel", TechLevel.Medieval);
             Scribe_Values.Look(ref headOfStateMode, "headOfStateMode", HeadOfStateMode.IdeoLeader);
@@ -70,6 +81,10 @@ namespace Dominion
             debugLogging = false;
             simulationDetail = SimulationDetail.Normal;
             eventLogCap = 500;
+            aiDiplomacyEnabled = true;
+            aiAggression = 1f;
+            politicalEventsEnabled = true;
+            stabilityDriftSpeed = 1f;
             councilIntervalDays = 60;
             councilMinTechLevel = TechLevel.Medieval;
             headOfStateMode = HeadOfStateMode.IdeoLeader;

@@ -27,7 +27,8 @@ namespace Dominion
         }
 
         public static bool IsSimulated(Faction f) =>
-            f != null && !f.IsPlayer && !f.Hidden && !f.defeated && !f.temporary && !f.deactivated;
+            f != null && !f.IsPlayer && !f.Hidden && !f.defeated && !f.temporary && !f.deactivated
+            && f.def.humanlikeFaction;
 
         public static int SlotFor(Faction f)
         {
@@ -52,6 +53,22 @@ namespace Dominion
 
             IReadOnlyList<SimSystem> systems = SimSystemRegistry.All;
 
+            for (int i = 0; i < systems.Count; i++)
+            {
+                SimSystem s = systems[i];
+                using (DominionProfiler.Measure(s.Name, "Slot"))
+                {
+                    try
+                    {
+                        s.Slot(slot);
+                    }
+                    catch (Exception e)
+                    {
+                        DLog.WarningOnce($"{s.Name}.Slot failed: {e}", s.Name.GetHashCode() ^ 0x710);
+                    }
+                }
+            }
+
             if (slot % SlotsPerHour == 0)
             {
                 for (int i = 0; i < systems.Count; i++)
@@ -72,7 +89,7 @@ namespace Dominion
                 for (int i = 0; i < systems.Count; i++)
                 {
                     SimSystem s = systems[i];
-                    using (DominionProfiler.Measure(s.Name + ".DailyFaction"))
+                    using (DominionProfiler.Measure(s.Name, "DailyFaction"))
                     {
                         try
                         {
@@ -128,7 +145,7 @@ namespace Dominion
 
         private static void Run(SimSystem s, string phase, Action<SimSystem> action)
         {
-            using (DominionProfiler.Measure(s.Name + "." + phase))
+            using (DominionProfiler.Measure(s.Name, phase))
             {
                 try
                 {

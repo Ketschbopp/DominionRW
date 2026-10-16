@@ -64,6 +64,8 @@ namespace Dominion
             if (method == null) return null;
             try
             {
+                if (method.IsStatic)
+                    return (TDelegate)System.Delegate.CreateDelegate(typeof(TDelegate), method);
                 return AccessTools.MethodDelegate<TDelegate>(method);
             }
             catch (Exception e)
@@ -74,6 +76,9 @@ namespace Dominion
         }
 
         public void Note(string text) => report.Add("  · " + text);
+
+        /// <summary>Records a failure found by the integration's own checks.</summary>
+        public void Fail(string what) => Record(false, what);
 
         private void Record(bool ok, string what)
         {

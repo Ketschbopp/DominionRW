@@ -50,7 +50,7 @@ namespace Dominion
                 comp.EventLog.Add(ev);
                 DLog.Verbose("Event " + ev);
 
-                using (DominionProfiler.Measure("EventBus." + ev.def.defName))
+                using (DominionProfiler.Measure("EventBus", ev.def.defName))
                 {
                     try
                     {

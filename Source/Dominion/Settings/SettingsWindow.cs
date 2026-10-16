@@ -68,6 +68,14 @@ namespace Dominion
             l.Gap();
             l.Label("Dominion_Setting_EventLogCap".Translate(s.eventLogCap));
             s.eventLogCap = (int)l.Slider(s.eventLogCap, 50, 5000);
+            l.GapLine();
+            l.CheckboxLabeled("Dominion_Setting_AiDiplomacy".Translate(), ref s.aiDiplomacyEnabled, "Dominion_Setting_AiDiplomacy_Desc".Translate());
+            l.Label("Dominion_Setting_AiAggression".Translate(s.aiAggression.ToStringPercent()));
+            s.aiAggression = l.Slider(s.aiAggression, 0f, 3f);
+            l.Gap();
+            l.CheckboxLabeled("Dominion_Setting_PoliticalEvents".Translate(), ref s.politicalEventsEnabled, "Dominion_Setting_PoliticalEvents_Desc".Translate());
+            l.Label("Dominion_Setting_StabilityDrift".Translate(s.stabilityDriftSpeed.ToStringPercent()));
+            s.stabilityDriftSpeed = l.Slider(s.stabilityDriftSpeed, 0.1f, 3f);
         }
 
         private static void DrawCouncil(Listing_Standard l, DominionSettings s)

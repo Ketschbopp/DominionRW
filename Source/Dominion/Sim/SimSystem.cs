@@ -18,13 +18,21 @@ namespace Dominion
         /// <summary>Lower runs first within the same slot.</summary>
         public virtual int Order => 0;
 
-        public virtual string Name => GetType().Name;
+        private string name;
+
+        public virtual string Name => name ??= GetType().Name;
 
         public virtual void DailyFaction(Faction faction) { }
 
         public virtual void DailyGlobal() { }
 
         public virtual void Hourly() { }
+
+        /// <summary>
+        /// Runs every scheduler slot (every <see cref="DominionScheduler.TicksPerSlot"/> ticks), for work
+        /// that is cut into small pieces across the day. Keep it very cheap.
+        /// </summary>
+        public virtual void Slot(int slot) { }
 
         public virtual void OnEvent(DominionEvent ev) { }
     }

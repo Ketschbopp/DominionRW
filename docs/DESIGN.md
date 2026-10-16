@@ -122,7 +122,7 @@ Rules:
 - XML content for an integration (defs, patches) lives in `Compat/<Mod>/` and is loaded by `LoadFolders.xml` with `IfModActive`.
 - About.xml lists every linked mod under `loadAfter` (never `modDependencies`).
 - Each optional integration can be toggled off individually in settings.
-- **Exception: Economics & Demography and Faction Territories & Vassalage are hard requirements.** Both are listed in `modDependencies`. Dominion's economy and population model reads from E&D, and its territory and vassalage model reads from FTV, with no fallbacks of its own. (FTV itself requires NozoMe's Map Mode Framework, so that comes along too.) Binding still goes through cached delegates, so E&D updates are caught by the startup self-test with a clear error instead of a crash.
+- **Exception: Economics & Demography and Faction Territories & Vassalage are hard requirements.** Both are listed in `modDependencies`. Dominion's economy and population model reads from E&D, and its territory and vassalage model reads from FTV, with no fallbacks of its own. (FTV itself requires NozoMe's Map Mode Framework, so that comes along too.) If either one fails to bind, for example while it has no 1.7 build, Dominion logs an error and runs in a degraded mode (population and wealth estimated from settlement counts, no territory or vassal data) so a save is never broken by it. Binding still goes through cached delegates, so E&D updates are caught by the startup self-test with a clear error instead of a crash.
 
 ### 4.2 Version note
 
@@ -348,8 +348,8 @@ Debug category **Dominion** includes:
 
 | Milestone | Scope |
 |---|---|
-| **M0: Skeleton** | About/LoadFolders, csproj (Krafs ref), Harmony bootstrap, settings shell, dev menu shell, `WorldComponent_Dominion`, scheduler, event bus, integration loader with self-test |
-| **M1: World sim** | FactionState, RelationState, stability, economy index, AI personalities, daily AI diplomacy (abstract), capitals |
+| **M0: Skeleton** ✅ | About/LoadFolders, csproj (Krafs ref), Harmony bootstrap, settings shell, dev menu shell, `WorldComponent_Dominion`, scheduler, event bus, integration loader with self-test |
+| **M1: World sim** ✅ | FactionState, RelationState, stability, economy index, AI personalities, daily AI diplomacy (abstract), capitals, E&D and FTV core bindings |
 | **M2: News** | News feed tab, visibility and intel, grammar headlines, radio, research tree, colony thoughts |
 | **M3: Diplomacy UI** | Dominion tab, dossiers, actions, treaties, embargo and border rights, Leadership Desk |
 | **M4: Physical diplomacy** | Envoys, delegations, summits plus the dialogue system, hostage exchange |
@@ -363,6 +363,22 @@ Debug category **Dominion** includes:
 Integrations are designed into the event bus from M0, so M9 is wiring and not restructuring. Any integration can be pulled forward.
 
 ---
+
+## 9a. M1 implementation notes
+
+How the world simulation works as built (tunable values in brackets are code constants or settings):
+
+| System (order) | Runs | Does |
+|---|---|---|
+| Economy (0) | Daily per faction | Reads adults, total population and stockpile wealth from E&D. Economy index = wealth per head ÷ world average × 100, smoothed. |
+| Territory (1) | Every slot + daily | Scans FTV ownership of all surface tiles in 240 pieces across the day; counts FTV vassal outposts per master and per (original, master) pair. |
+| Capital (2) | Daily per faction | CBF seat if present, else the oldest settlement. Raises *capital lost* if destroyed or captured, *new capital* when it moves. |
+| Military (3) | Daily per faction | Strength = (settlements·8 + adults·0.5 + vassal outposts·4 + territory·0.01) × tech factor × √(economy/100) × (1 − weariness/200). |
+| Relations (10) | Daily per faction | Opinion of every other faction and the player moves 10%/day toward a target from ideology compatibility (±30), tech gap, paranoia, border friction (settlements within 25 tiles), shared enemies, grievances (decay 2%/day), vassal outposts the other holds, the current relation kind, and player goodwill. |
+| Politics (20) | Daily per faction | Weariness, legitimacy, stability drift toward a target; blocs drift; riots (stability < 30), coups (stability < 20 and legitimacy < 40), revolutions (10+ days below 10). |
+| AI diplomacy (30) | Daily per faction | Goodwill between AI factions follows their opinions without crossing kind thresholds. With an 8–15 day cooldown, an AI may make peace, ally, declare war (needs hatred, aggression, relative strength, proximity, stability; max 2 wars; respects 30-day truces) or break an alliance. Relations with the player are never changed here. |
+
+Relation changes go through vanilla base goodwill and `SetRelationDirect` on both sides, so vanilla and other mods see the same state. The Harmony hook on `Notify_RelationKindChanged` turns every change into a Dominion event and names the aggressor when Dominion caused it.
 
 ## 10. Decisions log
 

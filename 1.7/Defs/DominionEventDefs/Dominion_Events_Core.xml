@@ -51,4 +51,64 @@
     <newsworthiness>0.8</newsworthiness>
     <headline>The leader of {0} has died</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_AllianceBroken</defName>
+    <label>alliance broken</label>
+    <description>An alliance between two factions has ended.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <headline>{0} ends its alliance with {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Riots</defName>
+    <label>riots</label>
+    <description>Unrest has turned into riots. Stability and legitimacy fall, and the economy suffers.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <headline>Riots break out in {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Coup</defName>
+    <label>coup</label>
+    <description>The military or a palace faction has seized power and installed a new leader.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <headline>Coup in {0}: a new leader seizes power</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Revolution</defName>
+    <label>revolution</label>
+    <description>The government has fallen to a revolution. A new leader and a new form of government take over.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>1</newsworthiness>
+    <headline>Revolution in {0}: the government falls</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_CapitalLost</defName>
+    <label>capital lost</label>
+    <description>A faction has lost its capital, destroyed or captured. Stability and legitimacy fall sharply.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.95</newsworthiness>
+    <headline>{0} loses its capital</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_CapitalEstablished</defName>
+    <label>new capital</label>
+    <description>A faction has moved its seat of government.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.4</newsworthiness>
+    <headline>{0} proclaims a new capital</headline>
+  </Dominion.DominionEventDef>
 </Defs>

@@ -6,7 +6,7 @@ using Verse;
 namespace Dominion
 {
     /// <summary>
-    /// The Dominion main tab. M0 shell: overview, event log and integration status.
+    /// The Dominion main tab: overview with faction dossiers, event log and integration status.
     /// Diplomacy, treaties, intelligence, council and news tabs arrive in later milestones.
     /// </summary>
     public class MainTabWindow_Dominion : MainTabWindow
@@ -17,8 +17,10 @@ namespace Dominion
 
         private Tab current = Tab.Overview;
         private Vector2 scroll;
+        private Vector2 dossierScroll;
+        private Faction selected;
 
-        public override Vector2 RequestedTabSize => new Vector2(900f, 640f);
+        public override Vector2 RequestedTabSize => new Vector2(1000f, 720f);
 
         public override void DoWindowContents(Rect inRect)
         {
@@ -51,39 +53,70 @@ namespace Dominion
 
         private void DrawOverview(Rect rect)
         {
-            List<Faction> factions = Find.FactionManager.AllFactionsListForReading;
-            var shown = new List<Faction>();
-            foreach (Faction f in factions)
-                if (DominionScheduler.IsSimulated(f))
-                    shown.Add(f);
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp == null) return;
+            List<Faction> shown = comp.Cache.Simulated;
+            if (selected != null && !shown.Contains(selected)) selected = null;
+            if (selected == null && shown.Count > 0) selected = shown[0];
 
+            Rect tableRect = rect.TopPart(0.45f);
+            Rect dossierRect = rect.BottomPart(0.55f);
+            dossierRect.yMin += 6f;
+
+            // Columns: faction, government, stability, economy, military, relation to player
+            float[] widths = { 0.30f, 0.14f, 0.12f, 0.12f, 0.12f, 0.20f };
             Text.Font = GameFont.Small;
-            Rect header = new Rect(rect.x, rect.y, rect.width, RowHeight);
+            Rect header = new Rect(tableRect.x, tableRect.y, tableRect.width - 16f, RowHeight);
             GUI.color = Color.gray;
-            Widgets.Label(header.LeftPart(0.4f), "Dominion_Col_Faction".Translate());
-            Widgets.Label(new Rect(header.x + header.width * 0.4f, header.y, header.width * 0.3f, RowHeight), "Dominion_Col_Leader".Translate());
-            Widgets.Label(header.RightPart(0.3f), "Dominion_Col_Relation".Translate());
+            string[] headers =
+            {
+                "Dominion_Col_Faction".Translate(), "Dominion_Col_Government".Translate(), "Dominion_Col_Stability".Translate(),
+                "Dominion_Col_Economy".Translate(), "Dominion_Col_Military".Translate(), "Dominion_Col_Relation".Translate(),
+            };
+            float x = header.x;
+            for (int c = 0; c < headers.Length; c++)
+            {
+                Widgets.Label(new Rect(x, header.y, header.width * widths[c], RowHeight), headers[c]);
+                x += header.width * widths[c];
+            }
             GUI.color = Color.white;
 
-            Rect outRect = new Rect(rect.x, rect.y + RowHeight, rect.width, rect.height - RowHeight);
+            Rect outRect = new Rect(tableRect.x, tableRect.y + RowHeight, tableRect.width, tableRect.height - RowHeight);
             Rect view = new Rect(0f, 0f, outRect.width - 16f, shown.Count * RowHeight);
             Widgets.BeginScrollView(outRect, ref scroll, view);
             for (int i = 0; i < shown.Count; i++)
             {
                 Faction f = shown[i];
+                comp.TryGetState(f, out FactionState s);
                 Rect row = new Rect(0f, i * RowHeight, view.width, RowHeight);
-                if (i % 2 == 1) Widgets.DrawLightHighlight(row);
-                Rect nameRect = row.LeftPart(0.4f);
-                FactionUIUtility.DrawFactionIconWithTooltip(new Rect(nameRect.x, nameRect.y + 1f, 24f, 24f), f);
-                nameRect.xMin += 30f;
-                Widgets.Label(nameRect, f.Name.Truncate(nameRect.width));
-                Widgets.Label(new Rect(row.x + row.width * 0.4f, row.y, row.width * 0.3f, RowHeight), f.leader?.LabelShortCap ?? "-");
+                if (f == selected) Widgets.DrawHighlightSelected(row);
+                else if (i % 2 == 1) Widgets.DrawLightHighlight(row);
+                Widgets.DrawHighlightIfMouseover(row);
+                if (Widgets.ButtonInvisible(row)) selected = f;
+
+                x = row.x;
+                Rect cell = new Rect(x, row.y, row.width * widths[0], RowHeight);
+                FactionUIUtility.DrawFactionIconWithTooltip(new Rect(cell.x, cell.y + 1f, 24f, 24f), f);
+                cell.xMin += 30f;
+                Widgets.Label(cell, f.Name.Truncate(cell.width));
+                x += row.width * widths[0];
+                Widgets.Label(new Rect(x, row.y, row.width * widths[1], RowHeight), s != null && s.governmentInitialized ? DominionUI.GovernmentLabel(s.government) : "-");
+                x += row.width * widths[1];
+                Widgets.Label(new Rect(x, row.y, row.width * widths[2], RowHeight), s != null ? DominionUI.Colored(s.stability.ToString("F0"), DominionUI.StabilityColor(s.stability)) : "-");
+                x += row.width * widths[2];
+                Widgets.Label(new Rect(x, row.y, row.width * widths[3], RowHeight), s != null ? s.economyIndex.ToString("F0") : "-");
+                x += row.width * widths[3];
+                Widgets.Label(new Rect(x, row.y, row.width * widths[4], RowHeight), s != null ? s.militaryStrength.ToString("F0") : "-");
+                x += row.width * widths[4];
                 FactionRelationKind kind = f.RelationKindWith(Faction.OfPlayer);
                 GUI.color = kind.GetColor();
-                Widgets.Label(row.RightPart(0.3f), kind.GetLabelCap() + " (" + f.PlayerGoodwill.ToStringWithSign() + ")");
+                Widgets.Label(new Rect(x, row.y, row.width * widths[5], RowHeight), kind.GetLabelCap() + " (" + f.PlayerGoodwill.ToStringWithSign() + ")");
                 GUI.color = Color.white;
             }
             Widgets.EndScrollView();
+
+            if (selected != null)
+                FactionDossierPanel.Draw(dossierRect, selected, comp, ref dossierScroll);
         }
 
         private void DrawEvents(Rect rect)

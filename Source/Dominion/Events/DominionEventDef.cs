@@ -84,6 +84,12 @@ namespace Dominion
         public static DominionEventDef Dominion_PeaceMade;
         public static DominionEventDef Dominion_RelationsWarmed;
         public static DominionEventDef Dominion_LeaderDied;
+        public static DominionEventDef Dominion_AllianceBroken;
+        public static DominionEventDef Dominion_Riots;
+        public static DominionEventDef Dominion_Coup;
+        public static DominionEventDef Dominion_Revolution;
+        public static DominionEventDef Dominion_CapitalLost;
+        public static DominionEventDef Dominion_CapitalEstablished;
 
         static DominionEventDefOf()
         {

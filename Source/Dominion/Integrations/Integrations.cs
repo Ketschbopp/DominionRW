@@ -2,55 +2,9 @@ using System;
 
 namespace Dominion
 {
-    // One class per linked mod. In M0 each one only binds the members later milestones will call,
-    // so the self-test shows straight away which mods are wired correctly. Behaviour is added per
-    // milestone (see docs/DESIGN.md §4.3 and §9).
-
-    /// <summary>Required: population, stockpiles, wealth and prices.</summary>
-    public class Integration_EconomicsDemography : DominionIntegration
-    {
-        public override string PackageId => "helldan.economicsdemography";
-        public override string Label => "Economics & Demography";
-        public override bool Required => true;
-
-        public Type WorldPopulationManager { get; private set; }
-
-        protected internal override void Bind(Binder b)
-        {
-            WorldPopulationManager = b.Type("EconomicsDemography.WorldPopulationManager");
-            b.Method(WorldPopulationManager, "GetPopulation");
-            b.Method(WorldPopulationManager, "ModifyPopulation");
-            b.Method(WorldPopulationManager, "GetStockpile");
-            b.Field(WorldPopulationManager, "FactionWealth");
-            b.Field(WorldPopulationManager, "globalPriceModifiers");
-            Type stockpile = b.Type("EconomicsDemography.VirtualStockpile");
-            b.Method(stockpile, "TryConsumeWealth");
-            b.Method(stockpile, "GetTotalWealth");
-        }
-    }
-
-    /// <summary>Required: territory ownership and vassalage.</summary>
-    public class Integration_FactionTerritories : DominionIntegration
-    {
-        public override string PackageId => "jaeger972.factionterritories";
-        public override string Label => "Faction Territories and Vassalage";
-        public override bool Required => true;
-
-        protected internal override void Bind(Binder b)
-        {
-            Type cache = b.Type("FactionTerritories.TerritoryOwnershipCache");
-            b.Method(cache, "TryGetClaimingFactions");
-            b.Method(cache, "TryGetSingleFactionIfUncontested");
-            Type vassalise = b.Type("FactionTerritories.Vassalise.VassaliseUtility");
-            b.Method(vassalise, "CanVassaliseSettlement");
-            b.Method(vassalise, "ExecuteVassalisation");
-            b.Method(vassalise, "ExecuteCedeToFactionAtTile");
-            Type component = b.Type("FactionTerritories.Vassalise.VassaliseComponent");
-            b.Field(component, "Instance");
-            Type invasions = b.Type("FactionTerritories.Invasions.Utility");
-            b.Method(invasions, "TryCreateForSettlement");
-        }
-    }
+    // Optional mods. Each one only binds the members later milestones will call, so the self-test
+    // shows straight away which mods are wired correctly. Behaviour is added per milestone
+    // (see docs/DESIGN.md §4.3 and §9). Integrations with behaviour live in their own files.
 
     public class Integration_SimpleLeadership : DominionIntegration
     {
@@ -147,19 +101,6 @@ namespace Dominion
             b.Type("IRBM.DoomsdayClockManager");
             b.Type("IRBM.MissileQueueManager");
             b.Type("IRBM.AIFactionMissileUtility");
-        }
-    }
-
-    public class Integration_CustomBaseFramework : DominionIntegration
-    {
-        public override string PackageId => "EvilEyeGuy.CustomBaseFramework";
-        public override string Label => "Custom Base Framework";
-
-        protected internal override void Bind(Binder b)
-        {
-            Type seats = b.Type("CustomBaseFramework.Hauptsitze");
-            b.Method(seats, "IstHauptsitz");
-            b.Type("CustomBaseFramework.SettlementPlanDef");
         }
     }
 

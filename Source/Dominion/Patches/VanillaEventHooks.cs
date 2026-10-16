@@ -20,6 +20,7 @@ namespace Dominion
             if (Current.ProgramState != ProgramState.Playing || other == null) return;
 
             FactionRelationKind now = __instance.RelationKindWith(other);
+            if (now == previousKind) return;
             int low = System.Math.Min(__instance.loadID, other.loadID);
             int high = System.Math.Max(__instance.loadID, other.loadID);
             int tick = Find.TickManager.TicksGame;
@@ -36,9 +37,18 @@ namespace Dominion
                 def = DominionEventDefOf.Dominion_PeaceMade;
             else if (now == FactionRelationKind.Ally)
                 def = DominionEventDefOf.Dominion_RelationsWarmed;
+            else if (previousKind == FactionRelationKind.Ally)
+                def = DominionEventDefOf.Dominion_AllianceBroken;
+            if (def == null) return;
 
-            if (def != null)
-                EventBus.Raise(def, __instance, other);
+            // When Dominion drives the change it names the actor (the aggressor, the one breaking the alliance...).
+            Faction primary = __instance, secondary = other;
+            if (DiplomacyUtility.Actor == other)
+            {
+                primary = other;
+                secondary = __instance;
+            }
+            EventBus.Raise(def, primary, secondary);
         }
     }
 

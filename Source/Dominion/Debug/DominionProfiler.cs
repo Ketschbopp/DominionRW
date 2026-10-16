@@ -25,6 +25,9 @@ namespace Dominion
 
         public static Scope Measure(string key) => Enabled ? new Scope(key, Stopwatch.GetTimestamp()) : default;
 
+        /// <summary>Same as <see cref="Measure(string)"/> but only builds the key string while profiling is on.</summary>
+        public static Scope Measure(string keyA, string keyB) => Enabled ? new Scope(keyA + "." + keyB, Stopwatch.GetTimestamp()) : default;
+
         public readonly struct Scope : IDisposable
         {
             private readonly string key;
