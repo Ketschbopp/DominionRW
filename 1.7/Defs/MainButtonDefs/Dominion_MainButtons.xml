@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MainButtonDef>
+    <defName>Dominion</defName>
+    <label>dominion</label>
+    <description>Factions, diplomacy, intelligence and world events.</description>
+    <tabWindowClass>Dominion.MainTabWindow_Dominion</tabWindowClass>
+    <order>55</order>
+    <validWithoutMap>true</validWithoutMap>
+  </MainButtonDef>
+</Defs>

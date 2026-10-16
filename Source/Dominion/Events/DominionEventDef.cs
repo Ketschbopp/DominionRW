@@ -1,0 +1,93 @@
+using System;
+using System.Collections.Generic;
+using RimWorld;
+using Verse;
+
+namespace Dominion
+{
+    public enum EventCategory { General, Diplomacy, War, Military, Economy, Politics, Espionage, Disaster, Culture, Council }
+
+    /// <summary>How hidden an event is. Higher values need more intel before they appear as news.</summary>
+    public enum Secrecy { Public, Restricted, Secret, BlackOps }
+
+    /// <summary>
+    /// Describes a kind of world event. Every meaningful thing that happens, from Dominion, vanilla or
+    /// a linked mod, is raised on the <see cref="EventBus"/> as a <see cref="DominionEvent"/> of one of these defs.
+    /// </summary>
+    public class DominionEventDef : Def
+    {
+        public EventCategory category = EventCategory.General;
+        public Secrecy secrecy = Secrecy.Public;
+
+        /// <summary>0..1, how strongly this event competes for news coverage.</summary>
+        public float newsworthiness = 0.5f;
+
+        /// <summary>Headline used until grammar-based news lands in M2. {0} and {1} are the faction names.</summary>
+        [MustTranslate]
+        public string headline;
+
+        /// <summary>Hidden from the dev-menu event list.</summary>
+        public bool debugHidden;
+
+        public Type workerClass = typeof(DominionEventWorker);
+
+        [Unsaved]
+        private DominionEventWorker workerInt;
+
+        public DominionEventWorker Worker
+        {
+            get
+            {
+                if (workerInt == null)
+                {
+                    workerInt = (DominionEventWorker)Activator.CreateInstance(workerClass);
+                    workerInt.def = this;
+                }
+                return workerInt;
+            }
+        }
+
+        public override IEnumerable<string> ConfigErrors()
+        {
+            foreach (string e in base.ConfigErrors())
+                yield return e;
+            if (workerClass == null || !typeof(DominionEventWorker).IsAssignableFrom(workerClass))
+                yield return "workerClass must derive from Dominion.DominionEventWorker";
+            if (newsworthiness < 0f || newsworthiness > 1f)
+                yield return "newsworthiness must be between 0 and 1";
+        }
+    }
+
+    /// <summary>Optional C# behaviour for an event def. The default does nothing beyond logging.</summary>
+    public class DominionEventWorker
+    {
+        public DominionEventDef def;
+
+        /// <summary>Called once when the event is raised, before listeners are notified.</summary>
+        public virtual void Apply(DominionEvent ev) { }
+
+        public virtual string GetHeadline(DominionEvent ev)
+        {
+            string a = ev.primary?.Name ?? "?";
+            string b = ev.secondary?.Name ?? "?";
+            if (def.headline.NullOrEmpty())
+                return def.LabelCap;
+            return string.Format(def.headline, a, b);
+        }
+    }
+
+    [DefOf]
+    public static class DominionEventDefOf
+    {
+        public static DominionEventDef Dominion_DebugTest;
+        public static DominionEventDef Dominion_WarDeclared;
+        public static DominionEventDef Dominion_PeaceMade;
+        public static DominionEventDef Dominion_RelationsWarmed;
+        public static DominionEventDef Dominion_LeaderDied;
+
+        static DominionEventDefOf()
+        {
+            DefOfHelper.EnsureInitializedInCtor(typeof(DominionEventDefOf));
+        }
+    }
+}

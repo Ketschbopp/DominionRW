@@ -1,7 +1,7 @@
 # Dominion: Design Document
 
-**Status:** Draft v0.1, for review before any code is written
-**Target:** RimWorld 1.7, Harmony
+**Status:** v0.2, author decisions applied (§10); M0 in progress
+**Target:** RimWorld 1.7 (.NET 10 runtime), Harmony 3
 **Package ID (proposed):** `ketschbopp.dominion`
 
 Dominion is a geopolitical simulation layer for RimWorld. It replaces the vanilla faction screen with a full diplomacy, economy, intelligence and politics system, and connects to a set of existing mods so that one event (a coup, a missile strike, an embargo) affects all of them.
@@ -13,7 +13,7 @@ Dominion is a geopolitical simulation layer for RimWorld. It replaces the vanill
 1. **Everything is one event stream.** Every meaningful thing that happens, from Dominion, vanilla or a linked mod, becomes a `DominionEvent`. The economy, relations, AI memory, intel and news all listen to that one stream. This is what makes the mods feel like one system instead of ten separate ones.
 2. **Physical where it matters, abstract where it doesn't.** Leaders really travel to summits and to the Rim Council, operatives really walk into settlements, and warbands really cross the world map. Background world simulation (AI-to-AI trade, distant politics) stays abstract and cheap.
 3. **Performance first.** Strategic simulation runs once per in-game day, spread across the day. Nothing runs per tick on pawns or things. See §3.
-4. **Optional integrations only.** Dominion runs on its own. Each linked mod adds depth when present and is never required (§4).
+4. **Two hard requirements, the rest optional.** Economics & Demography (economy and population) and Faction Territories & Vassalage (territory and vassalage) are required and form the backbone. Every other linked mod adds depth when present and is never required (§4).
 5. **Use vanilla systems.** Goodwill, `Faction.RelationKindWith`, `GameCondition`, `IncidentWorker`, `WorldObject`, `Caravan`, `Lord`/`LordJob`, `Letter`, `Quest` where suitable, `ResearchProjectDef`, `ThoughtDef`, `Precept`/`Ideo`. Dominion adds state on top of these instead of replacing them.
 6. **Everything is configurable** from Mod Settings, and **everything is spawnable** from the Dev menu.
 
@@ -91,7 +91,7 @@ Source/Dominion/
 docs/
 ```
 
-Build: `Source/Dominion/Dominion.csproj` targets `net472` and references `Krafs.Rimworld.Ref` (1.7) plus `Lib.Harmony` (excluded from output). It builds anywhere without a RimWorld install, and the DLL is committed to `1.7/Assemblies`.
+Build: `Source/Dominion/Dominion.csproj` targets **`net10.0`** (RimWorld 1.7 runs on .NET 10 instead of Unity's Mono; verified against the 1.7 reference assemblies and against linked mods' 1.7 builds). It references `Krafs.Rimworld.Ref` 1.7 and `Lib.Harmony.Ref` 3.x (reference-only; Harmony itself comes from the `brrainz.harmony` mod at runtime). It builds anywhere with the .NET 10 SDK and no RimWorld install, and the DLL is committed to `1.7/Assemblies`.
 
 ---
 
@@ -121,11 +121,12 @@ Rules:
 - **One DLL**, no compile-time dependency on any other mod. Each integration is an `IDominionIntegration` class that activates only if `ModsConfig.IsActive(packageId)`, binds the target mod's members by name through Harmony's `AccessTools`, and fails soft: if a member is missing after an update, it logs one warning, disables itself, and the game continues.
 - XML content for an integration (defs, patches) lives in `Compat/<Mod>/` and is loaded by `LoadFolders.xml` with `IfModActive`.
 - About.xml lists every linked mod under `loadAfter` (never `modDependencies`).
-- Each integration can be toggled off individually in settings.
+- Each optional integration can be toggled off individually in settings.
+- **Exception: Economics & Demography and Faction Territories & Vassalage are hard requirements.** Both are listed in `modDependencies`. Dominion's economy and population model reads from E&D, and its territory and vassalage model reads from FTV, with no fallbacks of its own. (FTV itself requires NozoMe's Map Mode Framework, so that comes along too.) Binding still goes through cached delegates, so E&D updates are caught by the startup self-test with a clear error instead of a crash.
 
 ### 4.2 Version note
 
-As of the reference snapshots, most linked mods ship **1.6 assemblies only**. Custom Base Framework and Pillage & Plunder already ship 1.7. The bindings below target the current public APIs; each one is version-guarded and will need to be re-checked as the mods move to 1.7.
+As of the reference snapshots, most linked mods ship **1.6 assemblies only**. Custom Base Framework and Pillage & Plunder already ship 1.7. Because 1.7 moved from .NET Framework 4.7.2 to .NET 10, a mod's 1.6 DLL cannot load in 1.7, so each mod needs its own 1.7 build before its integration can activate. **This matters most for E&D and FTV:** as hard requirements, Dominion cannot be played until both ship 1.7 builds (FTV's Map Mode Framework dependency as well). The bindings below target the current public APIs; each one is version-guarded and will be re-checked as the mods move to 1.7.
 
 ### 4.3 Per-mod plan
 
@@ -133,8 +134,8 @@ Type names below come from the mods' current public assemblies.
 
 | Mod (packageId) | What Dominion reads | What Dominion drives | Hooks found |
 |---|---|---|---|
-| **Faction Territories & Vassalage** (`jaeger972.factionterritories`) | Territory ownership per tile, vassal outposts | War outcomes cede settlements; treaties transfer territory; vassal status is synced both ways with Dominion's vassalage; border rights use real territory | `TerritoryOwnershipCache.TryGetClaimingFactions`, `VassaliseUtility.ExecuteVassalisation / ExecuteCedeToFactionAtTile`, `VassaliseComponent`, `Invasions.Utility.TryCreateForSettlement`, `Expansion.SettlementConstruction` |
-| **Economics & Demography** (`helldan.economicsdemography`) | Real population, stockpiles, wealth, inflation, global price modifiers | Embargoes and blockades cut stockpile flow; wars, plagues and famine change population; sabotage destroys stockpile wealth; trade deals add flows | `WorldPopulationManager.GetPopulation / ModifyPopulation / GetStockpile / FactionWealth / globalPriceModifiers`, `VirtualStockpile.TryConsumeWealth` |
+| **Faction Territories & Vassalage** (`jaeger972.factionterritories`), **required** | Territory ownership per tile, vassal outposts | War outcomes cede settlements; treaties transfer territory; vassal status is synced both ways with Dominion's vassalage; border rights use real territory | `TerritoryOwnershipCache.TryGetClaimingFactions`, `VassaliseUtility.ExecuteVassalisation / ExecuteCedeToFactionAtTile`, `VassaliseComponent`, `Invasions.Utility.TryCreateForSettlement`, `Expansion.SettlementConstruction` |
+| **Economics & Demography** (`helldan.economicsdemography`), **required** | Real population, stockpiles, wealth, inflation, global price modifiers | Embargoes and blockades cut stockpile flow; wars, plagues and famine change population; sabotage destroys stockpile wealth; trade deals add flows | `WorldPopulationManager.GetPopulation / ModifyPopulation / GetStockpile / FactionWealth / globalPriceModifiers`, `VirtualStockpile.TryConsumeWealth` |
 | **Vanilla Outposts Expanded** (`vanillaexpanded.outposts`) | Player and AI outposts as strategic assets | Outposts project territory and intel; defensive outposts can intercept warbands; artillery outposts can bombard (with diplomatic consequences); production feeds the economy; outposts become targets of AI operations | `VOE.Outpost_*`, `TravellingArtilleryStrike` |
 | **Visit Settlements** (`alt4s.VisitSettlements`) | Settlement maps the player is visiting | Physical espionage and special operations happen on the real visited map; theft or destruction there raises Dominion incidents; summits can be held in a visited settlement | `WorldComponent_SettlementData.settlementMaps`, `VS_Penalize*` patches (listen) |
 | **Simple Leadership** (`pb3n.SimpleLeadership`) | Settlement leaders, acting leaders, power events (riots, power struggles) | Assassinations kill real leaders; Dominion coups start Simple Leadership power struggles; its riots and successions become Dominion politics events; leaders are the pawns who travel to summits | `WorldComponent_LeaderTracker.GetBaseLeader / StartPowerEvent / GetActiveEventsFor`, `FactionLeadershipData`, `PowerStruggle`, `Rioting` |
@@ -147,9 +148,7 @@ Type names below come from the mods' current public assemblies.
 | **Pillage & Plunder** (`lordfelix.pillageandplunder`) | Plundered settlements, NPC plunder incidents | Plunder is a war act and news item; plundered settlements lose economy and stability | `PlunderedSettlementManager`, `IncidentWorker_NpcSettlementPlunder` |
 | **The News** (`xwe1ss.thenews`) | none | Dominion **replaces** it, with the same design reimplemented. It is marked `incompatibleWith` to avoid double news, price patches and coups. | n/a |
 
-Fallbacks when a mod is absent:
-- **Territory:** Dominion's own light territory (tiles within N of each settlement, recomputed daily).
-- **Population and economy:** Dominion's abstract economy index.
+Fallbacks when an optional mod is absent (E&D and FTV have none because they are required):
 - **Capital:** Largest or oldest settlement, or the leader's home.
 - **Leaders:** Vanilla `Faction.leader`.
 
@@ -158,7 +157,7 @@ Fallbacks when a mod is absent:
 Dominion acts as the **arbiter** where linked mods overlap:
 - **Prices:** E&D global price modifiers and Dominion embargo, plague or crisis modifiers are combined in one place, multiplicatively, never applied twice.
 - **Riots and coups:** Simple Leadership power events and Dominion coups are the same event. Whichever fires first, the other is notified instead of firing again.
-- **Vassalage:** FTV is the source of truth when installed, and Dominion mirrors it.
+- **Vassalage and territory:** FTV is the source of truth, and Dominion's treaties, wars and puppets act through it.
 - **NPC raids and plunder:** FTV invasions, P&P plunder and Dominion warbands share one "military action" event, so news and relations count each once.
 
 ---
@@ -168,7 +167,7 @@ Dominion acts as the **arbiter** where linked mods overlap:
 ### 5.1 Faction states and internal politics
 
 Each faction tracks:
-- **Stability** (0–100). Low means riots, then coups, then revolution or civil war, where the faction splits and a new faction is generated at runtime from the rebel settlements.
+- **Stability** (0–100). Low means riots, then coups, then revolution. **Factions are never split mid-game:** a successful revolution replaces the regime (new leader, government type and bloc balance) inside the same faction, and a rebellious settlement can at most defect to an *existing* faction.
 - **Legitimacy** of the leader, **war weariness**, **economy index**, **military strength**.
 - **Government type**, derived from ideology memes and royal titles: Autocracy, Theocracy, Council, Tribal Confederacy, Corporate, Hive or Mech. It shapes which actions are possible.
 - **Political blocs** (for example Hawks, Doves, Traders, Zealots), each with support %, which players can fund or undermine.
@@ -209,6 +208,8 @@ AI factions run the same action set **among themselves** in the daily simulation
 ### 5.4 The Rim Council
 
 - A recurring session (default: once per year, configurable), hosted in rotation by member factions or by the player once eligible.
+- **Membership:** all non-hidden humanlike factions **except tribals** (tech level Neolithic or lower; the threshold is configurable). A tribal faction that is the player's vassal sits in through its overlord.
+- **No vetoes.** Every vote is weighted, and nobody can block a motion alone. The only exception is a dev-mode tool that lets the player veto, for testing.
 - Delegates (leaders or envoys) **physically travel** to the host settlement. Absent members cannot vote.
 - When the session opens, the **Council window** shows motions, debate (influence spending) and weighted voting. Vote weight = f(population, economy, military, allies).
 - **Decrees**, for example: sanctions on a faction, a ceasefire order, a non-proliferation treaty (IRBM), a plague quarantine, recognition of territory, a trade standard (tariff cap), banning a practice (organ trade, slavery), a peacekeeping coalition, admitting a member, and the **Federation Charter** (for the unification ending).
@@ -216,7 +217,9 @@ AI factions run the same action set **among themselves** in the daily simulation
 
 ### 5.5 Espionage and special operations
 
-`OperationDef`, which is data-driven: required skills, team size, duration, base success, exposure risk, effects, and whether it is **abstract** (resolved off-map) or **physical** (on a real map).
+`OperationDef`, which is data-driven: required skills, team size, duration, base success, exposure risk and effects.
+
+**The player chooses the mode for each operation:** *abstract* (resolved off-map from the team's skills) or *physical* (played on the real map). Physical is riskier to run but gives a better success chance and better rewards. The Mode column below is the AI's default and marks which ops can only be one or the other.
 
 | Operation | Mode | Effect |
 |---|---|---|
@@ -247,7 +250,7 @@ AI factions run the same action set **among themselves** in the daily simulation
 
 ### 5.7 Economy
 
-- Faction economy index (E&D-backed when present) is affected by trade deals, embargoes, blockades, war, plagues, sabotage, vassal tribute and outposts (VOE).
+- Faction economy index (computed from E&D's population, stockpiles and wealth) is affected by trade deals, embargoes, blockades, war, plagues, sabotage, vassal tribute and outposts (VOE).
 - **Embargo:** that faction's traders refuse you, or charge a markup.
 - **Blockade:** caravans and convoys to and from the target are intercepted.
 - Price effects at the trade screen come from the cached daily modifier table (§3), with a tooltip that explains every factor ("Embargo +25%", "Plague in region +10%").
@@ -256,7 +259,7 @@ AI factions run the same action set **among themselves** in the daily simulation
 ### 5.8 Culture and ideology
 
 - **Ideological compatibility** between factions shifts opinion daily (shared memes and precepts help, opposing ones hurt).
-- **Cultural influence:** each faction projects influence through broadcasts, trade, vassals and proximity. High foreign influence can shift a faction's blocs, and over a long time can push an ideology reform (a vanilla `Ideo` precept change) or cause defection of settlements.
+- **Cultural influence:** each faction projects influence through broadcasts, trade, vassals and proximity. Its main effect is **political**: it shifts a faction's blocs, opinion and stability. **Ideology is affected to a lesser degree:** sustained, very high influence can trigger an occasional minor reform (one non-core precept changed through vanilla `Ideo`), rate-limited and toggleable in settings. Memes and the ideology itself are never replaced.
 - Ideology precepts gate actions; for example, a pacifist ideo can't declare aggressive wars without a stability cost.
 
 ### 5.9 News, intel and broadcasting (The News, reimplemented)
@@ -278,7 +281,10 @@ AI factions run the same action set **among themselves** in the daily simulation
 ### 5.10 Leadership Desk
 
 - A new building, `Dominion_LeadershipDesk`, made from **Wood, Steel or Gold** (`stuffCategories` plus a filter so only those three are allowed).
-- **Function:** the colony's leader (ideo leader, highest royal title, or an assigned "Head of State" role) works here to:
+- **Who is head of state** is a setting: either **the ideology leader** (vanilla `Precept_RoleSingle` leader), or **a pawn chosen at the desk**.
+- **Diplomats** work the same way, also as a setting: either pawns holding a **Diplomat ideology role** (a `PreceptDef` that Dominion adds to Ideology), or **pawns chosen at the desk**. Diplomats are the pawns sent as envoys and summit delegates when the head of state does not go.
+- If Ideology is not installed, both fall back to choosing at the desk.
+- **Function:** the head of state works here to:
   - unlock the full Dominion diplomacy action list (without a desk, only basic comms-console diplomacy is available)
   - draft treaties (reduced cooldowns), prepare council motions, and review intel dossiers
   - **material tier:** Wood is the basic tier; Steel gives faster drafting; Gold gives a prestige bonus to diplomacy acceptance and a room impressiveness boost
@@ -310,7 +316,7 @@ Daily rolls weighted by world state include border skirmishes, defections, scand
 
 ## 6. UI style
 
-The UI follows **RimToll and RimCourt**: windows look like **paper documents** (sheet background, typed text, ink stamps), and dossiers show a **photo** of the leader with stamped verdicts and seals. Assets would mirror their `Sheet`, `Stamp` and `Photo` texture approach, with new art for Dominion seals, treaty paper and newspaper mastheads. All windows are resizable and readable at UI scale 1.0–2.0.
+The UI follows **RimToll and RimCourt**: windows look like **paper documents** (sheet background, typed text, ink stamps), and dossiers show a **photo** of the leader with stamped verdicts and seals. Assets mirror their `Sheet`, `Stamp` and `Photo` texture approach, with new art for Dominion seals, treaty paper and newspaper mastheads. **All textures are made in this repo** (generated from scripts in `tools/textures/`, so they can be regenerated and tweaked). All windows are resizable and readable at UI scale 1.0–2.0.
 
 ---
 
@@ -351,21 +357,25 @@ Debug category **Dominion** includes:
 | **M6: Espionage** | Operations (abstract first, then physical maps), counter-intel, exposure |
 | **M7: War** | War goals, war score, warbands and interception, occupation, cold war, joint wars |
 | **M8: Broadcast and culture** | Broadcast Center, programs, TV and newspaper hooks, ideo influence |
-| **M9: Integrations** | One integration per sub-milestone: FTV → E&D → Simple Leadership → VOE → Visit Settlements → RimMarket → RimToll → RimCourt → IRBM → CBF → VBE → P&P |
+| **M9: Integrations** | One integration per sub-milestone (the core bindings for E&D and FTV land in M1, since both are required): FTV (full) → E&D (full) → Simple Leadership → VOE → Visit Settlements → RimMarket → RimToll → RimCourt → IRBM → CBF → VBE → P&P |
 | **M10: Ending and polish** | Unification ending, events catalogue, balancing, translation keys |
 
 Integrations are designed into the event bus from M0, so M9 is wiring and not restructuring. Any integration can be pulled forward.
 
 ---
 
-## 10. Open questions for the author
+## 10. Decisions log
 
-1. **Package ID and author name** for About.xml (proposed: `ketschbopp.dominion`).
-2. **The News**: confirm Dominion should be *incompatible* with it, rather than merely disabling overlap.
-3. **Rim Council membership**: should it include all factions, or only those above a tech level (tribals excluded)? Should the Empire (Royalty) have a special role, such as a veto?
-4. **Physical operations**: always physical, always abstract, or the player's choice per op (physical gives a better success chance)?
-5. **Civil war splitting factions at runtime**: is creating new factions mid-game acceptable? (It is safe in vanilla, but some mods assume a fixed list.)
-6. **Ideology reform**: should foreign influence be able to actually change another faction's `Ideo`, or only its politics?
-7. **Player head of state**: ideo leader, royal title holder, or a free choice at the Leadership Desk?
-8. **Art**: who provides textures? Placeholder art is planned until then.
-9. **Which integration first** after the core (default order in M9)?
+| # | Question | Decision |
+|---|---|---|
+| 1 | Package ID | `ketschbopp.dominion` |
+| 2 | The News | Dominion is marked `incompatibleWith` it |
+| 3 | Rim Council membership | Tribals excluded; no one has a veto (dev-mode player only) |
+| 4 | Physical vs abstract operations | The player chooses per operation |
+| 5 | Splitting factions in civil war | No. Revolutions change the regime inside the faction |
+| 6 | Foreign influence | Mainly politics; ideology to a lesser degree (minor, rate-limited reforms) |
+| 7 | Head of state and diplomats | Setting: ideology role (leader / Diplomat role) or chosen at the Leadership Desk |
+| 8 | Art | Made in-repo by script |
+| 9 | Integration order | As in M9 |
+| 10 | Economics & Demography | **Hard requirement** (added later by the author) |
+| 11 | Faction Territories & Vassalage | **Hard requirement** (added later by the author) |

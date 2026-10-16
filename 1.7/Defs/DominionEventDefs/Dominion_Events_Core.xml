@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- headline: {0} is the primary faction, {1} the secondary. Grammar-based news replaces these in M2. -->
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DebugTest</defName>
+    <label>test event</label>
+    <description>A test event raised from the dev menu.</description>
+    <category>General</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.1</newsworthiness>
+    <headline>Test event involving {0}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_WarDeclared</defName>
+    <label>war declared</label>
+    <description>Two factions have become hostile.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <headline>{0} and {1} are now at war</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_PeaceMade</defName>
+    <label>peace made</label>
+    <description>Two hostile factions are no longer at war.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <headline>{0} and {1} end hostilities</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_RelationsWarmed</defName>
+    <label>alliance formed</label>
+    <description>Two factions have become allies.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.7</newsworthiness>
+    <headline>{0} and {1} become allies</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_LeaderDied</defName>
+    <label>leader died</label>
+    <description>A faction's leader has died.</description>
+    <category>Politics</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.8</newsworthiness>
+    <headline>The leader of {0} has died</headline>
+  </Dominion.DominionEventDef>
+</Defs>

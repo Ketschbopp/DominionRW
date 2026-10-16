@@ -1,6 +1,41 @@
 # DominionRW
-Rim World Dominion, a 1.7 Rimworld mod that expands and overhauls diplomacy, and inter faction interaction massively, with many mod compatibilities.
+
+Rim World Dominion, a 1.7 RimWorld mod that expands and overhauls diplomacy and inter-faction interaction massively, with many mod compatibilities.
 
 ## Status
 
-Design phase. See [docs/DESIGN.md](docs/DESIGN.md) for the architecture, feature spec, integration plan and roadmap.
+**M0 (framework)** is in place: the mod skeleton, simulation scheduler, event bus, integration loader with self-test, settings, dev menu and a first Dominion tab. See [docs/DESIGN.md](docs/DESIGN.md) for the architecture, feature spec, integration plan and roadmap.
+
+## Requirements
+
+- RimWorld 1.7
+- [Harmony](https://github.com/pardeike/HarmonyRimWorld)
+- [Economics and Demography](https://github.com/helldanpwnz/Economics-and-Demography)
+- Faction Territories and Vassalage (which itself needs Map Mode Framework)
+
+Dominion replaces **The News** and is incompatible with it.
+
+## Building
+
+RimWorld 1.7 runs on .NET 10, so you need the **.NET 10 SDK**. No RimWorld install is needed; the reference assemblies come from NuGet.
+
+```
+dotnet build Source/Dominion/Dominion.csproj -c Release
+```
+
+The DLL is written to `1.7/Assemblies/Dominion.dll` (committed, so the repo folder works as a mod folder as-is).
+
+## Layout
+
+| Path | Contents |
+|---|---|
+| `About/` | Mod metadata, preview and icon |
+| `1.7/` | Assemblies and Defs for RimWorld 1.7 |
+| `Languages/` | Translation keys |
+| `Source/Dominion/` | C# source |
+| `tools/textures/` | Scripts that generate the mod's textures |
+| `docs/` | Design document |
+
+## Testing in game
+
+Enable dev mode, then use the dev menu category **Dominion**: raise any event, run a simulated day, log the scheduler and event log, run the integration self-test, and read the profiler. The **Dominion** tab shows factions, the event log and which integrations are active.

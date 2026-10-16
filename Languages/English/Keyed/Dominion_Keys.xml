@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Main tab -->
+  <Dominion_Tab_Overview>Overview</Dominion_Tab_Overview>
+  <Dominion_Tab_Events>Events</Dominion_Tab_Events>
+  <Dominion_Tab_Integrations>Integrations</Dominion_Tab_Integrations>
+  <Dominion_Col_Faction>Faction</Dominion_Col_Faction>
+  <Dominion_Col_Leader>Leader</Dominion_Col_Leader>
+  <Dominion_Col_Relation>Relation to you</Dominion_Col_Relation>
+  <Dominion_NoEvents>Nothing has happened yet.</Dominion_NoEvents>
+
+  <!-- Event categories -->
+  <Dominion_EventCategory_General>General</Dominion_EventCategory_General>
+  <Dominion_EventCategory_Diplomacy>Diplomacy</Dominion_EventCategory_Diplomacy>
+  <Dominion_EventCategory_War>War</Dominion_EventCategory_War>
+  <Dominion_EventCategory_Military>Military</Dominion_EventCategory_Military>
+  <Dominion_EventCategory_Economy>Economy</Dominion_EventCategory_Economy>
+  <Dominion_EventCategory_Politics>Politics</Dominion_EventCategory_Politics>
+  <Dominion_EventCategory_Espionage>Espionage</Dominion_EventCategory_Espionage>
+  <Dominion_EventCategory_Disaster>Disaster</Dominion_EventCategory_Disaster>
+  <Dominion_EventCategory_Culture>Culture</Dominion_EventCategory_Culture>
+  <Dominion_EventCategory_Council>Council</Dominion_EventCategory_Council>
+
+  <!-- Integrations -->
+  <Dominion_IntegrationStatus_Pending>Not checked</Dominion_IntegrationStatus_Pending>
+  <Dominion_IntegrationStatus_NotInstalled>Not installed</Dominion_IntegrationStatus_NotInstalled>
+  <Dominion_IntegrationStatus_Disabled>Switched off</Dominion_IntegrationStatus_Disabled>
+  <Dominion_IntegrationStatus_Failed>Failed (version mismatch?)</Dominion_IntegrationStatus_Failed>
+  <Dominion_IntegrationStatus_Active>Active</Dominion_IntegrationStatus_Active>
+  <Dominion_Integration_Required>[required]</Dominion_Integration_Required>
+
+  <!-- Settings -->
+  <Dominion_SettingsCategory>Dominion</Dominion_SettingsCategory>
+  <Dominion_SettingsTab_General>General</Dominion_SettingsTab_General>
+  <Dominion_SettingsTab_Simulation>Simulation</Dominion_SettingsTab_Simulation>
+  <Dominion_SettingsTab_Council>Council</Dominion_SettingsTab_Council>
+  <Dominion_SettingsTab_Leadership>Leadership</Dominion_SettingsTab_Leadership>
+  <Dominion_SettingsTab_Culture>Culture</Dominion_SettingsTab_Culture>
+  <Dominion_SettingsTab_Integrations>Integrations</Dominion_SettingsTab_Integrations>
+  <Dominion_SettingsTab_Performance>Performance</Dominion_SettingsTab_Performance>
+
+  <Dominion_Setting_DebugLogging>Verbose logging</Dominion_Setting_DebugLogging>
+  <Dominion_Setting_DebugLogging_Desc>Write every event and simulation step to the log. For troubleshooting only.</Dominion_Setting_DebugLogging_Desc>
+  <Dominion_Setting_ResetDefaults>Reset all settings to defaults</Dominion_Setting_ResetDefaults>
+
+  <Dominion_Setting_SimulationDetail>Simulation detail</Dominion_Setting_SimulationDetail>
+  <Dominion_Setting_SimulationDetail_Desc>Lower detail does less work per faction each day. Use Low for worlds with very many factions.</Dominion_Setting_SimulationDetail_Desc>
+  <Dominion_SimulationDetail_Low>Low</Dominion_SimulationDetail_Low>
+  <Dominion_SimulationDetail_Normal>Normal</Dominion_SimulationDetail_Normal>
+  <Dominion_SimulationDetail_High>High</Dominion_SimulationDetail_High>
+  <Dominion_Setting_EventLogCap>Events kept in history: {0}</Dominion_Setting_EventLogCap>
+
+  <Dominion_Setting_CouncilInterval>Days between Rim Council sessions: {0}</Dominion_Setting_CouncilInterval>
+  <Dominion_Setting_CouncilMinTech>Lowest tech level with a council seat: {0}</Dominion_Setting_CouncilMinTech>
+  <Dominion_Setting_CouncilMinTech_Desc>Factions below this tech level have no seat. By default tribals are excluded. A tribal vassal is represented by its overlord.</Dominion_Setting_CouncilMinTech_Desc>
+  <Dominion_Setting_CouncilNoVeto>No faction has a veto. Votes are weighted by population, economy, military and allies. (In dev mode, the player can veto for testing.)</Dominion_Setting_CouncilNoVeto>
+
+  <Dominion_Setting_HeadOfState>Your head of state is:</Dominion_Setting_HeadOfState>
+  <Dominion_HeadOfStateMode_IdeoLeader>The leader of your ideology</Dominion_HeadOfStateMode_IdeoLeader>
+  <Dominion_HeadOfStateMode_ChosenAtDesk>Chosen at the Leadership Desk</Dominion_HeadOfStateMode_ChosenAtDesk>
+  <Dominion_Setting_Diplomats>Your diplomats are:</Dominion_Setting_Diplomats>
+  <Dominion_DiplomatMode_IdeoRole>Pawns holding the Diplomat ideology role</Dominion_DiplomatMode_IdeoRole>
+  <Dominion_DiplomatMode_ChosenAtDesk>Chosen at the Leadership Desk</Dominion_DiplomatMode_ChosenAtDesk>
+  <Dominion_Setting_NoIdeologyFallback>Ideology is not active, so both are chosen at the Leadership Desk.</Dominion_Setting_NoIdeologyFallback>
+
+  <Dominion_Setting_AllowIdeoReforms>Foreign influence can reform ideologies</Dominion_Setting_AllowIdeoReforms>
+  <Dominion_Setting_AllowIdeoReforms_Desc>Influence mainly changes a faction's politics. With this on, very high foreign influence held for a long time can also change one minor precept of its ideology. Memes are never changed.</Dominion_Setting_AllowIdeoReforms_Desc>
+  <Dominion_Setting_IdeoReformMinDays>Minimum days between reforms of one faction: {0}</Dominion_Setting_IdeoReformMinDays>
+
+  <Dominion_Setting_IntegrationsHeader>Connections to other mods. Required mods cannot be switched off.</Dominion_Setting_IntegrationsHeader>
+  <Dominion_Setting_IntegrationsRestart>Changes take effect after restarting the game.</Dominion_Setting_IntegrationsRestart>
+
+  <Dominion_Setting_Profiling>Profile Dominion's performance</Dominion_Setting_Profiling>
+  <Dominion_Setting_Profiling_Desc>Measures how long each Dominion system takes. See the report in the dev menu under Dominion. Has a tiny cost while on.</Dominion_Setting_Profiling_Desc>
+
+</LanguageData>
