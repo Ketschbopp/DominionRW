@@ -14,4 +14,17 @@
     </requiredCapacities>
     <canBeDoneByMechs>false</canBeDoneByMechs>
   </WorkGiverDef>
+  <WorkGiverDef>
+    <defName>Dominion_GovernAtDesk</defName>
+    <label>govern at leadership desk</label>
+    <giverClass>Dominion.WorkGiver_GovernAtDesk</giverClass>
+    <workType>Dominion_Statecraft</workType>
+    <priorityInType>50</priorityInType>
+    <verb>govern</verb>
+    <gerund>governing</gerund>
+    <requiredCapacities>
+      <li>Talking</li>
+    </requiredCapacities>
+    <canBeDoneByMechs>false</canBeDoneByMechs>
+  </WorkGiverDef>
 </Defs>

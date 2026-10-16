@@ -25,6 +25,9 @@ namespace Dominion
         /// <summary>Package id of the integration that raised it, or null for Dominion and vanilla.</summary>
         public string source;
 
+        /// <summary>Extra text for headlines, such as the treaty involved. Available to news grammar as DETAIL.</summary>
+        public string detail;
+
         /// <summary>Secrecy for this instance; starts as the def's value and can be raised or lowered.</summary>
         public Secrecy secrecy;
 
@@ -51,6 +54,7 @@ namespace Dominion
             Scribe_Values.Look(ref magnitude, "magnitude", 1f);
             Scribe_Values.Look(ref source, "source");
             Scribe_Values.Look(ref secrecy, "secrecy");
+            Scribe_Values.Look(ref detail, "detail");
         }
 
         public override string ToString() => $"#{id} {def?.defName} [{primary?.Name} / {secondary?.Name}] t={tick}";

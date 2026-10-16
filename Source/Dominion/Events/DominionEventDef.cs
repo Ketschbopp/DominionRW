@@ -75,7 +75,7 @@ namespace Dominion
             string b = ev.secondary?.Name ?? "?";
             if (def.headline.NullOrEmpty())
                 return def.LabelCap;
-            return string.Format(def.headline, a, b);
+            return string.Format(def.headline, a, b, ev.detail ?? "");
         }
     }
 
@@ -94,6 +94,15 @@ namespace Dominion
         public static DominionEventDef Dominion_CapitalLost;
         public static DominionEventDef Dominion_CapitalEstablished;
         public static DominionEventDef Dominion_NewsCorrection;
+        public static DominionEventDef Dominion_TreatySigned;
+        public static DominionEventDef Dominion_TreatyCancelled;
+        public static DominionEventDef Dominion_TreatyBroken;
+        public static DominionEventDef Dominion_TreatyExpired;
+        public static DominionEventDef Dominion_EmbargoDeclared;
+        public static DominionEventDef Dominion_EmbargoLifted;
+        public static DominionEventDef Dominion_BordersChanged;
+        public static DominionEventDef Dominion_Denounced;
+        public static DominionEventDef Dominion_TributePaid;
 
         static DominionEventDefOf()
         {

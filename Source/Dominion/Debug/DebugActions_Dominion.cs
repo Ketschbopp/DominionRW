@@ -206,6 +206,34 @@ namespace Dominion
                 Messages.Message("Dominion: no faction with low enough intel for a rumor.", MessageTypeDefOf.RejectInput, historical: false);
         }
 
+        [DebugAction(Category, "Fill influence", allowedGameStates = AllowedGameStates.Playing)]
+        private static void FillInfluence() => WorldComponent_Dominion.Instance?.Player.AddInfluence(PlayerState.MaxInfluence);
+
+        [DebugAction(Category, "Sign treaty...", allowedGameStates = AllowedGameStates.Playing)]
+        private static List<DebugActionNode> SignTreaty()
+        {
+            var nodes = new List<DebugActionNode>();
+            foreach (TreatyDef def in DefDatabase<TreatyDef>.AllDefsListForReading)
+            {
+                var defNode = new DebugActionNode(def.defName);
+                foreach (Faction a in DebugFactions())
+                {
+                    var aNode = new DebugActionNode(a.Name);
+                    foreach (Faction b in DebugFactions())
+                    {
+                        if (b == a) continue;
+                        TreatyDef cd = def;
+                        Faction ca = a, cb = b;
+                        aNode.AddChild(new DebugActionNode(b.Name, DebugActionType.Action,
+                            () => WorldComponent_Dominion.Instance.Treaties.Sign(cd, ca, cb, ca)));
+                    }
+                    defNode.AddChild(aNode);
+                }
+                nodes.Add(defNode);
+            }
+            return nodes;
+        }
+
         [DebugAction(Category, "Integration self-test")]
         private static void SelfTest() => DLog.Message(IntegrationRegistry.SelfTestReport());
 

@@ -47,19 +47,21 @@ namespace Dominion
                 r.sharedEnemies = CountSharedEnemies(faction, other, cache.Simulated);
                 r.grievance *= 0.98f;
                 if (r.grievance < 0.5f) r.grievance = 0f;
+                r.favour *= 0.98f;
+                if (Mathf.Abs(r.favour) < 0.5f) r.favour = 0f;
 
                 // Hostility that ended outside Dominion (vanilla, other mods) ends the war record too.
                 if (r.AtWar && faction.RelationKindWith(other) != FactionRelationKind.Hostile)
                     r.warSince = -1;
                 if (r.AtWar) wars++;
 
-                r.targetOpinion = TargetOpinion(faction, other, fs, r);
+                r.targetOpinion = TargetOpinion(faction, other, fs, r, comp.TryGetRelation(other, faction));
                 r.opinion = Mathf.Clamp(r.opinion + (r.targetOpinion - r.opinion) * 0.1f, -100f, 100f);
             }
             fs.activeWars = wars;
         }
 
-        private static float TargetOpinion(Faction f, Faction other, FactionState fs, RelationState r)
+        private static float TargetOpinion(Faction f, Faction other, FactionState fs, RelationState r, RelationState theirs)
         {
             if (f.def.permanentEnemy || other.def.permanentEnemy)
                 return -80f;
@@ -73,6 +75,14 @@ namespace Dominion
             t += Mathf.Min(r.sharedEnemies, 3) * 8f;
             t -= r.grievance * 0.6f;
             t -= Mathf.Min(r.outpostsHeldByOther, 3) * 15f;
+            t += r.favour;
+            t += DiplomacySystem.TreatyOpinionBonus(f, other);
+            if (theirs != null)
+            {
+                if (theirs.embargo) t -= 15f;
+                if (theirs.border == BorderStatus.Closed) t -= 8f;
+                else if (theirs.border == BorderStatus.Restricted) t -= 3f;
+            }
 
             switch (f.RelationKindWith(other))
             {

@@ -351,7 +351,7 @@ Debug category **Dominion** includes:
 | **M0: Skeleton** ✅ | About/LoadFolders, csproj (Krafs ref), Harmony bootstrap, settings shell, dev menu shell, `WorldComponent_Dominion`, scheduler, event bus, integration loader with self-test |
 | **M1: World sim** ✅ | FactionState, RelationState, stability, economy index, AI personalities, daily AI diplomacy (abstract), capitals, E&D and FTV core bindings |
 | **M2: News** ✅ | News feed tab, visibility and intel, grammar headlines, radio, research tree, colony thoughts |
-| **M3: Diplomacy UI** | Dominion tab, dossiers, actions, treaties, embargo and border rights, Leadership Desk |
+| **M3: Diplomacy UI** ✅ | Dominion tab, dossiers, actions, treaties, embargo and border rights, Leadership Desk |
 | **M4: Physical diplomacy** | Envoys, delegations, summits plus the dialogue system, hostage exchange |
 | **M5: Rim Council** | Sessions, motions, voting, decrees, violations |
 | **M6: Espionage** | Operations (abstract first, then physical maps), counter-intel, exposure |
@@ -404,6 +404,27 @@ A report is *Confirmed* if it came by radio or dispatch or intel is 30+ above wh
 **Text.** Headlines and stories come from vanilla grammar (`RulePackDef` per event, plus the shared `Dominion_NewsCommon`) and are resolved once at delivery, then saved.
 
 **Dossier gating.** Leader, capital and government are always known; stability, population, economy and military need 25; wealth, war weariness, personality and blocs need 50; a faction's opinions of others need 80. The raw event log is dev-mode only, since it shows everything.
+
+## 9c. M3 implementation notes
+
+**Influence** (0–100, start 20) is the player's political capital. The head of state earns it at the Leadership Desk (statecraft work, 1.5 per hour × (0.5 + Social/10), ×1.25 at a steel or gold desk) and spends it on actions.
+
+**Head of state** comes from the setting: the ideology leader (vanilla `IdeoRole_Leader`), or a colonist chosen at the desk (also the fallback without Ideology). Their Social skill adds (Social − 8) × 1.5% to every acceptance chance; a gold desk adds 8%. *Diplomats* (envoys sent in their place) arrive with physical diplomacy in M4.
+
+**Actions** (`DiplomacyActionDef`, data-driven with a worker class):
+
+| Tier | Needs | Actions (influence, cooldown) |
+|---|---|---|
+| Basic | Comms console or desk | Gift (silver, 3 d), Compliment (5, 10 d), Insult (0, 5 d), Propose peace (20, 7 d), Declare war (0) |
+| Statecraft | Desk and head of state | Propose treaty (5 + treaty, 5 d; Diplomatic Corps), Border policy (5, 5 d), Embargo (10, 10 d), Denounce (15, 30 d), Demand tribute (25, 30 d) |
+
+**Treaties** (`TreatyDef`, data-driven): alliance (vanilla ally + defensive), non-aggression pact (120 d), trade agreement (180 d, ±10% prices, +3% economy), defensive pact, intelligence sharing (120 d, +20 intel on the partner and +8 on its enemies, secret). AI acceptance = base + opinion/200 + personality weights + leadership bonus, zero below the treaty's minimum opinion. Declaring war breaks every treaty between the pair; breaking a treaty gives the victim +40 grievance and lowers every faction's opinion of the breaker (more for honourable factions). Defensive partners are called to war an hour later: an AI joins with chance 0.2 + 0.7 × honour (halved if it has its own pact with the aggressor), otherwise breaks the treaty; the player gets a choice. AI factions sign trade agreements, non-aggression pacts and defensive pacts with each other, and honourable ones rarely attack treaty partners.
+
+**Borders** (per side, start open): restricted turns away visitors, closed turns away visitors and traders and blocks trading at that faction's settlements. **Embargoes** stop the target's trader caravans and settlement trade, cost the target 4% economy each, and an AI embargo on the player adds a 40% markup (for traders who still come, such as orbital ones). AI factions close borders below −30/−50 opinion, embargo below −60, and lift both as relations recover. Liked players get treaty offers (at most every 30 days per faction).
+
+**Opinion inputs added:** treaty opinion bonuses, *favour* (gestures; decays 2%/day), −15 if the other side embargoes you, −8/−3 for its closed or restricted border.
+
+**Prices** are combined in one Harmony postfix on `Tradeable.GetPriceFor`, cached per faction per tick, multiplied on top of other mods' prices.
 
 ## 10. Decisions log
 

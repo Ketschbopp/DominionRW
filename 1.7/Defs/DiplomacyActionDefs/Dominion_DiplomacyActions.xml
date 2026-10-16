@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_Gift</defName>
+    <label>send gift</label>
+    <description>Send silver from your colony as a gift. Raises goodwill and their opinion of you.</description>
+    <workerClass>Dominion.DiplomacyAction_Gift</workerClass>
+    <tier>Basic</tier>
+    <influenceCost>0</influenceCost>
+    <cooldownDays>3</cooldownDays>
+    <order>1</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_Compliment</defName>
+    <label>compliment</label>
+    <description>Send warm words through official channels. Usually raises their opinion of you a little; sometimes it falls flat.</description>
+    <workerClass>Dominion.DiplomacyAction_Compliment</workerClass>
+    <tier>Basic</tier>
+    <influenceCost>5</influenceCost>
+    <cooldownDays>10</cooldownDays>
+    <order>2</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_Insult</defName>
+    <label>insult</label>
+    <description>Insult them openly. Lowers goodwill and their opinion of you, and they will remember it.</description>
+    <workerClass>Dominion.DiplomacyAction_Insult</workerClass>
+    <tier>Basic</tier>
+    <influenceCost>0</influenceCost>
+    <cooldownDays>5</cooldownDays>
+    <order>3</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_ProposePeace</defName>
+    <label>propose peace</label>
+    <description>Ask an enemy for peace. War-weary, dovish factions, and those weaker than you, are more willing. Peace starts a 30-day truce.</description>
+    <workerClass>Dominion.DiplomacyAction_ProposePeace</workerClass>
+    <tier>Basic</tier>
+    <influenceCost>20</influenceCost>
+    <cooldownDays>7</cooldownDays>
+    <order>4</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_DeclareWar</defName>
+    <label>declare war</label>
+    <description>Declare war. Every treaty with them is broken, which costs you reputation with every faction.</description>
+    <workerClass>Dominion.DiplomacyAction_DeclareWar</workerClass>
+    <tier>Basic</tier>
+    <influenceCost>0</influenceCost>
+    <cooldownDays>1</cooldownDays>
+    <order>5</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_ProposeTreaty</defName>
+    <label>propose treaty</label>
+    <description>Propose a formal treaty. Each treaty has its own influence cost and acceptance chance.</description>
+    <workerClass>Dominion.DiplomacyAction_ProposeTreaty</workerClass>
+    <tier>Advanced</tier>
+    <influenceCost>5</influenceCost>
+    <cooldownDays>5</cooldownDays>
+    <requiredResearch>Dominion_DiplomaticCorps</requiredResearch>
+    <order>1</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_Borders</defName>
+    <label>set border policy</label>
+    <description>Open, restrict (traders only) or close your borders to this faction. Closing them offends.</description>
+    <workerClass>Dominion.DiplomacyAction_Borders</workerClass>
+    <tier>Advanced</tier>
+    <influenceCost>5</influenceCost>
+    <cooldownDays>5</cooldownDays>
+    <order>2</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_Embargo</defName>
+    <label>declare or lift embargo</label>
+    <description>Refuse all trade with this faction. Their caravans stop coming, you cannot trade at their settlements, and their economy suffers.</description>
+    <workerClass>Dominion.DiplomacyAction_Embargo</workerClass>
+    <tier>Advanced</tier>
+    <influenceCost>10</influenceCost>
+    <cooldownDays>10</cooldownDays>
+    <order>3</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_Denounce</defName>
+    <label>denounce</label>
+    <description>Denounce them publicly. They resent it; their enemies warm to you and their allies cool.</description>
+    <workerClass>Dominion.DiplomacyAction_Denounce</workerClass>
+    <tier>Advanced</tier>
+    <influenceCost>15</influenceCost>
+    <cooldownDays>30</cooldownDays>
+    <order>4</order>
+  </Dominion.DiplomacyActionDef>
+
+  <Dominion.DiplomacyActionDef>
+    <defName>Dominion_DemandTribute</defName>
+    <label>demand tribute</label>
+    <description>Demand silver under threat. Works only if you are clearly stronger, and they will resent it either way.</description>
+    <workerClass>Dominion.DiplomacyAction_DemandTribute</workerClass>
+    <tier>Advanced</tier>
+    <influenceCost>25</influenceCost>
+    <cooldownDays>30</cooldownDays>
+    <order>5</order>
+  </Dominion.DiplomacyActionDef>
+
+</Defs>

@@ -56,7 +56,46 @@ def radio_receiver():
     out.save(OUT / "Dominion_RadioReceiver.png", optimize=True)
 
 
+def leadership_desk():
+    """2x2 desk, Graphic_Multi with masks: red in the mask = tinted by the desk's material."""
+    s = 256
+    img = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    mask = Image.new("RGBA", (s, s), (0, 0, 0, 255))
+    d, m = ImageDraw.Draw(img), ImageDraw.Draw(mask)
+    body = [14, 40, 242, 214]
+    # desk body: light grey so the material colour comes through
+    shaded_rect(d, body, (214, 214, 214, 255), width=4, highlight=24)
+    m.rectangle(body, fill=(255, 0, 0, 255))
+    d.rectangle([24, 50, 232, 204], outline=(150, 150, 150, 255), width=3)        # inlaid border
+    for y in range(64, 200, 18):                                                 # grain
+        d.line([(28, y), (228, y + 3)], fill=(185, 185, 185, 255), width=2)
+    d.rectangle([14, 196, 242, 214], fill=(170, 170, 170, 255), outline=OUTLINE, width=3)  # front edge
+    # untinted details (mask stays black there)
+    def detail(box, fill, shape="rect"):
+        (d.ellipse if shape == "ellipse" else d.rectangle)(box, fill=fill, outline=OUTLINE, width=2)
+        (m.ellipse if shape == "ellipse" else m.rectangle)(box, fill=(0, 0, 0, 255))
+    detail([92, 96, 164, 164], (236, 228, 204, 255))                              # document
+    for y in range(106, 156, 8):
+        d.line([(100, y), (156, y)], fill=(110, 110, 130, 255), width=2)
+    detail([136, 140, 160, 160], (170, 30, 30, 255), "ellipse")                   # wax seal
+    detail([44, 70, 74, 100], (40, 40, 60, 255), "ellipse")                       # inkwell
+    d.line([(64, 74), (86, 52)], fill=(240, 240, 240, 255), width=3)              # quill
+    detail([186, 62, 222, 98], (60, 90, 60, 255), "ellipse")                      # lamp shade
+    detail([198, 74, 210, 86], (250, 230, 140, 255), "ellipse")
+    detail([40, 150, 80, 186], (110, 40, 40, 255))                                # book stack
+    detail([44, 140, 84, 172], (40, 70, 110, 255))
+    detail([108, 186, 148, 198], (200, 170, 70, 255))                             # nameplate
+    shadow = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    ImageDraw.Draw(shadow).rectangle([20, 48, 250, 224], fill=(0, 0, 0, 80))
+    shadow = shadow.filter(ImageFilter.GaussianBlur(4))
+    south = Image.alpha_composite(shadow, img)
+    for rot, angle in (("south", 0), ("north", 180), ("east", 90)):
+        south.rotate(angle).save(OUT / f"Dominion_LeadershipDesk_{rot}.png", optimize=True)
+        mask.rotate(angle).save(OUT / f"Dominion_LeadershipDesk_{rot}m.png", optimize=True)
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     radio_receiver()
-    print("wrote", OUT / "Dominion_RadioReceiver.png")
+    leadership_desk()
+    print("wrote building textures to", OUT)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-  <!-- News grammar. Symbols from code: FACTION_A/B, LEADER_A/B, GOV_A/B, CAPITAL_A/B, LEAD, SOURCE. -->
+  <!-- News grammar. Symbols from code: FACTION_A/B, LEADER_A/B, GOV_A/B, CAPITAL_A/B, LEAD, SOURCE, DETAIL, DETAIL_INDEF. -->
 
   <RulePackDef>
     <defName>Dominion_NewsCommon</defName>
@@ -185,6 +185,114 @@
         <li>correction_detail-&gt;Better information has since reached us.</li>
         <li>correction_detail-&gt;The rumors appear to have been spread by traders.</li>
         <li>correction_detail-&gt;Some suspect deliberate disinformation.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_TreatySigned</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] and [FACTION_B] sign [DETAIL_INDEF]</li>
+        <li>headline-&gt;New [DETAIL] between [FACTION_A] and [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] and [FACTION_B] have signed [DETAIL_INDEF]. [signed_detail] [closing]</li>
+        <li>signed_detail-&gt;Envoys of both sides are said to have negotiated for weeks.</li>
+        <li>signed_detail-&gt;[observers] see it as a sign of closer ties.</li>
+        <li>signed_detail-&gt;The terms have not been made fully public.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_TreatyCancelled</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] withdraws from its [DETAIL] with [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has formally ended its [DETAIL] with [FACTION_B]. [cancel_detail] [closing]</li>
+        <li>cancel_detail-&gt;The decision is said to have come as a surprise.</li>
+        <li>cancel_detail-&gt;Relations between the two have been cooling.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_TreatyBroken</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] breaks its [DETAIL] with [FACTION_B]</li>
+        <li>headline-&gt;Betrayal: [FACTION_A] violates [DETAIL]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has broken its [DETAIL] with [FACTION_B]. [broken_detail] [closing]</li>
+        <li>broken_detail-&gt;[FACTION_B] has called it an act of betrayal.</li>
+        <li>broken_detail-&gt;Other powers are said to be reconsidering their own agreements with [FACTION_A].</li>
+        <li>broken_detail-&gt;[observers] say the word of [LEADER_A] is now worth little.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_TreatyExpired</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[DETAIL] between [FACTION_A] and [FACTION_B] expires</li>
+        <li>story-&gt;The [DETAIL] between [FACTION_A] and [FACTION_B] has expired. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_EmbargoDeclared</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] declares an embargo on [FACTION_B]</li>
+        <li>headline-&gt;Trade cut off: [FACTION_A] embargoes [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has halted all trade with [FACTION_B]. [embargo_detail] [closing]</li>
+        <li>embargo_detail-&gt;Caravans have been turned back at the border.</li>
+        <li>embargo_detail-&gt;Merchants on both sides expect heavy losses.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_EmbargoLifted</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] lifts its embargo on [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has resumed trade with [FACTION_B]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_BordersChanged</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] sets its borders with [FACTION_B] to [DETAIL]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has changed its border policy toward [FACTION_B]: the border is now [DETAIL]. [closing]</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_Denounced</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] denounces [FACTION_B]</li>
+        <li>headline-&gt;War of words: [FACTION_A] condemns [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has publicly denounced [FACTION_B]. [denounce_detail] [closing]</li>
+        <li>denounce_detail-&gt;[LEADER_A] accused [FACTION_B] of treachery and bad faith.</li>
+        <li>denounce_detail-&gt;[FACTION_B] has rejected the accusations.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_TributePaid</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] pays tribute to [FACTION_B]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has paid [DETAIL] silver in tribute to [FACTION_B]. [tribute_detail] [closing]</li>
+        <li>tribute_detail-&gt;The payment is said to have been made under threat.</li>
+        <li>tribute_detail-&gt;Resentment in [FACTION_A] is running high.</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>

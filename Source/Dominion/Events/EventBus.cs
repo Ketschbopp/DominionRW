@@ -20,9 +20,10 @@ namespace Dominion
         public static event Action<DominionEvent> Raised;
 
         public static DominionEvent Raise(DominionEventDef def, Faction primary = null, Faction secondary = null,
-            int tile = -1, float magnitude = 1f, string source = null)
+            int tile = -1, float magnitude = 1f, string source = null, string detail = null, Secrecy? secrecy = null)
         {
-            var ev = new DominionEvent(def, primary, secondary) { tile = tile, magnitude = magnitude, source = source };
+            var ev = new DominionEvent(def, primary, secondary) { tile = tile, magnitude = magnitude, source = source, detail = detail };
+            if (secrecy.HasValue) ev.secrecy = secrecy.Value;
             Raise(ev);
             return ev;
         }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <WorkTypeDef>
+    <defName>Dominion_Statecraft</defName>
+    <labelShort>statecraft</labelShort>
+    <pawnLabel>statesman</pawnLabel>
+    <gerundLabel>governing</gerundLabel>
+    <description>Affairs of state at the Leadership Desk. Only your head of state does this work; it earns influence for diplomacy.</description>
+    <verb>Govern</verb>
+    <naturalPriority>480</naturalPriority>
+    <alwaysStartActive>true</alwaysStartActive>
+    <workTags>
+      <li>Social</li>
+      <li>Intellectual</li>
+    </workTags>
+    <relevantSkills>
+      <li>Social</li>
+    </relevantSkills>
+  </WorkTypeDef>
+</Defs>

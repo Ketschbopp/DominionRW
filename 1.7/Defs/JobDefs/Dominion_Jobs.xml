@@ -6,4 +6,10 @@
     <reportString>monitoring the radio.</reportString>
     <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
   </JobDef>
+  <JobDef>
+    <defName>Dominion_GovernAtDesk</defName>
+    <driverClass>Dominion.JobDriver_GovernAtDesk</driverClass>
+    <reportString>attending to affairs of state.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
 </Defs>

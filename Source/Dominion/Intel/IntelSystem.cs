@@ -51,6 +51,15 @@ namespace Dominion
                     t += r.distance < 15f ? 15f : r.distance < 40f ? 8f : 0f;
             }
 
+            // Intel-sharing partners tell you about themselves and, less fully, about their enemies.
+            foreach (Treaty treaty in comp.Treaties.All)
+            {
+                if (treaty.def.intelBonus <= 0f || player == null || !treaty.Involves(player)) continue;
+                Faction partner = treaty.Other(player);
+                if (partner == f) t += treaty.def.intelBonus;
+                else if (partner.HostileTo(f)) t += treaty.def.intelBonus * 0.4f;
+            }
+
             t -= s.personality.paranoia * 10f;
             if (s.government == GovernmentType.Junta || s.government == GovernmentType.Autocracy) t -= 5f;
 

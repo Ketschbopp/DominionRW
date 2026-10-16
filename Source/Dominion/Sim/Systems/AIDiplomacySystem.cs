@@ -86,6 +86,20 @@ namespace Dominion
                         return true;
                     }
 
+                    TreatyRegistry treaties = comp.Treaties;
+                    if (r.opinion > 30f && back.opinion > 25f && !treaties.Has(f, other, DominionTreatyDefOf.Dominion_TradeAgreement)
+                        && Rand.Chance(0.03f * (p.greed + os.personality.greed)))
+                    {
+                        treaties.Sign(DominionTreatyDefOf.Dominion_TradeAgreement, f, other, f);
+                        return true;
+                    }
+                    if (r.opinion > 5f && back.opinion > 0f && r.distance >= 0f && r.distance < RelationsSystem.NeighbourDistance
+                        && p.paranoia > 0.5f && !treaties.Has(f, other, DominionTreatyDefOf.Dominion_NonAggressionPact) && Rand.Chance(0.02f))
+                    {
+                        treaties.Sign(DominionTreatyDefOf.Dominion_NonAggressionPact, f, other, f);
+                        return true;
+                    }
+
                     if (now < r.truceUntil || fs.activeWars >= MaxConcurrentWars) return false;
                     float hatred = Mathf.Max(0f, (-r.opinion - 35f) / 65f);
                     if (hatred <= 0f) return false;
@@ -93,6 +107,8 @@ namespace Dominion
                     float proximity = r.distance < 0f ? 0.3f : Mathf.Clamp(1f - (r.distance - 5f) / 40f, 0.1f, 1f);
                     float stable = fs.stability > 35f ? 1f : 0.4f;
                     float utility = hatred * fs.effectiveAggression * strength * proximity * stable * (1f - fs.warWeariness / 100f);
+                    // Breaking a pact is possible, but only for the dishonourable and the desperate.
+                    if (treaties.AnyNonAggression(f, other)) utility *= (1f - p.honour) * 0.3f;
                     if (!Rand.Chance(Mathf.Min(0.1f, utility * 0.03f * settings.aiAggression))) return false;
                     DiplomacyUtility.SetRelationKind(f, other, FactionRelationKind.Hostile, f, "Dominion_Reason_War".Translate());
                     return true;
@@ -100,6 +116,12 @@ namespace Dominion
 
                 case FactionRelationKind.Ally:
                 {
+                    if (r.opinion > 60f && back.opinion > 50f && !comp.Treaties.Has(f, other, DominionTreatyDefOf.Dominion_DefensivePact)
+                        && Rand.Chance(0.02f))
+                    {
+                        comp.Treaties.Sign(DominionTreatyDefOf.Dominion_DefensivePact, f, other, f);
+                        return true;
+                    }
                     if (r.opinion >= 5f) return false;
                     float chance = (5f - r.opinion) / 100f * (1f - p.honour) * 0.5f;
                     if (!Rand.Chance(chance)) return false;

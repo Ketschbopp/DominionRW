@@ -45,6 +45,8 @@ namespace Dominion
         public bool delivered;
         public bool read;
 
+        public string detail;
+
         public string headline;
         public string story;
 
@@ -61,6 +63,7 @@ namespace Dominion
             secondary = ev.secondary,
             tile = ev.tile,
             secrecy = ev.secrecy,
+            detail = ev.detail,
         };
 
         public void ExposeData()
@@ -82,6 +85,7 @@ namespace Dominion
             Scribe_Values.Look(ref correctsId, "correctsId", -1);
             Scribe_Values.Look(ref delivered, "delivered");
             Scribe_Values.Look(ref read, "read");
+            Scribe_Values.Look(ref detail, "detail");
             Scribe_Values.Look(ref headline, "headline");
             Scribe_Values.Look(ref story, "story");
         }

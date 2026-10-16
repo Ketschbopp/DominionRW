@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Treaties are data: add new ones here. See Dominion.TreatyDef for every field. -->
+
+  <Dominion.TreatyDef>
+    <defName>Dominion_Alliance</defName>
+    <label>alliance</label>
+    <description>A full alliance: the two factions become allies, and each is expected to join any war declared on the other. Ends if either side attacks the other or the alliance is cancelled.</description>
+    <alliance>true</alliance>
+    <defensive>true</defensive>
+    <opinionBonus>15</opinionBonus>
+    <influenceCost>40</influenceCost>
+    <aiAcceptBase>0.05</aiAcceptBase>
+    <minOpinion>40</minOpinion>
+    <honourWeight>0.2</honourWeight>
+  </Dominion.TreatyDef>
+
+  <Dominion.TreatyDef>
+    <defName>Dominion_NonAggressionPact</defName>
+    <label>non-aggression pact</label>
+    <description>Both sides promise not to attack each other for 120 days. Breaking it costs reputation with every faction.</description>
+    <durationDays>120</durationDays>
+    <nonAggression>true</nonAggression>
+    <opinionBonus>5</opinionBonus>
+    <influenceCost>15</influenceCost>
+    <aiAcceptBase>0.3</aiAcceptBase>
+    <minOpinion>-20</minOpinion>
+    <paranoiaWeight>0.3</paranoiaWeight>
+  </Dominion.TreatyDef>
+
+  <Dominion.TreatyDef>
+    <defName>Dominion_TradeAgreement</defName>
+    <label>trade agreement</label>
+    <description>Preferential trade for 180 days: you buy from them 10% cheaper and sell to them 10% dearer, and both economies grow a little.</description>
+    <durationDays>180</durationDays>
+    <tradeBonus>0.1</tradeBonus>
+    <economyBonus>0.03</economyBonus>
+    <opinionBonus>5</opinionBonus>
+    <influenceCost>20</influenceCost>
+    <aiAcceptBase>0.25</aiAcceptBase>
+    <minOpinion>0</minOpinion>
+    <greedWeight>0.35</greedWeight>
+  </Dominion.TreatyDef>
+
+  <Dominion.TreatyDef>
+    <defName>Dominion_DefensivePact</defName>
+    <label>defensive pact</label>
+    <description>Each side promises to join any war declared on the other. Refusing when called breaks the pact.</description>
+    <defensive>true</defensive>
+    <opinionBonus>10</opinionBonus>
+    <influenceCost>30</influenceCost>
+    <aiAcceptBase>0.1</aiAcceptBase>
+    <minOpinion>30</minOpinion>
+    <honourWeight>0.3</honourWeight>
+    <incompatibleWith>
+      <li>Dominion_Alliance</li>
+    </incompatibleWith>
+  </Dominion.TreatyDef>
+
+  <Dominion.TreatyDef>
+    <defName>Dominion_IntelSharing</defName>
+    <label>intelligence sharing</label>
+    <description>For 120 days the two sides share what they learn. You gain intel on the partner, and some on its enemies. Kept secret.</description>
+    <durationDays>120</durationDays>
+    <intelBonus>20</intelBonus>
+    <opinionBonus>3</opinionBonus>
+    <influenceCost>25</influenceCost>
+    <secrecy>Secret</secrecy>
+    <requiredResearch>Dominion_WorldCommsProtocols</requiredResearch>
+    <aiAcceptBase>0.15</aiAcceptBase>
+    <minOpinion>20</minOpinion>
+    <paranoiaWeight>-0.3</paranoiaWeight>
+  </Dominion.TreatyDef>
+</Defs>

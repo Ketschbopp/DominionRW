@@ -2,6 +2,9 @@ using Verse;
 
 namespace Dominion
 {
+    /// <summary>Open: anyone may come. Restricted: traders only. Closed: no visitors, traders or trade.</summary>
+    public enum BorderStatus { Open, Restricted, Closed }
+
     /// <summary>
     /// How one faction sees another (directional: A's view of B can differ from B's view of A).
     /// Factions are stored by load id so the record survives without holding references. Saved.
@@ -28,6 +31,15 @@ namespace Dominion
 
         /// <summary>Approximate distance in tiles between the nearest settlements, or -1 if unknown.</summary>
         public float distance = -1f;
+
+        /// <summary>The from-faction's border policy toward the other side. Everyone starts open.</summary>
+        public BorderStatus border = BorderStatus.Open;
+
+        /// <summary>The from-faction refuses trade with the other side.</summary>
+        public bool embargo;
+
+        /// <summary>Goodwill earned or lost through gestures (gifts, compliments, insults). Added to opinion; decays.</summary>
+        public float favour;
 
         /// <summary>Number of the from-faction's former settlements the to-faction holds as FTV vassal outposts.</summary>
         public int outpostsHeldByOther;
@@ -60,6 +72,9 @@ namespace Dominion
             Scribe_Values.Look(ref truceUntil, "truceUntil", -1);
             Scribe_Values.Look(ref distance, "distance", -1f);
             Scribe_Values.Look(ref outpostsHeldByOther, "outpostsHeldByOther");
+            Scribe_Values.Look(ref border, "border", BorderStatus.Open);
+            Scribe_Values.Look(ref embargo, "embargo");
+            Scribe_Values.Look(ref favour, "favour");
         }
     }
 }

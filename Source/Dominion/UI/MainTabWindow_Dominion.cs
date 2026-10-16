@@ -11,12 +11,14 @@ namespace Dominion
     /// </summary>
     public class MainTabWindow_Dominion : MainTabWindow
     {
-        private enum Tab { News, Overview, Events, Integrations }
+        private enum Tab { News, Overview, Diplomacy, Treaties, Events, Integrations }
 
         private const float RowHeight = 26f;
 
         private Tab current = Tab.News;
         private readonly NewsTabPanel newsPanel = new NewsTabPanel();
+        private readonly DiplomacyPanel diplomacyPanel = new DiplomacyPanel();
+        private readonly TreatiesPanel treatiesPanel = new TreatiesPanel();
         private Vector2 scroll;
         private Vector2 dossierScroll;
         private Faction selected;
@@ -33,6 +35,8 @@ namespace Dominion
             {
                 new TabRecord(newsLabel, () => Select(Tab.News), current == Tab.News),
                 new TabRecord("Dominion_Tab_Overview".Translate(), () => Select(Tab.Overview), current == Tab.Overview),
+                new TabRecord("Dominion_Tab_Diplomacy".Translate(), () => Select(Tab.Diplomacy), current == Tab.Diplomacy),
+                new TabRecord("Dominion_Tab_Treaties".Translate(), () => Select(Tab.Treaties), current == Tab.Treaties),
             };
             if (Prefs.DevMode)
                 tabs.Add(new TabRecord("Dominion_Tab_Events".Translate(), () => Select(Tab.Events), current == Tab.Events));
@@ -50,6 +54,12 @@ namespace Dominion
                     if (WorldComponent_Dominion.Instance != null) newsPanel.Draw(body, WorldComponent_Dominion.Instance);
                     break;
                 case Tab.Overview: DrawOverview(body); break;
+                case Tab.Diplomacy:
+                    if (WorldComponent_Dominion.Instance != null) diplomacyPanel.Draw(body, WorldComponent_Dominion.Instance);
+                    break;
+                case Tab.Treaties:
+                    if (WorldComponent_Dominion.Instance != null) treatiesPanel.Draw(body, WorldComponent_Dominion.Instance);
+                    break;
                 case Tab.Events: DrawEvents(body); break;
                 case Tab.Integrations: DrawIntegrations(body); break;
             }

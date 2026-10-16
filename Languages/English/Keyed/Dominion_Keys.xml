@@ -186,4 +186,91 @@
   <Dominion_Setting_LetterForMajor_Desc>Major news (wars, coups, revolutions, lost capitals) arrives as a letter even in categories set to Message.</Dominion_Setting_LetterForMajor_Desc>
   <Dominion_Setting_NotifyHeader>How each kind of news reaches you:</Dominion_Setting_NotifyHeader>
 
+  <!-- M3: diplomacy -->
+  <Dominion_Tab_Diplomacy>Diplomacy</Dominion_Tab_Diplomacy>
+  <Dominion_Tab_Treaties>Treaties</Dominion_Tab_Treaties>
+  <Dominion_Yes>yes</Dominion_Yes>
+  <Dominion_No>no</Dominion_No>
+  <Dominion_Action_Cooldown>Available again in {0}.</Dominion_Action_Cooldown>
+  <Dominion_Action_Invalid>Not possible with this faction.</Dominion_Action_Invalid>
+  <Dominion_Action_NeedsComms>Needs a powered comms console or a Leadership Desk.</Dominion_Action_NeedsComms>
+  <Dominion_Action_NeedsDesk>Needs a Leadership Desk.</Dominion_Action_NeedsDesk>
+  <Dominion_Action_NeedsInfluence>Needs {0} influence.</Dominion_Action_NeedsInfluence>
+  <Dominion_Action_NeedsResearch>Needs research: {0}.</Dominion_Action_NeedsResearch>
+  <Dominion_Action_NeedsSilver>needs {0} silver</Dominion_Action_NeedsSilver>
+  <Dominion_Action_NotWhileHostile>Not possible while at war.</Dominion_Action_NotWhileHostile>
+  <Dominion_Action_PermanentEnemy>They will never make peace.</Dominion_Action_PermanentEnemy>
+  <Dominion_ActionTier_Basic>Basic (comms console or desk)</Dominion_ActionTier_Basic>
+  <Dominion_ActionTier_Advanced>Statecraft (desk and head of state)</Dominion_ActionTier_Advanced>
+  <Dominion_Border_Open>open</Dominion_Border_Open>
+  <Dominion_Border_Restricted>restricted</Dominion_Border_Restricted>
+  <Dominion_Border_Closed>closed</Dominion_Border_Closed>
+  <Dominion_Border_Open_Desc>visitors and traders welcome</Dominion_Border_Open_Desc>
+  <Dominion_Border_Restricted_Desc>traders only</Dominion_Border_Restricted_Desc>
+  <Dominion_Border_Closed_Desc>no visitors, no traders, no trade</Dominion_Border_Closed_Desc>
+  <Dominion_Border_Current>(current)</Dominion_Border_Current>
+  <Dominion_Col_Treaty>Treaty</Dominion_Col_Treaty>
+  <Dominion_Col_Party>Party</Dominion_Col_Party>
+  <Dominion_Col_Expires>Expires</Dominion_Col_Expires>
+  <Dominion_Compliment_Success>{0} appreciated your kind words.</Dominion_Compliment_Success>
+  <Dominion_Compliment_Fail>Your compliment to {0} fell flat.</Dominion_Compliment_Fail>
+  <Dominion_DeskTier_Wood>wood</Dominion_DeskTier_Wood>
+  <Dominion_DeskTier_Steel>steel</Dominion_DeskTier_Steel>
+  <Dominion_DeskTier_Gold>gold</Dominion_DeskTier_Gold>
+  <Dominion_Desk_Tier>Desk: {0}</Dominion_Desk_Tier>
+  <Dominion_Desk_HeadOfState>Head of state: {0}</Dominion_Desk_HeadOfState>
+  <Dominion_Desk_Influence>Influence: {0} / {1}</Dominion_Desk_Influence>
+  <Dominion_Desk_ChooseHeadOfState>Choose head of state</Dominion_Desk_ChooseHeadOfState>
+  <Dominion_Desk_ChooseHeadOfState_Desc>Pick the colonist who leads your colony in diplomacy. Their Social skill makes others more willing to agree, and they earn influence working at this desk.</Dominion_Desk_ChooseHeadOfState_Desc>
+  <Dominion_Desk_MakeCapital>Make this colony the capital</Dominion_Desk_MakeCapital>
+  <Dominion_Desk_MakeCapital_Desc>Your capital is where envoys come and where tribute is delivered.</Dominion_Desk_MakeCapital_Desc>
+  <Dominion_Desk_CapitalSet>{0} is now your capital.</Dominion_Desk_CapitalSet>
+  <Dominion_Desk_NoColonists>No free colonists here.</Dominion_Desk_NoColonists>
+  <Dominion_Desk_OpenDiplomacy>Diplomacy</Dominion_Desk_OpenDiplomacy>
+  <Dominion_Desk_OpenDiplomacy_Desc>Open the Dominion tab.</Dominion_Desk_OpenDiplomacy_Desc>
+  <Dominion_HeadOfState_NoIdeoLeader>Your ideology has no leader. Assign one, or switch the head of state setting to "chosen at the desk".</Dominion_HeadOfState_NoIdeoLeader>
+  <Dominion_HeadOfState_NoneChosen>No head of state. Choose one at the Leadership Desk.</Dominion_HeadOfState_NoneChosen>
+  <Dominion_Dip_HeadOfState>Head of state: {0}</Dominion_Dip_HeadOfState>
+  <Dominion_Dip_HeadOfState_Desc>Your head of state earns influence at the Leadership Desk, and their Social skill improves acceptance chances.</Dominion_Dip_HeadOfState_Desc>
+  <Dominion_Dip_Influence>Influence {0} / {1}</Dominion_Dip_Influence>
+  <Dominion_Dip_Influence_Desc>Influence is spent on diplomacy. Your head of state earns it by working at the Leadership Desk (statecraft work).</Dominion_Dip_Influence_Desc>
+  <Dominion_Dip_Desk>Desk: {0}</Dominion_Dip_Desk>
+  <Dominion_Dip_Comms>Comms console: {0}</Dominion_Dip_Comms>
+  <Dominion_Dip_Standing>Relation: {0} ({1})   Their opinion of you: {2}</Dominion_Dip_Standing>
+  <Dominion_Dip_TreatiesWithYou>Treaties with you:</Dominion_Dip_TreatiesWithYou>
+  <Dominion_Dip_Expires>expires in {0}</Dominion_Dip_Expires>
+  <Dominion_Dip_NoExpiry>no expiry</Dominion_Dip_NoExpiry>
+  <Dominion_Dip_Cancel>Cancel</Dominion_Dip_Cancel>
+  <Dominion_Dip_CancelConfirm>Cancel the {0} with {1}? This is not a violation, but they will resent it.</Dominion_Dip_CancelConfirm>
+  <Dominion_Dip_Borders>Borders: yours to them {0}, theirs to you {1}</Dominion_Dip_Borders>
+  <Dominion_Dip_Embargo>Embargo: by you {0}, by them {1}</Dominion_Dip_Embargo>
+  <Dominion_Dip_Prices>Trade prices with them: you buy at {0}, sell at {1}</Dominion_Dip_Prices>
+  <Dominion_Dip_Actions>Actions</Dominion_Dip_Actions>
+  <Dominion_Dip_Cost>{0} influence</Dominion_Dip_Cost>
+  <Dominion_Dip_Chance>Chance they agree: {0}</Dominion_Dip_Chance>
+  <Dominion_Gift_Amount>{0} silver</Dominion_Gift_Amount>
+  <Dominion_Gift_Sent>You sent {0} silver to {1}. Goodwill +{2}.</Dominion_Gift_Sent>
+  <Dominion_Insult_Done>You insulted {0}. They will not forget it.</Dominion_Insult_Done>
+  <Dominion_Obligation_Title>Defensive obligation</Dominion_Obligation_Title>
+  <Dominion_Obligation_Text>{1} has declared war on {0}, your partner in a {2}. They expect you to honour it and join the war.\n\nRefusing breaks the treaty, and every faction will think less of you.</Dominion_Obligation_Text>
+  <Dominion_Obligation_Honour>Honour the treaty: declare war on {0}</Dominion_Obligation_Honour>
+  <Dominion_Obligation_Refuse>Refuse (breaks the treaty)</Dominion_Obligation_Refuse>
+  <Dominion_Offer_Title>Offer from {0}</Dominion_Offer_Title>
+  <Dominion_Offer_Text>{0} proposes a {1}.\n\n{2}</Dominion_Offer_Text>
+  <Dominion_Offer_Accept>Accept</Dominion_Offer_Accept>
+  <Dominion_Offer_Decline>Decline</Dominion_Offer_Decline>
+  <Dominion_Peace_Accepted>{0} has agreed to peace. A 30-day truce begins.</Dominion_Peace_Accepted>
+  <Dominion_Peace_Refused>{0} refused your offer of peace.</Dominion_Peace_Refused>
+  <Dominion_Treaties_None>No treaties you know of.</Dominion_Treaties_None>
+  <Dominion_Treaty_AlreadySigned>already signed</Dominion_Treaty_AlreadySigned>
+  <Dominion_Treaty_AtWar>at war</Dominion_Treaty_AtWar>
+  <Dominion_Treaty_Incompatible>conflicts with the {0}</Dominion_Treaty_Incompatible>
+  <Dominion_Treaty_Option>{0}  (cost {1}, chance {2})</Dominion_Treaty_Option>
+  <Dominion_Treaty_Accepted>{0} has signed the {1}.</Dominion_Treaty_Accepted>
+  <Dominion_Treaty_Refused>{0} rejected the {1}.</Dominion_Treaty_Refused>
+  <Dominion_Tribute_Paid>{0} gave in and paid {1} silver. It is on its way by drop pod.</Dominion_Tribute_Paid>
+  <Dominion_Tribute_Refused>{0} refused your demand.</Dominion_Tribute_Refused>
+  <Dominion_War_Confirm>Declare war on {0}?</Dominion_War_Confirm>
+  <Dominion_War_BreaksTreaties>This breaks your treaties with them: {0}. Every faction will think less of you.</Dominion_War_BreaksTreaties>
+
 </LanguageData>

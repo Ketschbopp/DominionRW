@@ -9,7 +9,7 @@ namespace Dominion
     /// Writes headlines and stories with vanilla's grammar engine. Each event def can name a RulePackDef
     /// providing "headline" and "story"; the shared Dominion_NewsCommon pack adds reusable phrases.
     /// Symbols available to rule packs: FACTION_A, FACTION_B, LEADER_A, LEADER_B, GOV_A, GOV_B,
-    /// CAPITAL_A, LEAD (an opening that reflects confidence) and SOURCE.
+    /// CAPITAL_A, LEAD (an opening that reflects confidence), SOURCE, DETAIL and DETAIL_INDEF (DETAIL with "a"/"an").
     /// </summary>
     public static class NewsText
     {
@@ -33,6 +33,8 @@ namespace Dominion
             req.Rules.Add(new Rule_String("LEAD", (n.confidence == NewsConfidence.Confirmed
                 ? "Dominion_News_LeadConfirmed" : "Dominion_News_LeadRumor").Translate()));
             req.Rules.Add(new Rule_String("SOURCE", SourceLabel(n.source)));
+            req.Rules.Add(new Rule_String("DETAIL", n.detail ?? ""));
+            req.Rules.Add(new Rule_String("DETAIL_INDEF", n.detail.NullOrEmpty() ? "" : Find.ActiveLanguageWorker.WithIndefiniteArticle(n.detail)));
 
             try
             {
@@ -51,7 +53,7 @@ namespace Dominion
         {
             string a = n.primary?.Name ?? "Dominion_News_UnknownParty".Translate();
             string b = n.secondary?.Name ?? "Dominion_News_UnknownParty".Translate();
-            return n.def.headline.NullOrEmpty() ? n.def.LabelCap.ToString() : string.Format(n.def.headline, a, b);
+            return n.def.headline.NullOrEmpty() ? n.def.LabelCap.ToString() : string.Format(n.def.headline, a, b, n.detail ?? "");
         }
 
         private static void AddFaction(ref GrammarRequest req, string suffix, Faction f)

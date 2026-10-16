@@ -134,4 +134,103 @@
     <newsRules>Dominion_News_Correction</newsRules>
     <headline>Earlier reports about {0} were false</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TreatySigned</defName>
+    <label>treaty signed</label>
+    <description>Two factions have signed a treaty.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_TreatySigned</newsRules>
+    <headline>{0} and {1} sign a treaty: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TreatyCancelled</defName>
+    <label>treaty cancelled</label>
+    <description>A faction has formally withdrawn from a treaty.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_TreatyCancelled</newsRules>
+    <headline>{0} withdraws from its {2} with {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TreatyBroken</defName>
+    <label>treaty broken</label>
+    <description>A faction has broken a treaty. Every faction thinks less of it.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.85</newsworthiness>
+    <newsRules>Dominion_News_TreatyBroken</newsRules>
+    <headline>{0} breaks its {2} with {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TreatyExpired</defName>
+    <label>treaty expired</label>
+    <description>A treaty has run its course.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <newsRules>Dominion_News_TreatyExpired</newsRules>
+    <headline>The {2} between {0} and {1} expires</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_EmbargoDeclared</defName>
+    <label>embargo declared</label>
+    <description>A faction has stopped all trade with another.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_EmbargoDeclared</newsRules>
+    <headline>{0} declares an embargo on {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_EmbargoLifted</defName>
+    <label>embargo lifted</label>
+    <description>A faction has resumed trade with another.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.4</newsworthiness>
+    <newsRules>Dominion_News_EmbargoLifted</newsRules>
+    <headline>{0} lifts its embargo on {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_BordersChanged</defName>
+    <label>border policy changed</label>
+    <description>A faction has changed its border policy toward another.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.4</newsworthiness>
+    <newsRules>Dominion_News_BordersChanged</newsRules>
+    <headline>{0} sets its borders with {1} to {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_Denounced</defName>
+    <label>denunciation</label>
+    <description>A faction has publicly denounced another.</description>
+    <category>Diplomacy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_Denounced</newsRules>
+    <headline>{0} denounces {1}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TributePaid</defName>
+    <label>tribute paid</label>
+    <description>A faction has paid tribute under threat.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.6</newsworthiness>
+    <newsRules>Dominion_News_TributePaid</newsRules>
+    <headline>{0} pays tribute of {2} silver to {1}</headline>
+  </Dominion.DominionEventDef>
 </Defs>
