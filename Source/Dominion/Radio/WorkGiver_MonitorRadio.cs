@@ -20,7 +20,8 @@ namespace Dominion
         {
             if (!DominionResearchDefOf.Dominion_RadioMonitoring.IsFinished) return true;
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
-            return comp == null || (!forced && comp.radioCoverage >= EnoughCoverage);
+            // With a linked antenna the airwaves are covered already; colonists only listen when told to.
+            return comp == null || (!forced && (comp.radioCoverage >= EnoughCoverage || RadioAntenna.GlobalCoverage));
         }
 
         public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
@@ -52,6 +53,7 @@ namespace Dominion
     public static class DominionThingDefOf
     {
         public static ThingDef Dominion_RadioReceiver;
+        public static ThingDef Dominion_LargeRadioAntenna;
 
         static DominionThingDefOf()
         {

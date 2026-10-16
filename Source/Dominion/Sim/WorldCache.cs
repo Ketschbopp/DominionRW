@@ -56,7 +56,8 @@ namespace Dominion
             for (int i = 0; i < settlements.Count; i++)
             {
                 Settlement s = settlements[i];
-                if (s.Faction == null) continue;
+                // Dominion simulates the surface; orbital and space settlements (Odyssey) are left to the game.
+                if (s.Faction == null || !DominionGeo.OnSurface(s.Tile)) continue;
                 if (!settlementsByFaction.TryGetValue(s.Faction.loadID, out List<Settlement> list))
                 {
                     list = new List<Settlement>();

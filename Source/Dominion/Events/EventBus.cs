@@ -59,7 +59,7 @@ namespace Dominion
                     }
                     catch (Exception e)
                     {
-                        DLog.WarningOnce($"Worker for {ev.def.defName} failed: {e}", ev.def.shortHash ^ 0x1);
+                        DominionScheduler.Failed("Worker " + ev.def.defName, e);
                     }
 
                     IReadOnlyList<SimSystem> systems = SimSystemRegistry.All;
@@ -71,7 +71,7 @@ namespace Dominion
                         }
                         catch (Exception e)
                         {
-                            DLog.WarningOnce($"{systems[i].Name}.OnEvent failed on {ev.def.defName}: {e}", systems[i].Name.GetHashCode() ^ ev.def.shortHash);
+                            DominionScheduler.Failed(systems[i].Name + ".OnEvent", e, ev.def.defName);
                         }
                     }
 

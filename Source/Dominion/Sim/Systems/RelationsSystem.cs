@@ -137,15 +137,14 @@ namespace Dominion
         public static float NearestDistance(List<Settlement> a, List<Settlement> b)
         {
             if (a.Count == 0 || b.Count == 0) return -1f;
-            WorldGrid grid = Find.WorldGrid;
             float best = float.MaxValue;
             for (int i = 0; i < a.Count; i++)
                 for (int j = 0; j < b.Count; j++)
                 {
-                    float d = grid.ApproxDistanceInTiles(a[i].Tile, b[j].Tile);
-                    if (d < best) best = d;
+                    float d = DominionGeo.Distance(a[i].Tile, b[j].Tile);
+                    if (d >= 0f && d < best) best = d;
                 }
-            return best;
+            return best == float.MaxValue ? -1f : best;
         }
 
         /// <summary>-1..1. Same ideology is 1; shared memes raise it, memes that exclude each other lower it.</summary>

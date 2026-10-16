@@ -92,6 +92,8 @@ namespace Dominion
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (comp == null) return null;
             string s = "Dominion_Radio_Coverage".Translate(comp.radioCoverage.ToString("F0"));
+            Thing antenna = RadioAntenna.LinkedAntenna(parent);
+            s += "\n" + (antenna != null ? "Dominion_Radio_AntennaLinked".Translate(antenna.LabelShort) : "Dominion_Radio_NoAntenna".Translate());
             int queued = comp.RadioOrders.Orders.Count;
             if (queued > 0) s += "\n" + "Dominion_Radio_OrdersQueued".Translate(queued);
             if (comp.RadioOrders.AdvisoryInForce)

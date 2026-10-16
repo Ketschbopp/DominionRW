@@ -49,7 +49,7 @@ namespace Dominion
             List<Settlement> settlements = WorldComponent_Dominion.Instance.Cache.SettlementsOf(f);
             foreach (PlanetTile t in playerOutposts)
                 foreach (Settlement s in settlements)
-                    if (Find.WorldGrid.ApproxDistanceInTiles(t, s.Tile) < WatchTiles) return 8f;
+                    if (DominionGeo.Distance(t, s.Tile) is float d && d >= 0f && d < WatchTiles) return 8f;
             return 0f;
         }
     }

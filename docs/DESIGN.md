@@ -398,11 +398,13 @@ Relation changes go through vanilla base goodwill and `SetRelationDirect` on bot
 | Intelligence report | Restricted or higher | 12–48 h |
 | Traveler gossip | Everything else | 1–4 days |
 
-A report is *Confirmed* if it came by radio or dispatch or intel is 30+ above what was needed, otherwise a *Rumor*. Events the player cannot see stay hidden for up to 30 days and surface if intel grows, or leak (4% / 2% / 0.5% per day for Restricted / Secret / BlackOps).
+With vanilla's **Tube television** researched, every report that is not hidden arrives within 1–4 hours, whatever its source (news already on its way catches up). A report is *Confirmed* if it came by radio or dispatch or intel is 30+ above what was needed, otherwise a *Rumor*. Events the player cannot see stay hidden for up to 30 days and surface if intel grows, or leak (4% / 2% / 0.5% per day for Restricted / Secret / BlackOps).
 
 **False rumors.** Each day, each faction the player has under 40 intel on adds a 2% chance of a baseless rumor (war, riots, coup, leader's death). Once intel on that faction reaches 50 a correction is published, and the original report is marked as false.
 
 **Radio.** Radio coverage (0–100) rises while a colonist monitors a powered receiver (Research work; about 4 per hour, scaled by Intellectual skill and hearing) and decays 30% per day. Colonists stop monitoring at 90.
+
+**Large radio antenna** (research *World communications protocols*, 2×2, 250 W): built touching a radio receiver, it links to it. While both are powered, radio coverage stays at 100% with nobody monitoring, and Restricted events can also arrive by radio intercept (1–6 h). Modded buildings of at least 2×2 called "antenna" count too. A setting, *News travels instantly*, delivers every report the player has the intel for the moment it happens.
 
 **Radio desk.** With a receiver built, the player can queue two radio orders (rubber-stamp buttons on the newspaper, or gizmos on the receiver). Research-work colonists take them before plain monitoring, in two-hour shifts that also feed coverage; progress is kept on the order.
 

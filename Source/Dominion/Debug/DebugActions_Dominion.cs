@@ -25,13 +25,13 @@ namespace Dominion
                     Faction capturedPrimary = primary;
                     var primaryNode = new DebugActionNode(primary.Name);
                     primaryNode.AddChild(new DebugActionNode("(no second faction)", DebugActionType.Action,
-                        () => EventBus.Raise(capturedDef, capturedPrimary)));
+                        () => RaiseAndReport(capturedDef, capturedPrimary, null)));
                     foreach (Faction secondary in DebugFactions())
                     {
                         if (secondary == primary) continue;
                         Faction capturedSecondary = secondary;
                         primaryNode.AddChild(new DebugActionNode(secondary.Name, DebugActionType.Action,
-                            () => EventBus.Raise(capturedDef, capturedPrimary, capturedSecondary)));
+                            () => RaiseAndReport(capturedDef, capturedPrimary, capturedSecondary)));
                     }
                     defNode.AddChild(primaryNode);
                 }
@@ -40,11 +40,99 @@ namespace Dominion
             return nodes;
         }
 
-        [DebugAction(Category, "Run daily simulation now", allowedGameStates = AllowedGameStates.Playing)]
-        private static void RunDailyNow()
+        /// <summary>
+        /// Raises an event and delivers its news at once (normally news takes hours or days to arrive), so the
+        /// result can be seen straight away. Most events only report: the systems that cause them apply the effects.
+        /// </summary>
+        private static void RaiseAndReport(DominionEventDef def, Faction a, Faction b)
         {
-            WorldComponent_Dominion.Instance?.Scheduler.RunFullDayNow();
-            Messages.Message("Dominion: ran one full simulated day.", MessageTypeDefOf.NeutralEvent, historical: false);
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp == null) return;
+            DominionEvent ev = EventBus.Raise(def, a, b);
+            int delivered = DeliverNewsOf(comp, n => n.eventId == ev.id, includeHidden: true);
+            Messages.Message($"Dominion: raised {def.defName}; {delivered} news item(s) delivered to the newspaper.", MessageTypeDefOf.NeutralEvent, historical: false);
+        }
+
+        /// <summary>Delivers matching pending news now. Hidden items are delivered as leaks when asked to.</summary>
+        private static int DeliverNewsOf(WorldComponent_Dominion comp, System.Func<NewsItem, bool> match, bool includeHidden)
+        {
+            int count = 0;
+            foreach (NewsItem n in comp.News.Pending.ToList())
+            {
+                if (!match(n) || (n.Hidden && !includeHidden)) continue;
+                if (n.Hidden)
+                {
+                    n.source = NewsSource.Leak;
+                    n.confidence = NewsConfidence.Rumor;
+                }
+                n.arrivesTick = Find.TickManager.TicksGame;
+                NewsSystem.Deliver(n, comp);
+                count++;
+            }
+            return count;
+        }
+
+        [DebugAction(Category, "Run daily simulation now", allowedGameStates = AllowedGameStates.Playing)]
+        private static void RunDailyNow() => RunDays(false);
+
+        [DebugAction(Category, "Make every faction act now (and run a day)", allowedGameStates = AllowedGameStates.Playing)]
+        private static void ActNow() => RunDays(true);
+
+        /// <summary>One simulated day, then whatever news it produced is delivered at once and summarised.</summary>
+        private static void RunDays(bool forceAi)
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp == null) return;
+            if (forceAi)
+                foreach (FactionState s in comp.AllStates)
+                    s.nextAiActionTick = 0;
+            int firstEvent = comp.EventLog.PeekNextId;
+            int failuresBefore = DominionScheduler.FailureCounts.Values.Sum();
+            comp.Scheduler.RunFullDayNow();
+            int events = comp.EventLog.PeekNextId - firstEvent;
+            int news = DeliverNewsOf(comp, n => n.eventId >= firstEvent, includeHidden: false);
+            int failures = DominionScheduler.FailureCounts.Values.Sum() - failuresBefore;
+            Messages.Message($"Dominion: ran one simulated day: {events} event(s), {news} news item(s) delivered" +
+                (failures > 0 ? $", {failures} system failure(s) (see Health check)." : "."), failures > 0 ? MessageTypeDefOf.RejectInput : MessageTypeDefOf.NeutralEvent, historical: false);
+        }
+
+        [DebugAction(Category, "Health check", allowedGameStates = AllowedGameStates.Playing)]
+        private static void HealthCheck()
+        {
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            var sb = new System.Text.StringBuilder();
+            if (comp == null)
+            {
+                Find.WindowStack.Add(new Dialog_MessageBox("Dominion: no world component. The mod did not load into this save."));
+                return;
+            }
+            comp.Scheduler.Rebuild();
+            sb.AppendLine(comp.Scheduler.Describe());
+            sb.AppendLine($"Day {GenDate.DaysPassed}, tick {Find.TickManager.TicksGame}. Events logged: {comp.EventLog.PeekNextId}. " +
+                          $"News: {comp.News.Delivered.Count} delivered, {comp.News.Pending.Count(n => !n.Hidden)} on the way, {comp.News.Pending.Count(n => n.Hidden)} hidden. " +
+                          $"Radio coverage {comp.radioCoverage:F0}.");
+            sb.AppendLine();
+            sb.AppendLine("Factions (settlements on the surface, intel, stability, economy, next AI action):");
+            int now = Find.TickManager.TicksGame;
+            foreach (Faction f in comp.Cache.Simulated)
+            {
+                FactionState s = comp.GetState(f);
+                string next = s.nextAiActionTick > now ? (s.nextAiActionTick - now).ToStringTicksToPeriod() : "now";
+                sb.AppendLine($"  {f.Name}: {comp.Cache.SettlementsOf(f).Count} towns, intel {s.playerIntel:F0}, stability {s.stability:F0}, economy {s.economyIndex:F0}, wars {s.activeWars}, AI in {next}");
+            }
+            sb.AppendLine();
+            if (DominionScheduler.FailureCounts.Count == 0) sb.AppendLine("No system failures since the game started.");
+            else
+            {
+                sb.AppendLine("System failures since the game started (count, last error):");
+                foreach (KeyValuePair<string, int> kv in DominionScheduler.FailureCounts.OrderByDescending(kv => kv.Value))
+                    sb.AppendLine($"  {kv.Key}: {kv.Value}x, {DominionScheduler.LastFailure[kv.Key]}");
+            }
+            sb.AppendLine();
+            sb.AppendLine(IntegrationRegistry.SelfTestReport());
+            string text = sb.ToString();
+            DLog.Message("Health check\n" + text);
+            Find.WindowStack.Add(new Dialog_MessageBox(text.Truncate(6000f)));
         }
 
         [DebugAction(Category, "Log scheduler state", allowedGameStates = AllowedGameStates.Playing)]
@@ -167,16 +255,8 @@ namespace Dominion
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (comp == null) return;
-            foreach (NewsItem n in comp.News.Pending.ToList())
-            {
-                if (n.Hidden)
-                {
-                    n.source = NewsSource.Leak;
-                    n.confidence = NewsConfidence.Rumor;
-                }
-                n.arrivesTick = Find.TickManager.TicksGame;
-                NewsSystem.Deliver(n, comp);
-            }
+            int n = DeliverNewsOf(comp, _ => true, includeHidden: true);
+            Messages.Message($"Dominion: delivered {n} news item(s).", MessageTypeDefOf.NeutralEvent, historical: false);
         }
 
         [DebugAction(Category, "Log pending and hidden news", allowedGameStates = AllowedGameStates.Playing)]

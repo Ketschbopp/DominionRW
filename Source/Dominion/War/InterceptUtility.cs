@@ -56,7 +56,7 @@ namespace Dominion
         public static bool InReach(Caravan caravan, WorldObject target)
         {
             if (caravan == null || target == null || caravan.Tile.Layer != target.Tile.Layer) return false;
-            return caravan.Tile == target.Tile || Find.WorldGrid.ApproxDistanceInTiles(caravan.Tile, target.Tile) <= ReachTiles;
+            return caravan.Tile == target.Tile || (DominionGeo.Distance(caravan.Tile, target.Tile) is float d && d >= 0f && d <= ReachTiles);
         }
 
         public static bool IsPursuing(Caravan caravan, WorldObject target) => Pursuits.Any(p => p.caravan == caravan && p.target == target);
@@ -124,7 +124,8 @@ namespace Dominion
         private static void Steer(Pursuit p, IInterceptable it)
         {
             Caravan c = p.caravan;
-            float dist = Find.WorldGrid.ApproxDistanceInTiles(c.Tile, p.target.Tile);
+            float dist = DominionGeo.Distance(c.Tile, p.target.Tile);
+            if (dist < 0f) return; // not on the same layer: nothing to chase
             PlanetTile meet = it.TileAhead(Mathf.Clamp(Mathf.RoundToInt(dist * 0.5f), 0, 6));
             if (!meet.Valid || meet.Layer != c.Tile.Layer) meet = p.target.Tile;
             if (p.lastDestination == meet.tileId && c.pather.Moving) return;

@@ -252,7 +252,7 @@ namespace Dominion
             if (reg.originalOwner.Count == 0) return list;
             foreach (Settlement s in Find.WorldObjects.Settlements)
             {
-                if (s.Faction == null || !reg.originalOwner.TryGetValue(s.Tile.tileId, out int origId)) continue;
+                if (s.Faction == null || !DominionGeo.OnSurface(s.Tile) || !reg.originalOwner.TryGetValue(s.Tile.tileId, out int origId)) continue;
                 Faction orig = comp.Cache.FactionById(origId);
                 if ((s.Faction == w.attacker && orig == w.defender) || (s.Faction == w.defender && orig == w.attacker))
                     list.Add(s);

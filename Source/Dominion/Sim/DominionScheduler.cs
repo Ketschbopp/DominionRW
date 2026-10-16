@@ -64,7 +64,7 @@ namespace Dominion
                     }
                     catch (Exception e)
                     {
-                        DLog.WarningOnce($"{s.Name}.Slot failed: {e}", s.Name.GetHashCode() ^ 0x710);
+                        Failed(s.Name + ".Slot", e);
                     }
                 }
             }
@@ -97,7 +97,7 @@ namespace Dominion
                         }
                         catch (Exception e)
                         {
-                            DLog.WarningOnce($"{s.Name}.DailyFaction failed for {faction.Name}: {e}", s.Name.GetHashCode() ^ 0x5A17);
+                            Failed(s.Name + ".DailyFaction", e, faction.Name);
                         }
                     }
                 }
@@ -143,6 +143,27 @@ namespace Dominion
             return $"Scheduler: {simulated} simulated factions across {used}/{SlotsPerDay} slots, {SimSystemRegistry.All.Count} systems.";
         }
 
+        // ---------------------------------------------------------------- failures
+
+        /// <summary>How often each system phase has thrown since the game started, and its last error.</summary>
+        public static readonly Dictionary<string, int> FailureCounts = new Dictionary<string, int>();
+        public static readonly Dictionary<string, string> LastFailure = new Dictionary<string, string>();
+
+        /// <summary>
+        /// A system threw. Logged in full the first time, counted every time, and the player is told once per phase,
+        /// so a broken system is never silent (see the dev action "Health check").
+        /// </summary>
+        public static void Failed(string what, Exception e, string context = null)
+        {
+            FailureCounts[what] = (FailureCounts.TryGetValue(what, out int n) ? n : 0) + 1;
+            LastFailure[what] = (context != null ? context + ": " : "") + e.Message;
+            if (n > 0) return;
+            DLog.Error($"{what} failed{(context != null ? " for " + context : "")}: {e}");
+            if (Current.ProgramState == ProgramState.Playing)
+                Messages.Message($"Dominion: {what} failed and is being skipped. Details in the log; Dev menu → Dominion → Health check.",
+                    MessageTypeDefOf.RejectInput, historical: false);
+        }
+
         private static void Run(SimSystem s, string phase, Action<SimSystem> action)
         {
             using (DominionProfiler.Measure(s.Name, phase))
@@ -153,7 +174,7 @@ namespace Dominion
                 }
                 catch (Exception e)
                 {
-                    DLog.WarningOnce($"{s.Name}.{phase} failed: {e}", (s.Name + phase).GetHashCode());
+                    Failed(s.Name + "." + phase, e);
                 }
             }
         }

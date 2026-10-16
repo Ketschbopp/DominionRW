@@ -66,4 +66,56 @@
     </placeWorkers>
     <constructionSkillPrerequisite>4</constructionSkillPrerequisite>
   </ThingDef>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>Dominion_LargeRadioAntenna</defName>
+    <label>large radio antenna</label>
+    <description>A tall, guyed lattice mast with dipoles and a dish. Built right next to a radio receiver (touching it, corners count), it links to the receiver and gives your colony global radio coverage: coverage stays at 100% without anyone monitoring, news by radio arrives within hours, and even lightly guarded traffic can be heard. Both the antenna and the receiver need power.</description>
+    <graphicData>
+      <texPath>Things/Building/Dominion_LargeRadioAntenna</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+    </graphicData>
+    <size>(2,2)</size>
+    <rotatable>false</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>Impassable</passability>
+    <fillPercent>0.4</fillPercent>
+    <castEdgeShadows>false</castEdgeShadows>
+    <blockWind>false</blockWind>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <WorkToBuild>9000</WorkToBuild>
+      <Mass>60</Mass>
+      <Flammability>0</Flammability>
+      <Beauty>-4</Beauty>
+    </statBases>
+    <costList>
+      <Steel>180</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+    </costList>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+    </building>
+    <designationCategory>Misc</designationCategory>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>250</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable"/>
+      <li Class="CompProperties_Breakdownable"/>
+    </comps>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <researchPrerequisites>
+      <li>Dominion_WorldCommsProtocols</li>
+    </researchPrerequisites>
+    <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
+  </ThingDef>
 </Defs>
