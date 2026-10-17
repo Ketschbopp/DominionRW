@@ -63,8 +63,8 @@ namespace Dominion
                 string give = string.Join(", ", lines.Where(l => !l.weBuy).Select(l => l.Label));
                 if (!get.NullOrEmpty()) parts.Add("Dominion_Deal_YouGet".Translate(get));
                 if (!give.NullOrEmpty()) parts.Add("Dominion_Deal_YouGive".Translate(give));
-                if (silver > 0) parts.Add("Dominion_Deal_YouPay".Translate(silver));
-                else if (silver < 0) parts.Add("Dominion_Deal_TheyPay".Translate(-silver));
+                if (silver > 0) parts.Add("Dominion_Standing_YouPay".Translate(silver));
+                else if (silver < 0) parts.Add("Dominion_Standing_TheyPay".Translate(-silver));
                 return string.Join("; ", parts) + "  ·  " + "Dominion_Deal_Every".Translate(everyDays, deliveriesLeft);
             }
         }
@@ -368,7 +368,7 @@ namespace Dominion
 
             string got = string.Join(", ", arriving.Select(a => GenLabel.ThingLabel(a.line.def, a.line.stuff, a.count)));
             string text = "Dominion_Deal_Delivered".Translate(f.Name, got.NullOrEmpty() ? "-" : got,
-                moved > 0 ? "Dominion_Deal_YouPay".Translate(moved).ToString() : moved < 0 ? "Dominion_Deal_TheyPay".Translate(-moved).ToString() : "-");
+                moved > 0 ? "Dominion_Standing_YouPay".Translate(moved).ToString() : moved < 0 ? "Dominion_Standing_TheyPay".Translate(-moved).ToString() : "-");
             if (short_ > 0f) text += " " + "Dominion_Deal_TheyShort".Translate(f.Name);
             Messages.Message(text, arriving.Count > 0 ? new LookTargets(DropCellFinder.TradeDropSpot(map), map) : LookTargets.Invalid,
                 MessageTypeDefOf.PositiveEvent, historical: true);

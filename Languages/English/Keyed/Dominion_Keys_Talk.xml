@@ -169,8 +169,8 @@
   <Dominion_Deal_NoNegotiator>No colonist at home is able to talk to them.</Dominion_Deal_NoNegotiator>
   <Dominion_Deal_YouGet>you get {0}</Dominion_Deal_YouGet>
   <Dominion_Deal_YouGive>you give {0}</Dominion_Deal_YouGive>
-  <Dominion_Deal_YouPay>you pay {0} silver</Dominion_Deal_YouPay>
-  <Dominion_Deal_TheyPay>they pay {0} silver</Dominion_Deal_TheyPay>
+  <Dominion_Standing_YouPay>you pay {0} silver</Dominion_Standing_YouPay>
+  <Dominion_Standing_TheyPay>they pay {0} silver</Dominion_Standing_TheyPay>
   <Dominion_Deal_Every>every {0} days, {1} left</Dominion_Deal_Every>
   <Dominion_Deal_Frequency>How often</Dominion_Deal_Frequency>
   <Dominion_Deal_Freq_Every>Every {0} days</Dominion_Deal_Freq_Every>
@@ -210,7 +210,7 @@
   <Dominion_Standing_Sign_Desc>Sign and send the offer to {0}. They read it and seal it, or refuse.</Dominion_Standing_Sign_Desc>
   <Dominion_Standing_JustOnce>Just this once</Dominion_Standing_JustOnce>
   <Dominion_Standing_JustOnce_Desc>Leave it as a one-time trade.</Dominion_Standing_JustOnce_Desc>
-  <Dominion_Ledger_Title>Ledger of standing deals</Dominion_Ledger_Title>
+  <Dominion_Standing_LedgerTitle>Ledger of standing deals</Dominion_Standing_LedgerTitle>
   <Dominion_Ledger_Empty>No standing deals yet. Trade with a faction from the Diplomacy tab, then offer to repeat the trade.</Dominion_Ledger_Empty>
   <Dominion_Ledger_Button>Ledger ({0})</Dominion_Ledger_Button>
   <Dominion_Ledger_Button_Desc>Every standing deal: what is due when, with buttons to resume or call one off.</Dominion_Ledger_Button_Desc>

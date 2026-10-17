@@ -84,7 +84,7 @@ namespace Dominion
             }
             if (silver != 0)
             {
-                DominionTheme.InkLabel(new Rect(32f, vy, w - 32f, 22f), (silver > 0 ? "Dominion_Deal_YouPay" : "Dominion_Deal_TheyPay").Translate(Mathf.Abs(silver)),
+                DominionTheme.InkLabel(new Rect(32f, vy, w - 32f, 22f), (silver > 0 ? "Dominion_Standing_YouPay" : "Dominion_Standing_TheyPay").Translate(Mathf.Abs(silver)),
                     silver > 0 ? DominionTheme.InkRed : DominionTheme.InkGreen, GameFont.Small, TextAnchor.MiddleLeft);
                 vy += 24f;
             }
@@ -146,7 +146,7 @@ namespace Dominion
 
         protected override void DoPaper(Rect rect)
         {
-            float y = DominionPaper.Title(new Rect(rect.x, rect.y, rect.width, 40f), "Dominion_Ledger_Title".Translate());
+            float y = DominionPaper.Title(new Rect(rect.x, rect.y, rect.width, 40f), "Dominion_Standing_LedgerTitle".Translate());
             Rect body = new Rect(rect.x, y, rect.width, rect.yMax - y);
             List<TradeAgreement> deals = TradeDeals.All.OrderBy(d => d.Open ? 0 : 1).ThenBy(d => d.nextTick).ToList();
             if (deals.Count == 0)
