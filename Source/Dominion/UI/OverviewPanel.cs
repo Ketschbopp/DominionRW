@@ -47,7 +47,7 @@ namespace Dominion
             }
             map.Draw(mapRect, MapStyle.Atlas, selected, null, null, f =>
             {
-                if (f.IsPlayer) return;
+                if (f.IsPlayer || !shown.Contains(f)) return;
                 DominionUIState.selected = f;
                 dossierScroll = Vector2.zero;
             });

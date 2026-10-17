@@ -61,7 +61,7 @@ namespace Dominion
             Rect table = new Rect(body.x, body.y, body.width - RackWidth - 10f, body.height);
 
             // The campaign map takes the top of the table; the open dossier lies below it.
-            Rect mapRect = new Rect(table.x, table.y, table.width, Mathf.Max(220f, table.height * 0.52f));
+            Rect mapRect = new Rect(table.x, table.y, table.width, Mathf.Min(Mathf.Max(220f, table.height * 0.52f), table.height - 160f));
             if (focusedId != selectedId)
             {
                 focusedId = selectedId;
@@ -69,7 +69,7 @@ namespace Dominion
                 else map.Reset();
             }
             map.Draw(mapRect, MapStyle.WarRoom, selected?.attacker, selected?.defender, selected != null ? new List<War> { selected } : null,
-                f => DominionUIState.selected = f);
+                f => PickWarWith(f, mine, world));
             Rect dossier = new Rect(table.x, mapRect.yMax + 8f, table.width, table.yMax - mapRect.yMax - 8f);
             if (selected != null) DrawDossier(dossier, selected, comp);
             else DrawTheatre(dossier, comp);
@@ -92,9 +92,20 @@ namespace Dominion
             return found;
         }
 
+        /// <summary>A town clicked on the map opens the dossier of a war its faction is in, yours first.</summary>
+        private void PickWarWith(Faction f, List<War> mine, List<War> world)
+        {
+            if (f.IsPlayer) return;
+            DominionUIState.selected = f;
+            War w = mine.FirstOrDefault(x => x.Involves(f)) ?? world.FirstOrDefault(x => x.Involves(f) && Known(x));
+            if (w == null || w.id == selectedId) return;
+            selectedId = w.id;
+            dossierScroll = Vector2.zero;
+        }
+
         private static IEnumerable<PlanetTile> WarTiles(War w)
         {
-            Settlement a = DominionUIState.Capital(w.attacker), b = DominionUIState.Capital(w.defender);
+            Settlement a = WorldMapView.Seat(w.attacker), b = WorldMapView.Seat(w.defender);
             if (a != null) yield return a.Tile;
             if (b != null) yield return b.Tile;
             foreach (Warband band in WarbandUtility.All())

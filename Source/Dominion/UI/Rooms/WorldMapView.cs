@@ -39,7 +39,7 @@ namespace Dominion
 
         public void Reset()
         {
-            targetZoom = 1f;
+            targetZoom = MinZoom;
             targetCentre = new Vector2(centre.x, 0.5f);
         }
 
@@ -62,13 +62,17 @@ namespace Dominion
             }
             float aspect = local.height > 0f ? local.width / local.height : 2f;
             float needY = Mathf.Max(maxY - minY + 0.12f, (maxX - minX + 0.08f) * 2f / aspect);
-            targetZoom = Mathf.Clamp(1f / needY, 1f, 4f);
-            targetCentre = new Vector2(Mathf.Repeat((minX + maxX) / 2f, 1f), (minY + maxY) / 2f);
+            float z = Mathf.Clamp(1f / needY, MinZoom, 4f);
+            targetZoom = z;
+            targetCentre = new Vector2(Mathf.Repeat((minX + maxX) / 2f, 1f), Mathf.Clamp((minY + maxY) / 2f, 0.5f / z, 1f - 0.5f / z));
         }
+
+        /// <summary>Never wider than the world: a view wider than 2:1 starts zoomed in a little.</summary>
+        private float MinZoom => Mathf.Max(1f, local.height > 0f ? local.width / local.height / 2f : 1f);
 
         private void ClampView()
         {
-            zoom = Mathf.Clamp(zoom, 1f, MaxZoom);
+            zoom = Mathf.Clamp(zoom, MinZoom, MaxZoom);
             float hv = 1f / zoom;
             centre.y = Mathf.Clamp(centre.y, hv / 2f, 1f - hv / 2f);
             centre.x = Mathf.Repeat(centre.x, 1f);
@@ -121,7 +125,7 @@ namespace Dominion
 
             foreach (War w in shownWars) DrawWarLine(w, focus, focus2, style);
             Settlement hovered = DrawSettlements(focus, focus2, style);
-            Warband hoveredBand = DrawWarbands(shownWars, wars != null, style);
+            Warband hoveredBand = DrawWarbands(shownWars, wars != null, style, hovered);
             DrawControls();
 
             // Hover: a settlement or warband's details, otherwise whose land this is.
@@ -212,10 +216,13 @@ namespace Dominion
 
         private void DrawWarLine(War w, Faction focus, Faction focus2, MapStyle style)
         {
-            Settlement a = DominionUIState.Capital(w.attacker), b = DominionUIState.Capital(w.defender);
+            Settlement a = Seat(w.attacker), b = Seat(w.defender);
             if (a == null || b == null || !DominionGeo.OnSurface(a.Tile) || !DominionGeo.OnSurface(b.Tile)) return;
-            Vector2 pa = ToScreen(TerritoryMap.Project(a.Tile)), pb = ToScreen(TerritoryMap.Project(b.Tile));
-            if (Mathf.Abs(pa.x - pb.x) > local.width * 0.75f) return; // across the date line at this zoom: skip rather than draw it the long way
+            // Unwrap in map space so a pair across the date line takes the short way round.
+            Vector2 ma = TerritoryMap.Project(a.Tile), mb = TerritoryMap.Project(b.Tile);
+            mb.x += Mathf.Round(ma.x - mb.x);
+            Vector2 span = Span;
+            Vector2 pa = ToScreen(ma), pb = pa + new Vector2((mb.x - ma.x) / span.x * local.width, (mb.y - ma.y) / span.y * local.height);
             bool lit = focus == null || w.Involves(focus) || w.Involves(focus2);
             if (!lit && style == MapStyle.Atlas) return;
             DashedLine(pa, pb, new Color(WarLine.r, WarLine.g, WarLine.b, lit ? 0.75f : 0.25f), lit ? 2f : 1f, 8f, 5f, lit ? Time.realtimeSinceStartup * 12f : 0f);
@@ -224,6 +231,16 @@ namespace Dominion
             Widgets.DrawLine(mid + new Vector2(-5f, -5f), mid + new Vector2(5f, 5f), WarLine, 2f);
             Widgets.DrawLine(mid + new Vector2(-5f, 5f), mid + new Vector2(5f, -5f), WarLine, 2f);
             TooltipHandler.TipRegion(new Rect(mid.x - 7f, mid.y - 7f, 14f, 14f), w.Label);
+        }
+
+        /// <summary>A faction's capital, or for a colony without one yet, any of its settlements.</summary>
+        public static Settlement Seat(Faction f)
+        {
+            Settlement s = DominionUIState.Capital(f);
+            if (s != null || f == null) return s;
+            foreach (Settlement x in Find.WorldObjects.Settlements)
+                if (x.Faction == f) return x;
+            return null;
         }
 
         /// <summary>A line drawn in dashes; <paramref name="phase"/> slides the dashes along it.</summary>
@@ -345,7 +362,7 @@ namespace Dominion
             Text.Font = GameFont.Small;
         }
 
-        private Warband DrawWarbands(List<War> wars, bool onlyThese, MapStyle style)
+        private Warband DrawWarbands(List<War> wars, bool onlyThese, MapStyle style, Settlement settlementHovered)
         {
             Warband hovered = null;
             float phase = Time.realtimeSinceStartup * 18f;
@@ -398,7 +415,8 @@ namespace Dominion
                 string eta = w.Blockading ? "Dominion_Warband_BlockadingShort".Translate().ToString()
                     : "Dominion_Warband_Arrives".Translate(w.TicksToArrival.ToStringTicksToPeriod(allowSeconds: false)).ToString();
                 TooltipHandler.TipRegion(hit, w.Label + "\n" + w.MissionText + "\n" + eta + "\n\n" + "Dominion_Tip_ShowOnMap".Translate());
-                if (Clicked(hit)) CameraJumper.TryJumpAndSelect(w);
+                // A warband sitting on a town does not steal the town's click.
+                if (settlementHovered == null && Clicked(hit)) CameraJumper.TryJumpAndSelect(w);
             }
             return hovered;
         }
@@ -415,7 +433,7 @@ namespace Dominion
             }
             if (MapButton(minus, "−", "Dominion_Map_ZoomOut".Translate()))
             {
-                targetZoom = Mathf.Max(1f, (targetZoom ?? zoom) / 1.6f);
+                targetZoom = Mathf.Max(MinZoom, (targetZoom ?? zoom) / 1.6f);
             }
             if (MapButton(home, "⌂", "Dominion_Map_Reset".Translate())) Reset();
             TooltipHandler.TipRegion(new Rect(0f, 0f, 60f, 20f), "Dominion_Map_Help".Translate());
