@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Talking with factions: quick topics on the telegraph keys, audiences, and trade deals. -->
+
+  <!-- Quick topics -->
+  <Dominion_Talk_Heading>Talk</Dominion_Talk_Heading>
+  <Dominion_Talk_Praise>Praise them</Dominion_Talk_Praise>
+  <Dominion_Talk_Praise_Desc>Say something kind about them and their leader. Honourable factions and gentle, courtly or festive ones like it; suspicious, martial and aloof ones see through flattery.</Dominion_Talk_Praise_Desc>
+  <Dominion_Talk_Complain>Air a grievance</Dominion_Talk_Complain>
+  <Dominion_Talk_Complain_Desc>Complain about what they did to you. Honourable factions may apologise, which eases your grievance against them; proud or aggressive ones take offence. Being stronger than them helps.</Dominion_Talk_Complain_Desc>
+  <Dominion_Talk_AskRivals>Ask about their rivals</Dominion_Talk_AskRivals>
+  <Dominion_Talk_AskRivals_Desc>Ask whom they trust least and most. Reveals their true opinion of two factions and adds a little intel on them. Paranoid factions that do not like you will not say.</Dominion_Talk_AskRivals_Desc>
+  <Dominion_Talk_AskWants>Ask what they want</Dominion_Talk_AskWants>
+  <Dominion_Talk_AskWants_Desc>Ask what they want from you or the world: help in a war, amends, a treaty, aid, silver. Being asked pleases them a little.</Dominion_Talk_AskWants_Desc>
+  <Dominion_Talk_ShareRumour>Share a rumour</Dominion_Talk_ShareRumour>
+  <Dominion_Talk_ShareRumour_Desc>Tell them something unflattering about another faction. If they believe it they think less of that faction and better of you; if not, they think you are meddling. Easier about a faction they already distrust and one you know well.</Dominion_Talk_ShareRumour_Desc>
+  <Dominion_Talk_Warn>Warn them</Dominion_Talk_Warn>
+  <Dominion_Talk_Warn_Desc>Warn them of a danger: a warband on its way, a war, a rival spoiling for a fight. A real warning earns gratitude, even from enemies; a false alarm makes you look foolish.</Dominion_Talk_Warn_Desc>
+  <Dominion_Talk_Sure>Always heard out</Dominion_Talk_Sure>
+  <Dominion_Talk_PickTarget>Pick who it is about</Dominion_Talk_PickTarget>
+  <Dominion_Talk_Cooldown>Can be raised again with them after {0} days.</Dominion_Talk_Cooldown>
+  <Dominion_Talk_Shuns>{0} shuns outsiders and will not talk until they like you better.</Dominion_Talk_Shuns>
+  <Dominion_Talk_NoGrievance>You have no grievance against {0} worth raising.</Dominion_Talk_NoGrievance>
+  <Dominion_Talk_NoOneElse>There is no one else to ask about.</Dominion_Talk_NoOneElse>
+  <Dominion_Talk_Log>{0}: “{1}”</Dominion_Talk_Log>
+  <Dominion_Talk_RumourTitle>Spread a rumour about</Dominion_Talk_RumourTitle>
+  <Dominion_Talk_RumourAbout>{0} ({1} they believe it)</Dominion_Talk_RumourAbout>
+  <Dominion_Talk_Odds_Honour>Their honour</Dominion_Talk_Odds_Honour>
+  <Dominion_Talk_Odds_Paranoia>Their suspicion</Dominion_Talk_Odds_Paranoia>
+  <Dominion_Talk_Odds_Aggression>Their aggression</Dominion_Talk_Odds_Aggression>
+  <Dominion_Talk_Odds_Opinion>What they think of you</Dominion_Talk_Odds_Opinion>
+  <Dominion_Talk_Odds_Manner>Their manner</Dominion_Talk_Odds_Manner>
+  <Dominion_Talk_Odds_Strength>Your strength against theirs</Dominion_Talk_Odds_Strength>
+  <Dominion_Talk_Odds_Distrust>How they already see that faction</Dominion_Talk_Odds_Distrust>
+  <Dominion_Talk_Odds_Intel>How well you know that faction</Dominion_Talk_Odds_Intel>
+  <Dominion_Talk_Praise_Good>{0} took the praise well.</Dominion_Talk_Praise_Good>
+  <Dominion_Talk_Praise_Bad>{0} saw it as flattery.</Dominion_Talk_Praise_Bad>
+  <Dominion_Talk_Complain_Good>{0} apologised; your grievance eased by {1}.</Dominion_Talk_Complain_Good>
+  <Dominion_Talk_Complain_Bad>{0} took offence at the complaint.</Dominion_Talk_Complain_Bad>
+  <Dominion_Talk_Rivals_Refused>{0} would not say.</Dominion_Talk_Rivals_Refused>
+  <Dominion_Talk_Rivals_Worst>They trust {0} least (opinion {1}).</Dominion_Talk_Rivals_Worst>
+  <Dominion_Talk_Rivals_Best>They trust {0} most (opinion {1}).</Dominion_Talk_Rivals_Best>
+  <Dominion_Talk_Want_List>{0} wants: {1}.</Dominion_Talk_Want_List>
+  <Dominion_Talk_Want_Nothing>{0} wants nothing from you at present.</Dominion_Talk_Want_Nothing>
+  <Dominion_Talk_Want_Help>help in their war against {0}</Dominion_Talk_Want_Help>
+  <Dominion_Talk_Want_Amends>amends for what you did to them</Dominion_Talk_Want_Amends>
+  <Dominion_Talk_Want_LiftEmbargo>an end to your embargo</Dominion_Talk_Want_LiftEmbargo>
+  <Dominion_Talk_Want_OpenBorders>your borders opened</Dominion_Talk_Want_OpenBorders>
+  <Dominion_Talk_Want_NonAggression>a non-aggression pact</Dominion_Talk_Want_NonAggression>
+  <Dominion_Talk_Want_Trade>a trade agreement</Dominion_Talk_Want_Trade>
+  <Dominion_Talk_Want_Aid>aid for their struggling economy</Dominion_Talk_Want_Aid>
+  <Dominion_Talk_Want_Silver>silver, as always</Dominion_Talk_Want_Silver>
+  <Dominion_Talk_Rumour_Good>{0} believed what you said about {1}.</Dominion_Talk_Rumour_Good>
+  <Dominion_Talk_Rumour_Bad>{0} did not believe you about {1} and thinks you are meddling.</Dominion_Talk_Rumour_Bad>
+  <Dominion_Talk_Threat_Warband>{0} has a warband marching on them</Dominion_Talk_Threat_Warband>
+  <Dominion_Talk_Threat_War>their war with {0} could turn worse</Dominion_Talk_Threat_War>
+  <Dominion_Talk_Threat_Rival>{0} is spoiling for a fight with them</Dominion_Talk_Threat_Rival>
+  <Dominion_Talk_Warn_Good>{0} is grateful for the warning: {1}.</Dominion_Talk_Warn_Good>
+  <Dominion_Talk_Warn_Bad>{0} found the warning baseless.</Dominion_Talk_Warn_Bad>
+
+  <!-- Voice lines for talking (see Dominion_Keys_Voice.xml for the rest). {0} faction, {1} leader, {2} your colony. -->
+  <Dominion_Voice_Plain_SmallTalk>Quiet season here. And with you?|The harvest held. Can't complain.</Dominion_Voice_Plain_SmallTalk>
+  <Dominion_Voice_Plain_Praised>Kind of you to say.|We'll take the compliment.</Dominion_Voice_Plain_Praised>
+  <Dominion_Voice_Plain_Apology>Fair point. We'll make it right.|You're right. That was badly done.</Dominion_Voice_Plain_Apology>
+  <Dominion_Voice_Plain_Rebuff>Not interested.|We'd rather not discuss it.</Dominion_Voice_Plain_Rebuff>
+  <Dominion_Voice_Plain_Confide>Between us, then.|Here's how it stands.</Dominion_Voice_Plain_Confide>
+  <Dominion_Voice_Plain_Warned>Thanks for the warning. We'll be ready.|Good to know. We owe you.</Dominion_Voice_Plain_Warned>
+  <Dominion_Voice_Plain_Bargain>Let's see the numbers.|We can talk business.</Dominion_Voice_Plain_Bargain>
+  <Dominion_Voice_Courtly_SmallTalk>The season's balls have been tolerable, thank you.|The court is in good spirits, as befits it.</Dominion_Voice_Courtly_SmallTalk>
+  <Dominion_Voice_Courtly_Praised>Flattery, but well turned. The court approves.|How perceptive of you to notice.</Dominion_Voice_Courtly_Praised>
+  <Dominion_Voice_Courtly_Apology>The court concedes a regrettable lapse. It shall be mended.|Very well. The crown extends its regrets.</Dominion_Voice_Courtly_Apology>
+  <Dominion_Voice_Courtly_Rebuff>The court does not discuss such matters with commoners.|That is not a fit subject for this audience.</Dominion_Voice_Courtly_Rebuff>
+  <Dominion_Voice_Courtly_Confide>The court will share this much, in confidence.|Listen closely; this will not be repeated.</Dominion_Voice_Courtly_Confide>
+  <Dominion_Voice_Courtly_Warned>The crown thanks you for your vigilance.|A timely word. The court will remember it.</Dominion_Voice_Courtly_Warned>
+  <Dominion_Voice_Courtly_Bargain>The treasury will hear your proposal.|Name your terms, and be reasonable.</Dominion_Voice_Courtly_Bargain>
+  <Dominion_Voice_Divine_SmallTalk>The faithful pray, the fields grow. All is as willed.|The temples are full. And yours?</Dominion_Voice_Divine_SmallTalk>
+  <Dominion_Voice_Divine_Praised>Praise rightly given rises to heaven.|Your words honour the chosen of {0}.</Dominion_Voice_Divine_Praised>
+  <Dominion_Voice_Divine_Apology>Even the faithful may err. We atone.|It is confessed. Penance will be done.</Dominion_Voice_Divine_Apology>
+  <Dominion_Voice_Divine_Rebuff>That is not for unbelievers to know.|Silence. Some things are sacred.</Dominion_Voice_Divine_Rebuff>
+  <Dominion_Voice_Divine_Confide>The oracle has spoken thus.|Hear what has been revealed to us.</Dominion_Voice_Divine_Confide>
+  <Dominion_Voice_Divine_Warned>The heavens sent you to warn us. We are grateful.|A warning from a stranger is still a sign. Thank you.</Dominion_Voice_Divine_Warned>
+  <Dominion_Voice_Divine_Bargain>Even the temple must keep its stores. Speak.|The faithful trade honestly. Make your offer.</Dominion_Voice_Divine_Bargain>
+  <Dominion_Voice_Zealous_SmallTalk>Every day the truth wins more hearts.|We have no time for idle words, but go on.</Dominion_Voice_Zealous_SmallTalk>
+  <Dominion_Voice_Zealous_Praised>Praise the faith, not us.|The truth shines through us. You see it too.</Dominion_Voice_Zealous_Praised>
+  <Dominion_Voice_Zealous_Apology>We were overzealous. The faith forgives; so must we.|Wrong was done. We will mend it.</Dominion_Voice_Zealous_Apology>
+  <Dominion_Voice_Zealous_Rebuff>We do not share with the unconverted.|Convert, and then ask.</Dominion_Voice_Zealous_Rebuff>
+  <Dominion_Voice_Zealous_Confide>The faithful see much. Listen.|We will tell you what the faith has seen.</Dominion_Voice_Zealous_Confide>
+  <Dominion_Voice_Zealous_Warned>The enemies of the faith gather? Let them come. But thank you.|A warning well given. The faithful will be ready.</Dominion_Voice_Zealous_Warned>
+  <Dominion_Voice_Zealous_Bargain>The cause needs supplies. Speak.|Trade, then. The faith provides.</Dominion_Voice_Zealous_Bargain>
+  <Dominion_Voice_Eerie_SmallTalk>The nights are long here. We like them that way.|Things grow in the dark. Things always grow.</Dominion_Voice_Eerie_SmallTalk>
+  <Dominion_Voice_Eerie_Praised>How... sweet.|Your words taste of fear. And respect.</Dominion_Voice_Eerie_Praised>
+  <Dominion_Voice_Eerie_Apology>Perhaps we were... careless. It will not happen again.|An error. We will make it disappear.</Dominion_Voice_Eerie_Apology>
+  <Dominion_Voice_Eerie_Rebuff>Some doors stay closed, little colony.|You do not want to know.</Dominion_Voice_Eerie_Rebuff>
+  <Dominion_Voice_Eerie_Confide>We hear whispers. Here is one.|Listen. The dark tells us things.</Dominion_Voice_Eerie_Confide>
+  <Dominion_Voice_Eerie_Warned>We knew. But it is touching that you told us.|Interesting. We will prepare a... welcome.</Dominion_Voice_Eerie_Warned>
+  <Dominion_Voice_Eerie_Bargain>We trade in many things. Some of them are goods.|Name your price. We will name ours.</Dominion_Voice_Eerie_Bargain>
+  <Dominion_Voice_Martial_SmallTalk>Training. Raiding. The usual.|Our warriors are bored. What do you want?</Dominion_Voice_Martial_SmallTalk>
+  <Dominion_Voice_Martial_Praised>Ha! Flatter us all you like. We're still armed.|Strong words. We like strong words.</Dominion_Voice_Martial_Praised>
+  <Dominion_Voice_Martial_Apology>Fine. Our fighters went too far. Done.|We'll pay for the broken heads. This time.</Dominion_Voice_Martial_Apology>
+  <Dominion_Voice_Martial_Rebuff>Mind your own business.|Ask again and lose a tooth.</Dominion_Voice_Martial_Rebuff>
+  <Dominion_Voice_Martial_Confide>Here's who we'd fight next. And who we wouldn't.|Listen up. We say this once.</Dominion_Voice_Martial_Confide>
+  <Dominion_Voice_Martial_Warned>Someone wants a fight? Good. Thanks for the tip.|A warning? Ha. We'll be waiting with steel.</Dominion_Voice_Martial_Warned>
+  <Dominion_Voice_Martial_Bargain>Weapons, food, silver. What're you selling?|Trade's for the weak. But fine.</Dominion_Voice_Martial_Bargain>
+  <Dominion_Voice_Honourable_SmallTalk>The training yards are full and the tea is hot. All is well.|We keep to our ways. And you?</Dominion_Voice_Honourable_SmallTalk>
+  <Dominion_Voice_Honourable_Praised>You honour us. We will honour you in return.|Kind words between equals. Thank you.</Dominion_Voice_Honourable_Praised>
+  <Dominion_Voice_Honourable_Apology>We were wrong. We apologise, without condition.|Our honour demands we make amends.</Dominion_Voice_Honourable_Apology>
+  <Dominion_Voice_Honourable_Rebuff>That would not be honourable to share.|Forgive us; we cannot speak of it.</Dominion_Voice_Honourable_Rebuff>
+  <Dominion_Voice_Honourable_Confide>Since you ask honestly, we answer honestly.|This is the truth, as we know it.</Dominion_Voice_Honourable_Confide>
+  <Dominion_Voice_Honourable_Warned>You warn even those who are not your friends. That is honour.|We are in your debt for this warning.</Dominion_Voice_Honourable_Warned>
+  <Dominion_Voice_Honourable_Bargain>A fair trade is a kind of honour. Speak.|We will deal fairly, if you do.</Dominion_Voice_Honourable_Bargain>
+  <Dominion_Voice_Stern_SmallTalk>Production quotas are being met.|Order is maintained. That is all.</Dominion_Voice_Stern_SmallTalk>
+  <Dominion_Voice_Stern_Praised>Noted.|The state accepts your assessment.</Dominion_Voice_Stern_Praised>
+  <Dominion_Voice_Stern_Apology>An irregularity occurred. It has been corrected.|The responsible officials have been disciplined.</Dominion_Voice_Stern_Apology>
+  <Dominion_Voice_Stern_Rebuff>That information is classified.|Request denied.</Dominion_Voice_Stern_Rebuff>
+  <Dominion_Voice_Stern_Confide>The following is released to you.|The state's assessment is as follows.</Dominion_Voice_Stern_Confide>
+  <Dominion_Voice_Stern_Warned>Your report has been forwarded to the ministry.|Intelligence received. Defences are being raised.</Dominion_Voice_Stern_Warned>
+  <Dominion_Voice_Stern_Bargain>Submit your terms to the trade ministry.|The state will consider an exchange.</Dominion_Voice_Stern_Bargain>
+  <Dominion_Voice_Aloof_SmallTalk>...It is quiet. We prefer quiet.|Nothing to report. As always.</Dominion_Voice_Aloof_SmallTalk>
+  <Dominion_Voice_Aloof_Praised>...Hm.|We did not ask for praise.</Dominion_Voice_Aloof_Praised>
+  <Dominion_Voice_Aloof_Apology>We will stay out of your way.|...It was a mistake. It is over.</Dominion_Voice_Aloof_Apology>
+  <Dominion_Voice_Aloof_Rebuff>No.|That is our business.</Dominion_Voice_Aloof_Rebuff>
+  <Dominion_Voice_Aloof_Confide>Only this, and then leave us.|Fine. One answer.</Dominion_Voice_Aloof_Confide>
+  <Dominion_Voice_Aloof_Warned>We had not noticed. ...Thank you.|We will watch the horizon.</Dominion_Voice_Aloof_Warned>
+  <Dominion_Voice_Aloof_Bargain>If we must trade, be quick.|State the goods. Nothing more.</Dominion_Voice_Aloof_Bargain>
+  <Dominion_Voice_Mercantile_SmallTalk>Markets are up, margins are thin. Same as ever!|Business is good. Could be better. Always could!</Dominion_Voice_Mercantile_SmallTalk>
+  <Dominion_Voice_Mercantile_Praised>Flattery is free. We prefer silver, but thank you!|Kind words are good for business.</Dominion_Voice_Mercantile_Praised>
+  <Dominion_Voice_Mercantile_Apology>Our mistake. Consider it written off.|We'll make it right. Reputation is everything.</Dominion_Voice_Mercantile_Apology>
+  <Dominion_Voice_Mercantile_Rebuff>That's proprietary information.|Trade secret, I'm afraid.</Dominion_Voice_Mercantile_Rebuff>
+  <Dominion_Voice_Mercantile_Confide>Information is a commodity. This one's on the house.|Here's what the market's saying.</Dominion_Voice_Mercantile_Confide>
+  <Dominion_Voice_Mercantile_Warned>Risk averted is profit saved. Thank you!|We'll adjust our forecasts. Much obliged.</Dominion_Voice_Mercantile_Warned>
+  <Dominion_Voice_Mercantile_Bargain>Now we're talking. What's on the table?|Let's make a deal everyone walks away from happy.</Dominion_Voice_Mercantile_Bargain>
+  <Dominion_Voice_Festive_SmallTalk>We had a feast last night. You should've come!|Music, wine, dancing. The usual!</Dominion_Voice_Festive_SmallTalk>
+  <Dominion_Voice_Festive_Praised>Oh, stop it! ...No, go on.|You're too kind! Let's drink to that!</Dominion_Voice_Festive_Praised>
+  <Dominion_Voice_Festive_Apology>Oops. Our fault. Let us make it up to you!|Sorry, sorry. Next round's on us.</Dominion_Voice_Festive_Apology>
+  <Dominion_Voice_Festive_Rebuff>Boring! Ask us something fun.|Let's not spoil the mood with that.</Dominion_Voice_Festive_Rebuff>
+  <Dominion_Voice_Festive_Confide>Ooh, gossip! Here's what we've heard.|Lean in, this one's juicy.</Dominion_Voice_Festive_Confide>
+  <Dominion_Voice_Festive_Warned>Trouble's coming? Then we'll party harder first. Thank you!|Good thing you told us. We owe you a drink.</Dominion_Voice_Festive_Warned>
+  <Dominion_Voice_Festive_Bargain>Trading? Can there be wine involved?|Sure, let's make a deal and celebrate it!</Dominion_Voice_Festive_Bargain>
+  <Dominion_Voice_Gentle_SmallTalk>The children are well, and the gardens are green.|It has been a peaceful season. We hope yours was too.</Dominion_Voice_Gentle_SmallTalk>
+  <Dominion_Voice_Gentle_Praised>Thank you. That warms our hearts.|You are very kind.</Dominion_Voice_Gentle_Praised>
+  <Dominion_Voice_Gentle_Apology>We are so sorry. We will put it right.|You are right, and we apologise.</Dominion_Voice_Gentle_Apology>
+  <Dominion_Voice_Gentle_Rebuff>We'd rather not speak ill of anyone.|Please, let's talk of something else.</Dominion_Voice_Gentle_Rebuff>
+  <Dominion_Voice_Gentle_Confide>We'll tell you, so that no one gets hurt.|In the hope it helps keep the peace:</Dominion_Voice_Gentle_Confide>
+  <Dominion_Voice_Gentle_Warned>Thank you for caring about us.|We will get our people to safety. Thank you.</Dominion_Voice_Gentle_Warned>
+  <Dominion_Voice_Gentle_Bargain>We're happy to share what we have.|Let's trade, so both our peoples prosper.</Dominion_Voice_Gentle_Bargain>
+  <Dominion_Voice_Collegial_SmallTalk>The council's agenda is long, as ever.|We debated irrigation for six hours. Riveting.</Dominion_Voice_Collegial_SmallTalk>
+  <Dominion_Voice_Collegial_Praised>The council will be pleased to hear it.|Your remarks are entered into the record.</Dominion_Voice_Collegial_Praised>
+  <Dominion_Voice_Collegial_Apology>The council acknowledges the fault and offers its apology.|After review, we accept responsibility.</Dominion_Voice_Collegial_Apology>
+  <Dominion_Voice_Collegial_Rebuff>That matter is before a committee.|We are not at liberty to discuss it.</Dominion_Voice_Collegial_Rebuff>
+  <Dominion_Voice_Collegial_Confide>The council's briefing, in short:|For your information, the council's view:</Dominion_Voice_Collegial_Confide>
+  <Dominion_Voice_Collegial_Warned>The council thanks you. Measures will be taken.|Your warning will be tabled as urgent.</Dominion_Voice_Collegial_Warned>
+  <Dominion_Voice_Collegial_Bargain>The trade committee is in session. Proceed.|Present your proposal for consideration.</Dominion_Voice_Collegial_Bargain>
+  <Dominion_Voice_Tribal_SmallTalk>The hunt was good. The children grow.|Rain came. The river is full.</Dominion_Voice_Tribal_SmallTalk>
+  <Dominion_Voice_Tribal_Praised>Good words. The elders smile.|You speak well, outlander.</Dominion_Voice_Tribal_Praised>
+  <Dominion_Voice_Tribal_Apology>Our young ones were foolish. We make it right.|The tribe was wrong. We give you peace.</Dominion_Voice_Tribal_Apology>
+  <Dominion_Voice_Tribal_Rebuff>That is for the tribe, not you.|The elders say no.</Dominion_Voice_Tribal_Rebuff>
+  <Dominion_Voice_Tribal_Confide>The scouts saw this. Listen.|The fire-talk says this.</Dominion_Voice_Tribal_Confide>
+  <Dominion_Voice_Tribal_Warned>You warn us. You are a friend to the tribe.|Our hunters will watch. Thank you.</Dominion_Voice_Tribal_Warned>
+  <Dominion_Voice_Tribal_Bargain>Show us what you trade.|We trade skins and food. You?</Dominion_Voice_Tribal_Bargain>
+
+</LanguageData>

@@ -47,6 +47,11 @@ namespace Dominion
         // A key just pressed stays down a moment.
         private DiplomacyActionDef pressed;
         private float pressedAt;
+        private TalkTopic? pressedTalk;
+
+        // What the faction last said back, shown under the talk keys.
+        private TalkResult lastTalk;
+        private Faction lastTalkFaction;
 
         private static List<DiplomacyActionDef> actions;
 
@@ -457,7 +462,7 @@ namespace Dominion
             Rect list = new Rect(inner.x, inner.y + 22f, inner.width, inner.height - 22f);
             Rect view = new Rect(0f, 0f, list.width - 16f, Mathf.Max(list.height, keysHeight));
             Widgets.BeginScrollView(list, ref keysScroll, view);
-            float y = 0f;
+            float y = DrawTalk(view.width, f);
             ActionTier? lastTier = null;
             foreach (DiplomacyActionDef def in Actions)
             {
@@ -476,6 +481,94 @@ namespace Dominion
             }
             keysHeight = y + 6f;
             Widgets.EndScrollView();
+        }
+
+        // ------------------------------------------------------------------ talk
+
+        /// <summary>
+        /// The talk keys at the top of the bank: quick words over the wire, each answered in the faction's own voice.
+        /// The last answer stays printed under them. Returns the y below.
+        /// </summary>
+        private float DrawTalk(float width, Faction f)
+        {
+            float y = 0f;
+            DominionTheme.InkLabel(new Rect(0f, y, width, 18f), "Dominion_Talk_Heading".Translate().ToString().ToUpper(), new Color(0.75f, 0.65f, 0.45f), GameFont.Tiny);
+            Widgets.DrawBoxSolid(new Rect(0f, y + 17f, width, 1f), new Color(0.75f, 0.65f, 0.45f, 0.3f));
+            y += 20f;
+            // Two keys to a row: talk is quick.
+            float half = (width - 6f) / 2f;
+            for (int i = 0; i < DiplomacyTalk.Topics.Length; i++)
+            {
+                Rect r = new Rect(i % 2 == 0 ? 0f : half + 6f, y + i / 2 * (KeyRow - 2f), half, KeyRow - 6f);
+                DrawTalkKey(r, DiplomacyTalk.Topics[i], f);
+            }
+            y += Mathf.CeilToInt(DiplomacyTalk.Topics.Length / 2f) * (KeyRow - 2f);
+
+            // Their last answer, on a strip of tape.
+            if (lastTalk != null && lastTalkFaction == f)
+            {
+                string text = "“" + lastTalk.reply + "”" + (lastTalk.fact.NullOrEmpty() ? "" : "\n" + lastTalk.fact);
+                Text.Font = GameFont.Tiny;
+                float h = Text.CalcHeight(text, width - 12f) + 8f;
+                Text.Font = GameFont.Small;
+                Rect strip = new Rect(0f, y, width, h);
+                DominionRooms.DrawStrip(strip, DominionRooms.TickerTape, 0.3f);
+                Color ink = lastTalk.outcome > 0 ? DominionTheme.InkGreen : lastTalk.outcome < 0 ? DominionTheme.InkRed : DominionTheme.Ink;
+                DominionTheme.InkLabel(new Rect(6f, y + 4f, width - 12f, h - 4f), text, ink, GameFont.Tiny);
+                y += h + 4f;
+            }
+            return y + 4f;
+        }
+
+        private void DrawTalkKey(Rect row, TalkTopic t, Faction f)
+        {
+            string reason = DiplomacyTalk.CannotTalkReason(f, t);
+            bool down = pressedTalk == t && pressed == null && Time.realtimeSinceStartup - pressedAt < 0.25f;
+            bool over = reason == null && Mouse.IsOver(row);
+            if (over) Widgets.DrawBoxSolid(row, new Color(1f, 0.85f, 0.5f, 0.07f));
+            Rect cap = new Rect(row.x + 2f, row.y + (down ? 6f : 3f), 24f, 24f);
+            GUI.color = reason != null ? new Color(0.5f, 0.48f, 0.44f) : over ? Color.white : new Color(0.9f, 0.88f, 0.84f);
+            GUI.DrawTexture(cap, DominionRooms.Knob);
+            GUI.color = Color.white;
+            float cost = DiplomacyTalk.InfluenceCost(t);
+            string label = DiplomacyTalk.Label(t) + (cost > 0f ? "  ·  " + cost.ToString("F0") : "");
+            Rect text = new Rect(row.x + 30f, row.y, row.width - 30f, 18f);
+            DominionTheme.InkLabel(text, label.Truncate(text.width), reason != null ? new Color(0.6f, 0.55f, 0.48f) : DominionRooms.BrassLight, GameFont.Small);
+            Rect info = new Rect(row.x + 30f, row.y + 18f, row.width - 30f, 15f);
+            float? chance = reason == null ? DiplomacyTalk.Chance(f, t) : null;
+            if (reason != null) DominionTheme.InkLabel(info, reason.Truncate(info.width), new Color(1f, 0.55f, 0.4f, 0.85f), GameFont.Tiny);
+            else if (chance.HasValue)
+            {
+                Rect bar = new Rect(info.x, info.y + 2f, Mathf.Min(info.width - 36f, 90f), 10f);
+                Widgets.DrawBoxSolid(bar, new Color(0f, 0f, 0f, 0.5f));
+                GUI.DrawTexture(new Rect(bar.x, bar.y, bar.width * chance.Value, bar.height), DominionPaper.OddsFill(chance.Value));
+                DominionTheme.InkLabel(new Rect(bar.xMax + 4f, info.y - 1f, 40f, 16f), chance.Value.ToStringPercent(), new Color(0.95f, 0.9f, 0.8f), GameFont.Tiny);
+                var sb = new System.Text.StringBuilder();
+                DiplomacyTalk.Chance(f, t, null, sb);
+                TooltipHandler.TipRegion(bar, "Dominion_Odds_Title".Translate(f.Name) + "\n" + sb + "Dominion_Odds_Total".Translate(chance.Value.ToStringPercent()));
+            }
+            else DominionTheme.InkLabel(info, (t == TalkTopic.ShareRumour ? "Dominion_Talk_PickTarget" : "Dominion_Talk_Sure").Translate(), new Color(0.8f, 0.75f, 0.65f), GameFont.Tiny);
+            string tip = DiplomacyTalk.Desc(t) + "\n\n" + "Dominion_Talk_Cooldown".Translate(DiplomacyTalk.CooldownDays(t))
+                         + (reason != null ? "\n\n" + reason.Colorize(ColorLibrary.RedReadable) : "");
+            TooltipHandler.TipRegion(new Rect(row.x, row.y, row.width, 18f), tip);
+            TooltipHandler.TipRegion(cap, tip);
+            if (reason != null || !(Widgets.ButtonInvisible(cap) || Widgets.ButtonInvisible(text))) return;
+            if (t == TalkTopic.ShareRumour)
+            {
+                Find.WindowStack.Add(new FloatMenu(DiplomacyTalk.RumourMenu(f, about => Say(f, t, about)), "Dominion_Talk_RumourTitle".Translate()));
+                return;
+            }
+            Say(f, t, null);
+        }
+
+        private void Say(Faction f, TalkTopic t, Faction about)
+        {
+            pressed = null;
+            pressedTalk = t;
+            pressedAt = Time.realtimeSinceStartup;
+            SoundDefOf.Tick_Low.PlayOneShotOnCamera();
+            lastTalk = DiplomacyTalk.Talk(f, t, about);
+            lastTalkFaction = f;
         }
 
         private void DrawKey(Rect row, DiplomacyActionDef def, DiplomacyActionWorker worker, Faction f, WorldComponent_Dominion comp)
@@ -533,6 +626,7 @@ namespace Dominion
             if (Widgets.ButtonInvisible(cap) || Widgets.ButtonInvisible(text))
             {
                 pressed = def;
+                pressedTalk = null;
                 pressedAt = Time.realtimeSinceStartup;
                 SoundDefOf.Tick_Low.PlayOneShotOnCamera();
                 if (worker.ViaLetter) Find.WindowStack.Add(new Dialog_EnvoyLetter(def, f));
