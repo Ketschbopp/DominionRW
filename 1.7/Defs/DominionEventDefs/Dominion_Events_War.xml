@@ -287,4 +287,44 @@
     <newsRules>Dominion_News_MissileStrike</newsRules>
     <headline>{0} launches a missile strike on {2}</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_DoomsdayClock</defName>
+    <label>doomsday clock</label>
+    <description>A strategic strike has started the doomsday clock. Every faction is on edge; the closer it gets to midnight, the worse.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <headline>The doomsday clock is ticking: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_NuclearWar</defName>
+    <label>global nuclear war</label>
+    <description>The doomsday clock has struck midnight. Strategic weapons fly between every power that has them; economies and governments everywhere are shaken, and the Rim Council is dissolved.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>1</newsworthiness>
+    <headline>GLOBAL NUCLEAR WAR</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_NuclearWinter</defName>
+    <label>nuclear winter</label>
+    <description>The exchange is over and the sky has darkened. A nuclear winter grips the planet, starving populations everywhere.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>1</newsworthiness>
+    <headline>Nuclear winter falls, expected to last {2} years</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_NuclearWinterEnds</defName>
+    <label>nuclear winter ends</label>
+    <description>The nuclear winter has lifted. The world can begin to rebuild.</description>
+    <category>War</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.9</newsworthiness>
+    <headline>The nuclear winter is over</headline>
+  </Dominion.DominionEventDef>
 </Defs>

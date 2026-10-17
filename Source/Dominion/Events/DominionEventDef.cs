@@ -158,6 +158,10 @@ namespace Dominion
         public static DominionEventDef Dominion_VisitIncident;
         public static DominionEventDef Dominion_SiegeBegan;
         public static DominionEventDef Dominion_MissileStrike;
+        public static DominionEventDef Dominion_DoomsdayClock;
+        public static DominionEventDef Dominion_NuclearWar;
+        public static DominionEventDef Dominion_NuclearWinter;
+        public static DominionEventDef Dominion_NuclearWinterEnds;
 
         static DominionEventDefOf()
         {
