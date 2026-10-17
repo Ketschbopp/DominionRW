@@ -588,9 +588,4 @@
   <Dominion_IRBM_ClockText>{0}:{1} to midnight</Dominion_IRBM_ClockText>
   <Dominion_IRBM_DisbandReason>a global nuclear war broke out, and the council that was meant to prevent it could not survive it.</Dominion_IRBM_DisbandReason>
   <Dominion_IRBM_Dossier>Missiles</Dominion_IRBM_Dossier>
-  <Dominion_IRBM_Phase_Calm>Doomsday clock: not running</Dominion_IRBM_Phase_Calm>
-  <Dominion_IRBM_Phase_Clock>Doomsday clock: {0}</Dominion_IRBM_Phase_Clock>
-  <Dominion_IRBM_Phase_War>GLOBAL NUCLEAR WAR</Dominion_IRBM_Phase_War>
-  <Dominion_IRBM_Phase_Winter>Nuclear winter</Dominion_IRBM_Phase_Winter>
-  <Dominion_IRBM_Phase_Desc>InterRim Ballistic Missile's doomsday clock. Every strategic strike moves it toward midnight; at midnight a global nuclear war breaks out, the Rim Council is dissolved for good, and a nuclear winter follows. While it runs, every faction loses stability; in war and winter, economies and populations suffer too.</Dominion_IRBM_Phase_Desc>
 </LanguageData>
