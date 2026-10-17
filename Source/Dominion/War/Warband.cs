@@ -206,7 +206,7 @@ namespace Dominion
             if (Faction != null && Faction.HostileTo(Faction.OfPlayer))
             {
                 sb.AppendLine();
-                sb.Append("Dominion_Warband_BattleSize".Translate(WarbandUtility.ForPlayerBattle(Faction, Mathf.Min(points, 3000f), WarbandUtility.InterceptShare).ToString("F0")));
+                sb.Append("Dominion_Warband_BattleSize".Translate(WarbandUtility.ForPlayerBattle(Faction, Mathf.Min(points, 3000f), WarbandUtility.InterceptShare, vary: false).ToString("F0")));
             }
             return sb.ToString();
         }
@@ -426,12 +426,22 @@ namespace Dominion
         /// <paramref name="share"/> of a raid on the colony (which already follows wealth, difficulty and adaptation),
         /// scaled by how strong the faction is.
         /// </summary>
-        public static float ForPlayerBattle(Faction f, float simPoints, float share)
+        public static float ForPlayerBattle(Faction f, float simPoints, float share, bool vary = true)
         {
             float sim = simPoints * Mathf.Clamp(Find.Storyteller.difficulty.threatScale, 0.3f, 2.5f);
             Map home = VisitorUtility.PlayerCapitalMap();
             float colony = home != null ? StorytellerUtility.DefaultThreatPointsNow(home) * share * Mathf.Clamp(RelativeStrength(f), 0.75f, 1.5f) : 0f;
-            return Mathf.Max(sim, colony);
+            return Mathf.Max(sim, colony) * SizeSetting * (vary ? Vary() : 1f);
+        }
+
+        /// <summary>The player's "Warband fight size" setting.</summary>
+        public static float SizeSetting => Mathf.Clamp(DominionMod.Settings.warbandFightSize, 0.1f, 5f);
+
+        /// <summary>One fight's luck, within the player's "Warband fight variance" setting (±).</summary>
+        public static float Vary()
+        {
+            float v = Mathf.Clamp(DominionMod.Settings.warbandFightVariance, 0f, 0.9f);
+            return Rand.Range(1f - v, 1f + v);
         }
 
         /// <summary>A typical warband's size for this faction, without the luck of the levy.</summary>
@@ -626,7 +636,7 @@ namespace Dominion
             // is and how big the warband was (about 140% for an average one).
             float strength = Mathf.Clamp(RelativeStrength(w.Faction), 0.6f, 1.8f);
             float size = Mathf.Clamp(w.points / Mathf.Max(200f, ExpectedPoints(w.Faction)), 0.7f, 1.4f);
-            float points = StorytellerUtility.DefaultThreatPointsNow(map) * Mathf.Clamp(0.9f + 0.5f * strength * size, 1.1f, 2f) * Rand.Range(0.9f, 1.1f);
+            float points = StorytellerUtility.DefaultThreatPointsNow(map) * Mathf.Clamp(0.9f + 0.5f * strength * size, 1.1f, 2f) * SizeSetting * Vary();
             var parms = new IncidentParms
             {
                 target = map,

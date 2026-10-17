@@ -111,6 +111,10 @@ namespace Dominion
                 l.Label("Dominion_Setting_WarbandSpeed".Translate(s.warbandSpeed.ToString("0.0")), tooltip: "Dominion_Setting_WarbandSpeed_Desc".Translate());
                 s.warbandSpeed = Mathf.Round(l.Slider(s.warbandSpeed, 0.5f, 5f) * 10f) / 10f;
                 l.CheckboxLabeled("Dominion_Setting_WarbandRaids".Translate(), ref s.warbandRaidsOnPlayer, "Dominion_Setting_WarbandRaids_Desc".Translate());
+                l.Label("Dominion_Setting_WarbandFightSize".Translate(s.warbandFightSize.ToStringPercent()), tooltip: "Dominion_Setting_WarbandFightSize_Desc".Translate());
+                s.warbandFightSize = Mathf.Round(l.Slider(s.warbandFightSize, 0.25f, 3f) * 20f) / 20f;
+                l.Label("Dominion_Setting_WarbandFightVariance".Translate(s.warbandFightVariance.ToStringPercent()), tooltip: "Dominion_Setting_WarbandFightVariance_Desc".Translate());
+                s.warbandFightVariance = Mathf.Round(l.Slider(s.warbandFightVariance, 0f, 0.6f) * 20f) / 20f;
                 l.CheckboxLabeled("Dominion_Setting_Occupation".Translate(), ref s.warOccupation, "Dominion_Setting_Occupation_Desc".Translate());
             }
             l.Gap();
