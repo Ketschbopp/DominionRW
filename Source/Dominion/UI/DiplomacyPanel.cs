@@ -494,14 +494,17 @@ namespace Dominion
             Widgets.EndScrollView();
         }
 
-        /// <summary>The big switches over the keys: trade over the wire and the ledger of standing deals.</summary>
+        /// <summary>The big switches over the keys: an audience with their leader, trade over the wire, and the ledger of standing deals.</summary>
         private static void DrawDealButtons(Rect rect, Faction f)
         {
-            float w = (rect.width - 4f) / 2f;
-            if (DominionRooms.BrassButton(new Rect(rect.x, rect.y, w, rect.height), "Dominion_Deal_Trade".Translate(),
+            float w = (rect.width - 8f) / 3f;
+            if (DominionRooms.BrassButton(new Rect(rect.x, rect.y, w, rect.height), "Dominion_Audience_Button".Translate(),
+                    "Dominion_Audience_Button_Desc".Translate(f.leader?.LabelShortCap ?? f.Name, Dialog_Audience.CooldownDays), Dialog_Audience.CannotHoldReason(f)))
+                Dialog_Audience.Request(f);
+            if (DominionRooms.BrassButton(new Rect(rect.x + w + 4f, rect.y, w, rect.height), "Dominion_Deal_Trade".Translate(),
                     "Dominion_Deal_Trade_Desc".Translate(f.Name, TradeDeals.OfficeDays), TradeDeals.CannotDealReason(f)))
                 TradeDeals.OpenTrade(f);
-            if (DominionRooms.BrassButton(new Rect(rect.x + w + 4f, rect.y, w, rect.height), "Dominion_Ledger_Button".Translate(TradeDeals.Open.Count()),
+            if (DominionRooms.BrassButton(new Rect(rect.x + (w + 4f) * 2f, rect.y, w, rect.height), "Dominion_Ledger_Button".Translate(TradeDeals.Open.Count()),
                     "Dominion_Ledger_Button_Desc".Translate()))
                 Find.WindowStack.Add(new Dialog_TradeLedger());
         }

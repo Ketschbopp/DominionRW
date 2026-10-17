@@ -215,4 +215,75 @@
   <Dominion_Ledger_Button>Ledger ({0})</Dominion_Ledger_Button>
   <Dominion_Ledger_Button_Desc>Every standing deal: what is due when, with buttons to resume or call one off.</Dominion_Ledger_Button_Desc>
 
+  <!-- Audiences -->
+  <Dominion_Audience_Button>Audience</Dominion_Audience_Button>
+  <Dominion_Audience_Button_Desc>Request an audience with {0}: a longer conversation where you can make small talk, settle grievances, trade rumours and threats, ask for help in your wars, trade, or propose a treaty. Once every {1} days.</Dominion_Audience_Button_Desc>
+  <Dominion_Audience_Refused>{0} refuses to receive your envoy while you are at war. A war-weary or less aggressive enemy might.</Dominion_Audience_Refused>
+  <Dominion_Audience_Log>Audience with {0}.</Dominion_Audience_Log>
+  <Dominion_Audience_Head>AUDIENCE  ·  {0}</Dominion_Audience_Head>
+  <Dominion_Audience_You>YOU</Dominion_Audience_You>
+  <Dominion_Audience_Manner>Manner: {0}</Dominion_Audience_Manner>
+  <Dominion_Audience_Patience>Patience</Dominion_Audience_Patience>
+  <Dominion_Audience_Patience_Desc>How much longer {0} will listen. Each exchange uses one lamp; going back between topics does not. Honour and a good opinion of you give more patience.</Dominion_Audience_Patience_Desc>
+  <Dominion_Audience_Ended>(The audience is over.)</Dominion_Audience_Ended>
+  <Dominion_Audience_Close>Close the channel</Dominion_Audience_Close>
+  <Dominion_Audience_AlreadyAsked>Already raised in this audience.</Dominion_Audience_AlreadyAsked>
+  <Dominion_Audience_Back>◂ Back</Dominion_Audience_Back>
+  <Dominion_Audience_End>End the audience</Dominion_Audience_End>
+  <Dominion_Audience_SmallTalk>Small talk</Dominion_Audience_SmallTalk>
+  <Dominion_Audience_SmallTalk_Desc>Pleasantries. Warms most leaders a little, festive and gentle ones more; does nothing for those who already dislike you.</Dominion_Audience_SmallTalk_Desc>
+  <Dominion_Audience_Grievances>Grievances</Dominion_Audience_Grievances>
+  <Dominion_Audience_Grievances_Desc>Settle what stands between you: apologise, pay amends, or demand an apology from them.</Dominion_Audience_Grievances_Desc>
+  <Dominion_Audience_Rumours>Rumours</Dominion_Audience_Rumours>
+  <Dominion_Audience_Rumours_Desc>Ask about their rivals, pass on a rumour about another faction, or warn them of a danger.</Dominion_Audience_Rumours_Desc>
+  <Dominion_Audience_Threats>Threats</Dominion_Audience_Threats>
+  <Dominion_Audience_Threats_Desc>Remind them of your strength, or demand tribute.</Dominion_Audience_Threats_Desc>
+  <Dominion_Audience_Help>Ask for help</Dominion_Audience_Help>
+  <Dominion_Audience_Help_Desc>Ask them to join one of your wars.</Dominion_Audience_Help_Desc>
+  <Dominion_Audience_NoWar>You are not at war.</Dominion_Audience_NoWar>
+  <Dominion_Audience_AlreadyFighting>{0} is already at war with {1}.</Dominion_Audience_AlreadyFighting>
+  <Dominion_Audience_HelpAgainst>Join the war against {0} ({1})</Dominion_Audience_HelpAgainst>
+  <Dominion_Audience_Deal>Trade</Dominion_Audience_Deal>
+  <Dominion_Audience_Treaty>Propose a treaty</Dominion_Audience_Treaty>
+  <Dominion_Audience_Apologise>Apologise ({0} influence)</Dominion_Audience_Apologise>
+  <Dominion_Audience_Apologise_Desc>Apologise for what you did to {0}. Honourable and gentle leaders may forgive a large part of their grievance; aggressive ones want more than words.</Dominion_Audience_Apologise_Desc>
+  <Dominion_Audience_Amends>Pay amends ({0} silver)</Dominion_Audience_Amends>
+  <Dominion_Audience_Amends_Desc>Pay silver to make up for what you did to {0}. Always eases their grievance, more the more you pay.</Dominion_Audience_Amends_Desc>
+  <Dominion_Audience_NoTheirGrievance>{0} holds no grievance against you worth settling.</Dominion_Audience_NoTheirGrievance>
+  <Dominion_Audience_DemandApology>Demand an apology</Dominion_Audience_DemandApology>
+  <Dominion_Audience_Intimidate>Remind them of your strength</Dominion_Audience_Intimidate>
+  <Dominion_Audience_Intimidate_Desc>Your strength is {1} of {0}'s. The weak and the timid grow careful and drop their grudges; the proud and the aggressive are provoked.</Dominion_Audience_Intimidate_Desc>
+  <Dominion_Audience_Tribute>Demand tribute</Dominion_Audience_Tribute>
+  <Dominion_Audience_Forgiven>their grievance eased by {0}</Dominion_Audience_Forgiven>
+  <Dominion_Audience_NotEnough>words are not enough</Dominion_Audience_NotEnough>
+  <Dominion_Audience_Cowed>{0} backs down</Dominion_Audience_Cowed>
+  <Dominion_Audience_Provoked>{0} is provoked</Dominion_Audience_Provoked>
+  <Dominion_Audience_LogApology>{0} accepted your apology.</Dominion_Audience_LogApology>
+  <Dominion_Audience_LogApologyRejected>{0} would not accept your apology.</Dominion_Audience_LogApologyRejected>
+  <Dominion_Audience_LogAmends>You paid {0} silver in amends to {1}.</Dominion_Audience_LogAmends>
+  <Dominion_Audience_LogCowed>{0} backed down before your strength.</Dominion_Audience_LogCowed>
+  <Dominion_Audience_LogProvoked>{0} took your show of strength as a provocation.</Dominion_Audience_LogProvoked>
+  <Dominion_Audience_Said_SmallTalk>How have you been? How are your people?</Dominion_Audience_Said_SmallTalk>
+  <Dominion_Audience_Said_Apology>We regret what happened between us. We apologise.</Dominion_Audience_Said_Apology>
+  <Dominion_Audience_Said_Amends>We want to set things right. Accept {0} silver in amends.</Dominion_Audience_Said_Amends>
+  <Dominion_Audience_Said_Intimidate>Consider carefully. You know what we can do.</Dominion_Audience_Said_Intimidate>
+  <Dominion_Audience_Said_Tribute>We expect tribute. A letter with our terms follows.</Dominion_Audience_Said_Tribute>
+  <Dominion_Audience_Said_Help>Stand with us against {0}.</Dominion_Audience_Said_Help>
+  <Dominion_Audience_Said_Deal>Let's talk trade. Open your stores to us.</Dominion_Audience_Said_Deal>
+  <Dominion_Audience_Said_Treaty>We have a treaty to propose.</Dominion_Audience_Said_Treaty>
+  <Dominion_Audience_Said_End>Thank you for your time.</Dominion_Audience_Said_End>
+  <Dominion_Audience_Said_Praise>Your people are a credit to you.</Dominion_Audience_Said_Praise>
+  <Dominion_Audience_Said_Complain>We have a complaint, and we expect an apology.</Dominion_Audience_Said_Complain>
+  <Dominion_Audience_Said_AskRivals>Whom do you trust out there, and whom don't you?</Dominion_Audience_Said_AskRivals>
+  <Dominion_Audience_Said_AskWants>What do you want from us? Speak plainly.</Dominion_Audience_Said_AskWants>
+  <Dominion_Audience_Said_ShareRumour>You should know what we have heard about {0}.</Dominion_Audience_Said_ShareRumour>
+  <Dominion_Audience_Said_Warn>A word of warning: you are in danger.</Dominion_Audience_Said_Warn>
+
+  <!-- God mode -->
+  <Dominion_God_H_Talk>Talk and trade</Dominion_God_H_Talk>
+  <Dominion_God_DeliverAll>Deliver every standing deal now ({0})</Dominion_God_DeliverAll>
+  <Dominion_God_CancelDeal>Call off a standing deal...</Dominion_God_CancelDeal>
+  <Dominion_God_ResetTalk>Reset audience and talk cooldowns with {0}</Dominion_God_ResetTalk>
+  <Dominion_God_Restock>Restock {0}'s trade office</Dominion_God_Restock>
+
 </LanguageData>

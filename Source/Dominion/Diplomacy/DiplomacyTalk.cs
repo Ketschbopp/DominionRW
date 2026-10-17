@@ -72,7 +72,7 @@ namespace Dominion
         public static string CannotTalkReason(Faction f, TalkTopic t)
         {
             WorldComponent_Dominion comp = Comp;
-            if (comp == null || f == null || f.IsPlayer || f.defeated) return "Dominion_Action_Invalid".Translate();
+            if (comp == null || f == null || f.IsPlayer || f.defeated || !comp.TryGetState(f, out _)) return "Dominion_Action_Invalid".Translate();
             if (LeadershipUtility.BestDesk() == null && !LeadershipUtility.HasComms()) return "Dominion_Action_NeedsComms".Translate();
             int until = comp.Player.CooldownUntil(CooldownKey(t), f.loadID);
             int now = Find.TickManager.TicksGame;
