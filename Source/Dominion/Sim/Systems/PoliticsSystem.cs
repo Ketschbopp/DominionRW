@@ -121,19 +121,18 @@ namespace Dominion
 
         private static void RollUnrest(FactionState s, Faction faction, int now, float hawks)
         {
-            int day = GenDate.TicksPerDay;
 
-            if (s.lowStabilityDays >= RevolutionAfterLowDays && now - s.lastCoupTick > RevolutionCooldownDays * day && Rand.Chance(0.15f))
+            if (s.lowStabilityDays >= RevolutionAfterLowDays && now - s.lastCoupTick > DominionSettings.EventCooldownTicks(RevolutionCooldownDays) && Rand.Chance(0.15f))
             {
                 EventBus.Raise(DominionEventDefOf.Dominion_Revolution, faction);
                 return;
             }
-            if (s.stability < 20f && s.legitimacy < 40f && now - s.lastCoupTick > CoupCooldownDays * day && Rand.Chance(0.03f + hawks * 0.05f))
+            if (s.stability < 20f && s.legitimacy < 40f && now - s.lastCoupTick > DominionSettings.EventCooldownTicks(CoupCooldownDays) && Rand.Chance(0.03f + hawks * 0.05f))
             {
                 EventBus.Raise(DominionEventDefOf.Dominion_Coup, faction);
                 return;
             }
-            if (s.stability < 30f && now - s.lastRiotTick > RiotCooldownDays * day && Rand.Chance((30f - s.stability) / 100f * 0.3f))
+            if (s.stability < 30f && now - s.lastRiotTick > DominionSettings.EventCooldownTicks(RiotCooldownDays) && Rand.Chance((30f - s.stability) / 100f * 0.3f))
                 EventBus.Raise(DominionEventDefOf.Dominion_Riots, faction);
         }
 

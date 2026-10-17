@@ -62,7 +62,7 @@ namespace Dominion
 
             // A war-weary enemy sues for peace. Without this, a war with you could only end on your initiative.
             if (hostile && !f.def.permanentEnemy && s.warWeariness > 50f
-                && now - comp.Player.LastOfferTick(f.loadID) > OfferCooldownDays * GenDate.TicksPerDay
+                && now - comp.Player.LastOfferTick(f.loadID) > DominionSettings.AiCooldownTicks(OfferCooldownDays)
                 && Rand.Chance(0.02f + (s.warWeariness - 50f) / 1000f))
             {
                 comp.Player.SetLastOffer(f.loadID, now);
@@ -71,7 +71,7 @@ namespace Dominion
             }
 
             // Offers
-            if (!hostile && op > 35f && now - comp.Player.LastOfferTick(f.loadID) > OfferCooldownDays * GenDate.TicksPerDay
+            if (!hostile && op > 35f && now - comp.Player.LastOfferTick(f.loadID) > DominionSettings.AiCooldownTicks(OfferCooldownDays)
                 && Rand.Chance(0.05f))
             {
                 TreatyDef offer = ChooseOffer(f, s, view, comp);

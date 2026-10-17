@@ -278,7 +278,7 @@ namespace Dominion
             int now = Find.TickManager.TicksGame;
             if (loser.IsPlayer || winner.IsPlayer)
             {
-                if (now - w.lastOfferTick < OfferCooldownDays * GenDate.TicksPerDay) return false;
+                if (now - w.lastOfferTick < DominionSettings.AiCooldownTicks(OfferCooldownDays)) return false;
                 w.lastOfferTick = now;
                 if (loser.IsPlayer) DemandSurrender(w, winner);
                 else OfferSurrender(w, loser);

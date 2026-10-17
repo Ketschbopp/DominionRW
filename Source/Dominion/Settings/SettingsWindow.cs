@@ -88,6 +88,15 @@ namespace Dominion
             l.CheckboxLabeled("Dominion_Setting_EmbargoDrain".Translate(), ref s.embargoDrain, "Dominion_Setting_EmbargoDrain_Desc".Translate());
             l.Label("Dominion_Setting_StabilityDrift".Translate(s.stabilityDriftSpeed.ToStringPercent()));
             s.stabilityDriftSpeed = l.Slider(s.stabilityDriftSpeed, 0.1f, 3f);
+            l.GapLine();
+            l.Label("Dominion_Setting_CooldownsHeader".Translate());
+            l.Label("Dominion_Setting_PlayerCooldowns".Translate(s.playerCooldownScale.ToStringPercent()), tooltip: "Dominion_Setting_PlayerCooldowns_Desc".Translate());
+            s.playerCooldownScale = Mathf.Round(l.Slider(s.playerCooldownScale, 0f, 3f) * 20f) / 20f;
+            l.Label("Dominion_Setting_AiCooldowns".Translate(s.aiCooldownScale.ToStringPercent()), tooltip: "Dominion_Setting_AiCooldowns_Desc".Translate());
+            s.aiCooldownScale = Mathf.Round(l.Slider(s.aiCooldownScale, 0.1f, 3f) * 20f) / 20f;
+            l.Label("Dominion_Setting_EventCooldowns".Translate(s.eventCooldownScale.ToStringPercent()), tooltip: "Dominion_Setting_EventCooldowns_Desc".Translate());
+            s.eventCooldownScale = Mathf.Round(l.Slider(s.eventCooldownScale, 0.1f, 3f) * 20f) / 20f;
+            l.Label("Dominion_Setting_CooldownsWar".Translate().Colorize(ColoredText.SubtleGrayColor));
         }
 
         private static void DrawEspionage(Listing_Standard l, DominionSettings s)

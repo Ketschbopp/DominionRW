@@ -396,7 +396,7 @@ namespace Dominion
                     Find.WindowStack.Add(new Dialog_PeaceTable(w));
             }
             Rect mercB = new Rect(x + bw + 2f, y, bw - 4f, 30f);
-            if (DominionRooms.BrassButton(mercB, "Dominion_WarTab_Mercenaries".Translate(), "Dominion_WarTab_Mercenaries_Desc".Translate(WarOrders.MercenaryCooldownDays)))
+            if (DominionRooms.BrassButton(mercB, "Dominion_WarTab_Mercenaries".Translate(), "Dominion_WarTab_Mercenaries_Desc".Translate(DominionSettings.PlayerCooldownDays(WarOrders.MercenaryCooldownDays))))
                 MercenaryMenu(w);
             Rect callB = new Rect(x + bw * 2f + 2f, y, bw - 4f, 30f);
             DiplomacyActionDef call = DefDatabase<DiplomacyActionDef>.GetNamedSilentFail("Dominion_CallToArms");

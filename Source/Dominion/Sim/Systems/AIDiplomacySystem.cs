@@ -51,7 +51,7 @@ namespace Dominion
                 Faction other = candidates[(start + k) % candidates.Count];
                 if (TryAct(faction, fs, other, comp, now, settings))
                 {
-                    fs.nextAiActionTick = now + Mathf.RoundToInt(Rand.Range(8f, 15f) * settings.AiCooldownFactor * GenDate.TicksPerDay);
+                    fs.nextAiActionTick = now + DominionSettings.AiCooldownTicks(Rand.Range(8f, 15f) * settings.AiCooldownFactor);
                     return;
                 }
             }

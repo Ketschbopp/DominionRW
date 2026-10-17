@@ -69,7 +69,17 @@ namespace Dominion
         public int CooldownUntil(string action, int factionId) =>
             cooldowns.TryGetValue(action + ":" + factionId, out int t) ? t : -1;
 
-        public void SetCooldown(string action, int factionId, int until) => cooldowns[action + ":" + factionId] = until;
+        /// <summary>
+        /// Starts a cooldown ending at <paramref name="until"/>, at its built-in length; the player's cooldown setting
+        /// stretches or shortens it here, for every action at once. A time in the past clears it.
+        /// </summary>
+        public void SetCooldown(string action, int factionId, int until)
+        {
+            int now = Find.TickManager.TicksGame;
+            if (until > now)
+                until = now + UnityEngine.Mathf.RoundToInt((until - now) * UnityEngine.Mathf.Clamp(DominionMod.Settings.playerCooldownScale, 0f, 5f));
+            cooldowns[action + ":" + factionId] = until;
+        }
 
         public int LastOfferTick(int factionId) => lastOfferTick.TryGetValue(factionId, out int t) ? t : -999999;
 

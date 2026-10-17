@@ -182,6 +182,14 @@
   <Dominion_Setting_NewsThoughts_Desc>Wars and unrest near the colony, peace, and attacks on allies affect your colonists' mood.</Dominion_Setting_NewsThoughts_Desc>
   <Dominion_Setting_LetterForMajor>Letters for major news</Dominion_Setting_LetterForMajor>
   <Dominion_Setting_LetterForMajor_Desc>Major news (wars, coups, revolutions, lost capitals, broken treaties, Federation news and other major events) arrives as a letter even in categories set to Message, if the Letters setting allows it.</Dominion_Setting_LetterForMajor_Desc>
+  <Dominion_Setting_CooldownsHeader>Cooldowns</Dominion_Setting_CooldownsHeader>
+  <Dominion_Setting_PlayerCooldowns>Your diplomatic cooldowns: {0}</Dominion_Setting_PlayerCooldowns>
+  <Dominion_Setting_PlayerCooldowns_Desc>Scales how long you must wait before repeating an action with the same faction: diplomatic actions, talk topics, audiences, envoy missions, treaty proposals, peace offers and hiring mercenaries. 100% is normal, 50% halves every wait, 0% removes them. Cooldowns already running keep their length.</Dominion_Setting_PlayerCooldowns_Desc>
+  <Dominion_Setting_AiCooldowns>AI diplomacy cooldowns: {0}</Dominion_Setting_AiCooldowns>
+  <Dominion_Setting_AiCooldowns_Desc>Scales how long AI factions wait between their own diplomatic moves, between offers they make you (alliances, trade, demands), and between peace offers in a war. Lower makes the world busier. Works on top of the simulation detail setting.</Dominion_Setting_AiCooldowns_Desc>
+  <Dominion_Setting_EventCooldowns>Event cooldowns: {0}</Dominion_Setting_EventCooldowns>
+  <Dominion_Setting_EventCooldowns_Desc>Scales the waits between political events in the same faction (riots, coups, revolutions), between world events for the same faction, and before the same world event can repeat. Lower lets crises follow each other faster.</Dominion_Setting_EventCooldowns_Desc>
+  <Dominion_Setting_CooldownsWar>Warband raid cooldowns are under War.</Dominion_Setting_CooldownsWar>
   <Dominion_Setting_Letters>Letters from Dominion</Dominion_Setting_Letters>
   <Dominion_Setting_Letters_Desc>Which of Dominion's notices arrive as letters in the stack on the right of the screen. Everything else is shown as a message at the top left, and stays in the message history and the paper.\n\nAll: every notice and every news category set to Letter.\nOnly important: threats to the colony (wars declared on you, warbands, ambushes), and things you must act on soon (council summons, duties with a deadline, visitors waiting, treaties about to lapse).\nNone: no letters at all.</Dominion_Setting_Letters_Desc>
   <Dominion_LetterMode_All>All</Dominion_LetterMode_All>

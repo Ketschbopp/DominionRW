@@ -123,14 +123,14 @@ namespace Dominion
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             FactionState s = comp.GetState(f);
             int now = Find.TickManager.TicksGame;
-            if (now - s.lastWorldEventTick < FactionCooldownDays * GenDate.TicksPerDay) return;
+            if (now - s.lastWorldEventTick < DominionSettings.EventCooldownTicks(FactionCooldownDays)) return;
 
             List<DominionEventDef> defs = WorldDefs;
             for (int i = 0; i < defs.Count; i++)
             {
                 DominionEventDef def = defs[i];
                 WorldEventProps w = def.world;
-                if (def == s.lastWorldEvent && now - s.lastWorldEventTick < RepeatCooldownDays * GenDate.TicksPerDay) continue;
+                if (def == s.lastWorldEvent && now - s.lastWorldEventTick < DominionSettings.EventCooldownTicks(RepeatCooldownDays)) continue;
                 if (!Rand.Chance(settings.worldEventFrequency / Mathf.Max(1f, w.mtbDays))) continue;
                 if (!Conditions(f, s, w)) continue;
                 Faction partner = PickPartner(f, w.partner);

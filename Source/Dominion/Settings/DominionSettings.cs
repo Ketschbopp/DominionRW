@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace Dominion
@@ -43,6 +44,11 @@ namespace Dominion
         public int raidCooldownDays = 12;
         public int colonyRaidGapDays = 5;
         public int maxRaidsMarching = 1;
+
+        // Cooldowns (multipliers on the built-in waits)
+        public float playerCooldownScale = 1f;
+        public float aiCooldownScale = 1f;
+        public float eventCooldownScale = 1f;
         public bool warbandRaidsOnPlayer = true;
         public bool warOccupation = true;
         public float capitulationScore = 75f;
@@ -89,6 +95,21 @@ namespace Dominion
         /// <summary>How many days the AI waits between its own diplomatic moves, scaled by simulation detail.</summary>
         public float AiCooldownFactor => simulationDetail == SimulationDetail.Low ? 2f : simulationDetail == SimulationDetail.High ? 0.75f : 1f;
 
+        /// <summary>A cooldown of the player's own diplomatic actions, in ticks, after the player's cooldown setting.</summary>
+        public static int PlayerCooldownTicks(float days) => Scaled(days, DominionMod.Settings.playerCooldownScale);
+
+        /// <summary>The same in whole days, for showing to the player.</summary>
+        public static int PlayerCooldownDays(float days) => Mathf.Max(0, Mathf.RoundToInt(days * Clamp(DominionMod.Settings.playerCooldownScale)));
+
+        /// <summary>An AI faction's wait between diplomatic moves or offers, in ticks.</summary>
+        public static int AiCooldownTicks(float days) => Scaled(days, DominionMod.Settings.aiCooldownScale);
+
+        /// <summary>A political or world event's wait before it can happen again, in ticks.</summary>
+        public static int EventCooldownTicks(float days) => Scaled(days, DominionMod.Settings.eventCooldownScale);
+
+        private static float Clamp(float scale) => Mathf.Clamp(scale, 0f, 5f);
+        private static int Scaled(float days, float scale) => Mathf.RoundToInt(days * Clamp(scale) * GenDate.TicksPerDay);
+
         public NewsNotifyMode NotifyModeFor(EventCategory c) =>
             notifyModes.TryGetValue(c, out NewsNotifyMode m) ? m : NewsNotifyMode.Message;
 
@@ -125,6 +146,9 @@ namespace Dominion
             Scribe_Values.Look(ref raidCooldownDays, "raidCooldownDays", 12);
             Scribe_Values.Look(ref colonyRaidGapDays, "colonyRaidGapDays", 5);
             Scribe_Values.Look(ref maxRaidsMarching, "maxRaidsMarching", 1);
+            Scribe_Values.Look(ref playerCooldownScale, "playerCooldownScale", 1f);
+            Scribe_Values.Look(ref aiCooldownScale, "aiCooldownScale", 1f);
+            Scribe_Values.Look(ref eventCooldownScale, "eventCooldownScale", 1f);
             Scribe_Values.Look(ref warbandRaidsOnPlayer, "warbandRaidsOnPlayer", true);
             Scribe_Values.Look(ref warOccupation, "warOccupation", true);
             Scribe_Values.Look(ref capitulationScore, "capitulationScore", 75f);
@@ -183,6 +207,9 @@ namespace Dominion
             raidCooldownDays = 12;
             colonyRaidGapDays = 5;
             maxRaidsMarching = 1;
+            playerCooldownScale = 1f;
+            aiCooldownScale = 1f;
+            eventCooldownScale = 1f;
             warbandRaidsOnPlayer = true;
             warOccupation = true;
             capitulationScore = 75f;

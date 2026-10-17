@@ -55,7 +55,7 @@ namespace Dominion
 
         public static string CannotHireReason(War w, int silver)
         {
-            int left = w.lastMercenaryTick + MercenaryCooldownDays * GenDate.TicksPerDay - Find.TickManager.TicksGame;
+            int left = w.lastMercenaryTick + DominionSettings.PlayerCooldownTicks(MercenaryCooldownDays) - Find.TickManager.TicksGame;
             if (left > 0) return "Dominion_Action_Cooldown".Translate(left.ToStringTicksToPeriod(allowSeconds: false));
             if (DiplomacyHelpers.AvailableSilver() < silver) return "Dominion_Action_NeedsSilver".Translate(silver);
             return null;

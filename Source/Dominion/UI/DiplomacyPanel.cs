@@ -499,7 +499,7 @@ namespace Dominion
         {
             float w = (rect.width - 8f) / 3f;
             if (DominionRooms.BrassButton(new Rect(rect.x, rect.y, w, rect.height), "Dominion_Audience_Button".Translate(),
-                    "Dominion_Audience_Button_Desc".Translate(f.leader?.LabelShortCap ?? f.Name, Dialog_Audience.CooldownDays), Dialog_Audience.CannotHoldReason(f)))
+                    "Dominion_Audience_Button_Desc".Translate(f.leader?.LabelShortCap ?? f.Name, DominionSettings.PlayerCooldownDays(Dialog_Audience.CooldownDays)), Dialog_Audience.CannotHoldReason(f)))
                 Dialog_Audience.Request(f);
             if (DominionRooms.BrassButton(new Rect(rect.x + w + 4f, rect.y, w, rect.height), "Dominion_Deal_Trade".Translate(),
                     "Dominion_Deal_Trade_Desc".Translate(f.Name, TradeDeals.OfficeDays), TradeDeals.CannotDealReason(f)))
@@ -574,7 +574,7 @@ namespace Dominion
                 TooltipHandler.TipRegion(bar, "Dominion_Odds_Title".Translate(f.Name) + "\n" + sb + "Dominion_Odds_Total".Translate(chance.Value.ToStringPercent()));
             }
             else DominionTheme.InkLabel(info, (t == TalkTopic.ShareRumour ? "Dominion_Talk_PickTarget" : "Dominion_Talk_Sure").Translate(), new Color(0.8f, 0.75f, 0.65f), GameFont.Tiny);
-            string tip = DiplomacyTalk.Desc(t) + "\n\n" + "Dominion_Talk_Cooldown".Translate(DiplomacyTalk.CooldownDays(t))
+            string tip = DiplomacyTalk.Desc(t) + "\n\n" + "Dominion_Talk_Cooldown".Translate(DominionSettings.PlayerCooldownDays(DiplomacyTalk.CooldownDays(t)))
                          + (reason != null ? "\n\n" + reason.Colorize(ColorLibrary.RedReadable) : "");
             TooltipHandler.TipRegion(new Rect(row.x, row.y, row.width, 18f), tip);
             TooltipHandler.TipRegion(cap, tip);
@@ -639,7 +639,7 @@ namespace Dominion
             // A cooldown drains along the bottom of the row.
             if (until > now && def.cooldownDays > 0)
             {
-                float frac = Mathf.Clamp01((until - now) / (float)(def.cooldownDays * GenDate.TicksPerDay));
+                float frac = Mathf.Clamp01((until - now) / (float)Mathf.Max(1, DominionSettings.PlayerCooldownTicks(def.cooldownDays)));
                 Widgets.DrawBoxSolid(new Rect(row.x + 40f, row.yMax - 2f, (row.width - 40f) * frac, 2f), new Color(1f, 0.6f, 0.3f, 0.8f));
             }
 
