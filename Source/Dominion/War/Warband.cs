@@ -203,6 +203,11 @@ namespace Dominion
                 sb.Append("Dominion_Warband_Arrives".Translate(TicksToArrival.ToStringTicksToPeriod(allowSeconds: false)));
             sb.AppendLine();
             sb.Append("Dominion_Warband_Strength".Translate(points.ToString("F0")));
+            if (Faction != null && Faction.HostileTo(Faction.OfPlayer))
+            {
+                sb.AppendLine();
+                sb.Append("Dominion_Warband_BattleSize".Translate(WarbandUtility.ForPlayerBattle(Faction, Mathf.Min(points, 3000f), WarbandUtility.InterceptShare).ToString("F0")));
+            }
             return sb.ToString();
         }
 
@@ -334,6 +339,11 @@ namespace Dominion
         /// How many warbands a faction can field at once: 1 for a small or weak one, up to 6 for a large, strong,
         /// aggressive one (one per three towns, plus one for being stronger than the world average, plus aggression).
         /// </summary>
+        /// <summary>A whole warband caught on the road is as big as a raid on the colony; a sortie or an escort is less.</summary>
+        public const float InterceptShare = 1f;
+        public const float SortieShare = 0.7f;
+        public const float EscortShare = 0.5f;
+
         public static int MaxFor(Faction f)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
@@ -410,10 +420,19 @@ namespace Dominion
         public static float FieldPoints(Faction f) => Mathf.Clamp(ExpectedPoints(f) * Rand.Range(0.75f, 1.3f), 200f, 5000f);
 
         /// <summary>
-        /// A force the colony fights on a caravan map, scaled by the difficulty's threat scale like vanilla's caravan
-        /// ambushes. A warband's own points are its size in the world simulation and know nothing of difficulty.
+        /// The force the colony meets in a battle on a caravan map. A warband's own points are its size in the world
+        /// simulation, which is often far smaller than the raids the colony is used to, and knows nothing of difficulty.
+        /// So the battle is the larger of the two: the simulated force scaled by the difficulty's threat scale, or
+        /// <paramref name="share"/> of a raid on the colony (which already follows wealth, difficulty and adaptation),
+        /// scaled by how strong the faction is.
         /// </summary>
-        public static float ForPlayerBattle(float points) => points * Mathf.Clamp(Find.Storyteller.difficulty.threatScale, 0.3f, 2.5f);
+        public static float ForPlayerBattle(Faction f, float simPoints, float share)
+        {
+            float sim = simPoints * Mathf.Clamp(Find.Storyteller.difficulty.threatScale, 0.3f, 2.5f);
+            Map home = VisitorUtility.PlayerCapitalMap();
+            float colony = home != null ? StorytellerUtility.DefaultThreatPointsNow(home) * share * Mathf.Clamp(RelativeStrength(f), 0.75f, 1.5f) : 0f;
+            return Mathf.Max(sim, colony);
+        }
 
         /// <summary>A typical warband's size for this faction, without the luck of the levy.</summary>
         public static float ExpectedPoints(Faction f)
@@ -602,11 +621,12 @@ namespace Dominion
             if (map == null) return;
             // Peaceful difficulty has no raids: the warband turns back at the border.
             if (!Find.Storyteller.difficulty.allowBigThreats) return;
-            // Sized like the storyteller's own raids on the colony (wealth, colonists, difficulty, adaptation), then
-            // nudged by how strong this faction is and how big the warband was: from 70% to 150% of a normal raid.
+            // Sized from the storyteller's own raids on the colony (wealth, colonists, difficulty, adaptation). A warband
+            // is an army sent on purpose, so it is bigger than an ordinary raid: 110% to 200%, by how strong this faction
+            // is and how big the warband was (about 140% for an average one).
             float strength = Mathf.Clamp(RelativeStrength(w.Faction), 0.6f, 1.8f);
             float size = Mathf.Clamp(w.points / Mathf.Max(200f, ExpectedPoints(w.Faction)), 0.7f, 1.4f);
-            float points = StorytellerUtility.DefaultThreatPointsNow(map) * Mathf.Clamp(strength * size, 0.7f, 1.5f) * Rand.Range(0.9f, 1.1f);
+            float points = StorytellerUtility.DefaultThreatPointsNow(map) * Mathf.Clamp(0.9f + 0.5f * strength * size, 1.1f, 2f) * Rand.Range(0.9f, 1.1f);
             var parms = new IncidentParms
             {
                 target = map,
@@ -639,7 +659,7 @@ namespace Dominion
                 DiplomacyUtility.SetRelationKind(player, f, FactionRelationKind.Hostile, player, "Dominion_Reason_WarbandIntercepted".Translate());
             }
 
-            List<Pawn> enemies = InterceptUtility.GenerateFighters(f, ForPlayerBattle(Mathf.Min(w.points, 3000f)), caravan.Tile);
+            List<Pawn> enemies = InterceptUtility.GenerateFighters(f, ForPlayerBattle(f, Mathf.Min(w.points, 3000f), InterceptShare), caravan.Tile);
             EventBus.Raise(DominionEventDefOf.Dominion_WarbandIntercepted, player, f, caravan.Tile.tileId, detail: w.target?.Name);
             // Catching them on the road is worth a little; beating them is scored when the fight is decided.
             WarUtility.AddScore(player, f, 2f);

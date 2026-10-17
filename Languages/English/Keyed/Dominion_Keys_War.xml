@@ -105,6 +105,7 @@
   <Dominion_Warband_Arrives>arrives in {0}</Dominion_Warband_Arrives>
   <Dominion_Warband_BlockadeLeft>Blockade lifts in {0}</Dominion_Warband_BlockadeLeft>
   <Dominion_Warband_Strength>Strength: {0} points</Dominion_Warband_Strength>
+  <Dominion_Warband_BattleSize>If our caravan attacks it: a fight of about {0} points</Dominion_Warband_BattleSize>
   <Dominion_Warband_Intercept>Intercept the warband of {0}</Dominion_Warband_Intercept>
   <Dominion_Warband_InterceptActOfWar>Intercept the warband of {0} (an act of war)</Dominion_Warband_InterceptActOfWar>
   <Dominion_Warband_MoveToIntercept>Move to intercept</Dominion_Warband_MoveToIntercept>
@@ -275,7 +276,7 @@
   <Dominion_Setting_Warbands_Desc>Factions at war send armies across the world map to besiege, blockade and raid, and to reinforce their allies.</Dominion_Setting_Warbands_Desc>
   <Dominion_Setting_WarbandFrequency>Warband frequency: {0}</Dominion_Setting_WarbandFrequency>
   <Dominion_Setting_WarbandRaids>Warbands raid your colony</Dominion_Setting_WarbandRaids>
-  <Dominion_Setting_WarbandRaids_Desc>Factions at war with you may march warbands on your colony. They arrive as raids sized like the storyteller's own (70% to 150% of a normal raid, by the enemy's strength), at most one on the way at a time and never within 5 days of the last one. None come on Peaceful difficulty. When off, warbands only fight each other.</Dominion_Setting_WarbandRaids_Desc>
+  <Dominion_Setting_WarbandRaids_Desc>Factions at war with you may march warbands on your colony. They arrive as raids bigger than the storyteller's own (110% to 200% of a normal raid, by the enemy's strength), at most one on the way at a time and never within 5 days of the last one. None come on Peaceful difficulty. When off, warbands only fight each other.</Dominion_Setting_WarbandRaids_Desc>
   <Dominion_Setting_Occupation>Occupation</Dominion_Setting_Occupation>
   <Dominion_Setting_Occupation_Desc>Victorious warbands occupy enemy settlements. The peace decides whether they are kept.</Dominion_Setting_Occupation_Desc>
   <Dominion_Setting_CapitulationScore>Capitulation at war score {0}</Dominion_Setting_CapitulationScore>

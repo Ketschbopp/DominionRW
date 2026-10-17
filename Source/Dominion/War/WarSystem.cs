@@ -552,7 +552,8 @@ namespace Dominion
         {
             Faction f = b.settlement.Faction;
             Comp.Wars.blockades.Remove(b);
-            float pts = Mathf.Max(WarbandUtility.ForPlayerBattle(Mathf.Min(WarbandUtility.FieldPoints(f) * 0.5f, 2000f)), f.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat));
+            float pts = Mathf.Max(WarbandUtility.ForPlayerBattle(f, Mathf.Min(WarbandUtility.FieldPoints(f) * 0.5f, 2000f), WarbandUtility.SortieShare),
+                f.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat));
             var parms = new PawnGroupMakerParms
             {
                 groupKind = PawnGroupKindDefOf.Combat,
