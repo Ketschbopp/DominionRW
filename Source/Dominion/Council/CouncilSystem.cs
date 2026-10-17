@@ -135,8 +135,8 @@ namespace Dominion
             string how = c.host.IsPlayer ? "Dominion_Council_Announce_PlayerHosts".Translate()
                 : CouncilUtility.IsMember(Faction.OfPlayer) ? "Dominion_Council_Announce_Attend".Translate(c.host.Name)
                 : "Dominion_Council_Announce_NotMember".Translate();
-            Find.LetterStack.ReceiveLetter("Dominion_Council_AnnounceLabel".Translate(),
-                "Dominion_Council_AnnounceText".Translate(c.host.Name, days, AgendaText(c)) + "\n\n" + how, LetterDefOf.NeutralEvent, null, c.host);
+            DominionLetters.Send("Dominion_Council_AnnounceLabel".Translate(),
+                "Dominion_Council_AnnounceText".Translate(c.host.Name, days, AgendaText(c)) + "\n\n" + how, LetterDefOf.NeutralEvent, null, c.host, important: true);
         }
 
         private static Faction ChooseHost(List<Faction> members, int session)
@@ -388,7 +388,7 @@ namespace Dominion
             CouncilState c = State;
             int attended = c.attending.Count;
             if (report != null)
-                Find.LetterStack.ReceiveLetter("Dominion_Council_ResultsLabel".Translate(),
+                DominionLetters.Send("Dominion_Council_ResultsLabel".Translate(),
                     "Dominion_Council_ResultsText".Translate(c.host?.Name ?? "?", attended, report.NullOrEmpty() ? (string)"Dominion_Council_NoMotions".Translate() : report),
                     LetterDefOf.NeutralEvent, null, c.host);
             c.phase = CouncilPhase.Idle;
@@ -463,8 +463,8 @@ namespace Dominion
                     break;
             }
             if (violator.IsPlayer)
-                Find.LetterStack.ReceiveLetter("Dominion_Penalty_Label".Translate(PenaltyLabel(p)),
-                    ("Dominion_Penalty_Text_" + p).Translate(d.Summary, entry.fine), p >= Penalty.Sanctions ? LetterDefOf.NegativeEvent : LetterDefOf.NeutralEvent);
+                DominionLetters.Send("Dominion_Penalty_Label".Translate(PenaltyLabel(p)),
+                    ("Dominion_Penalty_Text_" + p).Translate(d.Summary, entry.fine), p >= Penalty.Sanctions ? LetterDefOf.NegativeEvent : LetterDefOf.NeutralEvent, important: true);
         }
 
         /// <summary>A decree the council puts in force on its own authority, as a penalty: no vote.</summary>
@@ -568,7 +568,7 @@ namespace Dominion
             c.disbandedTick = Find.TickManager.TicksGame;
             c.disbandedReason = reason;
             EventBus.Raise(DominionEventDefOf.Dominion_CouncilDisbanded, null, null, detail: reason);
-            Find.LetterStack.ReceiveLetter("Dominion_Council_DisbandedLabel".Translate(), "Dominion_Council_DisbandedText".Translate(reason), LetterDefOf.NegativeEvent);
+            DominionLetters.Send("Dominion_Council_DisbandedLabel".Translate(), "Dominion_Council_DisbandedText".Translate(reason), LetterDefOf.NegativeEvent);
         }
 
         /// <summary>God mode: bring a disbanded council back. The next session is scheduled as at the start of a game.</summary>

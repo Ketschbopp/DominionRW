@@ -90,4 +90,51 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SettlementExpanded</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] founds [DETAIL]</li>
+        <li>headline-&gt;New town of [DETAIL] for [FACTION_A]</li>
+        <li>headline-&gt;[FACTION_A] grows: settlers found [DETAIL]</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has founded the new settlement of [DETAIL]. [ex_why] [ex_detail] [closing]</li>
+        <li>ex_why-&gt;Its towns had grown too crowded, and its treasury could bear the cost.</li>
+        <li>ex_why-&gt;Years of growth have left its old towns bursting at the seams.</li>
+        <li>ex_why-&gt;The faction's stores are full and its people many, and land was there for the taking.</li>
+        <li>ex_detail-&gt;The first families are already raising walls.</li>
+        <li>ex_detail-&gt;[LEADER_A] has called it proof of the faction's strength.</li>
+        <li>ex_detail-&gt;Settlers left [CAPITAL_A] in long wagon trains to make the journey.</li>
+        <li>ex_detail-&gt;[observers] expect its neighbours to watch the new town closely.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_FactionResettled</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] settles again at [DETAIL]</li>
+        <li>headline-&gt;The wanderers of [FACTION_A] build a home</li>
+        <li>story-&gt;[LEAD] [FACTION_A], which had been left without a single town, has settled again and founded [DETAIL]. [rs_detail] [closing]</li>
+        <li>rs_detail-&gt;After seasons on the road, its people have numbers enough to put down roots.</li>
+        <li>rs_detail-&gt;[LEADER_A] has promised that the faction will never again be homeless.</li>
+        <li>rs_detail-&gt;[observers] had written the faction off; they may have spoken too soon.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_SettlementAbandoned</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] abandons [DETAIL]</li>
+        <li>headline-&gt;[DETAIL] left in ruins</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has given up the settlement of [DETAIL], which no longer had people enough to keep it going. [ab_detail] [closing]</li>
+        <li>ab_detail-&gt;Its last residents have moved to the faction's other towns.</li>
+        <li>ab_detail-&gt;Only empty houses and cold hearths are left.</li>
+        <li>ab_detail-&gt;[observers] see it as a sign of a faction in decline.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>

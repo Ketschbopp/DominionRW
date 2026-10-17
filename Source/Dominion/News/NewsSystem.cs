@@ -43,8 +43,11 @@ namespace Dominion
             if (ev.def == null || ev.def.debugHidden && ev.def != DominionEventDefOf.Dominion_DebugTest) return;
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             NewsItem item = comp.News.Add(NewsItem.FromEvent(ev));
+            // The end of the world is kept for good, at the top of the paper.
+            if (ev.def == DominionEventDefOf.Dominion_NuclearWar) item.bookmarked = true;
 
-            if (IntelUtility.InvolvesPlayer(ev.primary, ev.secondary))
+            // Everyone sees the end of the world at once: no intel needed, no delay, no doubt.
+            if (IntelUtility.InvolvesPlayer(ev.primary, ev.secondary) || ev.def == DominionEventDefOf.Dominion_NuclearWar)
             {
                 item.confidence = NewsConfidence.Confirmed;
                 item.source = NewsSource.DiplomaticDispatch;

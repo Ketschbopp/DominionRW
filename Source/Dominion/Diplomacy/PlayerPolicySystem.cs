@@ -97,8 +97,8 @@ namespace Dominion
             if (comp.Treaties.AnyNonAggression(f, player)) chance *= (1f - s.personality.honour) * 0.3f;
             if (!Rand.Chance(Mathf.Min(0.05f, chance))) return false;
             DiplomacyUtility.SetRelationKind(f, player, FactionRelationKind.Hostile, f, "Dominion_Reason_War".Translate());
-            Find.LetterStack.ReceiveLetter("Dominion_WarOnPlayer_Label".Translate(f.Name), "Dominion_WarOnPlayer_Text".Translate(f.Name, f.leader?.LabelShort ?? f.Name),
-                LetterDefOf.ThreatBig, null, f);
+            DominionLetters.Send("Dominion_WarOnPlayer_Label".Translate(f.Name), "Dominion_WarOnPlayer_Text".Translate(f.Name, f.leader?.LabelShort ?? f.Name),
+                LetterDefOf.ThreatBig, null, f, important: true);
             return true;
         }
 

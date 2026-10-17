@@ -55,7 +55,7 @@ namespace Dominion
             var letter = (Letter_TreatyExpiring)LetterMaker.MakeLetter("Dominion_TreatyExpiring_Label".Translate(t.Label),
                 "Dominion_TreatyExpiring_Text".Translate(t.Label, other.Name, t.DaysLeft), def, other, null);
             letter.treatyId = t.id;
-            Find.LetterStack.ReceiveLetter(letter);
+            DominionLetters.Send(letter, important: true);
         }
     }
 }

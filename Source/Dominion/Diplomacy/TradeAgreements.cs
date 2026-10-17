@@ -392,7 +392,7 @@ namespace Dominion
             d.faction.TryAffectGoodwillWith(Faction.OfPlayer, MissedGoodwill, canSendMessage: false, canSendHostilityLetter: false);
             Comp.GetRelation(d.faction, Faction.OfPlayer).favour -= 4f;
             Comp.Player.Log(d.faction, why, -1);
-            Find.LetterStack.ReceiveLetter("Dominion_Deal_MissedLabel".Translate(), why + "\n\n" + "Dominion_Deal_MissedText".Translate(d.faction.Name, -MissedGoodwill),
+            DominionLetters.Send("Dominion_Deal_MissedLabel".Translate(), why + "\n\n" + "Dominion_Deal_MissedText".Translate(d.faction.Name, -MissedGoodwill),
                 LetterDefOf.NegativeEvent, null, d.faction);
         }
 

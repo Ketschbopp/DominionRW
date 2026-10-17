@@ -17,6 +17,11 @@ namespace Dominion
             if (mode == NewsNotifyMode.Silent) return;
             if (mode == NewsNotifyMode.Message && settings.letterForMajorNews && n.def.newsworthiness >= MajorNewsworthiness)
                 mode = NewsNotifyMode.Letter;
+            // The Letters setting has the last word: only news of a war on the colony or an ally stays a letter in "important only".
+            // The end of the world always makes the front page, and always arrives as a letter unless letters are off.
+            if (n.def == DominionEventDefOf.Dominion_NuclearWar && mode != NewsNotifyMode.Silent) mode = NewsNotifyMode.Letter;
+            if (mode == NewsNotifyMode.Letter && !DominionLetters.Allowed(LetterFor(n) == LetterDefOf.NegativeEvent))
+                mode = NewsNotifyMode.Message;
 
             if (mode == NewsNotifyMode.Letter)
             {
@@ -45,7 +50,8 @@ namespace Dominion
             bool allyHit = player != null && n.secondary != null && n.secondary.RelationKindWith(player) == FactionRelationKind.Ally
                            && (n.def == DominionEventDefOf.Dominion_WarDeclared || n.def == DominionEventDefOf.Dominion_CapitalLost);
             bool playerHit = n.secondary != null && n.secondary.IsPlayer && n.def == DominionEventDefOf.Dominion_WarDeclared;
-            return allyHit || playerHit ? LetterDefOf.NegativeEvent : LetterDefOf.NeutralEvent;
+            bool doom = n.def == DominionEventDefOf.Dominion_NuclearWar;
+            return allyHit || playerHit || doom ? LetterDefOf.NegativeEvent : LetterDefOf.NeutralEvent;
         }
     }
 }

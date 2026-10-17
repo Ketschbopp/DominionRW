@@ -82,7 +82,7 @@
   <Dominion_UI_Distance>Nearest settlements {0} tiles apart.</Dominion_UI_Distance>
   <Dominion_UI_SortBy>Click to sort by {0}; click again to reverse.</Dominion_UI_SortBy>
   <Dominion_UI_Trend>{0} over the last {1} days.</Dominion_UI_Trend>
-  <Dominion_UI_MapLegend>Large dots: {0}. Tint: spheres of influence; red borders: fronts. Scroll to zoom, drag to pan, click a town to pick its faction, right-click for more.</Dominion_UI_MapLegend>
+  <Dominion_UI_MapLegend>Large dots: {0}. Tint: territory (from Faction Territories); red borders: fronts. Scroll to zoom, drag to pan, click a town to pick its faction, right-click for more.</Dominion_UI_MapLegend>
   <Dominion_Map_Capital>capital</Dominion_Map_Capital>
   <Dominion_Map_ClickPick>Click: pick this faction.</Dominion_Map_ClickPick>
   <Dominion_Map_RightClick>Right-click: show it on the world map, or open its pages.</Dominion_Map_RightClick>
@@ -92,7 +92,7 @@
   <Dominion_Map_ZoomIn>Zoom in (or scroll the mouse wheel over the map).</Dominion_Map_ZoomIn>
   <Dominion_Map_ZoomOut>Zoom out.</Dominion_Map_ZoomOut>
   <Dominion_Map_Reset>Show the whole world.</Dominion_Map_Reset>
-  <Dominion_Map_Help>Scroll to zoom, drag to pan. The map wraps round east to west. Each faction's sphere of influence is tinted in its colour; borders between factions at war are drawn in red as fronts.</Dominion_Map_Help>
+  <Dominion_Map_Help>Scroll to zoom, drag to pan. The map wraps round east to west. Each faction's territory, as Faction Territories draws it, is tinted in its colour; borders between factions at war are drawn in red as fronts.</Dominion_Map_Help>
   <Dominion_UI_NoSettlement>{0} has no settlement to show.</Dominion_UI_NoSettlement>
   <Dominion_UI_Jump_Dossier>Dossier</Dominion_UI_Jump_Dossier>
   <Dominion_UI_Jump_Dossier_Desc>Open {0}'s dossier in the Overview tab.</Dominion_UI_Jump_Dossier_Desc>

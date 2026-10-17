@@ -74,4 +74,37 @@
     <newsRules>Dominion_News_PirateTheft</newsRules>
     <headline>{0} raids the stores of {1}</headline>
   </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SettlementExpanded</defName>
+    <label>new settlement</label>
+    <description>A growing faction has spent part of its wealth on a new settlement (Economics &amp; Demography expansion).</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.45</newsworthiness>
+    <newsRules>Dominion_News_SettlementExpanded</newsRules>
+    <headline>{0} founds {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_FactionResettled</defName>
+    <label>wanderers settle</label>
+    <description>A faction that had lost all its settlements has gathered enough people to settle again (Economics &amp; Demography).</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.55</newsworthiness>
+    <newsRules>Dominion_News_FactionResettled</newsRules>
+    <headline>{0} settles again at {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_SettlementAbandoned</defName>
+    <label>settlement abandoned</label>
+    <description>A shrinking faction could no longer keep one of its settlements going and has left it in ruins (Economics &amp; Demography).</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.5</newsworthiness>
+    <newsRules>Dominion_News_SettlementAbandoned</newsRules>
+    <headline>{0} abandons {2}</headline>
+  </Dominion.DominionEventDef>
 </Defs>

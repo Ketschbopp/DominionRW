@@ -7,10 +7,11 @@ using Verse;
 namespace Dominion
 {
     /// <summary>
-    /// A flat picture of the planet's surface (longitude across, latitude down) with each faction's sphere of influence
-    /// tinted in its colour round its settlements, borders where two meet, and fronts in red where they are at war.
-    /// Influence spreads over land only, so seas divide it. Built once into a texture and rebuilt only when settlements
-    /// change hands or wars start and end.
+    /// A flat picture of the planet's surface (longitude across, latitude down) with each faction's territory tinted in
+    /// its colour, borders where two meet, and fronts in red where they are at war. Territory is FTV's own, tile by tile;
+    /// only if FTV's territory cannot be read (or has not been worked out yet) is it drawn as a sphere of influence round
+    /// each settlement, spreading over land only. Built once into a texture and rebuilt when settlements change hands,
+    /// wars start and end, and once a day while FTV territory is shown, as its borders move.
     /// </summary>
     public static class TerritoryMap
     {
@@ -30,6 +31,8 @@ namespace Dominion
         private static World builtFor;
         private static byte[] land; // 0 sea, 1 land
         private static byte[] hills;
+        private static int[] pixelTile; // the surface tile each pixel shows
+        private static bool fromFtv;
         private static int[] owner; // index into factions, -1 for none
         private static readonly List<Faction> factions = new List<Faction>();
         private static int signature;
@@ -98,6 +101,7 @@ namespace Dominion
         {
             land = new byte[W * H];
             hills = new byte[W * H];
+            pixelTile = new int[W * H];
             var known = new bool[W * H];
             var queue = new Queue<int>();
             WorldGrid grid = Find.WorldGrid;
@@ -111,6 +115,7 @@ namespace Dominion
                 known[i] = true;
                 land[i] = (byte)(tile.WaterCovered ? 0 : 1);
                 hills[i] = (byte)tile.hilliness;
+                pixelTile[i] = t;
                 queue.Enqueue(i);
             }
             // Tiles are larger than pixels near the poles and smaller elsewhere; fill the gaps from the nearest known pixel.
@@ -127,6 +132,7 @@ namespace Dominion
                     known[n] = true;
                     land[n] = land[i];
                     hills[n] = hills[i];
+                    pixelTile[n] = pixelTile[i];
                     queue.Enqueue(n);
                 }
             }
@@ -139,6 +145,8 @@ namespace Dominion
             unchecked
             {
                 int h = 17;
+                // FTV borders move without any settlement changing: look again each day.
+                if (FtvTerritory != null) h = h * 31 + GenDate.DaysPassed + 1;
                 foreach (Settlement s in Find.WorldObjects.Settlements)
                     if (s.Faction != null && DominionGeo.OnSurface(s.Tile)) h = h * 31 + s.ID * 7 + s.Faction.loadID;
                 WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
@@ -152,10 +160,65 @@ namespace Dominion
         public static bool KnownWar(War w) =>
             w.attacker != null && w.defender != null && (w.InvolvesPlayer || IntelUtility.IntelOn(w.attacker, w.defender) >= IntelUtility.RestrictedIntel);
 
+        private static Integration_FactionTerritories FtvTerritory
+        {
+            get
+            {
+                var ftv = IntegrationRegistry.Get<Integration_FactionTerritories>();
+                return ftv != null && ftv.IsActive && ftv.CanReadTerritory ? ftv : null;
+            }
+        }
+
         private static void BuildOwners()
         {
             factions.Clear();
             owner = new int[W * H];
+            Integration_FactionTerritories ftv = FtvTerritory;
+            fromFtv = ftv != null && BuildOwnersFromFtv(ftv);
+            if (!fromFtv) BuildInfluence();
+        }
+
+        /// <summary>Each land pixel takes the owner of the tile it shows. False if FTV claims no land at all yet.</summary>
+        private static bool BuildOwnersFromFtv(Integration_FactionTerritories ftv)
+        {
+            int count = Find.WorldGrid.Surface.TilesCount;
+            var tileOwner = new int[count];
+            var byLoadId = new Dictionary<int, int>();
+            bool any = false;
+            for (int t = 0; t < count; t++)
+            {
+                tileOwner[t] = -1;
+                if (!ftv.TryGetOwner(t, out int id) || id < 0) continue;
+                if (!byLoadId.TryGetValue(id, out int fi))
+                {
+                    Faction f = Integration_FactionTerritories.FactionByLoadId(id);
+                    fi = -1;
+                    if (f != null && !f.defeated)
+                    {
+                        fi = factions.Count;
+                        factions.Add(f);
+                    }
+                    byLoadId[id] = fi;
+                }
+                tileOwner[t] = fi;
+                if (fi >= 0) any = true;
+            }
+            if (!any)
+            {
+                factions.Clear();
+                return false;
+            }
+            for (int i = 0; i < owner.Length; i++)
+            {
+                int t = pixelTile[i];
+                owner[i] = land[i] == 1 && t >= 0 && t < count ? tileOwner[t] : -1;
+            }
+            return true;
+        }
+
+        /// <summary>No FTV territory: each settlement claims the land round it.</summary>
+        private static void BuildInfluence()
+        {
             var dist = new float[W * H];
             var src = new Vector2[W * H];
             var reach = new float[W * H];

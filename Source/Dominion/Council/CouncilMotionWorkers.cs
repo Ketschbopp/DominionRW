@@ -113,8 +113,8 @@ namespace Dominion
         {
             Faction x = d.targets[0];
             if (CouncilUtility.IsMember(Faction.OfPlayer) && !x.IsPlayer)
-                Find.LetterStack.ReceiveLetter("Dominion_Decree_DutyLabel".Translate(), "Dominion_Decree_Sanctions_Duty".Translate(x.Name, d.def.graceDays),
-                    LetterDefOf.NeutralEvent, null, x);
+                DominionLetters.Send("Dominion_Decree_DutyLabel".Translate(), "Dominion_Decree_Sanctions_Duty".Translate(x.Name, d.def.graceDays),
+                    LetterDefOf.NeutralEvent, null, x, important: true);
         }
 
         public override void DailyCheck(Decree d)
@@ -440,8 +440,8 @@ namespace Dominion
         public override void OnPassed(Decree d)
         {
             if (CouncilUtility.IsMember(Faction.OfPlayer) && CouncilUtility.PlayerSlaveCount() > 0)
-                Find.LetterStack.ReceiveLetter("Dominion_Decree_DutyLabel".Translate(), "Dominion_Decree_Slavery_Duty".Translate(d.def.graceDays),
-                    LetterDefOf.NeutralEvent);
+                DominionLetters.Send("Dominion_Decree_DutyLabel".Translate(), "Dominion_Decree_Slavery_Duty".Translate(d.def.graceDays),
+                    LetterDefOf.NeutralEvent, important: true);
         }
 
         public override void DailyCheck(Decree d)

@@ -144,8 +144,8 @@ namespace Dominion
             if (enemies.Count == 0) return;
             Map map = CaravanIncidentUtility.SetupCaravanAttackMap(caravan, enemies, true);
             LordMaker.MakeNewLord(f, new LordJob_AssaultColony(f, true, true, false, false, true, false, true), map, enemies);
-            Find.LetterStack.ReceiveLetter("Dominion_Delegation_InterceptedLabel".Translate(), "Dominion_Delegation_InterceptedText".Translate(f.Name),
-                LetterDefOf.ThreatBig, new LookTargets(enemies), f);
+            DominionLetters.Send("Dominion_Delegation_InterceptedLabel".Translate(), "Dominion_Delegation_InterceptedText".Translate(f.Name),
+                LetterDefOf.ThreatBig, new LookTargets(enemies), f, important: true);
         }
     }
 
