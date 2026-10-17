@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- The expanded Rim Council motions: security, territory and members, economy, society. -->
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_NonProliferation</defName>
+    <label>non-proliferation</label>
+    <description>No member may launch ballistic missiles at anyone while it holds. Needs InterRim Ballistic Missile.</description>
+    <workerClass>Dominion.CouncilMotion_NonProliferation</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>120</durationDays>
+    <graceDays>3</graceDays>
+    <proposeCost>25</proposeCost>
+    <aiProposeChance>0.4</aiProposeChance>
+    <summary>A ban on ballistic missiles</summary>
+    <pack>security</pack>
+    <ifPassed>No member may launch missiles for 120 days: the AI of bound members stands down its silos, and any strike by a member is a breach.</ifPassed>
+    <ifFailed>Members keep their missiles, and the doomsday clock keeps ticking.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_ArmsEmbargo</defName>
+    <label>arms embargo</label>
+    <description>No member may arm the named faction while it is at war: its military strength wastes away, and its allies must step back from it.</description>
+    <workerClass>Dominion.CouncilMotion_ArmsEmbargo</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>60</durationDays>
+    <graceDays>7</graceDays>
+    <proposeCost>20</proposeCost>
+    <aiProposeChance>0.3</aiProposeChance>
+    <summary>An arms embargo on {0}</summary>
+    <pack>security</pack>
+    <ifPassed>{0}'s military strength falls 8% at once and keeps wasting away; members allied to it must drop the alliance, and you must embargo it. Sending troops to its side is a breach.</ifPassed>
+    <ifFailed>{0} keeps buying arms freely.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_Peacekeeping</defName>
+    <label>peacekeeping coalition</label>
+    <description>Members send forces to the side that was attacked until the aggressor stands down.</description>
+    <workerClass>Dominion.CouncilMotion_Peacekeeping</workerClass>
+    <targetCount>2</targetCount>
+    <durationDays>45</durationDays>
+    <graceDays>10</graceDays>
+    <proposeCost>30</proposeCost>
+    <aiProposeChance>0.3</aiProposeChance>
+    <summary>A peacekeeping force against {0} for {1}</summary>
+    <pack>security</pack>
+    <ifPassed>The strongest willing members march warbands to {1}'s side; every day {1} gains war score and {0} grows wearier. If {0} is a member still at war after the grace period, it is in breach. You are asked to pay toward the force.</ifPassed>
+    <ifFailed>{0} keeps the initiative.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_Tribunal</defName>
+    <label>war crimes tribunal</label>
+    <description>A tribunal judges an aggressor or a serial breaker of decrees: a fine paid to its victims, and disgrace.</description>
+    <workerClass>Dominion.CouncilMotion_Tribunal</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>20</durationDays>
+    <graceDays>10</graceDays>
+    <proposeCost>20</proposeCost>
+    <aiProposeChance>0.25</aiProposeChance>
+    <summary>A tribunal for {0}</summary>
+    <pack>security</pack>
+    <ifPassed>Every member thinks less of {0}; it loses legitimacy and stability, and must pay a fine to those it wronged. Not paying is a breach.</ifPassed>
+    <ifFailed>{0} is not judged.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_RecogniseConquest</defName>
+    <label>recognition of conquest</label>
+    <description>The council recognises an occupier's hold on settlements it took: they become its own for good.</description>
+    <workerClass>Dominion.CouncilMotion_RecogniseConquest</workerClass>
+    <targetCount>2</targetCount>
+    <durationDays>0</durationDays>
+    <graceDays>0</graceDays>
+    <proposeCost>20</proposeCost>
+    <aiProposeChance>0.25</aiProposeChance>
+    <summary>Recognition of {0}'s conquests from {1}</summary>
+    <pack>territory</pack>
+    <ifPassed>Every settlement {0} occupies that belonged to {1} becomes {0}'s for good; {0} gains legitimacy and {1} resents the council.</ifPassed>
+    <ifFailed>The settlements stay occupied, and {1} may still win them back.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_Liberation</defName>
+    <label>demand for liberation</label>
+    <description>The occupier must hand back occupied settlements to their owner within the grace period.</description>
+    <workerClass>Dominion.CouncilMotion_Liberation</workerClass>
+    <targetCount>2</targetCount>
+    <durationDays>40</durationDays>
+    <graceDays>15</graceDays>
+    <proposeCost>25</proposeCost>
+    <aiProposeChance>0.3</aiProposeChance>
+    <summary>Liberation of {1}'s settlements held by {0}</summary>
+    <pack>territory</pack>
+    <ifPassed>{0} must return every settlement it holds of {1}'s within 15 days, or be in breach; while it holds them past the deadline its economy suffers 3%.</ifPassed>
+    <ifFailed>{0} keeps what it took.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_AdmitMember</defName>
+    <label>admission of a member</label>
+    <description>Gives a faction below the technology threshold a seat at the council.</description>
+    <workerClass>Dominion.CouncilMotion_AdmitMember</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>0</durationDays>
+    <permanent>true</permanent>
+    <graceDays>0</graceDays>
+    <proposeCost>15</proposeCost>
+    <aiProposeChance>0.15</aiProposeChance>
+    <summary>Admission of {0} to the council</summary>
+    <pack>territory</pack>
+    <ifPassed>{0} becomes a member for good: it attends, votes and is bound by decrees. It is grateful to the council.</ifPassed>
+    <ifFailed>{0} stays outside the council.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_ExpelMember</defName>
+    <label>expulsion of a member</label>
+    <description>Suspends a repeat breaker of decrees: no seat, no vote and no protection while it holds.</description>
+    <workerClass>Dominion.CouncilMotion_ExpelMember</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>90</durationDays>
+    <graceDays>0</graceDays>
+    <proposeCost>25</proposeCost>
+    <aiProposeChance>0.25</aiProposeChance>
+    <summary>Expulsion of {0}</summary>
+    <pack>territory</pack>
+    <ifPassed>{0} loses its seat and vote for 90 days and its leader loses legitimacy. It is no longer protected by the council's decrees.</ifPassed>
+    <ifFailed>{0} keeps its seat.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_NextHost</defName>
+    <label>choice of host</label>
+    <description>Names the member who hosts the next session.</description>
+    <workerClass>Dominion.CouncilMotion_NextHost</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>0</durationDays>
+    <graceDays>0</graceDays>
+    <proposeCost>10</proposeCost>
+    <aiProposeChance>0.2</aiProposeChance>
+    <summary>{0} to host the next session</summary>
+    <pack>territory</pack>
+    <ifPassed>{0} hosts the next session, and its leader gains standing.</ifPassed>
+    <ifFailed>The next host is chosen in the usual turn.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_ReliefFund</defName>
+    <label>relief fund</label>
+    <description>Members pay into a fund for a faction in crisis.</description>
+    <workerClass>Dominion.CouncilMotion_ReliefFund</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>20</durationDays>
+    <graceDays>10</graceDays>
+    <proposeCost>15</proposeCost>
+    <aiProposeChance>0.35</aiProposeChance>
+    <summary>A relief fund for {0}</summary>
+    <pack>economy</pack>
+    <ifPassed>{0} gains stability and a 4% economic boost at once; members with money to spare must pay into the fund within 10 days or be in breach (the poor and those in crisis are excused). You are asked for your share.</ifPassed>
+    <ifFailed>{0} is left to cope alone.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_FreeTrade</defName>
+    <label>free-trade zone</label>
+    <description>Low tariffs between members, and no embargoes among them.</description>
+    <workerClass>Dominion.CouncilMotion_FreeTrade</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>90</durationDays>
+    <graceDays>7</graceDays>
+    <proposeCost>20</proposeCost>
+    <aiProposeChance>0.3</aiProposeChance>
+    <summary>A free-trade zone</summary>
+    <pack>economy</pack>
+    <ifPassed>Members trade with each other on 8% better terms and their economies grow 3%; outsiders lose 1%. Keeping an embargo on another member (except sanctions) is a breach.</ifPassed>
+    <ifFailed>Tariffs stay where they are.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_DebtRelief</defName>
+    <label>debt relief</label>
+    <description>Forgives a faction's tribute: every tribute treaty it pays ends.</description>
+    <workerClass>Dominion.CouncilMotion_DebtRelief</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>15</durationDays>
+    <graceDays>7</graceDays>
+    <proposeCost>15</proposeCost>
+    <aiProposeChance>0.2</aiProposeChance>
+    <summary>Debt relief for {0}</summary>
+    <pack>economy</pack>
+    <ifPassed>Every tribute {0} pays is forgiven; {0} gains stability and a 3% economic boost. Creditors who keep collecting are in breach.</ifPassed>
+    <ifFailed>{0} keeps paying.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_CommonCurrency</defName>
+    <label>common currency</label>
+    <description>A shared currency: steadier prices and a little more trade between members.</description>
+    <workerClass>Dominion.CouncilMotion_CommonCurrency</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>180</durationDays>
+    <graceDays>0</graceDays>
+    <proposeCost>25</proposeCost>
+    <aiProposeChance>0.2</aiProposeChance>
+    <summary>A common currency</summary>
+    <pack>economy</pack>
+    <ifPassed>For 180 days members trade on 3% better terms, their economies grow 2%, and economic shocks settle faster.</ifPassed>
+    <ifFailed>Each member keeps its own money.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_Quarantine</defName>
+    <label>plague quarantine</label>
+    <description>Members close their borders to a faction with plague, and the plague does not spread to them.</description>
+    <workerClass>Dominion.CouncilMotion_Quarantine</workerClass>
+    <targetCount>1</targetCount>
+    <durationDays>30</durationDays>
+    <graceDays>3</graceDays>
+    <proposeCost>15</proposeCost>
+    <aiProposeChance>0.4</aiProposeChance>
+    <summary>A quarantine of {0}</summary>
+    <pack>society</pack>
+    <ifPassed>Members must close their borders to {0} within 3 days, or be in breach; the plague cannot spread from {0} to members, and {0}'s economy loses 3% from the cut trade.</ifPassed>
+    <ifFailed>The plague may spread freely.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_RefugeeProtection</defName>
+    <label>refugee protection</label>
+    <description>Members share the burden when a faction's people flee: they take refugees in and must not shut them out.</description>
+    <workerClass>Dominion.CouncilMotion_RefugeeProtection</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>120</durationDays>
+    <graceDays>0</graceDays>
+    <proposeCost>15</proposeCost>
+    <aiProposeChance>0.25</aiProposeChance>
+    <summary>Protection for refugees</summary>
+    <pack>society</pack>
+    <ifPassed>When a faction's people flee, members take some in (a little unrest, much gratitude) and you are asked for a contribution; a member with its border closed to them is in breach.</ifPassed>
+    <ifFailed>Refugees fend for themselves.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_BanOrganTrade</defName>
+    <label>ban on organ trade</label>
+    <description>No member harvests or sells organs.</description>
+    <workerClass>Dominion.CouncilMotion_BanOrganTrade</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>150</durationDays>
+    <graceDays>5</graceDays>
+    <proposeCost>15</proposeCost>
+    <aiProposeChance>0.2</aiProposeChance>
+    <summary>A ban on organ trade</summary>
+    <pack>society</pack>
+    <ifPassed>Harvesting organs is a breach for 150 days. Members whose ways allow it (cannibals, fleshcrafters, organ-use precepts) get caught now and then.</ifPassed>
+    <ifFailed>Organs stay a commodity.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_BanRaiding</defName>
+    <label>ban on raiding</label>
+    <description>No member raids caravans, convoys or stores.</description>
+    <workerClass>Dominion.CouncilMotion_BanRaiding</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>120</durationDays>
+    <graceDays>0</graceDays>
+    <proposeCost>20</proposeCost>
+    <aiProposeChance>0.3</aiProposeChance>
+    <summary>A ban on raiding caravans</summary>
+    <pack>society</pack>
+    <ifPassed>Ambushing convoys, plundering stores or looting settlements is a breach for 120 days. Raiders and blood courts will hate it.</ifPassed>
+    <ifFailed>Raiders go on as before.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+  <Dominion.CouncilMotionDef>
+    <defName>Dominion_Motion_CulturalExchange</defName>
+    <label>cultural exchange</label>
+    <description>Members open to each other's culture: opinion warms, and your broadcasts reach further.</description>
+    <workerClass>Dominion.CouncilMotion_CulturalExchange</workerClass>
+    <targetCount>0</targetCount>
+    <durationDays>90</durationDays>
+    <graceDays>7</graceDays>
+    <proposeCost>15</proposeCost>
+    <aiProposeChance>0.3</aiProposeChance>
+    <summary>A cultural exchange</summary>
+    <pack>society</pack>
+    <ifPassed>For 90 days members slowly warm to each other and your culture spreads among them; closing a border to another member is a breach. Isolationists will oppose it.</ifPassed>
+    <ifFailed>Cultures stay apart.</ifFailed>
+  </Dominion.CouncilMotionDef>
+
+</Defs>

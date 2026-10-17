@@ -38,6 +38,32 @@ namespace Dominion
         /// <summary>A member's leaning: above 0.1 votes yes, below −0.1 votes no, between abstains.</summary>
         public abstract float Utility(Faction voter, Motion m);
 
+        /// <summary>
+        /// What happens if the motion carries and if it fails, for the chamber and the ballot: the def's own text, then
+        /// what it would ask of <paramref name="forWhom"/> (normally the player), then how it would sit with their record.
+        /// </summary>
+        public virtual string Consequences(Motion m, Faction forWhom)
+        {
+            string a = m.targets.Count > 0 ? m.targets[0]?.Name ?? "?" : "";
+            string b = m.targets.Count > 1 ? m.targets[1]?.Name ?? "?" : "";
+            var sb = new System.Text.StringBuilder();
+            if (!def.ifPassed.NullOrEmpty()) sb.AppendLine("Dominion_Council_IfPassed".Translate(string.Format(def.ifPassed, a, b)));
+            string duty = forWhom != null ? DutyFor(m, forWhom) : null;
+            if (!duty.NullOrEmpty()) sb.AppendLine("Dominion_Council_YourDuty".Translate(duty));
+            if (def.durationDays > 0 || def.permanent)
+                sb.AppendLine(def.permanent ? "Dominion_Council_LastsForever".Translate().ToString() : "Dominion_Council_LastsDays".Translate(def.durationDays, def.graceDays).ToString());
+            if (!def.ifFailed.NullOrEmpty()) sb.AppendLine("Dominion_Council_IfFailed".Translate(string.Format(def.ifFailed, a, b)));
+            if (forWhom != null && CouncilUtility.IsMember(forWhom))
+            {
+                int v = Violations(forWhom);
+                if (v > 0) sb.AppendLine("Dominion_Council_YourRecord".Translate(v, CouncilSystem.PenaltyLabel(CouncilSystem.NextPenalty(forWhom))));
+            }
+            return sb.ToString().TrimEnd();
+        }
+
+        /// <summary>What the motion would ask of this member if it carried, or null if nothing.</summary>
+        public virtual string DutyFor(Motion m, Faction f) => null;
+
         public virtual void OnPassed(Decree d) { }
 
         public virtual void DailyCheck(Decree d) { }

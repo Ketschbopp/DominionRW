@@ -32,6 +32,13 @@ namespace Dominion
         /// <summary>Headline-style description; {0} and {1} are the targets.</summary>
         [MustTranslate] public string summary;
 
+        /// <summary>What happens if it carries, and if it fails; {0} and {1} are the targets.</summary>
+        [MustTranslate] public string ifPassed;
+        [MustTranslate] public string ifFailed;
+
+        /// <summary>The pack it belongs to, for grouping in the propose menu (security, territory, economy, society).</summary>
+        public string pack;
+
         [Unsaved] private CouncilMotionWorker workerInt;
 
         public CouncilMotionWorker Worker
@@ -68,6 +75,9 @@ namespace Dominion
         /// <summary>Set by a dev-mode veto.</summary>
         public bool vetoed;
 
+        /// <summary>God mode: 1 forces it to carry, -1 to fail, 0 lets the vote decide.</summary>
+        public int devForce;
+
         public string Summary => def.Summarize(targets);
 
         public float LobbyFor(Faction f) => lobbying.TryGetValue(f.loadID, out float v) ? v : 0f;
@@ -79,6 +89,7 @@ namespace Dominion
             Scribe_Collections.Look(ref targets, "targets", LookMode.Reference);
             Scribe_Collections.Look(ref lobbying, "lobbying", LookMode.Value, LookMode.Value);
             Scribe_Values.Look(ref vetoed, "vetoed");
+            Scribe_Values.Look(ref devForce, "devForce");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 targets ??= new List<Faction>();
@@ -106,6 +117,12 @@ namespace Dominion
         /// <summary>Members the decree itself made act (e.g. embargoes imposed for sanctions), undone when it expires.</summary>
         public List<Faction> imposed = new List<Faction>();
 
+        /// <summary>The compliance ledger: every breach and the penalty it drew, oldest first.</summary>
+        public List<LedgerEntry> ledger = new List<LedgerEntry>();
+
+        /// <summary>Set for decrees the council imposed as a penalty (sanctions or expulsion for repeated breaches).</summary>
+        public bool penalty;
+
         public string Summary => def.Summarize(targets);
 
         public bool InGrace => Find.TickManager.TicksGame < passedTick + def.graceDays * GenDate.TicksPerDay;
@@ -122,8 +139,12 @@ namespace Dominion
             Scribe_Collections.Look(ref violators, "violators", LookMode.Reference);
             Scribe_Collections.Look(ref complied, "complied", LookMode.Reference);
             Scribe_Collections.Look(ref imposed, "imposed", LookMode.Reference);
+            Scribe_Collections.Look(ref ledger, "ledger", LookMode.Deep);
+            Scribe_Values.Look(ref penalty, "penalty");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
+                ledger ??= new List<LedgerEntry>();
+                ledger.RemoveAll(e => e?.faction == null);
                 // Saves from before this list existed: the members who complied are the best guess.
                 imposed ??= complied.Where(m => m != null && !m.IsPlayer).ToList();
                 imposed.RemoveAll(t => t == null);
@@ -168,7 +189,17 @@ namespace Dominion
         /// <summary>Violations of decrees that have since expired, by faction load id.</summary>
         public Dictionary<int, int> pastViolations = new Dictionary<int, int>();
 
-        /// <summary>The council is gone for good (a global nuclear war ended it). Only god mode can restore it.</summary>
+        /// <summary>The member a decree named to host the next session, if any. Cleared once it hosts.</summary>
+        public Faction nextHost;
+
+        /// <summary>Past sessions, newest last, at most <see cref="MaxRecords"/>.</summary>
+        public List<SessionRecord> records = new List<SessionRecord>();
+        public const int MaxRecords = 30;
+
+        /// <summary>Favours between the player and other members.</summary>
+        public List<Favour> favours = new List<Favour>();
+
+                /// <summary>The council is gone for good (a global nuclear war ended it). Only god mode can restore it.</summary>
         public bool disbanded;
         public int disbandedTick = -1;
         public string disbandedReason;
@@ -186,6 +217,9 @@ namespace Dominion
             Scribe_Collections.Look(ref decrees, "decrees", LookMode.Deep);
             Scribe_Values.Look(ref nextDecreeId, "nextDecreeId");
             Scribe_Collections.Look(ref pastViolations, "pastViolations", LookMode.Value, LookMode.Value);
+            Scribe_References.Look(ref nextHost, "nextHost");
+            Scribe_Collections.Look(ref records, "records", LookMode.Deep);
+            Scribe_Collections.Look(ref favours, "favours", LookMode.Deep);
             Scribe_Values.Look(ref disbanded, "disbanded");
             Scribe_Values.Look(ref disbandedTick, "disbandedTick", -1);
             Scribe_Values.Look(ref disbandedReason, "disbandedReason");
@@ -195,11 +229,135 @@ namespace Dominion
                 attending ??= new List<Faction>();
                 decrees ??= new List<Decree>();
                 pastViolations ??= new Dictionary<int, int>();
+                records ??= new List<SessionRecord>();
+                favours ??= new List<Favour>();
+                records.RemoveAll(r => r == null);
+                favours.RemoveAll(f => f?.faction == null);
                 // A motion or decree whose target faction is gone (mod removed, faction deleted) cannot be voted on or enforced.
                 agenda.RemoveAll(m => m?.def == null || m.targets.Count != m.def.targetCount);
                 attending.RemoveAll(f => f == null);
                 decrees.RemoveAll(d => d?.def == null || d.targets.Count != d.def.targetCount);
             }
+        }
+    }
+}
+
+namespace Dominion
+{
+    /// <summary>How hard the council comes down on a breach, by how many the member has on its record.</summary>
+    public enum Penalty { Warning, Fine, Sanctions, Expulsion }
+
+    /// <summary>A line in a decree's compliance ledger. Saved.</summary>
+    public class LedgerEntry : IExposable
+    {
+        public Faction faction;
+        public int tick;
+        public Penalty penalty;
+
+        /// <summary>Silver (or its worth in goods) taken as a fine.</summary>
+        public int fine;
+
+        public void ExposeData()
+        {
+            Scribe_References.Look(ref faction, "faction");
+            Scribe_Values.Look(ref tick, "tick");
+            Scribe_Values.Look(ref penalty, "penalty");
+            Scribe_Values.Look(ref fine, "fine");
+        }
+    }
+
+    /// <summary>One motion as the session voted on it. Saved.</summary>
+    public class MotionRecord : IExposable
+    {
+        public CouncilMotionDef def;
+        public string summary;
+        public Faction sponsor;
+        public bool passed;
+        public bool vetoed;
+        public float yes, no;
+        public List<Faction> ayes = new List<Faction>();
+        public List<Faction> nays = new List<Faction>();
+        public List<Faction> abstained = new List<Faction>();
+
+        /// <summary>The decree it became (-1 if none), and, once it has run its course, how it turned out.</summary>
+        public int decreeId = -1;
+        public string outcome;
+
+        public void ExposeData()
+        {
+            Scribe_Defs.Look(ref def, "def");
+            Scribe_Values.Look(ref summary, "summary");
+            Scribe_References.Look(ref sponsor, "sponsor");
+            Scribe_Values.Look(ref passed, "passed");
+            Scribe_Values.Look(ref vetoed, "vetoed");
+            Scribe_Values.Look(ref yes, "yes");
+            Scribe_Values.Look(ref no, "no");
+            Scribe_Collections.Look(ref ayes, "ayes", LookMode.Reference);
+            Scribe_Collections.Look(ref nays, "nays", LookMode.Reference);
+            Scribe_Collections.Look(ref abstained, "abstained", LookMode.Reference);
+            Scribe_Values.Look(ref decreeId, "decreeId", -1);
+            Scribe_Values.Look(ref outcome, "outcome");
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                ayes ??= new List<Faction>();
+                nays ??= new List<Faction>();
+                abstained ??= new List<Faction>();
+                ayes.RemoveAll(f => f == null);
+                nays.RemoveAll(f => f == null);
+                abstained.RemoveAll(f => f == null);
+            }
+        }
+    }
+
+    /// <summary>A past session: who hosted, who came, and every motion with every member's vote. Saved.</summary>
+    public class SessionRecord : IExposable
+    {
+        public int number;
+        public int tick;
+        public Faction host;
+        public List<Faction> attended = new List<Faction>();
+        public List<MotionRecord> motions = new List<MotionRecord>();
+
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref number, "number");
+            Scribe_Values.Look(ref tick, "tick");
+            Scribe_References.Look(ref host, "host");
+            Scribe_Collections.Look(ref attended, "attended", LookMode.Reference);
+            Scribe_Collections.Look(ref motions, "motions", LookMode.Deep);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                attended ??= new List<Faction>();
+                motions ??= new List<MotionRecord>();
+                attended.RemoveAll(f => f == null);
+                motions.RemoveAll(m => m?.def == null);
+            }
+        }
+    }
+
+    /// <summary>
+    /// A favour between the player and another member: one they owe you (you backed their motion and it carried) or
+    /// one you owe them (they voted your way because you asked). Saved.
+    /// </summary>
+    public class Favour : IExposable
+    {
+        public Faction faction;
+
+        /// <summary>True if the member owes the player; false if the player owes the member.</summary>
+        public bool owedToPlayer;
+        public int tick;
+        public string reason;
+
+        public const int LastsDays = 120;
+
+        public int ExpiresTick => tick + LastsDays * GenDate.TicksPerDay;
+
+        public void ExposeData()
+        {
+            Scribe_References.Look(ref faction, "faction");
+            Scribe_Values.Look(ref owedToPlayer, "owedToPlayer");
+            Scribe_Values.Look(ref tick, "tick");
+            Scribe_Values.Look(ref reason, "reason");
         }
     }
 }
