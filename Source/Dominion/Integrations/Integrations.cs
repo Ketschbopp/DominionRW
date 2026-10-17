@@ -15,45 +15,6 @@ namespace Dominion
     // DominionIntegration and its daily hook. Everything goes through reflection, so a missing or changed mod
     // only switches its own integration off. See docs/DESIGN.md §9h.
 
-    /// <summary>Vanilla Outposts Expanded: your outposts add council weight and watch nearby factions.</summary>
-    public class Integration_VanillaOutposts : DominionIntegration
-    {
-        public override string PackageId => "vanillaexpanded.outposts";
-        public override string Label => "Vanilla Outposts Expanded";
-
-        private const float WatchTiles = 15f;
-        private Type outpostBase;
-        private readonly List<PlanetTile> playerOutposts = new List<PlanetTile>();
-
-        protected internal override void OnWorldLoaded() => playerOutposts.Clear();
-
-        protected internal override void Bind(Binder b)
-        {
-            Type defensive = b.Type("VOE.Outpost_Defensive");
-            outpostBase = defensive?.BaseType; // the shared Outpost base class from Vanilla Expanded Framework
-            if (outpostBase == null) b.Fail("outpost base class");
-        }
-
-        public override void DailyGlobal()
-        {
-            playerOutposts.Clear();
-            foreach (WorldObject o in Find.WorldObjects.AllWorldObjects)
-                if (o.Faction != null && o.Faction.IsPlayer && outpostBase.IsInstanceOfType(o))
-                    playerOutposts.Add(o.Tile);
-        }
-
-        public override float VoteWeightModifier(Faction f) => f.IsPlayer ? Mathf.Min(3f, playerOutposts.Count * 0.3f) : 0f;
-
-        public override float IntelModifier(Faction f)
-        {
-            List<Settlement> settlements = WorldComponent_Dominion.Instance.Cache.SettlementsOf(f);
-            foreach (PlanetTile t in playerOutposts)
-                foreach (Settlement s in settlements)
-                    if (DominionGeo.Distance(t, s.Tile) is float d && d >= 0f && d < WatchTiles) return 8f;
-            return 0f;
-        }
-    }
-
     /// <summary>RimToll: resentment over tolls sours a faction's view of you.</summary>
     public class Integration_RimToll : DominionIntegration
     {

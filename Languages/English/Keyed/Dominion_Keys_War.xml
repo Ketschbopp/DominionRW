@@ -45,6 +45,7 @@
   <Dominion_Reason_CallToArms>called to arms by {0}</Dominion_Reason_CallToArms>
   <Dominion_Reason_PuppetRevolt>puppet revolt</Dominion_Reason_PuppetRevolt>
   <Dominion_Reason_WarbandIntercepted>warband intercepted</Dominion_Reason_WarbandIntercepted>
+  <Dominion_Reason_OutpostAttacked>outpost attacked</Dominion_Reason_OutpostAttacked>
   <Dominion_Reason_CovertDiscovered>covert operation discovered</Dominion_Reason_CovertDiscovered>
   <Dominion_Reason_CovertExposed>covert operation exposed</Dominion_Reason_CovertExposed>
   <Dominion_Reason_FalseFlag>staged incident</Dominion_Reason_FalseFlag>
@@ -98,6 +99,16 @@
 
   <!-- Warbands -->
   <Dominion_Warband_Label>warband of {0}</Dominion_Warband_Label>
+  <Dominion_Scouts_Label>scouts of {0}</Dominion_Scouts_Label>
+  <Dominion_WarbandMission_Scout>Scouting {1} ({0})</Dominion_WarbandMission_Scout>
+  <Dominion_WarbandMission_ScoutPlayer>Scouting your colony</Dominion_WarbandMission_ScoutPlayer>
+  <Dominion_Scouts_SurveyedColony>Scouts of {0} have surveyed your colony. Their next raid will come better prepared, unless it is a long time coming.</Dominion_Scouts_SurveyedColony>
+  <Dominion_Outpost_Name>{0} {1}</Dominion_Outpost_Name>
+  <Dominion_Outpost_Attack>Attack {0}</Dominion_Outpost_Attack>
+  <Dominion_Outpost_AttackedLabel>Outpost attacked</Dominion_Outpost_AttackedLabel>
+  <Dominion_Outpost_AttackedText>Your caravan has fallen on {0}. The garrison of {1} has come out to fight; the camp will not survive the day, whoever wins.</Dominion_Outpost_AttackedText>
+  <Dominion_Outpost_ShellingLabel>Artillery barrage</Dominion_Outpost_ShellingLabel>
+  <Dominion_Outpost_ShellingText>The guns of {0} at {1} have opened fire on the colony. Shells are on their way.\n\nThe outpost will fire again once its crews have reloaded. A caravan can attack it to silence the guns for good.</Dominion_Outpost_ShellingText>
   <Dominion_WarbandMission_Siege>Marching on {1} ({0})</Dominion_WarbandMission_Siege>
   <Dominion_WarbandMission_RaidPlayer>Marching on your colony</Dominion_WarbandMission_RaidPlayer>
   <Dominion_WarbandMission_Blockade>Blockading {1} ({0})</Dominion_WarbandMission_Blockade>
@@ -276,6 +287,12 @@
   <Dominion_Setting_Warbands_Desc>Factions at war send armies across the world map to besiege, blockade and raid, and to reinforce their allies.</Dominion_Setting_Warbands_Desc>
   <Dominion_Setting_WarbandFrequency>Warband frequency: {0}</Dominion_Setting_WarbandFrequency>
   <Dominion_Setting_WarbandRaids>Warbands raid your colony</Dominion_Setting_WarbandRaids>
+  <Dominion_Setting_WarbandScouts>Scouts</Dominion_Setting_WarbandScouts>
+  <Dominion_Setting_WarbandScouts_Desc>Factions often send a small, fast party of scouts ahead of a siege or a raid. When the scouts reach their target, the next attack on it within 20 days is stronger (+25% for a siege, +15% for a raid on your colony). A caravan can catch the scouts, a small fight, to deny them their report.</Dominion_Setting_WarbandScouts_Desc>
+  <Dominion_Setting_AiOutposts>AI military outposts (Vanilla Outposts Expanded)</Dominion_Setting_AiOutposts>
+  <Dominion_Setting_AiOutposts_Desc>Factions at war build military outposts near the front: encampments that warbands set out from (closer, and 10% stronger), defensive outposts that strengthen their towns' garrisons in range (+25%), and artillery outposts that weaken enemy garrisons in range before a siege (-15%). Up to three per faction; they are packed up when the faction's wars end. A caravan can attack one.</Dominion_Setting_AiOutposts_Desc>
+  <Dominion_Setting_AiArtillery>AI artillery outposts shell your colony</Dominion_Setting_AiArtillery>
+  <Dominion_Setting_AiArtillery_Desc>An enemy artillery outpost with your colony in range may fire a barrage at it (VOE's own artillery strike), about once every few days. Not on Peaceful difficulty.</Dominion_Setting_AiArtillery_Desc>
   <Dominion_Setting_WarbandFightSize>Warband fight size: {0}</Dominion_Setting_WarbandFightSize>
   <Dominion_Setting_WarbandFightSize_Desc>Scales every fight with a warband that the colony takes part in: warband raids on the colony, and battles on caravan maps (intercepted warbands, blockade sorties, ambushed delegations). 100% is Dominion's normal size: warband raids are 110% to 200% of a normal storyteller raid, and caravan battles at least a share of one. Fights between other factions are not affected.</Dominion_Setting_WarbandFightSize_Desc>
   <Dominion_Setting_WarbandFightVariance>Warband fight variance: ±{0}</Dominion_Setting_WarbandFightVariance>

@@ -365,6 +365,18 @@ namespace Dominion
             }
             else if (mission == WarbandMission.Blockade)
                 target = comp.GetState(enemy).capital;
+
+            // A careful commander sends scouts first; the attack follows on a later day, stronger for the report.
+            // (Not the opening move of a war: that marches at once.)
+            if (!force && DominionMod.Settings.warbandScouts && (mission == WarbandMission.Siege || mission == WarbandMission.RaidPlayer) && !WarbandUtility.ScoutOut(f))
+            {
+                Settlement aim = mission == WarbandMission.Siege ? target ?? WarUtility.NearestSettlement(enemy, DelegationUtility.HomeTile(f)) : null;
+                Map colony = mission == WarbandMission.RaidPlayer ? VisitorUtility.PlayerCapitalMap() : null;
+                int aimTile = aim != null ? aim.Tile.tileId : colony != null ? colony.Tile.tileId : -1;
+                if (aimTile >= 0 && !WarbandUtility.HasScouted(f, aimTile) && Rand.Chance(0.35f + 0.3f * s.personality.paranoia)
+                    && WarbandUtility.Launch(f, enemy, WarbandMission.Scout, aim) != null)
+                    return;
+            }
             WarbandUtility.Launch(f, enemy, mission, target);
         }
 

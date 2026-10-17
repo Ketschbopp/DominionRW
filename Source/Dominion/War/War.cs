@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -202,6 +203,9 @@ namespace Dominion
         /// <summary>Strength of the Dominion warband behind an FTV invasion, by tile, so its outcome uses it.</summary>
         public Dictionary<int, float> siegePoints = new Dictionary<int, float>();
 
+        /// <summary>Scouting reports: (faction load id &lt;&lt; 32 | tile) → tick the report goes stale.</summary>
+        public Dictionary<long, int> scoutedUntil = new Dictionary<long, int>();
+
         /// <summary>The goal the player chose for the war they are about to declare.</summary>
         public WarGoal pendingPlayerGoal = WarGoal.Punitive;
         public Settlement pendingPlayerTarget;
@@ -247,6 +251,12 @@ namespace Dominion
             Scribe_Collections.Look(ref fights, "warbandFights", LookMode.Deep);
             Scribe_Collections.Look(ref originalOwner, "originalOwnerByTile", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref siegePoints, "siegePoints", LookMode.Value, LookMode.Value);
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                int now = Verse.Find.TickManager.TicksGame;
+                foreach (long k in scoutedUntil.Where(kv => kv.Value <= now).Select(kv => kv.Key).ToList()) scoutedUntil.Remove(k);
+            }
+            Scribe_Collections.Look(ref scoutedUntil, "scoutedUntil", LookMode.Value, LookMode.Value);
             Scribe_Values.Look(ref pendingPlayerGoal, "pendingPlayerGoal");
             Scribe_References.Look(ref pendingPlayerTarget, "pendingPlayerTarget");
             Scribe_Values.Look(ref nextId, "nextId");
@@ -260,6 +270,7 @@ namespace Dominion
                 pursuits.RemoveAll(x => x == null || x.caravan == null || x.target == null);
                 originalOwner ??= new Dictionary<int, int>();
                 siegePoints ??= new Dictionary<int, float>();
+                scoutedUntil ??= new Dictionary<long, int>();
                 wars.RemoveAll(w => w == null || w.attacker == null || w.defender == null);
                 blockades.RemoveAll(b => b == null || b.caravan == null || b.settlement == null);
             }

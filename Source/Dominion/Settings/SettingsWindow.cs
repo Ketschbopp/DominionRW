@@ -120,6 +120,13 @@ namespace Dominion
                 l.Label("Dominion_Setting_WarbandSpeed".Translate(s.warbandSpeed.ToString("0.0")), tooltip: "Dominion_Setting_WarbandSpeed_Desc".Translate());
                 s.warbandSpeed = Mathf.Round(l.Slider(s.warbandSpeed, 0.5f, 5f) * 10f) / 10f;
                 l.CheckboxLabeled("Dominion_Setting_WarbandRaids".Translate(), ref s.warbandRaidsOnPlayer, "Dominion_Setting_WarbandRaids_Desc".Translate());
+                l.CheckboxLabeled("Dominion_Setting_WarbandScouts".Translate(), ref s.warbandScouts, "Dominion_Setting_WarbandScouts_Desc".Translate());
+                if (IntegrationRegistry.Get<Integration_VanillaOutposts>()?.IsActive ?? false)
+                {
+                    l.CheckboxLabeled("Dominion_Setting_AiOutposts".Translate(), ref s.aiOutposts, "Dominion_Setting_AiOutposts_Desc".Translate());
+                    if (s.aiOutposts)
+                        l.CheckboxLabeled("Dominion_Setting_AiArtillery".Translate(), ref s.aiArtilleryOnPlayer, "Dominion_Setting_AiArtillery_Desc".Translate());
+                }
                 l.Label("Dominion_Setting_WarbandFightSize".Translate(s.warbandFightSize.ToStringPercent()), tooltip: "Dominion_Setting_WarbandFightSize_Desc".Translate());
                 s.warbandFightSize = Mathf.Round(l.Slider(s.warbandFightSize, 0.25f, 3f) * 20f) / 20f;
                 l.Label("Dominion_Setting_WarbandFightVariance".Translate(s.warbandFightVariance.ToStringPercent()), tooltip: "Dominion_Setting_WarbandFightVariance_Desc".Translate());

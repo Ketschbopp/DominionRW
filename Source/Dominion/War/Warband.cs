@@ -19,6 +19,11 @@ namespace Dominion
         Blockade,
         /// <summary>Marches to an ally at war and strengthens it.</summary>
         Reinforce,
+        /// <summary>
+        /// A small, fast party that surveys an enemy settlement (or the player's colony) ahead of an attack. The next
+        /// siege or raid on what it scouted is stronger; a caravan that catches the scouts denies it.
+        /// </summary>
+        Scout,
     }
 
     /// <summary>
@@ -99,7 +104,10 @@ namespace Dominion
             return path.Count > 0;
         }
 
-        public int TicksToArrival => Mathf.Max(0, (path.Count - 1 - index) * TicksPerTile - ticksOnTile);
+        /// <summary>Ticks this party spends on each tile: scouts travel light and move twice as fast.</summary>
+        public int StepTicks => mission == WarbandMission.Scout ? Mathf.Max(125, TicksPerTile / 2) : TicksPerTile;
+
+        public int TicksToArrival => Mathf.Max(0, (path.Count - 1 - index) * StepTicks - ticksOnTile);
 
         public PlanetTile DestinationTile => path.Count > 0 ? new PlanetTile(path[path.Count - 1]) : Tile;
 
@@ -122,7 +130,7 @@ namespace Dominion
                 return;
             }
             ticksOnTile += delta;
-            if (ticksOnTile < TicksPerTile) return;
+            if (ticksOnTile < StepTicks) return;
             ticksOnTile = 0;
 
             if (index >= path.Count - 1)
@@ -172,7 +180,7 @@ namespace Dominion
                 Vector3 a = Find.WorldGrid.GetTileCenter(new PlanetTile(path[index]));
                 if (index >= path.Count - 1 || ticksOnTile <= 0) return a;
                 Vector3 b = Find.WorldGrid.GetTileCenter(new PlanetTile(path[index + 1]));
-                return Vector3.Lerp(a, b, Mathf.Clamp01(ticksOnTile / (float)TicksPerTile));
+                return Vector3.Lerp(a, b, Mathf.Clamp01(ticksOnTile / (float)StepTicks));
             }
         }
 
@@ -185,10 +193,10 @@ namespace Dominion
 
         public override Color ExpandingIconColor => VisibleToPlayer ? base.ExpandingIconColor : Color.clear;
 
-        public override string Label => "Dominion_Warband_Label".Translate(Faction?.Name ?? "?");
+        public override string Label => (mission == WarbandMission.Scout ? "Dominion_Scouts_Label" : "Dominion_Warband_Label").Translate(Faction?.Name ?? "?");
 
         /// <summary>What it is doing, in words: "Marching on X", "Reinforcing Y"...</summary>
-        public string MissionText => ("Dominion_WarbandMission_" + mission).Translate(target?.Name ?? "?",
+        public string MissionText => ("Dominion_WarbandMission_" + mission + (mission == WarbandMission.Scout && (target?.IsPlayer ?? false) ? "Player" : "")).Translate(target?.Name ?? "?",
             mission == WarbandMission.Reinforce ? ally?.Name ?? "?" : targetSettlement?.Label ?? target?.Name ?? "?");
 
         public override string GetInspectString()
@@ -206,7 +214,7 @@ namespace Dominion
             if (Faction != null && Faction.HostileTo(Faction.OfPlayer))
             {
                 sb.AppendLine();
-                sb.Append("Dominion_Warband_BattleSize".Translate(WarbandUtility.ForPlayerBattle(Faction, Mathf.Min(points, 3000f), WarbandUtility.InterceptShare, vary: false).ToString("F0")));
+                sb.Append("Dominion_Warband_BattleSize".Translate(WarbandUtility.ForPlayerBattle(Faction, Mathf.Min(points, 3000f), WarbandUtility.InterceptShareFor(this), vary: false).ToString("F0")));
             }
             return sb.ToString();
         }
@@ -343,6 +351,31 @@ namespace Dominion
         public const float InterceptShare = 1f;
         public const float SortieShare = 0.7f;
         public const float EscortShare = 0.5f;
+        public const float ScoutShare = 0.25f;
+
+        public static float InterceptShareFor(Warband w) => w.mission == WarbandMission.Scout ? ScoutShare : InterceptShare;
+
+        /// <summary>How long a scouting report stays good, and what it adds to the attack that uses it.</summary>
+        public const int ScoutingDays = 20;
+        public const float ScoutedSiegeBonus = 1.25f;
+        public const float ScoutedRaidBonus = 1.15f;
+
+        private static long ScoutKey(Faction f, int tile) => (long)f.loadID << 32 | (uint)tile;
+
+        /// <summary>Whether <paramref name="f"/> has a fresh scouting report on the tile.</summary>
+        public static bool HasScouted(Faction f, int tile) =>
+            f != null && WorldComponent_Dominion.Instance.Wars.scoutedUntil.TryGetValue(ScoutKey(f, tile), out int until) && until > Find.TickManager.TicksGame;
+
+        /// <summary>Uses up a scouting report: the force multiplier for an attack on the tile (1 if none).</summary>
+        public static float ConsumeScouting(Faction f, int tile, float bonus)
+        {
+            if (!HasScouted(f, tile)) return 1f;
+            WorldComponent_Dominion.Instance.Wars.scoutedUntil.Remove(ScoutKey(f, tile));
+            return bonus;
+        }
+
+        /// <summary>Scouts are not counted towards a faction's warbands, but each faction sends one party at a time.</summary>
+        public static bool ScoutOut(Faction f) => All().Any(x => x.Faction == f && x.mission == WarbandMission.Scout);
 
         public static int MaxFor(Faction f)
         {
@@ -385,7 +418,10 @@ namespace Dominion
                         best = s.Tile;
                     }
                 }
-            return best.Valid ? best : DelegationUtility.HomeTile(f);
+            if (!best.Valid) best = DelegationUtility.HomeTile(f);
+            // A forward encampment (Vanilla Outposts Expanded) nearer the target is a better place to set out from.
+            PlanetTile forward = Integration_VanillaOutposts.ForwardBase(f, best, to);
+            return forward.Valid ? forward : best;
         }
 
         /// <summary>Within <paramref name="range"/> tiles of a player settlement or caravan.</summary>
@@ -411,7 +447,7 @@ namespace Dominion
         {
             int n = 0;
             foreach (Warband w in All())
-                if (w.Faction == f) n++;
+                if (w.Faction == f && w.mission != WarbandMission.Scout) n++;
             return n;
         }
 
@@ -460,7 +496,7 @@ namespace Dominion
             PlanetTile home = DelegationUtility.HomeTile(from);
             PlanetTile end;
             if (mission == WarbandMission.Reinforce) end = DelegationUtility.HomeTile(ally);
-            else if (mission == WarbandMission.RaidPlayer)
+            else if (mission == WarbandMission.RaidPlayer || mission == WarbandMission.Scout && to != null && to.IsPlayer)
             {
                 Map map = VisitorUtility.PlayerCapitalMap();
                 end = map != null ? map.Tile : PlanetTile.Invalid;
@@ -482,9 +518,12 @@ namespace Dominion
             w.target = to;
             w.targetSettlement = targetSettlement;
             w.ally = ally;
-            w.points = FieldPoints(from) * (mission == WarbandMission.Blockade ? 0.6f : mission == WarbandMission.Reinforce ? 0.5f : 1f);
+            w.points = mission == WarbandMission.Scout ? Mathf.Max(100f, FieldPoints(from) * 0.15f)
+                : FieldPoints(from) * (mission == WarbandMission.Blockade ? 0.6f : mission == WarbandMission.Reinforce ? 0.5f : 1f);
+            w.points *= Integration_VanillaOutposts.LaunchBonus(from, start);
             if (!w.SetRoute(start, end)) return null;
             Find.WorldObjects.Add(w);
+            if (mission == WarbandMission.Scout) return w; // scouts slip out quietly: no news
             EventBus.Raise(mission == WarbandMission.Reinforce ? DominionEventDefOf.Dominion_Reinforcements : DominionEventDefOf.Dominion_WarbandMarching,
                 from, mission == WarbandMission.Reinforce ? ally : to, start.tileId,
                 detail: targetSettlement?.Label ?? (mission == WarbandMission.Reinforce ? ally?.Name : to?.Name));
@@ -523,6 +562,14 @@ namespace Dominion
                     if (enemy == null || !f.HostileTo(enemy)) return false;
                     RaidPlayer(w);
                     return false;
+                case WarbandMission.Scout:
+                {
+                    if (enemy == null || !f.HostileTo(enemy)) return false;
+                    WorldComponent_Dominion.Instance.Wars.scoutedUntil[ScoutKey(f, w.Tile.tileId)] = Find.TickManager.TicksGame + ScoutingDays * GenDate.TicksPerDay;
+                    if (enemy.IsPlayer && w.VisibleToPlayer)
+                        Messages.Message("Dominion_Scouts_SurveyedColony".Translate(f.Name), w, MessageTypeDefOf.ThreatSmall, historical: true);
+                    return false;
+                }
                 case WarbandMission.Blockade:
                 {
                     if (enemy == null || !f.HostileTo(enemy) || w.targetSettlement == null || w.targetSettlement.Destroyed) return false;
@@ -553,6 +600,7 @@ namespace Dominion
             int count = Mathf.Max(1, comp.Cache.SettlementsOf(defender).Count);
             float garrison = Mathf.Clamp(ds.militaryStrength * 5f / count, 150f, 3000f) + 150f;
             if (s != null && ds.capital == s) garrison *= 1.5f;
+            garrison *= Integration_VanillaOutposts.GarrisonFactor(attacker, defender, s);
             if (Find.TickManager.TicksGame < ds.sabotagedUntilTick) garrison *= 0.85f;
             float attack = points * MilitarySystem.TechFactor(attacker.def.techLevel) / MilitarySystem.TechFactor(defender.def.techLevel);
             return Mathf.Clamp(attack / (attack + garrison * 1.2f), 0.05f, 0.95f);
@@ -577,14 +625,16 @@ namespace Dominion
             if (s.HasMap) return; // the player is there; no battle off-screen on a map they can see
 
             War war = comp.Wars.Find(attacker, defender);
+            // A scouted town is attacked where it is weakest.
+            float points = w.points * ConsumeScouting(attacker, s.Tile.tileId, ScoutedSiegeBonus);
             var ftv = IntegrationRegistry.Get<Integration_FactionTerritories>();
             if (ftv != null && ftv.CanInvade && DominionMod.Settings.warOccupation && ftv.TryStartInvasion(s, attacker))
             {
-                comp.Wars.siegePoints[s.Tile.tileId] = w.points;
+                comp.Wars.siegePoints[s.Tile.tileId] = points;
                 if (war != null) war.battles++;
                 return; // the ownership watch reports the outcome
             }
-            ResolveBattle(attacker, defender, s, w.points);
+            ResolveBattle(attacker, defender, s, points);
         }
 
         /// <summary>An off-map battle at an AI settlement: losses, war score, and occupation (or plunder) if the attacker wins.</summary>
@@ -637,6 +687,8 @@ namespace Dominion
             float strength = Mathf.Clamp(RelativeStrength(w.Faction), 0.6f, 1.8f);
             float size = Mathf.Clamp(w.points / Mathf.Max(200f, ExpectedPoints(w.Faction)), 0.7f, 1.4f);
             float points = StorytellerUtility.DefaultThreatPointsNow(map) * Mathf.Clamp(0.9f + 0.5f * strength * size, 1.1f, 2f) * SizeSetting * Vary();
+            // Raiders who scouted the colony first come better prepared.
+            points *= ConsumeScouting(w.Faction, map.Tile.tileId, ScoutedRaidBonus);
             var parms = new IncidentParms
             {
                 target = map,
@@ -669,7 +721,7 @@ namespace Dominion
                 DiplomacyUtility.SetRelationKind(player, f, FactionRelationKind.Hostile, player, "Dominion_Reason_WarbandIntercepted".Translate());
             }
 
-            List<Pawn> enemies = InterceptUtility.GenerateFighters(f, ForPlayerBattle(f, Mathf.Min(w.points, 3000f), InterceptShare), caravan.Tile);
+            List<Pawn> enemies = InterceptUtility.GenerateFighters(f, ForPlayerBattle(f, Mathf.Min(w.points, 3000f), InterceptShareFor(w)), caravan.Tile);
             EventBus.Raise(DominionEventDefOf.Dominion_WarbandIntercepted, player, f, caravan.Tile.tileId, detail: w.target?.Name);
             // Catching them on the road is worth a little; beating them is scored when the fight is decided.
             WarUtility.AddScore(player, f, 2f);

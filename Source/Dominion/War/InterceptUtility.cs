@@ -59,12 +59,15 @@ namespace Dominion
             return caravan.Tile == target.Tile || (DominionGeo.Distance(caravan.Tile, target.Tile) is float d && d >= 0f && d <= ReachTiles);
         }
 
+        /// <summary>The object as something a caravan can attack: our own world objects, or another mod's through an adapter.</summary>
+        public static IInterceptable AsInterceptable(WorldObject o) => o as IInterceptable ?? Integration_VanillaOutposts.AsTarget(o);
+
         public static bool IsPursuing(Caravan caravan, WorldObject target) => Pursuits.Any(p => p.caravan == caravan && p.target == target);
 
         /// <summary>The float menu entry for a caravan. Acts of war are confirmed first.</summary>
         public static FloatMenuOption Option(Caravan caravan, WorldObject target, string label, bool actOfWar)
         {
-            if (!(target is IInterceptable it) || !it.CanBeIntercepted) return null;
+            if (!(AsInterceptable(target) is IInterceptable it) || !it.CanBeIntercepted) return null;
             return new FloatMenuOption(label, () =>
             {
                 if (actOfWar)
@@ -77,7 +80,7 @@ namespace Dominion
         /// <summary>Sends the caravan after the target, or attacks at once if it is already within reach.</summary>
         public static void Order(Caravan caravan, WorldObject target)
         {
-            if (caravan == null || caravan.Destroyed || target == null || target.Destroyed || !(target is IInterceptable it)) return;
+            if (caravan == null || caravan.Destroyed || target == null || target.Destroyed || !(AsInterceptable(target) is IInterceptable it)) return;
             Pursuits.RemoveAll(p => p.caravan == caravan);
             if (InReach(caravan, target))
             {
@@ -99,7 +102,7 @@ namespace Dominion
                 if (i >= list.Count) continue;
                 Pursuit p = list[i];
                 if (p.caravan == null || p.caravan.Destroyed || !p.caravan.IsPlayerControlled || p.target == null || p.target.Destroyed
-                    || !(p.target is IInterceptable it) || !it.CanBeIntercepted)
+                    || !(AsInterceptable(p.target) is IInterceptable it) || !it.CanBeIntercepted)
                 {
                     list.RemoveAt(i);
                     continue;

@@ -137,4 +137,18 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_OutpostBuilt</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;[FACTION_A] builds a [DETAIL] facing [FACTION_B]</li>
+        <li>headline-&gt;New [DETAIL] on the [FACTION_B] front</li>
+        <li>story-&gt;[LEAD] [FACTION_A] has dug in a [DETAIL] on the road towards [FACTION_B]. [ob_detail] [closing]</li>
+        <li>ob_detail-&gt;Soldiers have been seen fortifying the camp and bringing up supplies.</li>
+        <li>ob_detail-&gt;[observers] read it as a sign that [FACTION_A] expects a long war.</li>
+        <li>ob_detail-&gt;Travellers are advised to give it a wide berth.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>

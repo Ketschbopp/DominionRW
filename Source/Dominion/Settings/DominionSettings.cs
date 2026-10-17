@@ -44,6 +44,9 @@ namespace Dominion
         public int raidCooldownDays = 12;
         public int colonyRaidGapDays = 5;
         public int maxRaidsMarching = 1;
+        public bool warbandScouts = true;
+        public bool aiOutposts = true;
+        public bool aiArtilleryOnPlayer = true;
 
         // Cooldowns (multipliers on the built-in waits)
         public float playerCooldownScale = 1f;
@@ -146,6 +149,9 @@ namespace Dominion
             Scribe_Values.Look(ref raidCooldownDays, "raidCooldownDays", 12);
             Scribe_Values.Look(ref colonyRaidGapDays, "colonyRaidGapDays", 5);
             Scribe_Values.Look(ref maxRaidsMarching, "maxRaidsMarching", 1);
+            Scribe_Values.Look(ref warbandScouts, "warbandScouts", true);
+            Scribe_Values.Look(ref aiOutposts, "aiOutposts", true);
+            Scribe_Values.Look(ref aiArtilleryOnPlayer, "aiArtilleryOnPlayer", true);
             Scribe_Values.Look(ref playerCooldownScale, "playerCooldownScale", 1f);
             Scribe_Values.Look(ref aiCooldownScale, "aiCooldownScale", 1f);
             Scribe_Values.Look(ref eventCooldownScale, "eventCooldownScale", 1f);
@@ -207,6 +213,9 @@ namespace Dominion
             raidCooldownDays = 12;
             colonyRaidGapDays = 5;
             maxRaidsMarching = 1;
+            warbandScouts = true;
+            aiOutposts = true;
+            aiArtilleryOnPlayer = true;
             playerCooldownScale = 1f;
             aiCooldownScale = 1f;
             eventCooldownScale = 1f;

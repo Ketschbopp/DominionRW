@@ -21,6 +21,9 @@ namespace Dominion
         public static DominionEventDef Dominion_FactionResettled;
         public static DominionEventDef Dominion_SettlementAbandoned;
 
+        // Vanilla Outposts Expanded
+        public static DominionEventDef Dominion_OutpostBuilt;
+
         static IntegrationEventDefOf()
         {
             DefOfHelper.EnsureInitializedInCtor(typeof(IntegrationEventDefOf));

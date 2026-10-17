@@ -107,4 +107,17 @@
     <newsRules>Dominion_News_SettlementAbandoned</newsRules>
     <headline>{0} abandons {2}</headline>
   </Dominion.DominionEventDef>
+
+  <!-- Vanilla Outposts Expanded -->
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_OutpostBuilt</defName>
+    <label>military outpost built</label>
+    <description>A faction at war has built a military outpost near the front (Vanilla Outposts Expanded): an encampment for its warbands, a defensive outpost, or an artillery position.</description>
+    <category>Military</category>
+    <secrecy>Restricted</secrecy>
+    <newsworthiness>0.4</newsworthiness>
+    <newsRules>Dominion_News_OutpostBuilt</newsRules>
+    <headline>{0} builds a {2} facing {1}</headline>
+  </Dominion.DominionEventDef>
 </Defs>
