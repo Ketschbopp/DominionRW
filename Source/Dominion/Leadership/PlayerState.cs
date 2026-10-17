@@ -44,6 +44,10 @@ namespace Dominion
         /// <summary>Council members the player promised to back on their next motion, by load id.</summary>
         public List<int> councilPromises = new List<int>();
 
+        /// <summary>Trade deals with factions, open and recently ended (see <see cref="TradeDeals"/>).</summary>
+        public List<TradeAgreement> tradeDeals = new List<TradeAgreement>();
+        public int nextTradeDealId;
+
         public void Log(Faction f, string text, int outcome = 0, bool byThem = false)
         {
             if (f == null || text.NullOrEmpty()) return;
@@ -93,6 +97,8 @@ namespace Dominion
             Scribe_Collections.Look(ref federationDues, "federationDues", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref duesPaid, "duesPaid", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref councilPromises, "councilPromises", LookMode.Value);
+            Scribe_Collections.Look(ref tradeDeals, "tradeDeals", LookMode.Deep);
+            Scribe_Values.Look(ref nextTradeDealId, "nextTradeDealId");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 cooldowns ??= new Dictionary<string, int>();
@@ -105,6 +111,9 @@ namespace Dominion
                 federationDues ??= new Dictionary<int, int>();
                 duesPaid ??= new Dictionary<int, int>();
                 councilPromises ??= new List<int>();
+                tradeDeals ??= new List<TradeAgreement>();
+                // A deal whose faction or good is gone (mod removed) cannot be carried out.
+                tradeDeals.RemoveAll(d => d?.faction == null);
             }
         }
     }

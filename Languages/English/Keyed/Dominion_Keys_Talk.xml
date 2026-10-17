@@ -158,4 +158,61 @@
   <Dominion_Voice_Tribal_Warned>You warn us. You are a friend to the tribe.|Our hunters will watch. Thank you.</Dominion_Voice_Tribal_Warned>
   <Dominion_Voice_Tribal_Bargain>Show us what you trade.|We trade skins and food. You?</Dominion_Voice_Tribal_Bargain>
 
+  <!-- Trade over the wire and standing deals -->
+  <Dominion_Deal_OfficeName>{0} trade office</Dominion_Deal_OfficeName>
+  <Dominion_Deal_Trade>Trade</Dominion_Deal_Trade>
+  <Dominion_Deal_Trade_Desc>Trade with {0} over the wire, in the usual trade window. What you buy comes down by drop pod; you sell what lies near your orbital trade beacons, as with orbital traders. Their office keeps its stock for {1} days. Afterwards you may offer to repeat the trade as a standing deal.</Dominion_Deal_Trade_Desc>
+  <Dominion_Deal_TheyEmbargo>{0} has placed an embargo on you.</Dominion_Deal_TheyEmbargo>
+  <Dominion_Deal_WeEmbargo>You have placed an embargo on {0}.</Dominion_Deal_WeEmbargo>
+  <Dominion_Deal_NoHome>You have no home to deliver to.</Dominion_Deal_NoHome>
+  <Dominion_Deal_NoTraders>{0} has no traders to send.</Dominion_Deal_NoTraders>
+  <Dominion_Deal_NoNegotiator>No colonist at home is able to talk to them.</Dominion_Deal_NoNegotiator>
+  <Dominion_Deal_YouGet>you get {0}</Dominion_Deal_YouGet>
+  <Dominion_Deal_YouGive>you give {0}</Dominion_Deal_YouGive>
+  <Dominion_Deal_YouPay>you pay {0} silver</Dominion_Deal_YouPay>
+  <Dominion_Deal_TheyPay>they pay {0} silver</Dominion_Deal_TheyPay>
+  <Dominion_Deal_Every>every {0} days, {1} left</Dominion_Deal_Every>
+  <Dominion_Deal_Frequency>How often</Dominion_Deal_Frequency>
+  <Dominion_Deal_Freq_Every>Every {0} days</Dominion_Deal_Freq_Every>
+  <Dominion_Deal_DeliveriesCount>Number of deliveries</Dominion_Deal_DeliveriesCount>
+  <Dominion_Deal_Terms>If you cannot pay or deliver when a delivery is due, the deal is suspended and they lose {0} goodwill toward you. Calling it off early costs {1} goodwill. War or an embargo ends it.</Dominion_Deal_Terms>
+  <Dominion_Deal_Odds_Greed>Their greed</Dominion_Deal_Odds_Greed>
+  <Dominion_Deal_Odds_Pace>How often</Dominion_Deal_Odds_Pace>
+  <Dominion_Deal_Odds_Size>Size of the deal</Dominion_Deal_Odds_Size>
+  <Dominion_Deal_Odds_Treaty>Trade treaty with you</Dominion_Deal_Odds_Treaty>
+  <Dominion_Deal_Odds_Traders>A people of traders</Dominion_Deal_Odds_Traders>
+  <Dominion_Deal_LogSigned>Standing deal signed: {0}.</Dominion_Deal_LogSigned>
+  <Dominion_Deal_LogRefused>{0} would not make it a standing deal.</Dominion_Deal_LogRefused>
+  <Dominion_Deal_LogEnded>Standing deal ended ({1}): {0}.</Dominion_Deal_LogEnded>
+  <Dominion_Deal_Delivered>Standing deal with {0}: {1} delivered; {2}.</Dominion_Deal_Delivered>
+  <Dominion_Deal_TheyShort>{0} could not fill the whole order from their stores, and charged less.</Dominion_Deal_TheyShort>
+  <Dominion_Deal_Missed_Silver>You could not pay the {0} silver due to {1}.</Dominion_Deal_Missed_Silver>
+  <Dominion_Deal_Missed_Goods>You could not hand over the {0} due to {1}.</Dominion_Deal_Missed_Goods>
+  <Dominion_Deal_MissedLabel>Trade deal suspended</Dominion_Deal_MissedLabel>
+  <Dominion_Deal_MissedText>The standing deal with {0} is suspended and they lost {1} goodwill toward you. Resume it from the Diplomacy tab once you can keep your side.</Dominion_Deal_MissedText>
+  <Dominion_Deal_End_Gone>{0} is gone</Dominion_Deal_End_Gone>
+  <Dominion_Deal_End_War>war with {0}</Dominion_Deal_End_War>
+  <Dominion_Deal_End_Embargo>an embargo between you and {0}</Dominion_Deal_End_Embargo>
+  <Dominion_Deal_End_Done>all deliveries made</Dominion_Deal_End_Done>
+  <Dominion_Deal_End_Cancelled>called off by you</Dominion_Deal_End_Cancelled>
+  <Dominion_Deal_State_Active>Next delivery in {0}; {1} made so far.</Dominion_Deal_State_Active>
+  <Dominion_Deal_State_Suspended>Suspended after {0} missed delivery(s). Resume it when you can keep your side.</Dominion_Deal_State_Suspended>
+  <Dominion_Deal_State_Completed>Completed: {0} deliveries made.</Dominion_Deal_State_Completed>
+  <Dominion_Deal_State_Cancelled>Ended: {0}.</Dominion_Deal_State_Cancelled>
+  <Dominion_Deal_Cancel>Call off</Dominion_Deal_Cancel>
+  <Dominion_Deal_Cancel_Desc>End this deal now. Calling it off before it has run its course costs {0} goodwill.</Dominion_Deal_Cancel_Desc>
+  <Dominion_Deal_Resume>Resume</Dominion_Deal_Resume>
+  <Dominion_Deal_Resume_Desc>Pick the deal up again: the next delivery comes tomorrow. Make sure you can pay or hand over the goods.</Dominion_Deal_Resume_Desc>
+  <Dominion_Deal_WithYou>Standing deals</Dominion_Deal_WithYou>
+  <Dominion_Standing_Title>A standing deal with {0}?</Dominion_Standing_Title>
+  <Dominion_Standing_Intro>You have traded with {0}. Offer to make the same trade again on a schedule: the same goods and the same silver, delivered by drop pod. Their stores in Economics &amp; Demography decide how much they can send each time.</Dominion_Standing_Intro>
+  <Dominion_Standing_Sign>Offer a standing deal</Dominion_Standing_Sign>
+  <Dominion_Standing_Sign_Desc>Sign and send the offer to {0}. They read it and seal it, or refuse.</Dominion_Standing_Sign_Desc>
+  <Dominion_Standing_JustOnce>Just this once</Dominion_Standing_JustOnce>
+  <Dominion_Standing_JustOnce_Desc>Leave it as a one-time trade.</Dominion_Standing_JustOnce_Desc>
+  <Dominion_Ledger_Title>Ledger of standing deals</Dominion_Ledger_Title>
+  <Dominion_Ledger_Empty>No standing deals yet. Trade with a faction from the Diplomacy tab, then offer to repeat the trade.</Dominion_Ledger_Empty>
+  <Dominion_Ledger_Button>Ledger ({0})</Dominion_Ledger_Button>
+  <Dominion_Ledger_Button_Desc>Every standing deal: what is due when, with buttons to resume or call one off.</Dominion_Ledger_Button_Desc>
+
 </LanguageData>

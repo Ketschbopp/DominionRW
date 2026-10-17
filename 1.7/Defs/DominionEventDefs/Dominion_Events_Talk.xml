@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Trade deals between the player and a faction (see Source/Dominion/Diplomacy/TradeAgreements.cs). -->
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TradeDealSigned</defName>
+    <label>trade deal signed</label>
+    <description>A trade deal has been signed: goods will change hands for silver, once or on a schedule.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.35</newsworthiness>
+    <headline>{0} signs a trade deal with {1}: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
+    <defName>Dominion_TradeDealBroken</defName>
+    <label>trade deal ended</label>
+    <description>A trade deal has been called off before it ran its course.</description>
+    <category>Economy</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>0.3</newsworthiness>
+    <headline>Trade deal between {0} and {1} collapses: {2}</headline>
+  </Dominion.DominionEventDef>
+</Defs>

@@ -406,6 +406,16 @@ namespace Dominion
             }
             y += 8f;
 
+            // Standing deals with them.
+            List<TradeAgreement> deals = TradeDeals.OpenWith(f).ToList();
+            if (deals.Count > 0)
+            {
+                DominionPaper.Caption(new Rect(0f, y + 4f, w, 18f), "Dominion_Deal_WithYou".Translate());
+                y += 24f;
+                foreach (TradeAgreement d in deals) y = Dialog_TradeLedger.DealRow(y, w, d, false);
+                y += 8f;
+            }
+
             // The record, printed as strips of tape.
             y = DrawHistory(y, w, f, comp);
             telegramHeight = y + 10f;
@@ -459,7 +469,8 @@ namespace Dominion
             DominionRooms.DrawMoulding(rect);
             Rect inner = rect.ContractedBy(8f);
             DominionTheme.InkLabel(new Rect(inner.x, inner.y, inner.width, 22f), "Dominion_Telegraph_Keys".Translate().ToString().ToUpper(), DominionRooms.BrassLight, GameFont.Tiny);
-            Rect list = new Rect(inner.x, inner.y + 22f, inner.width, inner.height - 22f);
+            DrawDealButtons(new Rect(inner.x, inner.y + 20f, inner.width, 28f), f);
+            Rect list = new Rect(inner.x, inner.y + 54f, inner.width, inner.height - 54f);
             Rect view = new Rect(0f, 0f, list.width - 16f, Mathf.Max(list.height, keysHeight));
             Widgets.BeginScrollView(list, ref keysScroll, view);
             float y = DrawTalk(view.width, f);
@@ -481,6 +492,18 @@ namespace Dominion
             }
             keysHeight = y + 6f;
             Widgets.EndScrollView();
+        }
+
+        /// <summary>The big switches over the keys: trade over the wire and the ledger of standing deals.</summary>
+        private static void DrawDealButtons(Rect rect, Faction f)
+        {
+            float w = (rect.width - 4f) / 2f;
+            if (DominionRooms.BrassButton(new Rect(rect.x, rect.y, w, rect.height), "Dominion_Deal_Trade".Translate(),
+                    "Dominion_Deal_Trade_Desc".Translate(f.Name, TradeDeals.OfficeDays), TradeDeals.CannotDealReason(f)))
+                TradeDeals.OpenTrade(f);
+            if (DominionRooms.BrassButton(new Rect(rect.x + w + 4f, rect.y, w, rect.height), "Dominion_Ledger_Button".Translate(TradeDeals.Open.Count()),
+                    "Dominion_Ledger_Button_Desc".Translate()))
+                Find.WindowStack.Add(new Dialog_TradeLedger());
         }
 
         // ------------------------------------------------------------------ talk
