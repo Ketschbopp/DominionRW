@@ -524,4 +524,18 @@
   <Dominion_WarRoom_Orders>Orders</Dominion_WarRoom_Orders>
   <Dominion_WarRoom_Chronicle>Chronicle</Dominion_WarRoom_Chronicle>
 
+
+  <!-- Telegraph office (Diplomacy) -->
+  <Dominion_Telegraph_TapeEmpty>The wire is quiet. Your messages to other factions, and theirs to you, will print here.</Dominion_Telegraph_TapeEmpty>
+  <Dominion_Telegraph_TapeTip>A wire to or from {0}. Click to open their line. The tape stops while you read it.</Dominion_Telegraph_TapeTip>
+  <Dominion_Telegraph_Goodwill>Goodwill {0}</Dominion_Telegraph_Goodwill>
+  <Dominion_Telegraph_Goodwill_Desc>{0}'s goodwill toward you, as the game counts it: it decides whether they are hostile, neutral or allied.</Dominion_Telegraph_Goodwill_Desc>
+  <Dominion_Telegraph_TheirOpinion>Their view {0}</Dominion_Telegraph_TheirOpinion>
+  <Dominion_Telegraph_TheirOpinion_Desc>What {0} actually thinks of you, from everything that has passed between you. The faint blue needle is your view of them.</Dominion_Telegraph_TheirOpinion_Desc>
+  <Dominion_Telegraph_TheirOpinionUnknown>Their view ?</Dominion_Telegraph_TheirOpinionUnknown>
+  <Dominion_Telegraph_YourOpinion>Your view {0}</Dominion_Telegraph_YourOpinion>
+  <Dominion_Telegraph_YourOpinion_Desc>What your people think of {0}.</Dominion_Telegraph_YourOpinion_Desc>
+  <Dominion_Telegraph_Head>TELEGRAM  ·  TO {0}</Dominion_Telegraph_Head>
+  <Dominion_Telegraph_Keys>Telegraph keys</Dominion_Telegraph_Keys>
+
 </LanguageData>
