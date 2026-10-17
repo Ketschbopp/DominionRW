@@ -449,12 +449,13 @@ namespace Dominion
                 return options;
             }
             string cannot = CannotOrderReason();
+            // Every response is listed; those that do not fit this story say why.
             foreach (RadioOrderKind kind in RadioOrderSpec.StoryResponses)
             {
-                if (CannotRespondReason(kind, n) != null) continue;
+                string reason = cannot ?? CannotRespondReason(kind, n);
                 RadioOrderSpec spec = RadioOrderSpec.Of(kind);
-                string label = spec.Label + (cannot != null ? " (" + cannot + ")" : "");
-                options.Add(new FloatMenuOption(label, cannot != null ? null : (System.Action)(() => Order(kind, n)), spec.icon, Color.white)
+                string label = spec.Label + (reason != null ? " (" + reason + ")" : "");
+                options.Add(new FloatMenuOption(label, reason != null ? null : (System.Action)(() => Order(kind, n)), spec.icon, Color.white)
                     { tooltip = spec.Desc });
             }
             return options;
