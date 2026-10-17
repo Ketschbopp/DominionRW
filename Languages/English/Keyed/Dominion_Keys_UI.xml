@@ -574,4 +574,6 @@
   <Dominion_Chamber_PickSeat>Click a seat in the chamber to see that member: their weight, attendance and how they lean on each motion.</Dominion_Chamber_PickSeat>
   <Dominion_Chamber_Host>Hosts this session</Dominion_Chamber_Host>
 
+  <Dominion_Council_DisbandedLabel>Rim Council disbanded</Dominion_Council_DisbandedLabel>
+  <Dominion_Council_DisbandedText>The Rim Council has been dissolved for good: {0}\n\nIts decrees no longer bind anyone, and no session will ever be called again.</Dominion_Council_DisbandedText>
 </LanguageData>

@@ -367,6 +367,16 @@
   </Dominion.DominionEventDef>
 
   <Dominion.DominionEventDef>
+    <defName>Dominion_CouncilDisbanded</defName>
+    <label>council disbanded</label>
+    <description>The Rim Council has been dissolved for good. Its decrees no longer bind anyone, and no session will ever be called again.</description>
+    <category>Council</category>
+    <secrecy>Public</secrecy>
+    <newsworthiness>1</newsworthiness>
+    <headline>The Rim Council is no more: {2}</headline>
+  </Dominion.DominionEventDef>
+
+  <Dominion.DominionEventDef>
     <defName>Dominion_AgentsExposed</defName>
     <label>agents exposed</label>
     <description>A faction has uncovered foreign agents working against it.</description>

@@ -22,6 +22,9 @@ namespace Dominion
 
         private static CouncilState State => WorldComponent_Dominion.Instance.Council;
 
+        /// <summary>The council meets: switched on in the settings and not disbanded.</summary>
+        public static bool Active => DominionMod.Settings.councilEnabled && !(WorldComponent_Dominion.Instance?.Council.disbanded ?? false);
+
         public override void DailyGlobal()
         {
             CouncilState c = State;
@@ -38,7 +41,7 @@ namespace Dominion
                 {
                     // A decree aimed at a faction that no longer exists has nothing left to do.
                     if (d.expiresTick >= 0 && now >= d.expiresTick || d.targets.Any(t => t == null || t.defeated)) Expire(d);
-                    else if (DominionMod.Settings.councilEnabled) d.def.Worker.DailyCheck(d);
+                    else if (Active) d.def.Worker.DailyCheck(d);
                 }
                 catch (System.Exception e)
                 {
@@ -46,7 +49,7 @@ namespace Dominion
                 }
             }
 
-            if (!DominionMod.Settings.councilEnabled) return;
+            if (!Active) return;
 
             if (c.nextSessionTick < 0)
                 c.nextSessionTick = now + Mathf.Max(AnnounceLeadDays + 5, DominionMod.Settings.councilIntervalDays / 2) * day;
@@ -59,7 +62,7 @@ namespace Dominion
         {
             CouncilState c = State;
             if (c.phase != CouncilPhase.Announced) return;
-            if (!DominionMod.Settings.councilEnabled)
+            if (!Active)
             {
                 Close(null); // switched off while a session was announced
                 return;
@@ -399,6 +402,37 @@ namespace Dominion
                 c.pastViolations[v.loadID] = (c.pastViolations.TryGetValue(v.loadID, out int n) ? n : 0) + 1;
             d.def.Worker.OnExpired(d);
             EventBus.Raise(DominionEventDefOf.Dominion_DecreeExpired, null, d.targets.FirstOrDefault(), detail: d.Summary);
+        }
+
+        /// <summary>
+        /// Ends the council for good: any announced session is called off, every decree lapses, and no session is ever
+        /// called again. A global nuclear war does this. <paramref name="reason"/> is shown in the letter and the Council tab.
+        /// </summary>
+        public static void DisbandPermanently(string reason)
+        {
+            CouncilState c = State;
+            if (c.disbanded) return;
+            if (c.phase == CouncilPhase.Announced) Close(null);
+            foreach (Decree d in c.decrees.ToList()) Expire(d);
+            c.agenda.Clear();
+            c.attending.Clear();
+            c.phase = CouncilPhase.Idle;
+            c.nextSessionTick = -1;
+            c.disbanded = true;
+            c.disbandedTick = Find.TickManager.TicksGame;
+            c.disbandedReason = reason;
+            EventBus.Raise(DominionEventDefOf.Dominion_CouncilDisbanded, null, null, detail: reason);
+            Find.LetterStack.ReceiveLetter("Dominion_Council_DisbandedLabel".Translate(), "Dominion_Council_DisbandedText".Translate(reason), LetterDefOf.NegativeEvent);
+        }
+
+        /// <summary>God mode: bring a disbanded council back. The next session is scheduled as at the start of a game.</summary>
+        public static void Restore()
+        {
+            CouncilState c = State;
+            c.disbanded = false;
+            c.disbandedTick = -1;
+            c.disbandedReason = null;
+            c.nextSessionTick = -1;
         }
 
         /// <summary>Dev-mode veto, the only veto there is.</summary>

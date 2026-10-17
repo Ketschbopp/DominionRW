@@ -168,6 +168,11 @@ namespace Dominion
         /// <summary>Violations of decrees that have since expired, by faction load id.</summary>
         public Dictionary<int, int> pastViolations = new Dictionary<int, int>();
 
+        /// <summary>The council is gone for good (a global nuclear war ended it). Only god mode can restore it.</summary>
+        public bool disbanded;
+        public int disbandedTick = -1;
+        public string disbandedReason;
+
         public void ExposeData()
         {
             Scribe_Values.Look(ref phase, "phase");
@@ -181,6 +186,9 @@ namespace Dominion
             Scribe_Collections.Look(ref decrees, "decrees", LookMode.Deep);
             Scribe_Values.Look(ref nextDecreeId, "nextDecreeId");
             Scribe_Collections.Look(ref pastViolations, "pastViolations", LookMode.Value, LookMode.Value);
+            Scribe_Values.Look(ref disbanded, "disbanded");
+            Scribe_Values.Look(ref disbandedTick, "disbandedTick", -1);
+            Scribe_Values.Look(ref disbandedReason, "disbandedReason");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 agenda ??= new List<Motion>();

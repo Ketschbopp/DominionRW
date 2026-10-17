@@ -79,6 +79,12 @@ namespace Dominion
                 Row(l, "Dominion_Dossier_Governor".Translate(), f, IntelUtility.RestrictedIntel,
                     () => leadership.GovernorOf(s.capital)?.LabelShortCap ?? "Dominion_None".Translate().ToString());
             Row(l, "Dominion_Col_Government".Translate(), DominionUI.GovernmentLabel(s.government));
+            TooltipHandler.TipRegion(new Rect(0f, l.CurHeight - Line, l.ColumnWidth, Line), () => GovernmentUtility.Reason(f), f.loadID ^ 0x60F);
+            Voice voice = FactionVoice.Of(f);
+            Row(l, "Dominion_Dossier_Voice".Translate(), FactionVoice.Label(voice).CapitalizeFirst());
+            MemeDef voiceMeme = FactionVoice.VoiceMeme(f);
+            TooltipHandler.TipRegion(new Rect(0f, l.CurHeight - Line, l.ColumnWidth, Line), () => "Dominion_Dossier_Voice_Desc".Translate(f.Name, FactionVoice.Label(voice),
+                voiceMeme != null ? "Dominion_Dossier_Voice_Meme".Translate(voiceMeme.LabelCap).ToString() : "") + "\n\n“" + FactionVoice.Line(f, VoiceLine.Greeting) + "”", f.loadID ^ 0x70C);
             Row(l, "Dominion_Col_Stability".Translate(), f, IntelUtility.RestrictedIntel, () => DominionUI.Colored(s.stability.ToString("F0"), DominionUI.StabilityColor(s.stability)));
             Row(l, "Dominion_Dossier_Legitimacy".Translate(), f, IntelUtility.RestrictedIntel, () => s.legitimacy.ToString("F0"));
             Row(l, "Dominion_Dossier_WarWeariness".Translate(), f, IntelUtility.SecretIntel, () => s.warWeariness.ToString("F0"));

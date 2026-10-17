@@ -14,7 +14,7 @@ namespace Dominion
         /// </summary>
         public static bool IsMember(Faction f)
         {
-            if (f == null || f.defeated) return false;
+            if (f == null || f.defeated || WorldComponent_Dominion.Instance.Council.disbanded) return false;
             if (f.IsPlayer)
                 return f.def.techLevel >= DominionMod.Settings.councilMinTechLevel || DominionResearchDefOf.Dominion_DiplomaticCorps.IsFinished;
             return DominionScheduler.IsSimulated(f) && !f.def.permanentEnemy && f.def.techLevel >= DominionMod.Settings.councilMinTechLevel;
