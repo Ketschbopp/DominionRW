@@ -298,8 +298,14 @@ namespace Dominion
             if (selected != null && !shown.Contains(selected)) selected = null;
         }
 
-        private static bool Matches(NewsItem n, string text) =>
-            Contains(n.headline, text) || Contains(n.story, text) || Contains(n.primary?.Name, text) || Contains(n.secondary?.Name, text);
+        /// <summary>Every word of the search must appear somewhere in the story; spaces alone match everything.</summary>
+        private static bool Matches(NewsItem n, string text)
+        {
+            foreach (string word in text.Split((char[])null, System.StringSplitOptions.RemoveEmptyEntries))
+                if (!Contains(n.headline, word) && !Contains(n.story, word) && !Contains(n.primary?.Name, word) && !Contains(n.secondary?.Name, word))
+                    return false;
+            return true;
+        }
 
         private static bool Contains(string s, string text) => s != null && s.IndexOf(text, System.StringComparison.OrdinalIgnoreCase) >= 0;
 

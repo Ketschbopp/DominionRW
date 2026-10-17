@@ -163,7 +163,7 @@ namespace Dominion
             Faction player = Faction.OfPlayer;
             foreach (Faction f in factions)
             {
-                if (!search.NullOrEmpty() && f.Name.IndexOf(search, System.StringComparison.OrdinalIgnoreCase) < 0) continue;
+                if (!search.Trim().NullOrEmpty() && f.Name.IndexOf(search.Trim(), System.StringComparison.OrdinalIgnoreCase) < 0) continue;
                 FactionRelationKind kind = f.RelationKindWith(player);
                 switch (filter)
                 {
