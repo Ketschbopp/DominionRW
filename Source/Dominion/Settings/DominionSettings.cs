@@ -40,6 +40,9 @@ namespace Dominion
         public float warbandSpeed = 2f;
         public float warbandFightSize = 1f;
         public float warbandFightVariance = 0.1f;
+        public int raidCooldownDays = 12;
+        public int colonyRaidGapDays = 5;
+        public int maxRaidsMarching = 1;
         public bool warbandRaidsOnPlayer = true;
         public bool warOccupation = true;
         public float capitulationScore = 75f;
@@ -119,6 +122,9 @@ namespace Dominion
             Scribe_Values.Look(ref warbandSpeed, "warbandSpeed", 2f);
             Scribe_Values.Look(ref warbandFightSize, "warbandFightSize", 1f);
             Scribe_Values.Look(ref warbandFightVariance, "warbandFightVariance", 0.1f);
+            Scribe_Values.Look(ref raidCooldownDays, "raidCooldownDays", 12);
+            Scribe_Values.Look(ref colonyRaidGapDays, "colonyRaidGapDays", 5);
+            Scribe_Values.Look(ref maxRaidsMarching, "maxRaidsMarching", 1);
             Scribe_Values.Look(ref warbandRaidsOnPlayer, "warbandRaidsOnPlayer", true);
             Scribe_Values.Look(ref warOccupation, "warOccupation", true);
             Scribe_Values.Look(ref capitulationScore, "capitulationScore", 75f);
@@ -174,6 +180,9 @@ namespace Dominion
             warbandSpeed = 2f;
             warbandFightSize = 1f;
             warbandFightVariance = 0.1f;
+            raidCooldownDays = 12;
+            colonyRaidGapDays = 5;
+            maxRaidsMarching = 1;
             warbandRaidsOnPlayer = true;
             warOccupation = true;
             capitulationScore = 75f;

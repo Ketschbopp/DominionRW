@@ -115,6 +115,12 @@ namespace Dominion
                 s.warbandFightSize = Mathf.Round(l.Slider(s.warbandFightSize, 0.25f, 3f) * 20f) / 20f;
                 l.Label("Dominion_Setting_WarbandFightVariance".Translate(s.warbandFightVariance.ToStringPercent()), tooltip: "Dominion_Setting_WarbandFightVariance_Desc".Translate());
                 s.warbandFightVariance = Mathf.Round(l.Slider(s.warbandFightVariance, 0f, 0.6f) * 20f) / 20f;
+                l.Label("Dominion_Setting_RaidCooldown".Translate(s.raidCooldownDays), tooltip: "Dominion_Setting_RaidCooldown_Desc".Translate());
+                s.raidCooldownDays = Mathf.RoundToInt(l.Slider(s.raidCooldownDays, 1f, 60f));
+                l.Label("Dominion_Setting_ColonyRaidGap".Translate(s.colonyRaidGapDays), tooltip: "Dominion_Setting_ColonyRaidGap_Desc".Translate());
+                s.colonyRaidGapDays = Mathf.RoundToInt(l.Slider(s.colonyRaidGapDays, 0f, 30f));
+                l.Label("Dominion_Setting_MaxRaidsMarching".Translate(s.maxRaidsMarching), tooltip: "Dominion_Setting_MaxRaidsMarching_Desc".Translate());
+                s.maxRaidsMarching = Mathf.RoundToInt(l.Slider(s.maxRaidsMarching, 1f, 6f));
                 l.CheckboxLabeled("Dominion_Setting_Occupation".Translate(), ref s.warOccupation, "Dominion_Setting_Occupation_Desc".Translate());
             }
             l.Gap();

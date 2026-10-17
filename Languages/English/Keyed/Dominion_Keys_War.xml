@@ -280,7 +280,13 @@
   <Dominion_Setting_WarbandFightSize_Desc>Scales every fight with a warband that the colony takes part in: warband raids on the colony, and battles on caravan maps (intercepted warbands, blockade sorties, ambushed delegations). 100% is Dominion's normal size: warband raids are 110% to 200% of a normal storyteller raid, and caravan battles at least a share of one. Fights between other factions are not affected.</Dominion_Setting_WarbandFightSize_Desc>
   <Dominion_Setting_WarbandFightVariance>Warband fight variance: ±{0}</Dominion_Setting_WarbandFightVariance>
   <Dominion_Setting_WarbandFightVariance_Desc>How much each fight's size varies by luck, up or down. 0% makes every fight exactly the expected size; 60% means a fight can be anything from 40% to 160% of it.</Dominion_Setting_WarbandFightVariance_Desc>
-  <Dominion_Setting_WarbandRaids_Desc>Factions at war with you may march warbands on your colony. They arrive as raids bigger than the storyteller's own (110% to 200% of a normal raid, by the enemy's strength), at most one on the way at a time and never within 5 days of the last one. None come on Peaceful difficulty. When off, warbands only fight each other.</Dominion_Setting_WarbandRaids_Desc>
+  <Dominion_Setting_RaidCooldown>Days between raids from the same enemy: {0}</Dominion_Setting_RaidCooldown>
+  <Dominion_Setting_RaidCooldown_Desc>After a faction's warband raids the colony, that faction waits at least this long before sending another one at it.</Dominion_Setting_RaidCooldown_Desc>
+  <Dominion_Setting_ColonyRaidGap>Days between any two warband raids: {0}</Dominion_Setting_ColonyRaidGap>
+  <Dominion_Setting_ColonyRaidGap_Desc>A breather after any warband raid on the colony, whoever sent it, before another enemy may send one. 0 lets different enemies raid back to back. The storyteller's own raids are not affected.</Dominion_Setting_ColonyRaidGap_Desc>
+  <Dominion_Setting_MaxRaidsMarching>Warbands on the way to the colony at once: {0}</Dominion_Setting_MaxRaidsMarching>
+  <Dominion_Setting_MaxRaidsMarching_Desc>How many raiding warbands may be marching on the colony at the same time, from all enemies together. Each enemy still sends only one at a time.</Dominion_Setting_MaxRaidsMarching_Desc>
+  <Dominion_Setting_WarbandRaids_Desc>Factions at war with you may march warbands on your colony. They arrive as raids bigger than the storyteller's own (110% to 200% of a normal raid, by the enemy's strength), with limits on how often they come (set below). None come on Peaceful difficulty. When off, warbands only fight each other.</Dominion_Setting_WarbandRaids_Desc>
   <Dominion_Setting_Occupation>Occupation</Dominion_Setting_Occupation>
   <Dominion_Setting_Occupation_Desc>Victorious warbands occupy enemy settlements. The peace decides whether they are kept.</Dominion_Setting_Occupation_Desc>
   <Dominion_Setting_CapitulationScore>Capitulation at war score {0}</Dominion_Setting_CapitulationScore>

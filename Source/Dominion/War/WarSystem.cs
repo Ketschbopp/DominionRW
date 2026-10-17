@@ -19,9 +19,6 @@ namespace Dominion
 
         private const int OfferCooldownDays = 15;
         private const int TributeEveryDays = 15;
-        private const int RaidCooldownDays = 12;
-        /// <summary>Days between any two warband raids on the colony, whoever sends them, on top of the storyteller's own.</summary>
-        private const int ColonyRaidGapDays = 5;
 
         // Joined wars end shortly after the war they were joined for. Handled on the next hour, not inside the event.
         private static readonly List<(Faction a, Faction b)> pendingPeace = new List<(Faction, Faction)>();
@@ -336,11 +333,14 @@ namespace Dominion
                 if (!DominionMod.Settings.warbandRaidsOnPlayer) return;
                 if (!Find.Storyteller.difficulty.allowBigThreats) return;
                 int now = Find.TickManager.TicksGame;
-                if (now - s.lastRaidOnPlayerTick < RaidCooldownDays * GenDate.TicksPerDay) return;
-                // One warband on the way to the colony at a time, and a breather between raids from different enemies.
-                if (WarbandUtility.All().Any(x => x.mission == WarbandMission.RaidPlayer)) return;
-                foreach (Faction g in comp.Cache.Simulated)
-                    if (now - comp.GetState(g).lastRaidOnPlayerTick < ColonyRaidGapDays * GenDate.TicksPerDay) return;
+                DominionSettings set = DominionMod.Settings;
+                if (now - s.lastRaidOnPlayerTick < set.raidCooldownDays * GenDate.TicksPerDay) return;
+                // A limit on warbands on the way to the colony at once, and a breather between raids from different enemies.
+                if (WarbandUtility.All().Count(x => x.mission == WarbandMission.RaidPlayer) >= Mathf.Max(1, set.maxRaidsMarching)) return;
+                if (WarbandUtility.All().Any(x => x.Faction == f && x.mission == WarbandMission.RaidPlayer)) return;
+                if (set.colonyRaidGapDays > 0)
+                    foreach (Faction g in comp.Cache.Simulated)
+                        if (now - comp.GetState(g).lastRaidOnPlayerTick < set.colonyRaidGapDays * GenDate.TicksPerDay) return;
                 mission = WarbandMission.RaidPlayer;
                 chance *= 0.5f;
             }
