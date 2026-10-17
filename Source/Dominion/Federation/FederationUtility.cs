@@ -17,10 +17,10 @@ namespace Dominion
         public static bool ResearchDone => DominionFederationDefOf.Dominion_PlanetaryFederation.IsFinished;
 
         /// <summary>
-        /// The charter passes at the Rim Council. With the council switched off, finishing the research is enough.
+        /// The charter passes at the Rim Council. With the council switched off or disbanded, finishing the research is enough.
         /// </summary>
         public static bool CharterInForce => State.CharterInForce
-            || (ResearchDone && (!DominionMod.Settings.councilEnabled || !CouncilCanMeet));
+            || (ResearchDone && (!CouncilSystem.Active || !CouncilCanMeet));
 
         /// <summary>The council needs two members to meet; in a mostly tribal world it never can.</summary>
         private static bool CouncilCanMeet

@@ -37,6 +37,70 @@ namespace Dominion
             { "Guilty", new Vector4(-0.10f, -0.05f, 0.10f, 0.05f) },
             { "Transhumanist", new Vector4(0f, 0.05f, 0f, -0.05f) },
             { "FleshPurity", new Vector4(0.05f, 0f, 0f, 0.10f) },
+
+            // Vanilla Memes Expanded
+            { "VME_Aristocratic", new Vector4(0f, 0.10f, 0.10f, 0.05f) },
+            { "VME_Royal", new Vector4(0f, 0.05f, 0.15f, 0f) },
+            { "VME_GodEmperor", new Vector4(0.10f, 0f, 0.10f, 0.10f) },
+            { "VME_ExaltedPriesthood", new Vector4(0.05f, 0f, 0.10f, 0.05f) },
+            { "VME_Republic", new Vector4(-0.05f, 0f, 0.10f, 0f) },
+            { "VME_Gestalt", new Vector4(-0.05f, -0.05f, 0.10f, -0.05f) },
+            { "VME_Egalitarian", new Vector4(-0.10f, -0.05f, 0.15f, -0.05f) },
+            { "VME_Elders", new Vector4(-0.05f, 0f, 0.10f, 0.05f) },
+            { "VME_Nationalist", new Vector4(0.15f, 0f, 0.05f, 0.15f) },
+            { "VME_Structure_Authoritarianism", new Vector4(0.10f, 0f, 0f, 0.15f) },
+            { "VME_Structure_CultOfPersonality", new Vector4(0.05f, 0.05f, 0f, 0.10f) },
+            { "VME_Structure_Corporate", new Vector4(0f, 0.25f, -0.05f, 0f) },
+            { "VME_Trader", new Vector4(-0.10f, 0.20f, 0.05f, -0.05f) },
+            { "VME_ViolentConversion", new Vector4(0.20f, 0f, -0.05f, 0f) },
+            { "VME_BloodCourt", new Vector4(0.25f, 0f, 0.10f, 0f) },
+            { "VME_Bushido", new Vector4(0.10f, -0.05f, 0.25f, 0f) },
+            { "VME_Pacifist", new Vector4(-0.30f, 0f, 0.15f, 0.05f) },
+            { "VME_Emancipation", new Vector4(0f, -0.05f, 0.15f, 0f) },
+            { "VFEA_Isolationist", new Vector4(0.10f, -0.05f, 0f, 0.30f) },
+            { "VME_Anonymity", new Vector4(0f, 0f, 0f, 0.15f) },
+            { "VME_Nomad", new Vector4(0.05f, 0f, 0f, 0.05f) },
+            { "VME_CityBuilders", new Vector4(-0.05f, 0.10f, 0f, 0f) },
+            { "VME_HardcoreIndustrialism", new Vector4(0f, 0.15f, 0f, 0f) },
+            { "VME_Progressive", new Vector4(0f, 0.05f, 0f, -0.05f) },
+            { "VME_CraftCulture", new Vector4(-0.05f, 0.05f, 0.10f, 0f) },
+            { "VME_Scrapper", new Vector4(0f, 0.10f, 0f, 0f) },
+            { "VME_PartyLife", new Vector4(-0.10f, 0.05f, -0.05f, -0.10f) },
+            { "VME_Healthcare", new Vector4(-0.10f, 0f, 0.05f, 0f) },
+            { "VME_Vegan", new Vector4(-0.05f, -0.05f, 0.05f, 0f) },
+            { "VME_Light", new Vector4(0f, 0f, 0.05f, 0.05f) },
+            { "VME_FireWorship", new Vector4(0.10f, 0f, 0f, 0f) },
+            { "VME_HolyDiseases", new Vector4(0.05f, 0f, -0.05f, 0f) },
+            { "VME_Fleshcrafters", new Vector4(0.05f, 0f, -0.10f, 0f) },
+            { "VME_MechanoidSupremacy", new Vector4(0.10f, 0f, -0.10f, 0.05f) },
+            { "VME_InsectoidSupremacy", new Vector4(0.15f, 0f, -0.10f, 0f) },
+            { "VME_Astrology", new Vector4(0f, 0f, 0f, 0.05f) },
+            { "VME_PsychicFocus", new Vector4(0f, 0f, 0.05f, 0.05f) },
+            { "VME_Cultured", new Vector4(-0.05f, 0f, 0.05f, 0f) },
+            { "VME_Structure_Serketist", new Vector4(0.10f, 0f, 0f, 0.05f) },
+            { "VME_Structure_Esotericism", new Vector4(0f, 0f, -0.05f, 0.15f) },
+            { "VME_Structure_ChthonianCult", new Vector4(0.10f, 0f, -0.10f, 0.10f) },
+            { "VME_Structure_Eschatologism", new Vector4(0.15f, -0.05f, 0f, 0f) },
+            { "VME_Structure_Shintaoism", new Vector4(-0.05f, 0f, 0.10f, 0f) },
+            { "VME_Structure_Pantheism", new Vector4(-0.05f, 0f, 0.05f, 0f) },
+            { "VME_Structure_Omnism", new Vector4(-0.10f, 0f, 0.05f, -0.10f) },
+            { "VME_Structure_Bacchanalianism", new Vector4(-0.05f, 0.10f, -0.10f, -0.05f) },
+            { "VME_Structure_SecularSpirituality", new Vector4(-0.05f, 0f, 0.05f, 0f) },
+        };
+
+        /// <summary>Precepts (vanilla issues with Vanilla Memes Expanded options) that tip a faction's temper.</summary>
+        private static readonly Dictionary<string, Vector4> PreceptMods = new Dictionary<string, Vector4>
+        {
+            { "VME_Violence_Honorable", new Vector4(0.10f, 0f, 0.05f, 0f) },
+            { "VME_Violence_Disapproved", new Vector4(-0.05f, 0f, 0f, 0f) },
+            { "VME_Violence_Abhorrent", new Vector4(-0.15f, 0f, 0.05f, 0f) },
+            { "VME_Raiding_Honorable", new Vector4(0.10f, 0.05f, -0.05f, 0f) },
+            { "VME_Raiding_Abhorrent", new Vector4(-0.10f, 0f, 0.05f, 0f) },
+            { "VME_Defeat_Dishonorable", new Vector4(0.05f, 0f, 0.05f, 0f) },
+            { "VME_Trading_Required", new Vector4(0f, 0.10f, 0f, 0f) },
+            { "VME_Slavery_Forbidden", new Vector4(0f, 0f, 0.10f, 0f) },
+            { "VFEA_Recruiting_Forbidden", new Vector4(0f, 0f, 0f, 0.10f) },
+            { "VME_Corruption_Essential", new Vector4(0f, 0.10f, -0.10f, 0.05f) },
         };
 
         private static readonly Dictionary<string, Vector4> TraitMods = new Dictionary<string, Vector4>
@@ -83,6 +147,10 @@ namespace Dominion
             if (ideo != null && ModsConfig.IdeologyActive)
                 foreach (MemeDef meme in ideo.memes)
                     if (MemeMods.TryGetValue(meme.defName, out Vector4 m))
+                        v += m;
+            if (ideo != null && ModsConfig.IdeologyActive)
+                foreach (Precept p in ideo.PreceptsListForReading)
+                    if (PreceptMods.TryGetValue(p.def.defName, out Vector4 m))
                         v += m;
 
             List<Trait> traits = faction.leader?.story?.traits?.allTraits;

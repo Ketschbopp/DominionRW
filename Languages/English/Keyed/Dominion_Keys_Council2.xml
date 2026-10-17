@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Rim Council: expanded motions, consequences, compliance ledger, session record, blocs and favours. -->
+
+  <!-- Consequences -->
+  <Dominion_Council_IfPassed>If it carries: {0}</Dominion_Council_IfPassed>
+  <Dominion_Council_IfFailed>If it fails: {0}</Dominion_Council_IfFailed>
+  <Dominion_Council_YourDuty>For you: {0}</Dominion_Council_YourDuty>
+  <Dominion_Council_LastsDays>It would hold for {0} days, with {1} days' grace to comply.</Dominion_Council_LastsDays>
+  <Dominion_Council_LastsForever>It would hold for good.</Dominion_Council_LastsForever>
+  <Dominion_Council_YourRecord>You have {0} breach(es) on record: your next would bring {1}.</Dominion_Council_YourRecord>
+  <Dominion_Council_Consequences>Consequences</Dominion_Council_Consequences>
+
+  <!-- Reasons a motion cannot be put -->
+  <Dominion_Council_NeedsIRBM>Missiles are not in this world (needs InterRim Ballistic Missile).</Dominion_Council_NeedsIRBM>
+  <Dominion_Council_NoCrime>The council has nothing to try them for: no war of aggression, no crimes in the past 90 days and no breaches.</Dominion_Council_NoCrime>
+  <Dominion_Council_NothingOccupied>The first faction holds no settlements taken from the second.</Dominion_Council_NothingOccupied>
+  <Dominion_Council_CannotAdmit>Only a faction the world simulation follows, and not outlaws, can be admitted.</Dominion_Council_CannotAdmit>
+  <Dominion_Council_AlreadyMember>Already a member.</Dominion_Council_AlreadyMember>
+  <Dominion_Council_NotAMember>Not a member of the council.</Dominion_Council_NotAMember>
+  <Dominion_Council_NotRepeatOffender>Only a member with two or more breaches on record can be expelled.</Dominion_Council_NotRepeatOffender>
+  <Dominion_Council_CannotHost>They cannot host: not a member, no capital, or (for you) no leadership desk.</Dominion_Council_CannotHost>
+  <Dominion_Council_AlreadyHost>They are hosting this session already.</Dominion_Council_AlreadyHost>
+  <Dominion_Council_NoCrisis>They are not in a crisis that needs aid.</Dominion_Council_NoCrisis>
+  <Dominion_Council_NoDebts>They pay no tribute to anyone.</Dominion_Council_NoDebts>
+  <Dominion_Council_NoPlague>There is no plague there.</Dominion_Council_NoPlague>
+  <Dominion_Council_DisbandedShort>The council has been disbanded.</Dominion_Council_DisbandedShort>
+
+  <!-- Duties (what a motion would ask of you) -->
+  <Dominion_Duty_YouAreTarget>it is aimed at you.</Dominion_Duty_YouAreTarget>
+  <Dominion_Duty_YouAreProtected>it is in your favour.</Dominion_Duty_YouAreProtected>
+  <Dominion_Duty_NonProliferation>you may not launch missiles while it holds; a strike is a breach.</Dominion_Duty_NonProliferation>
+  <Dominion_Duty_ArmsEmbargo>you must embargo {0} and send it no troops.</Dominion_Duty_ArmsEmbargo>
+  <Dominion_Duty_Peacekeeping>you are asked to pay {0} silver toward the force.</Dominion_Duty_Peacekeeping>
+  <Dominion_Duty_Peacekeeping_Aggressor>you must make peace with {0} within the grace period, or be in breach while forces march against you.</Dominion_Duty_Peacekeeping_Aggressor>
+  <Dominion_Duty_Tribunal_You>you would be fined {0} silver; refusing is a breach.</Dominion_Duty_Tribunal_You>
+  <Dominion_Duty_Recognise_You>you lose your occupied settlements to {0} for good.</Dominion_Duty_Recognise_You>
+  <Dominion_Duty_Recognise_Holder>the settlements you occupy become yours for good.</Dominion_Duty_Recognise_Holder>
+  <Dominion_Duty_Liberation_You>you must hand {0}'s settlements back within {1} days, or be in breach.</Dominion_Duty_Liberation_You>
+  <Dominion_Duty_Expel_You>you would lose your seat and vote for {0} days.</Dominion_Duty_Expel_You>
+  <Dominion_Duty_Host_You>you would host the next session at your capital.</Dominion_Duty_Host_You>
+  <Dominion_Duty_ReliefFund>you are asked for {0} silver for {1}.</Dominion_Duty_ReliefFund>
+  <Dominion_Duty_FreeTrade>you may not embargo another member (except under sanctions).</Dominion_Duty_FreeTrade>
+  <Dominion_Duty_DebtRelief_You>the tribute you pay is forgiven.</Dominion_Duty_DebtRelief_You>
+  <Dominion_Duty_DebtRelief_Creditor>you must forgive the tribute {0} pays you.</Dominion_Duty_DebtRelief_Creditor>
+  <Dominion_Duty_Quarantine>you must close your borders to {0}.</Dominion_Duty_Quarantine>
+  <Dominion_Duty_Refugees>you are asked for {0} silver each time a member's people flee, and must not close your borders to them.</Dominion_Duty_Refugees>
+  <Dominion_Duty_Organs>harvesting organs becomes a breach.</Dominion_Duty_Organs>
+  <Dominion_Duty_Raiding>ambushing convoys or looting settlements becomes a breach.</Dominion_Duty_Raiding>
+  <Dominion_Duty_Culture>you may not close your borders to another member.</Dominion_Duty_Culture>
+
+  <!-- Decree letters and requests -->
+  <Dominion_Decree_NonProliferation_Duty>The Rim Council has banned ballistic missiles. While the decree holds, any missile you launch is a breach.</Dominion_Decree_NonProliferation_Duty>
+  <Dominion_Decree_ArmsEmbargo_Duty>The Rim Council has put an arms embargo on {0}. Embargo it within {1} days and send it no troops, or be in breach.</Dominion_Decree_ArmsEmbargo_Duty>
+  <Dominion_Decree_Peacekeeping_Ask>The Rim Council is sending a peacekeeping force to defend {0} against {1}. Members are asked to pay {2} silver toward it.</Dominion_Decree_Peacekeeping_Ask>
+  <Dominion_Decree_Peacekeeping_Pay>Pay {0} silver</Dominion_Decree_Peacekeeping_Pay>
+  <Dominion_Decree_Peacekeeping_YouAggressor>The Rim Council has sent a peacekeeping force to defend {0} against you. Make peace within the grace period, or be in breach.</Dominion_Decree_Peacekeeping_YouAggressor>
+  <Dominion_Decree_Tribunal_Ask>The Rim Council's tribunal has found against you. Pay a fine of {0} silver to those you wronged?</Dominion_Decree_Tribunal_Ask>
+  <Dominion_Decree_Tribunal_Pay>Pay the fine ({0} silver)</Dominion_Decree_Tribunal_Pay>
+  <Dominion_Decree_Liberation_Ask>The Rim Council demands that you return these settlements to {0}: {1}. Hand them back?</Dominion_Decree_Liberation_Ask>
+  <Dominion_Decree_Liberation_Accept>Hand them back</Dominion_Decree_Liberation_Accept>
+  <Dominion_Decree_ExpelledLabel>Expelled from the council</Dominion_Decree_ExpelledLabel>
+  <Dominion_Decree_Expelled_You>The Rim Council has suspended your membership for {0} days. You have no seat and no vote, and its decrees no longer protect you.</Dominion_Decree_Expelled_You>
+  <Dominion_Decree_ReliefFund_Ask>The Rim Council has set up a relief fund for {0}. Your share is {1} silver. Pay it?</Dominion_Decree_ReliefFund_Ask>
+  <Dominion_Decree_ReliefFund_Pay>Pay {0} silver</Dominion_Decree_ReliefFund_Pay>
+  <Dominion_Decree_DebtRelief_Ask>The Rim Council has forgiven {0}'s tribute. Forgive what it owes you?</Dominion_Decree_DebtRelief_Ask>
+  <Dominion_Decree_DebtRelief_Forgive>Forgive the tribute</Dominion_Decree_DebtRelief_Forgive>
+  <Dominion_Decree_Quarantine_Ask>The Rim Council has quarantined {0} against plague. Close your borders to it?</Dominion_Decree_Quarantine_Ask>
+  <Dominion_Decree_Quarantine_Close>Close the borders</Dominion_Decree_Quarantine_Close>
+  <Dominion_Decree_Refugees_Ask>{0}'s people are fleeing. Under the refugee protection decree, members are asked for {1} silver to help them. Pay it?</Dominion_Decree_Refugees_Ask>
+  <Dominion_Decree_Refugees_Pay>Pay {0} silver</Dominion_Decree_Refugees_Pay>
+
+  <!-- Penalties and the ledger -->
+  <Dominion_Penalty_Warning>a warning</Dominion_Penalty_Warning>
+  <Dominion_Penalty_Fine>a fine</Dominion_Penalty_Fine>
+  <Dominion_Penalty_Sanctions>sanctions</Dominion_Penalty_Sanctions>
+  <Dominion_Penalty_Expulsion>expulsion</Dominion_Penalty_Expulsion>
+  <Dominion_Penalty_Label>Council penalty: {0}</Dominion_Penalty_Label>
+  <Dominion_Penalty_Text_Warning>You have broken the decree "{0}". The council warns you: each further breach will be punished more harshly (a fine, then sanctions, then expulsion).</Dominion_Penalty_Text_Warning>
+  <Dominion_Penalty_Text_Fine>You have broken the decree "{0}" again. The council has fined you: {1} silver was taken from your stores.</Dominion_Penalty_Text_Fine>
+  <Dominion_Penalty_Text_Sanctions>You have broken the decree "{0}" once too often. The council has put sanctions on you: every member must embargo you for 30 days.</Dominion_Penalty_Text_Sanctions>
+  <Dominion_Penalty_Text_Expulsion>You have broken the council's decrees too often ("{0}" was the last). You are suspended for 60 days: no seat, no vote, no protection.</Dominion_Penalty_Text_Expulsion>
+  <Dominion_Ledger_Title>Compliance ledger: {0}</Dominion_Ledger_Title>
+  <Dominion_Ledger_Complied>Complied ({0})</Dominion_Ledger_Complied>
+  <Dominion_Ledger_Violators>In breach ({0})</Dominion_Ledger_Violators>
+  <Dominion_Ledger_Pending>Not yet acted ({0})</Dominion_Ledger_Pending>
+  <Dominion_Ledger_Entries>Breaches and penalties</Dominion_Ledger_Entries>
+  <Dominion_Ledger_Entry>{0}  ·  {1}  ·  {2}</Dominion_Ledger_Entry>
+  <Dominion_Ledger_EntryFine>{0}  ·  {1}  ·  {2} ({3} silver)</Dominion_Ledger_EntryFine>
+  <Dominion_Ledger_None>No breaches yet.</Dominion_Ledger_None>
+  <Dominion_Ledger_Passed>Passed {0}</Dominion_Ledger_Passed>
+  <Dominion_Ledger_Expires>{0}  ·  grace until {1}</Dominion_Ledger_Expires>
+  <Dominion_Ledger_Penalty>A penalty decree the council imposed for repeated breaches.</Dominion_Ledger_Penalty>
+  <Dominion_Ledger_Click>Click to open its compliance ledger: who complied, who broke it and the penalties.</Dominion_Ledger_Click>
+  <Dominion_Ledger_Close>Close</Dominion_Ledger_Close>
+  <Dominion_Ledger_Escalation>Penalties grow with each breach on a member's record: a warning, then a fine, then sanctions, then expulsion. Old breaches are forgiven by half each time a decree runs out.</Dominion_Ledger_Escalation>
+
+  <!-- Session record -->
+  <Dominion_Record_Button>Session record</Dominion_Record_Button>
+  <Dominion_Record_Button_Desc>Every past session: each motion, how every member voted, what carried, and how the decrees turned out.</Dominion_Record_Button_Desc>
+  <Dominion_Record_Title>The Rim Council's record</Dominion_Record_Title>
+  <Dominion_Record_None>No session has been held yet.</Dominion_Record_None>
+  <Dominion_Record_Session>Session {0}  ·  {1}  ·  hosted by {2}  ·  {3} present</Dominion_Record_Session>
+  <Dominion_Record_Ayes>Aye: {0}</Dominion_Record_Ayes>
+  <Dominion_Record_Nays>Nay: {0}</Dominion_Record_Nays>
+  <Dominion_Record_Abstained>Abstained: {0}</Dominion_Record_Abstained>
+  <Dominion_Record_Tally>{0} – {1}</Dominion_Record_Tally>
+  <Dominion_Record_InForce>In force.</Dominion_Record_InForce>
+  <Dominion_Record_OutcomeKept>Ran its course with no breach; {0} member(s) acted on it.</Dominion_Record_OutcomeKept>
+  <Dominion_Record_OutcomeBroken>Ran its course; broken by {0}.</Dominion_Record_OutcomeBroken>
+  <Dominion_Record_Vetoed>(vetoed)</Dominion_Record_Vetoed>
+  <Dominion_Record_YourVote>Your vote: {0}</Dominion_Record_YourVote>
+
+  <!-- Blocs -->
+  <Dominion_Bloc_ByGovernment>{0} bloc</Dominion_Bloc_ByGovernment>
+  <Dominion_Bloc_ByLeader>{0}'s bloc</Dominion_Bloc_ByLeader>
+  <Dominion_Bloc_Title>Blocs</Dominion_Bloc_Title>
+  <Dominion_Bloc_None>No blocs: the members are too divided to vote together.</Dominion_Bloc_None>
+  <Dominion_Bloc_Desc>Members close in ideology, alliances and goodwill vote together: each leans toward motions sponsored by a fellow member of its bloc. Members: {0}.</Dominion_Bloc_Desc>
+  <Dominion_Bloc_Member>Bloc: {0}</Dominion_Bloc_Member>
+  <Dominion_Chamber_LegendBlocs>Seats grouped and coloured by bloc. Pick a banner to see how members lean.</Dominion_Chamber_LegendBlocs>
+  <Dominion_Chamber_SeatMode>Seats: {0}</Dominion_Chamber_SeatMode>
+  <Dominion_Chamber_SeatMode_Factions>colours</Dominion_Chamber_SeatMode_Factions>
+  <Dominion_Chamber_SeatMode_Blocs>blocs</Dominion_Chamber_SeatMode_Blocs>
+  <Dominion_Chamber_SeatMode_Desc>Colour the seats by each member's own colour or by voting bloc, when no banner is picked.</Dominion_Chamber_SeatMode_Desc>
+
+  <!-- Favours -->
+  <Dominion_Favour_Repaid>You repaid the favour you owed {0}: you backed "{1}".</Dominion_Favour_Repaid>
+  <Dominion_Favour_Ignored>{0} called in the favour you owed them, and you did not back "{1}". They will remember.</Dominion_Favour_Ignored>
+  <Dominion_Favour_OwesYou>Owes you {0} favour(s)</Dominion_Favour_OwesYou>
+  <Dominion_Favour_YouOwe>You owe them {0} favour(s)</Dominion_Favour_YouOwe>
+  <Dominion_Favour_Desc>Favours are earned by backing a member's motion that carries, and owed when a member votes your way because you asked. A favour owed to you can be called in at a session to swing that member's vote. A favour you owe is called in when that member next sponsors a motion: back it, or lose goodwill. Favours lapse after {0} days; one you never repaid leaves a grievance.</Dominion_Favour_Desc>
+  <Dominion_Favour_List_Owed>Owed to you: {0} ({1} days left)</Dominion_Favour_List_Owed>
+  <Dominion_Favour_List_Owing>You owe: {0} ({1} days left)</Dominion_Favour_List_Owing>
+  <Dominion_Council_LobbyCallIn>Call in a favour (certain, a strong push)</Dominion_Council_LobbyCallIn>
+  <Dominion_Council_LobbyAskFavour>Ask as a favour ({0} chance; you will owe them one)</Dominion_Council_LobbyAskFavour>
+  <Dominion_Council_NoFavourOwed>They owe you no favour.</Dominion_Council_NoFavourOwed>
+  <Dominion_Council_FavourCalledIn>{0} honours the favour they owed you.</Dominion_Council_FavourCalledIn>
+
+  <!-- Disbanded chamber -->
+  <Dominion_Chamber_Disbanded>The Rim Council was dissolved {0}</Dominion_Chamber_Disbanded>
+  <Dominion_Chamber_DisbandedReason>{0}</Dominion_Chamber_DisbandedReason>
+  <Dominion_Chamber_DisbandedSub>The chamber stands empty. No session will ever be called again; its decrees bind no one.</Dominion_Chamber_DisbandedSub>
+  <Dominion_Chamber_DisbandedPropose>The council has been disbanded for good.</Dominion_Chamber_DisbandedPropose>
+
+  <!-- Propose menu packs -->
+  <Dominion_Council_Pack_security>Security</Dominion_Council_Pack_security>
+  <Dominion_Council_Pack_territory>Territory and members</Dominion_Council_Pack_territory>
+  <Dominion_Council_Pack_economy>Economy</Dominion_Council_Pack_economy>
+  <Dominion_Council_Pack_society>Society</Dominion_Council_Pack_society>
+
+  <!-- God mode -->
+  <Dominion_God_Council_CallSession>Call a council session now</Dominion_God_Council_CallSession>
+  <Dominion_God_Council_AddMotion>Add a motion to the agenda...</Dominion_God_Council_AddMotion>
+  <Dominion_God_Council_Force>Force "{0}": {1}</Dominion_God_Council_Force>
+  <Dominion_God_Council_ForcePass>carry</Dominion_God_Council_ForcePass>
+  <Dominion_God_Council_ForceFail>fail</Dominion_God_Council_ForceFail>
+  <Dominion_God_Council_ClearViolations>Clear every breach and penalty</Dominion_God_Council_ClearViolations>
+  <Dominion_God_Council_Done>Done.</Dominion_God_Council_Done>
+  <Dominion_God_Council_Header>Council (expanded)</Dominion_God_Council_Header>
+</LanguageData>

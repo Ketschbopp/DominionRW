@@ -97,6 +97,16 @@ namespace Dominion
             body.yMin += DominionHeader.Height + 6f + TabDrawer.TabHeight;
             Widgets.DrawMenuSection(body);
             TabDrawer.DrawTabs(body, tabs);
+            // God mode's tools, only while god mode is on.
+            if (DebugSettings.godMode)
+            {
+                Rect god = new Rect(inRect.xMax - 110f, body.y - TabDrawer.TabHeight - 2f, 110f, TabDrawer.TabHeight - 4f);
+                GUI.color = new Color(1f, 0.55f, 0.45f);
+                if (Widgets.ButtonText(god, "Dominion_God_Button".Translate()) && !Find.WindowStack.IsOpen<Dialog_DominionGodMode>())
+                    Find.WindowStack.Add(new Dialog_DominionGodMode());
+                GUI.color = Color.white;
+                TooltipHandler.TipRegion(god, "Dominion_God_Button_Desc".Translate());
+            }
             body = body.ContractedBy(10f);
             if (comp == null) return;
 

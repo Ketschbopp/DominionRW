@@ -13,6 +13,9 @@
     <proposeCost>20</proposeCost>
     <aiProposeChance>0.35</aiProposeChance>
     <summary>Sanctions on {0}</summary>
+    <pack>security</pack>
+    <ifPassed>Every member must embargo {0} for 60 days; its economy falls by 5%. Members who keep trading with it are in breach.</ifPassed>
+    <ifFailed>{0} goes unpunished, and its sponsor loses face.</ifFailed>
   </Dominion.CouncilMotionDef>
 
   <Dominion.CouncilMotionDef>
@@ -26,6 +29,9 @@
     <proposeCost>10</proposeCost>
     <aiProposeChance>0.3</aiProposeChance>
     <summary>Censure of {0}</summary>
+    <pack>security</pack>
+    <ifPassed>Every member thinks less of {0} at once; its leader loses legitimacy and its people some faith in the regime.</ifPassed>
+    <ifFailed>Nothing happens; {0} takes heart.</ifFailed>
   </Dominion.CouncilMotionDef>
 
   <Dominion.CouncilMotionDef>
@@ -39,6 +45,9 @@
     <proposeCost>15</proposeCost>
     <aiProposeChance>0.4</aiProposeChance>
     <summary>Ceasefire between {0} and {1}</summary>
+    <pack>security</pack>
+    <ifPassed>{0} and {1} must make peace within the grace period. Restarting the war is a breach by the aggressor.</ifPassed>
+    <ifFailed>The war goes on.</ifFailed>
   </Dominion.CouncilMotionDef>
 
   <Dominion.CouncilMotionDef>
@@ -52,6 +61,9 @@
     <proposeCost>25</proposeCost>
     <aiProposeChance>0.35</aiProposeChance>
     <summary>Collective defence against {0}</summary>
+    <pack>security</pack>
+    <ifPassed>Every member must stand against {0}: declare war on it or at least embargo it. Its own allies and pact partners are excused.</ifPassed>
+    <ifFailed>{0} is left free to pursue its war.</ifFailed>
   </Dominion.CouncilMotionDef>
 
   <Dominion.CouncilMotionDef>
@@ -65,6 +77,9 @@
     <proposeCost>15</proposeCost>
     <aiProposeChance>0.3</aiProposeChance>
     <summary>A common trade standard</summary>
+    <pack>economy</pack>
+    <ifPassed>Members trade with each other on 5% better terms, and every member's economy grows 2%.</ifPassed>
+    <ifFailed>Trade goes on as before.</ifFailed>
   </Dominion.CouncilMotionDef>
 
   <Dominion.CouncilMotionDef>
@@ -78,6 +93,9 @@
     <proposeCost>10</proposeCost>
     <aiProposeChance>0.4</aiProposeChance>
     <summary>Diplomatic immunity for envoys</summary>
+    <pack>society</pack>
+    <ifPassed>Intercepting a delegation or capturing an envoy becomes a breach of the council's decree.</ifPassed>
+    <ifFailed>Envoys travel at their own risk.</ifFailed>
   </Dominion.CouncilMotionDef>
 
   <Dominion.CouncilMotionDef>
@@ -91,6 +109,9 @@
     <proposeCost>15</proposeCost>
     <aiProposeChance>0.25</aiProposeChance>
     <summary>A ban on slavery</summary>
+    <pack>society</pack>
+    <ifPassed>Members may not keep slaves. Keeping them after the grace period is a breach.</ifPassed>
+    <ifFailed>Slavery stays a matter for each member.</ifFailed>
   </Dominion.CouncilMotionDef>
 
   <Dominion.CouncilMotionDef>
@@ -105,5 +126,8 @@
     <proposeCost>40</proposeCost>
     <aiProposeChance>0</aiProposeChance>
     <summary>The Federation Charter</summary>
+    <pack>territory</pack>
+    <ifPassed>The Planetary Federation is founded: members may join it, and the road to unification opens.</ifPassed>
+    <ifFailed>The Federation has to wait for another session.</ifFailed>
   </Dominion.CouncilMotionDef>
 </Defs>

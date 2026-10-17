@@ -574,4 +574,79 @@
   <Dominion_Chamber_PickSeat>Click a seat in the chamber to see that member: their weight, attendance and how they lean on each motion.</Dominion_Chamber_PickSeat>
   <Dominion_Chamber_Host>Hosts this session</Dominion_Chamber_Host>
 
+  <Dominion_Council_DisbandedLabel>Rim Council disbanded</Dominion_Council_DisbandedLabel>
+  <Dominion_Council_DisbandedText>The Rim Council has been dissolved for good: {0}\n\nIts decrees no longer bind anyone, and no session will ever be called again.</Dominion_Council_DisbandedText>
+  <!-- InterRim Ballistic Missile -->
+  <Dominion_IRBM_Capability_0>no missiles</Dominion_IRBM_Capability_0>
+  <Dominion_IRBM_Capability_1>tactical missiles</Dominion_IRBM_Capability_1>
+  <Dominion_IRBM_Capability_2>strategic (nuclear) weapons</Dominion_IRBM_Capability_2>
+  <Dominion_IRBM_WarheadsLeft>{0} warheads left</Dominion_IRBM_WarheadsLeft>
+  <Dominion_IRBM_Satellites>{0} satellites</Dominion_IRBM_Satellites>
+  <Dominion_IRBM_Silos>{0} missiles loaded, {1} strategic</Dominion_IRBM_Silos>
+  <Dominion_IRBM_StandDown_Treaty>{0} stood down a missile strike on {1}: they are bound by a treaty.</Dominion_IRBM_StandDown_Treaty>
+  <Dominion_IRBM_StandDown_Decree>{0} stood down a missile strike on {1}: the Rim Council's non-proliferation decree binds them.</Dominion_IRBM_StandDown_Decree>
+  <Dominion_IRBM_ClockText>{0}:{1} to midnight</Dominion_IRBM_ClockText>
+  <Dominion_IRBM_DisbandReason>a global nuclear war broke out, and the council that was meant to prevent it could not survive it.</Dominion_IRBM_DisbandReason>
+  <Dominion_IRBM_Dossier>Missiles</Dominion_IRBM_Dossier>
+  <!-- God mode -->
+  <Dominion_God_Button>God mode</Dominion_God_Button>
+  <Dominion_God_Button_Desc>Dominion's god-mode tools: factions, wars, treaties, the council, events and IRBM. Only shown while god mode is on.</Dominion_God_Button_Desc>
+  <Dominion_God_Title>Dominion: god mode</Dominion_God_Title>
+  <Dominion_God_Page_Faction>Factions</Dominion_God_Page_Faction>
+  <Dominion_God_Page_War>Wars and treaties</Dominion_God_Page_War>
+  <Dominion_God_Page_Council>Council</Dominion_God_Page_Council>
+  <Dominion_God_Page_Events>Events and IRBM</Dominion_God_Page_Events>
+  <Dominion_God_PickFirst>Pick faction {0} first.</Dominion_God_PickFirst>
+  <Dominion_God_Done>Done: {0}.</Dominion_God_Done>
+  <Dominion_God_PickAI>Pick a computer-run faction as A to change its numbers.</Dominion_God_PickAI>
+  <Dominion_God_H_Relations>Relations (A toward B, or toward you if B is empty)</Dominion_God_H_Relations>
+  <Dominion_God_Goodwill>Goodwill with you {0}</Dominion_God_Goodwill>
+  <Dominion_God_Opinion>Opinion {0}</Dominion_God_Opinion>
+  <Dominion_God_ClearGrievance>Clear grievance</Dominion_God_ClearGrievance>
+  <Dominion_God_H_State>State of A</Dominion_God_H_State>
+  <Dominion_God_Numbers>Stability {0}, economy {1}, military {2}, legitimacy {3}</Dominion_God_Numbers>
+  <Dominion_God_Stability>Stability {0}</Dominion_God_Stability>
+  <Dominion_God_Economy>Economy {0}</Dominion_God_Economy>
+  <Dominion_God_Military>Military {0}</Dominion_God_Military>
+  <Dominion_God_Legitimacy>Legitimacy {0}</Dominion_God_Legitimacy>
+  <Dominion_God_Government>Government: {0} (change)</Dominion_God_Government>
+  <Dominion_God_H_Leader>Leader of A</Dominion_God_H_Leader>
+  <Dominion_God_KillLeader>Kill the leader (a successor takes over)</Dominion_God_KillLeader>
+  <Dominion_God_NewLeader>Replace the leader</Dominion_God_NewLeader>
+  <Dominion_God_H_Intel>Intelligence</Dominion_God_H_Intel>
+  <Dominion_God_Intel100>Intel 100 on A (or on everyone if A is empty)</Dominion_God_Intel100>
+  <Dominion_God_RevealOn>Reveal everything: off (click to turn on)</Dominion_God_RevealOn>
+  <Dominion_God_RevealOff>Reveal everything: ON (click to turn off)</Dominion_God_RevealOff>
+  <Dominion_God_H_War>War between A and B</Dominion_God_H_War>
+  <Dominion_God_DeclareWar>A declares war on B</Dominion_God_DeclareWar>
+  <Dominion_God_MakePeace>Make peace between A and B</Dominion_God_MakePeace>
+  <Dominion_God_Score>{0}: score {1}</Dominion_God_Score>
+  <Dominion_God_ScoreFor>+{1} war score for {0}</Dominion_God_ScoreFor>
+  <Dominion_God_Capitulate>{0} capitulates</Dominion_God_Capitulate>
+  <Dominion_God_H_Warbands>Warbands</Dominion_God_H_Warbands>
+  <Dominion_God_SpawnWarband>A sends a warband against B</Dominion_God_SpawnWarband>
+  <Dominion_God_RecallWarbands>Disband every warband of A</Dominion_God_RecallWarbands>
+  <Dominion_God_H_Treaties>Treaties</Dominion_God_H_Treaties>
+  <Dominion_God_Sign>Sign a treaty between A and B</Dominion_God_Sign>
+  <Dominion_God_Break>Break a treaty of A (with B, if picked)</Dominion_God_Break>
+  <Dominion_God_Reason>god mode</Dominion_God_Reason>
+  <Dominion_God_H_Council>Rim Council</Dominion_God_H_Council>
+  <Dominion_God_CouncilState>Phase {0}, {1} motions, {2} decrees, disbanded: {3}</Dominion_God_CouncilState>
+  <Dominion_God_Disband>Disband the council permanently</Dominion_God_Disband>
+  <Dominion_God_DisbandConfirm>Disband the Rim Council for good? Only god mode can restore it.</Dominion_God_DisbandConfirm>
+  <Dominion_God_Restore>Restore the council</Dominion_God_Restore>
+  <Dominion_God_H_Events>Events</Dominion_God_H_Events>
+  <Dominion_God_FireEvent>Fire a Dominion event (A primary, B secondary)</Dominion_God_FireEvent>
+  <Dominion_God_DeliverNews>Deliver all pending news now</Dominion_God_DeliverNews>
+  <Dominion_God_H_IRBM>InterRim Ballistic Missile</Dominion_God_H_IRBM>
+  <Dominion_God_NoIRBM>IRBM is not active.</Dominion_God_NoIRBM>
+  <Dominion_God_IRBMState>Phase {0}, {1}</Dominion_God_IRBMState>
+  <Dominion_God_StrikeTactical>Tactical strike: A hits B's capital (Dominion effects)</Dominion_God_StrikeTactical>
+  <Dominion_God_StrikeStrategic>Strategic strike: A hits B's capital (Dominion effects)</Dominion_God_StrikeStrategic>
+  <Dominion_God_Clock>Doomsday clock +{0} minutes</Dominion_God_Clock>
+  <Dominion_God_ClockReset>Reset the doomsday clock (before a war only)</Dominion_God_ClockReset>
+  <Dominion_God_NuclearWar>Start a global nuclear war</Dominion_God_NuclearWar>
+  <Dominion_God_NuclearWarConfirm>Start a global nuclear war? This dissolves the Rim Council for good.</Dominion_God_NuclearWarConfirm>
+  <Dominion_God_EndNuclearWar>End the nuclear war (winter follows)</Dominion_God_EndNuclearWar>
+  <Dominion_God_EndWinter>End the nuclear winter</Dominion_God_EndWinter>
 </LanguageData>

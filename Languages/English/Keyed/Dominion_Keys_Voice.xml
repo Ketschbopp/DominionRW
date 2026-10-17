@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Faction voices: how factions speak, from their memes and government. Variants are separated by "|". {0} faction, {1} leader, {2} your colony. -->
+  <Dominion_Voice_Plain>plain-spoken</Dominion_Voice_Plain>
+  <Dominion_Voice_Courtly>courtly</Dominion_Voice_Courtly>
+  <Dominion_Voice_Divine>divine decree</Dominion_Voice_Divine>
+  <Dominion_Voice_Zealous>zealous</Dominion_Voice_Zealous>
+  <Dominion_Voice_Eerie>unsettling</Dominion_Voice_Eerie>
+  <Dominion_Voice_Martial>martial</Dominion_Voice_Martial>
+  <Dominion_Voice_Honourable>honour-bound</Dominion_Voice_Honourable>
+  <Dominion_Voice_Stern>stern</Dominion_Voice_Stern>
+  <Dominion_Voice_Aloof>aloof</Dominion_Voice_Aloof>
+  <Dominion_Voice_Mercantile>mercantile</Dominion_Voice_Mercantile>
+  <Dominion_Voice_Festive>festive</Dominion_Voice_Festive>
+  <Dominion_Voice_Gentle>gentle</Dominion_Voice_Gentle>
+  <Dominion_Voice_Collegial>collegial</Dominion_Voice_Collegial>
+  <Dominion_Voice_Tribal>tribal</Dominion_Voice_Tribal>
+  <Dominion_Voice_Plain_Greeting>{0} hears you, {2}.|This is {1} of {0}. Go ahead.</Dominion_Voice_Plain_Greeting>
+  <Dominion_Voice_Plain_Accept>Agreed. {0} will hold to it.|Very well. We accept.</Dominion_Voice_Plain_Accept>
+  <Dominion_Voice_Plain_Refuse>No. {0} declines.|We will not. Not this time.</Dominion_Voice_Plain_Refuse>
+  <Dominion_Voice_Plain_Thanks>{0} thanks you. It will be remembered.|A fair gesture. Thank you.</Dominion_Voice_Plain_Thanks>
+  <Dominion_Voice_Plain_Insulted>We will remember this, {2}.|You have made an enemy of {0} today.</Dominion_Voice_Plain_Insulted>
+  <Dominion_Voice_Plain_Threat>Do not test {0}.|Push us, and we push back harder.</Dominion_Voice_Plain_Threat>
+  <Dominion_Voice_Plain_Farewell>Until next time.|{0} out.</Dominion_Voice_Plain_Farewell>
+  <Dominion_Voice_Courtly_Greeting>The court of {0} receives the envoy of {2}. Speak, and be brief.|By leave of {1}, the court of {0} grants you audience.</Dominion_Voice_Courtly_Greeting>
+  <Dominion_Voice_Courtly_Accept>The court is gracious. Let it be so recorded.|{1} deigns to accept. You may consider yourselves fortunate.</Dominion_Voice_Courtly_Accept>
+  <Dominion_Voice_Courtly_Refuse>The court finds the proposal beneath consideration.|{1} declines, and wonders that you asked.</Dominion_Voice_Courtly_Refuse>
+  <Dominion_Voice_Courtly_Thanks>A tribute worthy of notice. The court is pleased.|{1} accepts your gift with becoming grace.</Dominion_Voice_Courtly_Thanks>
+  <Dominion_Voice_Courtly_Insulted>Such impertinence from commoners. The court will not forget.|You forget your station, {2}. It will be taught to you.</Dominion_Voice_Courtly_Insulted>
+  <Dominion_Voice_Courtly_Threat>Kneel, or be made to.|The crown has long memory and longer reach.</Dominion_Voice_Courtly_Threat>
+  <Dominion_Voice_Courtly_Farewell>You are dismissed.|The audience is at an end.</Dominion_Voice_Courtly_Farewell>
+  <Dominion_Voice_Divine_Greeting>The Exalted One looks upon {2}. Speak, and be judged.|You stand before the will of {1}. Choose your words as prayers.</Dominion_Voice_Divine_Greeting>
+  <Dominion_Voice_Divine_Accept>It is willed. So it shall be.|The heavens assent through {1}.</Dominion_Voice_Divine_Accept>
+  <Dominion_Voice_Divine_Refuse>The divine will forbids it.|{1} has seen your request and found it wanting.</Dominion_Voice_Divine_Refuse>
+  <Dominion_Voice_Divine_Thanks>Your offering is received at the altar of {0}.|The faithful will sing of your generosity.</Dominion_Voice_Divine_Thanks>
+  <Dominion_Voice_Divine_Insulted>Blasphemy. Your colony will answer for this.|You profane the chosen of {0}. Repent while you can.</Dominion_Voice_Divine_Insulted>
+  <Dominion_Voice_Divine_Threat>The unbelieving shall be cast down.|Heaven's patience with {2} is ending.</Dominion_Voice_Divine_Threat>
+  <Dominion_Voice_Divine_Farewell>Go in the light of {0}.|Depart, and reflect on your sins.</Dominion_Voice_Divine_Farewell>
+  <Dominion_Voice_Zealous_Greeting>Have you come to hear the truth at last, {2}?|{0} greets you, as we greet all who may yet be saved.</Dominion_Voice_Zealous_Greeting>
+  <Dominion_Voice_Zealous_Accept>A step toward the truth. We accept.|The faith is served by this. Agreed.</Dominion_Voice_Zealous_Accept>
+  <Dominion_Voice_Zealous_Refuse>We do not bargain with the unconverted.|No. Not until your people see the light.</Dominion_Voice_Zealous_Refuse>
+  <Dominion_Voice_Zealous_Thanks>Your gift serves the faith. It is welcome.|The cause thanks you, brother.</Dominion_Voice_Zealous_Thanks>
+  <Dominion_Voice_Zealous_Insulted>Heretics! The fire will find you.|Your words will be your undoing, unbeliever.</Dominion_Voice_Zealous_Insulted>
+  <Dominion_Voice_Zealous_Threat>Convert, or be swept aside.|The crusade does not stop at your walls.</Dominion_Voice_Zealous_Threat>
+  <Dominion_Voice_Zealous_Farewell>May you find the truth before it finds you.|Go, and think on what you have heard.</Dominion_Voice_Zealous_Farewell>
+  <Dominion_Voice_Eerie_Greeting>Ah. {2}. We have been... expecting your voice.|The deep ones stir. Speak, little colony.</Dominion_Voice_Eerie_Greeting>
+  <Dominion_Voice_Eerie_Accept>It is agreed. The pact is sealed in more than ink.|Yes. Yesss. It shall be done.</Dominion_Voice_Eerie_Accept>
+  <Dominion_Voice_Eerie_Refuse>No. The signs are against it.|Your offer displeases what we serve.</Dominion_Voice_Eerie_Refuse>
+  <Dominion_Voice_Eerie_Thanks>A fine offering. It will be... put to use.|We accept. Do not ask how it will be used.</Dominion_Voice_Eerie_Thanks>
+  <Dominion_Voice_Eerie_Insulted>You will dream of {0} tonight, {2}. And every night after.|Careless words. They have been heard below.</Dominion_Voice_Eerie_Insulted>
+  <Dominion_Voice_Eerie_Threat>Your flesh would be better used by us.|Something is coming for {2}. We merely watch.</Dominion_Voice_Eerie_Threat>
+  <Dominion_Voice_Eerie_Farewell>We will be watching.|Sleep well. If you can.</Dominion_Voice_Eerie_Farewell>
+  <Dominion_Voice_Martial_Greeting>Speak fast, {2}. Our blades are restless.|{1} listens. Barely.</Dominion_Voice_Martial_Greeting>
+  <Dominion_Voice_Martial_Accept>Fine. But only the strong keep their deals.|Done. Do not make us regret it.</Dominion_Voice_Martial_Accept>
+  <Dominion_Voice_Martial_Refuse>No. Take it if you think you can.|Weak offer. Rejected.</Dominion_Voice_Martial_Refuse>
+  <Dominion_Voice_Martial_Thanks>Tribute. Good. Keep it coming.|Ha! You learn quickly, {2}.</Dominion_Voice_Martial_Thanks>
+  <Dominion_Voice_Martial_Insulted>Words. Let's see you back them with steel.|You'll bleed for that.</Dominion_Voice_Martial_Insulted>
+  <Dominion_Voice_Martial_Threat>We'll burn your walls and take what's left.|Pay, or be raided. Your choice.</Dominion_Voice_Martial_Threat>
+  <Dominion_Voice_Martial_Farewell>Watch your borders.|We'll meet again. Armed.</Dominion_Voice_Martial_Farewell>
+  <Dominion_Voice_Honourable_Greeting>{1} of {0} greets you with respect, {2}.|We receive you as equals. Speak plainly.</Dominion_Voice_Honourable_Greeting>
+  <Dominion_Voice_Honourable_Accept>Our word is given. It will not be broken.|Agreed, on our honour.</Dominion_Voice_Honourable_Accept>
+  <Dominion_Voice_Honourable_Refuse>With respect: no.|We cannot, and keep our honour.</Dominion_Voice_Honourable_Refuse>
+  <Dominion_Voice_Honourable_Thanks>An honourable gift. It shames us not to return it.|We are in your debt, and we pay our debts.</Dominion_Voice_Honourable_Thanks>
+  <Dominion_Voice_Honourable_Insulted>You have stained your honour, not ours.|An insult demands an answer. It will come.</Dominion_Voice_Honourable_Insulted>
+  <Dominion_Voice_Honourable_Threat>If it must be war, let it be fought with honour.|We would rather not draw our blades. Do not make us.</Dominion_Voice_Honourable_Threat>
+  <Dominion_Voice_Honourable_Farewell>Walk with honour.|Until we meet again, friend or foe.</Dominion_Voice_Honourable_Farewell>
+  <Dominion_Voice_Stern_Greeting>State your business with {0}.|The office of {1} is listening. Be precise.</Dominion_Voice_Stern_Greeting>
+  <Dominion_Voice_Stern_Accept>Approved. Deviation will be punished.|Agreed. The state expects compliance.</Dominion_Voice_Stern_Accept>
+  <Dominion_Voice_Stern_Refuse>Denied.|The request is refused. Do not resubmit.</Dominion_Voice_Stern_Refuse>
+  <Dominion_Voice_Stern_Thanks>Your contribution is noted.|The state acknowledges your gift.</Dominion_Voice_Stern_Thanks>
+  <Dominion_Voice_Stern_Insulted>Dissent is noted, {2}. And answered.|This insult has been entered in the record.</Dominion_Voice_Stern_Insulted>
+  <Dominion_Voice_Stern_Threat>{0} does not tolerate defiance.|Comply, or be made to comply.</Dominion_Voice_Stern_Threat>
+  <Dominion_Voice_Stern_Farewell>This conversation is over.|Dismissed.</Dominion_Voice_Stern_Farewell>
+  <Dominion_Voice_Aloof_Greeting>...We hear you. Why?|{0} does not usually answer. Speak.</Dominion_Voice_Aloof_Greeting>
+  <Dominion_Voice_Aloof_Accept>Fine. Leave us be afterwards.|Agreed. Do not contact us again soon.</Dominion_Voice_Aloof_Accept>
+  <Dominion_Voice_Aloof_Refuse>No.|We want nothing from outsiders.</Dominion_Voice_Aloof_Refuse>
+  <Dominion_Voice_Aloof_Thanks>We did not ask for this. ...Thank you.|Accepted. Do not expect warmth.</Dominion_Voice_Aloof_Thanks>
+  <Dominion_Voice_Aloof_Insulted>Outsiders. Always the same.|We knew better than to answer.</Dominion_Voice_Aloof_Insulted>
+  <Dominion_Voice_Aloof_Threat>Stay away from us.|Come closer and you will regret it.</Dominion_Voice_Aloof_Threat>
+  <Dominion_Voice_Aloof_Farewell>Leave.|End of transmission.</Dominion_Voice_Aloof_Farewell>
+  <Dominion_Voice_Mercantile_Greeting>{2}! Always a pleasure. What are we trading today?|{0} trade office. How can we make this profitable?</Dominion_Voice_Mercantile_Greeting>
+  <Dominion_Voice_Mercantile_Accept>Deal. Pleasure doing business.|Signed. Our accountants are delighted.</Dominion_Voice_Mercantile_Accept>
+  <Dominion_Voice_Mercantile_Refuse>The numbers don't work for us.|No deal. Come back with a better offer.</Dominion_Voice_Mercantile_Refuse>
+  <Dominion_Voice_Mercantile_Thanks>Silver speaks louder than words. Thank you.|A fine investment in our friendship.</Dominion_Voice_Mercantile_Thanks>
+  <Dominion_Voice_Mercantile_Insulted>Bad for business, {2}. Very bad.|That will cost you, one way or another.</Dominion_Voice_Mercantile_Insulted>
+  <Dominion_Voice_Mercantile_Threat>Cross us, and you'll find every market closed to you.|We can afford a war. Can you?</Dominion_Voice_Mercantile_Threat>
+  <Dominion_Voice_Mercantile_Farewell>Keep your ledgers balanced.|Until the next deal.</Dominion_Voice_Mercantile_Farewell>
+  <Dominion_Voice_Festive_Greeting>{2}! Come in, come in, the party's just started!|Ha! Our favourite neighbours. What's the occasion?</Dominion_Voice_Festive_Greeting>
+  <Dominion_Voice_Festive_Accept>Wonderful! Drinks all round!|Yes, yes, let's celebrate!</Dominion_Voice_Festive_Accept>
+  <Dominion_Voice_Festive_Refuse>Oh, no, no. That's no fun at all.|Pass. Ask us again after the festival.</Dominion_Voice_Festive_Refuse>
+  <Dominion_Voice_Festive_Thanks>Gifts! We love gifts! Thank you!|You shouldn't have! But we're glad you did.</Dominion_Voice_Festive_Thanks>
+  <Dominion_Voice_Festive_Insulted>Well, that killed the mood.|Rude! You're not invited anymore.</Dominion_Voice_Festive_Insulted>
+  <Dominion_Voice_Festive_Threat>Don't spoil the party, or we'll spoil yours.|We fight as hard as we celebrate.</Dominion_Voice_Festive_Threat>
+  <Dominion_Voice_Festive_Farewell>Come back soon, and bring wine!|Off you go, enjoy yourselves!</Dominion_Voice_Festive_Farewell>
+  <Dominion_Voice_Gentle_Greeting>Peace to you, {2}. How can we help?|{1} welcomes you. We are glad you called.</Dominion_Voice_Gentle_Greeting>
+  <Dominion_Voice_Gentle_Accept>Gladly. May it bring good to us both.|Yes. Let us build something kind.</Dominion_Voice_Gentle_Accept>
+  <Dominion_Voice_Gentle_Refuse>We're sorry. We cannot agree to this.|Forgive us, but no.</Dominion_Voice_Gentle_Refuse>
+  <Dominion_Voice_Gentle_Thanks>Thank you, truly. This means a great deal.|Your kindness will be returned.</Dominion_Voice_Gentle_Thanks>
+  <Dominion_Voice_Gentle_Insulted>Those words hurt, {2}. We hope you did not mean them.|We will try to forgive this.</Dominion_Voice_Gentle_Insulted>
+  <Dominion_Voice_Gentle_Threat>We do not want violence. Please, do not force it.|Even the patient can be pushed too far.</Dominion_Voice_Gentle_Threat>
+  <Dominion_Voice_Gentle_Farewell>Go well, friend.|Take care of your people.</Dominion_Voice_Gentle_Farewell>
+  <Dominion_Voice_Collegial_Greeting>The council of {0} recognises the delegate of {2}.|Welcome. The floor is yours.</Dominion_Voice_Collegial_Greeting>
+  <Dominion_Voice_Collegial_Accept>The motion carries. We accept.|After deliberation: agreed.</Dominion_Voice_Collegial_Accept>
+  <Dominion_Voice_Collegial_Refuse>The council has voted it down.|We could not reach agreement in your favour.</Dominion_Voice_Collegial_Refuse>
+  <Dominion_Voice_Collegial_Thanks>The council thanks you on behalf of all our people.|Your gift has been entered in our records with gratitude.</Dominion_Voice_Collegial_Thanks>
+  <Dominion_Voice_Collegial_Insulted>The council takes a dim view of your remarks.|This will be raised at our next session.</Dominion_Voice_Collegial_Insulted>
+  <Dominion_Voice_Collegial_Threat>The council will not hesitate to defend our people.|Do not mistake debate for weakness.</Dominion_Voice_Collegial_Threat>
+  <Dominion_Voice_Collegial_Farewell>The session is adjourned.|We will report back to the council.</Dominion_Voice_Collegial_Farewell>
+  <Dominion_Voice_Tribal_Greeting>The fire is warm, {2}. Sit and speak.|{1} of {0} hears you. The elders listen too.</Dominion_Voice_Tribal_Greeting>
+  <Dominion_Voice_Tribal_Accept>It is good. The tribe agrees.|Yes. We will tell this at the fire.</Dominion_Voice_Tribal_Accept>
+  <Dominion_Voice_Tribal_Refuse>The elders say no.|The spirits do not want this.</Dominion_Voice_Tribal_Refuse>
+  <Dominion_Voice_Tribal_Thanks>A good gift. The tribe will remember.|We eat well tonight because of you.</Dominion_Voice_Tribal_Thanks>
+  <Dominion_Voice_Tribal_Insulted>You spit on our fire, {2}.|The tribe will not forget these words.</Dominion_Voice_Tribal_Insulted>
+  <Dominion_Voice_Tribal_Threat>Our hunters know the way to your walls.|Leave our lands, or we take your scalps.</Dominion_Voice_Tribal_Threat>
+  <Dominion_Voice_Tribal_Farewell>Walk softly.|The fire burns on. Go.</Dominion_Voice_Tribal_Farewell>
+  <Dominion_GovReason_Tribal>A tribe, too young for a state.</Dominion_GovReason_Tribal>
+  <Dominion_GovReason_Royal>Ruled by royal titles.</Dominion_GovReason_Royal>
+  <Dominion_GovReason_Meme>Shaped by their ideology: {0}.</Dominion_GovReason_Meme>
+  <Dominion_GovReason_Tradition>Shaped by their ideology, technology and history.</Dominion_GovReason_Tradition>
+  <Dominion_Dossier_Voice>Manner</Dominion_Dossier_Voice>
+  <Dominion_Dossier_Voice_Desc>How {0} speaks in letters and audiences: {1}.{2}</Dominion_Dossier_Voice_Desc>
+  <Dominion_Dossier_Voice_Meme> It comes from their ideology: {0}.</Dominion_Dossier_Voice_Meme>
+  <Dominion_News_Quote>Asked for comment, {0} said: “{1}”</Dominion_News_Quote>
+</LanguageData>

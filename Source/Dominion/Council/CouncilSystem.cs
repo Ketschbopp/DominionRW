@@ -22,6 +22,9 @@ namespace Dominion
 
         private static CouncilState State => WorldComponent_Dominion.Instance.Council;
 
+        /// <summary>The council meets: switched on in the settings and not disbanded.</summary>
+        public static bool Active => DominionMod.Settings.councilEnabled && !(WorldComponent_Dominion.Instance?.Council.disbanded ?? false);
+
         public override void DailyGlobal()
         {
             CouncilState c = State;
@@ -38,7 +41,7 @@ namespace Dominion
                 {
                     // A decree aimed at a faction that no longer exists has nothing left to do.
                     if (d.expiresTick >= 0 && now >= d.expiresTick || d.targets.Any(t => t == null || t.defeated)) Expire(d);
-                    else if (DominionMod.Settings.councilEnabled) d.def.Worker.DailyCheck(d);
+                    else if (Active) d.def.Worker.DailyCheck(d);
                 }
                 catch (System.Exception e)
                 {
@@ -46,7 +49,8 @@ namespace Dominion
                 }
             }
 
-            if (!DominionMod.Settings.councilEnabled) return;
+            if (!Active) return;
+            ExpireFavours(c, now);
 
             if (c.nextSessionTick < 0)
                 c.nextSessionTick = now + Mathf.Max(AnnounceLeadDays + 5, DominionMod.Settings.councilIntervalDays / 2) * day;
@@ -59,7 +63,7 @@ namespace Dominion
         {
             CouncilState c = State;
             if (c.phase != CouncilPhase.Announced) return;
-            if (!DominionMod.Settings.councilEnabled)
+            if (!Active)
             {
                 Close(null); // switched off while a session was announced
                 return;
@@ -137,6 +141,11 @@ namespace Dominion
 
         private static Faction ChooseHost(List<Faction> members, int session)
         {
+            // A decree may have named the next host.
+            Faction named = State.nextHost;
+            State.nextHost = null;
+            if (named != null && members.Contains(named) && DelegationUtility.HomeTile(named).Valid && (!named.IsPlayer || LeadershipUtility.BestDesk() != null))
+                return named;
             var eligible = members.Where(f => DelegationUtility.HomeTile(f).Valid && (!f.IsPlayer || LeadershipUtility.BestDesk() != null))
                 .OrderBy(f => f.loadID).ToList();
             return eligible.Count == 0 ? null : eligible[session % eligible.Count];
@@ -255,24 +264,42 @@ namespace Dominion
             var results = new Dictionary<Motion, bool>();
             weightCache.Invalidate();
             KeepPromises(playerVotes);
+            var record = new SessionRecord { number = c.sessionNumber + 1, tick = Find.TickManager.TicksGame, host = c.host, attended = new List<Faction>(c.attending) };
             foreach (Motion m in c.agenda)
             {
                 results[m] = false;
+                var mr = new MotionRecord { def = m.def, summary = m.Summary, sponsor = m.sponsor, vetoed = m.vetoed };
+                record.motions.Add(mr);
                 if (m.def.Worker.InvalidReason(m.targets) != null)
                 {
+                    mr.outcome = "Dominion_Council_MotionVoid".Translate();
                     report.AppendLine("Dominion_Council_Rejected".Translate().ToString() + " " + m.Summary + "  " + "Dominion_Council_MotionVoid".Translate().ToString());
                     continue;
                 }
                 Tally(m, playerVotes, out float yes, out float no);
+                foreach (Faction f in c.attending)
+                {
+                    int vote = f.IsPlayer ? (playerVotes.TryGetValue(m, out int v) ? v : 0) : CouncilUtility.AIVote(f, m);
+                    (vote > 0 ? mr.ayes : vote < 0 ? mr.nays : mr.abstained).Add(f);
+                }
+                mr.yes = yes;
+                mr.no = no;
                 // A motion needs real support: more yes than no, and yes from at least a third of the weight in the room.
                 bool passed = !m.vetoed && yes > no && yes >= 0.34f * TotalWeight() && m.def.Worker.InvalidReason(m.targets) == null;
+                if (m.devForce != 0) passed = m.devForce > 0;
+                mr.passed = passed;
                 string vetoNote = m.vetoed ? " " + "Dominion_Council_Vetoed".Translate().ToString() : "";
                 report.AppendLine((passed ? "Dominion_Council_Passed" : "Dominion_Council_Rejected").Translate().ToString() + " " + m.Summary + "  "
                                   + "Dominion_Council_VoteResult".Translate(yes.ToString("F1"), no.ToString("F1")).ToString() + vetoNote);
                 results[m] = passed;
-                if (passed) Pass(m);
+                if (passed) mr.decreeId = Pass(m);
                 else EventBus.Raise(DominionEventDefOf.Dominion_MotionRejected, m.sponsor, m.targets.FirstOrDefault(), detail: m.Summary);
+                // Backing a member's motion that carries leaves it owing you a favour.
+                if (passed && m.sponsor != null && !m.sponsor.IsPlayer && playerVotes.TryGetValue(m, out int pv) && pv > 0)
+                    CouncilUtility.AddFavour(m.sponsor, true, m.Summary);
             }
+            c.records.Add(record);
+            while (c.records.Count > CouncilState.MaxRecords) c.records.RemoveAt(0);
             Close(report.ToString());
             return results;
         }
@@ -285,7 +312,9 @@ namespace Dominion
         {
             CouncilState c = State;
             PlayerState player = WorldComponent_Dominion.Instance.Player;
-            if (player.councilPromises.Count == 0 || !c.attending.Contains(Faction.OfPlayer)) return;
+            if (!c.attending.Contains(Faction.OfPlayer)) return;
+            CallInFavours(playerVotes);
+            if (player.councilPromises.Count == 0) return;
             foreach (Motion m in c.agenda)
             {
                 if (m.sponsor == null || !player.councilPromises.Contains(m.sponsor.loadID)) continue;
@@ -303,6 +332,7 @@ namespace Dominion
         /// <summary>Whether a motion would pass with these votes, as the gavel would count it.</summary>
         public static bool WouldPass(Motion m, Dictionary<Motion, int> playerVotes)
         {
+            if (m.devForce != 0) return m.devForce > 0;
             if (m.vetoed || m.def.Worker.InvalidReason(m.targets) != null) return false;
             Tally(m, playerVotes, out float yes, out float no);
             return yes > no && yes >= 0.34f * TotalWeight();
@@ -334,7 +364,7 @@ namespace Dominion
             }
         }
 
-        private static void Pass(Motion m)
+        private static int Pass(Motion m)
         {
             CouncilState c = State;
             int now = Find.TickManager.TicksGame;
@@ -350,6 +380,7 @@ namespace Dominion
             if (m.def.permanent || m.def.durationDays > 0) c.decrees.Add(d);
             EventBus.Raise(DominionEventDefOf.Dominion_DecreePassed, m.sponsor, m.targets.FirstOrDefault(), detail: m.Summary);
             m.def.Worker.OnPassed(d);
+            return d.id;
         }
 
         private static void Close(string report)
@@ -386,6 +417,117 @@ namespace Dominion
             if (!violator.IsPlayer)
                 comp.GetState(violator).legitimacy = Mathf.Max(0f, comp.GetState(violator).legitimacy - 5f);
             EventBus.Raise(DominionEventDefOf.Dominion_DecreeViolated, violator, d.targets.FirstOrDefault(), detail: d.Summary);
+            Punish(d, violator);
+        }
+
+        // ---------------------------------------------------------------- penalties
+
+        /// <summary>The penalty a member's next breach would draw, from how many it already has on record.</summary>
+        public static Penalty NextPenalty(Faction f) => PenaltyFor(State.ViolationsBy(f) + 1);
+
+        private static Penalty PenaltyFor(int breaches) =>
+            breaches <= 1 ? Penalty.Warning : breaches == 2 ? Penalty.Fine : breaches == 3 ? Penalty.Sanctions : Penalty.Expulsion;
+
+        public static string PenaltyLabel(Penalty p) => ("Dominion_Penalty_" + p).Translate();
+
+        /// <summary>
+        /// The council comes down harder on each breach: a warning, then a fine, then sanctions, then expulsion. Breaches
+        /// of penalty decrees themselves are not escalated further. Every step goes in the decree's compliance ledger.
+        /// </summary>
+        private static void Punish(Decree d, Faction violator)
+        {
+            if (d.penalty) return;
+            Penalty p = PenaltyFor(State.ViolationsBy(violator));
+            var entry = new LedgerEntry { faction = violator, tick = Find.TickManager.TicksGame, penalty = p };
+            d.ledger.Add(entry);
+            switch (p)
+            {
+                case Penalty.Fine:
+                    // Paid to those the decree protects, or to the host when it protects no one in particular.
+                    Faction to = d.targets.FirstOrDefault(t => t != violator && !t.IsPlayer) ?? (State.host != violator ? State.host : null);
+                    int amount = violator.IsPlayer ? 300 : Mathf.RoundToInt(Mathf.Clamp(WorldComponent_Dominion.Instance.GetState(violator).wealth * 0.01f, 150f, 1200f));
+                    if (to != null && !to.IsPlayer) entry.fine = EconomyEffects.Transfer(violator, to, amount);
+                    else if (violator.IsPlayer) entry.fine = DiplomacyHelpers.TakeSilver(amount);
+                    else
+                    {
+                        entry.fine = amount;
+                        EconomyEffects.Shock(violator, -0.02f, destroyGoods: false);
+                    }
+                    break;
+                case Penalty.Sanctions:
+                    if (!CouncilUtility.Named(CouncilMotionDefOf.Dominion_Motion_Sanctions, violator) && !violator.def.permanentEnemy)
+                        Impose(CouncilMotionDefOf.Dominion_Motion_Sanctions, violator, 30);
+                    break;
+                case Penalty.Expulsion:
+                    if (!CouncilUtility.Expelled(violator)) Impose(CouncilMotionDefOf.Dominion_Motion_ExpelMember, violator, 60);
+                    break;
+            }
+            if (violator.IsPlayer)
+                Find.LetterStack.ReceiveLetter("Dominion_Penalty_Label".Translate(PenaltyLabel(p)),
+                    ("Dominion_Penalty_Text_" + p).Translate(d.Summary, entry.fine), p >= Penalty.Sanctions ? LetterDefOf.NegativeEvent : LetterDefOf.NeutralEvent);
+        }
+
+        /// <summary>A decree the council puts in force on its own authority, as a penalty: no vote.</summary>
+        public static Decree Impose(CouncilMotionDef def, Faction target, int days)
+        {
+            if (def == null || target == null) return null;
+            int now = Find.TickManager.TicksGame;
+            var d = new Decree
+            {
+                id = State.NewDecreeId(),
+                def = def,
+                targets = new List<Faction> { target },
+                passedTick = now,
+                expiresTick = now + days * GenDate.TicksPerDay,
+                penalty = true,
+            };
+            State.decrees.Add(d);
+            EventBus.Raise(DominionEventDefOf.Dominion_DecreePassed, null, target, detail: d.Summary);
+            def.Worker.OnPassed(d);
+            return d;
+        }
+
+        // ---------------------------------------------------------------- favours
+
+        /// <summary>
+        /// Members you owe a favour expect your AYE on their motions: backing them pays the favour off; voting against
+        /// them (or not voting) is remembered and costs goodwill.
+        /// </summary>
+        private static void CallInFavours(Dictionary<Motion, int> playerVotes)
+        {
+            CouncilState c = State;
+            foreach (Motion m in c.agenda)
+            {
+                if (m.sponsor == null || m.sponsor.IsPlayer || CouncilUtility.FavoursOwedByPlayer(m.sponsor) == 0) continue;
+                CouncilUtility.SpendFavour(m.sponsor, false);
+                bool paid = playerVotes.TryGetValue(m, out int v) && v > 0;
+                RelationState r = WorldComponent_Dominion.Instance.GetRelation(m.sponsor, Faction.OfPlayer);
+                if (paid) r.favour += 4f;
+                else
+                {
+                    r.grievance += 10f;
+                    m.sponsor.TryAffectGoodwillWith(Faction.OfPlayer, -6, canSendMessage: false, canSendHostilityLetter: false);
+                }
+                string text = (paid ? "Dominion_Favour_Repaid" : "Dominion_Favour_Ignored").Translate(m.sponsor.Name, m.Summary);
+                WorldComponent_Dominion.Instance.Player.Log(m.sponsor, text, paid ? 1 : -1);
+                Messages.Message(text, paid ? MessageTypeDefOf.PositiveEvent : MessageTypeDefOf.NegativeEvent, historical: true);
+            }
+        }
+
+        /// <summary>Old favours lapse. A favour you owed and never repaid leaves a sour note.</summary>
+        private static void ExpireFavours(CouncilState c, int now)
+        {
+            for (int i = c.favours.Count - 1; i >= 0; i--)
+            {
+                Favour f = c.favours[i];
+                if (now < f.ExpiresTick) continue;
+                c.favours.RemoveAt(i);
+                if (!f.owedToPlayer && !f.faction.defeated)
+                {
+                    WorldComponent_Dominion.Instance.GetRelation(f.faction, Faction.OfPlayer).grievance += 5f;
+                    f.faction.TryAffectGoodwillWith(Faction.OfPlayer, -3, canSendMessage: false, canSendHostilityLetter: false);
+                }
+            }
         }
 
         private static void Expire(Decree d)
@@ -399,9 +541,90 @@ namespace Dominion
                 c.pastViolations[v.loadID] = (c.pastViolations.TryGetValue(v.loadID, out int n) ? n : 0) + 1;
             d.def.Worker.OnExpired(d);
             EventBus.Raise(DominionEventDefOf.Dominion_DecreeExpired, null, d.targets.FirstOrDefault(), detail: d.Summary);
+            // The session record learns how the decree turned out.
+            foreach (SessionRecord r in c.records)
+                foreach (MotionRecord mr in r.motions)
+                    if (mr.decreeId == d.id)
+                        mr.outcome = d.violators.Count == 0
+                            ? "Dominion_Record_OutcomeKept".Translate(d.complied.Count).ToString()
+                            : "Dominion_Record_OutcomeBroken".Translate(string.Join(", ", d.violators.Select(v => v.Name))).ToString();
+        }
+
+        /// <summary>
+        /// Ends the council for good: any announced session is called off, every decree lapses, and no session is ever
+        /// called again. A global nuclear war does this. <paramref name="reason"/> is shown in the letter and the Council tab.
+        /// </summary>
+        public static void DisbandPermanently(string reason)
+        {
+            CouncilState c = State;
+            if (c.disbanded) return;
+            if (c.phase == CouncilPhase.Announced) Close(null);
+            foreach (Decree d in c.decrees.ToList()) Expire(d);
+            c.agenda.Clear();
+            c.attending.Clear();
+            c.phase = CouncilPhase.Idle;
+            c.nextSessionTick = -1;
+            c.disbanded = true;
+            c.disbandedTick = Find.TickManager.TicksGame;
+            c.disbandedReason = reason;
+            EventBus.Raise(DominionEventDefOf.Dominion_CouncilDisbanded, null, null, detail: reason);
+            Find.LetterStack.ReceiveLetter("Dominion_Council_DisbandedLabel".Translate(), "Dominion_Council_DisbandedText".Translate(reason), LetterDefOf.NegativeEvent);
+        }
+
+        /// <summary>God mode: bring a disbanded council back. The next session is scheduled as at the start of a game.</summary>
+        public static void Restore()
+        {
+            CouncilState c = State;
+            c.disbanded = false;
+            c.disbandedTick = -1;
+            c.disbandedReason = null;
+            c.nextSessionTick = -1;
         }
 
         /// <summary>Dev-mode veto, the only veto there is.</summary>
         public static void DevVeto(Motion m) => m.vetoed = true;
+
+        // ---------------------------------------------------------------- god mode
+
+        /// <summary>God mode: announce a session if none is, count every member as arrived, and open it on the next hour.</summary>
+        public static void DevCallSessionNow()
+        {
+            CouncilState c = State;
+            if (c.disbanded) return;
+            if (c.phase != CouncilPhase.Announced) Announce(GenDate.TicksPerHour);
+            if (c.phase != CouncilPhase.Announced) return;
+            foreach (Faction m in CouncilUtility.Members())
+                if (!c.attending.Contains(m) && !m.IsPlayer) c.attending.Add(m);
+            c.nextSessionTick = Find.TickManager.TicksGame;
+        }
+
+        /// <summary>God mode: put a motion on the agenda (announcing a session first if needed), sponsored by the host. Returns why not, or null.</summary>
+        public static string DevAddMotion(CouncilMotionDef def, List<Faction> targets)
+        {
+            CouncilState c = State;
+            if (c.disbanded) return "Dominion_Council_DisbandedShort".Translate();
+            if (c.phase != CouncilPhase.Announced) Announce();
+            if (c.phase != CouncilPhase.Announced) return "Dominion_Council_NoSessionAnnounced".Translate();
+            string invalid = def.Worker.InvalidReason(targets);
+            if (invalid != null) return invalid;
+            c.agenda.Add(new Motion { def = def, sponsor = c.host, targets = new List<Faction>(targets) });
+            return null;
+        }
+
+        /// <summary>God mode: make a motion carry (true) or fail (false) whatever the vote.</summary>
+        public static void DevForce(Motion m, bool pass) => m.devForce = pass ? 1 : -1;
+
+        /// <summary>God mode: wipe every breach from the record, and lift the penalty decrees.</summary>
+        public static void DevClearViolations()
+        {
+            CouncilState c = State;
+            foreach (Decree d in c.decrees)
+            {
+                d.violators.Clear();
+                d.ledger.Clear();
+            }
+            c.pastViolations.Clear();
+            foreach (Decree d in c.decrees.Where(x => x.penalty).ToList()) Expire(d);
+        }
     }
 }

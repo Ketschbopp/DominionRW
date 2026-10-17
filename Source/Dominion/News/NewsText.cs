@@ -48,7 +48,28 @@ namespace Dominion
             }
             if (n.headline.NullOrEmpty()) n.headline = Fallback(n);
             if (n.story.NullOrEmpty()) n.story = n.def.description;
+            AddQuote(n);
             NewsFlavor.Decorate(n, req);
+        }
+
+        /// <summary>
+        /// Stories about a faction's politics, wars and diplomacy end with a word from its leader, in the faction's own
+        /// voice (from its memes and government): a threat in war, a refusal or a welcome in diplomacy.
+        /// </summary>
+        private static void AddQuote(NewsItem n)
+        {
+            Faction f = n.primary;
+            if (f == null || f.IsPlayer || f.leader == null || n.confidence == NewsConfidence.Rumor) return;
+            VoiceLine line;
+            switch (n.def.category)
+            {
+                case EventCategory.War: line = VoiceLine.Threat; break;
+                case EventCategory.Diplomacy:
+                case EventCategory.Council: line = n.secondary != null && n.secondary.HostileTo(f) ? VoiceLine.Refuse : VoiceLine.Accept; break;
+                case EventCategory.Politics: line = VoiceLine.Greeting; break;
+                default: return;
+            }
+            n.story += "\n\n" + "Dominion_News_Quote".Translate(f.leader.LabelShort, FactionVoice.Line(f, line, n.id));
         }
 
         private static string Fallback(NewsItem n)

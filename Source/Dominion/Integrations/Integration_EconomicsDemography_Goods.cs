@@ -106,6 +106,57 @@ namespace Dominion
             return value;
         }
 
+        /// <summary>How many of an item a faction holds in its E&amp;D stockpile (all qualities), or -1 if unknown.</summary>
+        public int StockOf(Faction f, ThingDef def)
+        {
+            if (!IsActive || inventoryField == null || f == null || f.IsPlayer || def == null) return -1;
+            try
+            {
+                object stock = StockpileOf(f);
+                if (stock == null || !(inventoryField.GetValue(stock) is Dictionary<string, int> inventory)) return -1;
+                int n = 0;
+                foreach (KeyValuePair<string, int> kv in inventory)
+                    if (DefOfKey(kv.Key) == def) n += kv.Value;
+                return n;
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("Reading an E&D stockpile failed: " + e.Message, 0x0EDA);
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Takes up to <paramref name="count"/> of an item out of a faction's E&amp;D stockpile (any quality). Returns how
+        /// many were taken, or -1 if the stockpile cannot be read (the caller then treats the faction's stores as unlimited).
+        /// </summary>
+        public int RemoveGoods(Faction f, ThingDef def, int count)
+        {
+            if (!IsActive || inventoryField == null || f == null || f.IsPlayer || def == null || count <= 0) return -1;
+            try
+            {
+                object stock = StockpileOf(f);
+                if (stock == null || !(inventoryField.GetValue(stock) is Dictionary<string, int> inventory)) return -1;
+                int taken = 0;
+                foreach (string key in new List<string>(inventory.Keys))
+                {
+                    if (taken >= count) break;
+                    if (DefOfKey(key) != def) continue;
+                    int n = Mathf.Min(count - taken, inventory[key]);
+                    if (inventory[key] - n > 0) inventory[key] -= n;
+                    else inventory.Remove(key);
+                    taken += n;
+                }
+                setWealthDirty?.Invoke(stock, null);
+                return taken;
+            }
+            catch (Exception e)
+            {
+                DLog.WarningOnce("Taking goods from an E&D stockpile failed: " + e.Message, 0x0EDB);
+                return -1;
+            }
+        }
+
         private static bool IsFood(ThingDef def) =>
             def.IsNutritionGivingIngestible && def.ingestible != null && def.ingestible.HumanEdible && !def.IsDrug && !def.IsCorpse;
 

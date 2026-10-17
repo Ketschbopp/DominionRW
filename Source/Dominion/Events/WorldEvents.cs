@@ -303,6 +303,8 @@ namespace Dominion
                 RelationState r = comp.TryGetRelation(from, g);
                 if (r == null || r.distance < 0f || r.distance > def.world.spreadDistance) continue;
                 if (comp.GetState(g).InCrisis || !Rand.Chance(def.world.spreadChance)) continue;
+                // A council quarantine keeps it out of members' lands.
+                if (CouncilUtility.Quarantined(from) && CouncilUtility.IsMember(g)) continue;
                 pendingSpread.Add((def, g));
             }
         }

@@ -163,8 +163,9 @@ namespace Dominion
             DiplomacyLogEntry entry = log.Count > 0 ? log[log.Count - 1] : null;
             if (entry != null && entry != last && entry.factionId == faction.loadID)
             {
-                reply = entry.text;
+                // Their answer in their own voice, then what came of it.
                 outcome = entry.outcome;
+                reply = "“" + FactionVoice.Answer(faction, outcome, Hostile, entry.tick) + "”\n\n" + entry.text;
             }
             else
             {
