@@ -453,7 +453,7 @@ Refusing breaks the treaty, and every faction will think less of you.</Dominion_
   <Dominion_Council_LobbySuccess>{0} has been persuaded.</Dominion_Council_LobbySuccess>
   <Dominion_Council_LobbyFail>{0} was not persuaded, and did not appreciate the attempt.</Dominion_Council_LobbyFail>
   <Dominion_Council_NoOneToLobby>No other delegations present.</Dominion_Council_NoOneToLobby>
-  <Dominion_Council_DevVeto>Dev: veto</Dominion_Council_DevVeto>
+  <Dominion_Council_DevVeto>God mode: veto</Dominion_Council_DevVeto>
   <Dominion_Council_CloseSession>Close the session and count the votes</Dominion_Council_CloseSession>
   <Dominion_Decree_DutyLabel>Council decree</Dominion_Decree_DutyLabel>
   <Dominion_Decree_Refuse>Refuse (violates the decree)</Dominion_Decree_Refuse>

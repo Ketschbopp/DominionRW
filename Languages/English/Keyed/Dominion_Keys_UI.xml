@@ -548,4 +548,30 @@
   <Dominion_Archive_CannotRenew>This treaty does not lapse, or was imposed on the losing side, so there is nothing to renew.</Dominion_Archive_CannotRenew>
   <Dominion_Archive_OpenParty>Open the line to {0}</Dominion_Archive_OpenParty>
 
+
+  <!-- Council chamber -->
+  <Dominion_Chamber_NoSession>Motions can only be put on the agenda once a session has been announced.</Dominion_Chamber_NoSession>
+  <Dominion_Chamber_NoMotions>The session is announced, but nothing is on the agenda yet.</Dominion_Chamber_NoMotions>
+  <Dominion_Chamber_NoAgenda>The council is in recess. When a session is announced, its motions will hang here.</Dominion_Chamber_NoAgenda>
+  <Dominion_Chamber_Carries>Carries {0} – {1}</Dominion_Chamber_Carries>
+  <Dominion_Chamber_Fails>Fails {0} – {1}</Dominion_Chamber_Fails>
+  <Dominion_Chamber_ClickBanner>Click to colour the seats by how each member leans on this motion.</Dominion_Chamber_ClickBanner>
+  <Dominion_Chamber_Empty>The council has no members yet.</Dominion_Chamber_Empty>
+  <Dominion_Chamber_YourVote>You cast your own vote when the session opens.</Dominion_Chamber_YourVote>
+  <Dominion_Chamber_LeansAye>Leans aye on {0}</Dominion_Chamber_LeansAye>
+  <Dominion_Chamber_LeansNay>Leans nay on {0}</Dominion_Chamber_LeansNay>
+  <Dominion_Chamber_Wavering>Undecided on {0}</Dominion_Chamber_Wavering>
+  <Dominion_Chamber_Lobbyable>(could be lobbied)</Dominion_Chamber_Lobbyable>
+  <Dominion_Chamber_LobbyHint>You can lobby undecided members on the ballot once the session opens.</Dominion_Chamber_LobbyHint>
+  <Dominion_Chamber_ClickSeat>Click to see this member beside the chamber.</Dominion_Chamber_ClickSeat>
+  <Dominion_Chamber_Tally>Ayes {0}  ·  nays {1}  ·  needs {2}</Dominion_Chamber_Tally>
+  <Dominion_Chamber_InSessionSoon>A session is called, hosted by {0}. Hang a motion on the rail or study the room.</Dominion_Chamber_InSessionSoon>
+  <Dominion_Chamber_Recess>The council is in recess.</Dominion_Chamber_Recess>
+  <Dominion_Chamber_LegendFactions>Seats in members' colours, in proportion to vote weight. Pick a banner to see how they lean.</Dominion_Chamber_LegendFactions>
+  <Dominion_Chamber_Aye>Aye</Dominion_Chamber_Aye>
+  <Dominion_Chamber_Nay>Nay</Dominion_Chamber_Nay>
+  <Dominion_Chamber_Waver>Undecided</Dominion_Chamber_Waver>
+  <Dominion_Chamber_PickSeat>Click a seat in the chamber to see that member: their weight, attendance and how they lean on each motion.</Dominion_Chamber_PickSeat>
+  <Dominion_Chamber_Host>Hosts this session</Dominion_Chamber_Host>
+
 </LanguageData>
