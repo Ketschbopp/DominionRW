@@ -233,6 +233,7 @@ namespace Dominion
     public class Dialog_FederationCharter : PaperWindow
     {
         private Vector2 scroll;
+        private float charterHeight = 1200f;
 
         public override Vector2 InitialSize => new Vector2(760f, 760f);
 
@@ -245,7 +246,7 @@ namespace Dominion
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             float y = DominionPaper.Title(new Rect(rect.x, rect.y, rect.width, 40f), "Dominion_Charter_Title".Translate(), DominionTheme.InkRed);
-            Rect view = new Rect(0f, 0f, rect.width - 16f, 1200f);
+            Rect view = new Rect(0f, 0f, rect.width - 16f, charterHeight);
             Widgets.BeginScrollView(new Rect(rect.x, y, rect.width, rect.yMax - y), ref scroll, view);
             float vy = 0f, w = view.width;
             vy += DominionPaper.Paragraph(0f, vy, w, "Dominion_Charter_Preamble".Translate(Faction.OfPlayer.Name)) + 10f;
@@ -292,6 +293,7 @@ namespace Dominion
                 DominionPaper.DrawSeal(new Rect(cell.xMax - 48f, cell.y + 6f, 46f, 46f), f, 0.18f);
                 idx++;
             }
+            charterHeight = vy + Mathf.CeilToInt(idx / (float)perRow) * 110f + 20f;
             Widgets.EndScrollView();
         }
     }

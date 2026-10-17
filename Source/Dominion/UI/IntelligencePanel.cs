@@ -43,15 +43,16 @@ namespace Dominion
             // Menu
             float x = inner.x;
             float y = inner.y + 44f;
+            float sw = Mathf.Min(174f, (inner.width - 200f) / 4f);
             foreach (Screen s in System.Enum.GetValues(typeof(Screen)))
             {
-                Rect b = new Rect(x, y, 170f, 26f);
+                Rect b = new Rect(x, y, sw - 4f, 26f);
                 if (Terminal.Button(b, ("Dominion_Term_Screen_" + s).Translate(), ("Dominion_Term_Screen_" + s + "_Desc").Translate(), null, screen == s))
                 {
                     screen = s;
                     leftScroll = rightScroll = Vector2.zero;
                 }
-                x += 174f;
+                x += sw;
             }
             Rect plan = new Rect(inner.xMax - 190f, y, 190f, 26f);
             if (Terminal.Button(plan, "Dominion_Term_NewMission".Translate(), "Dominion_Tip_PlanOp".Translate(), cleared ? null : "Dominion_Action_NeedsResearch".Translate(research.label).ToString(), false, Terminal.Amber))

@@ -22,8 +22,12 @@ namespace Dominion
         /// <summary>The event behind it, to find the newspaper story; -1 for orders the player gave.</summary>
         public int eventId = -1;
 
+        /// <summary>How secret the event was: other people's wars only show what your intel can see.</summary>
+        public Secrecy secrecy = Secrecy.Public;
+
         public void ExposeData()
         {
+            Scribe_Values.Look(ref secrecy, "secrecy", Secrecy.Public);
             Scribe_Values.Look(ref tick, "tick");
             Scribe_Values.Look(ref text, "text");
             Scribe_Values.Look(ref score, "score");
@@ -79,9 +83,9 @@ namespace Dominion
         /// <summary>Terms drafted at the peace table, applied instead of the default terms when this peace is made.</summary>
         [Unsaved] public PeaceDeal deal;
 
-        public void Chronicle(string text, int eventId = -1)
+        public void Chronicle(string text, int eventId = -1, Secrecy secrecy = Secrecy.Public)
         {
-            chronicle.Add(new WarChronicleEntry { tick = Find.TickManager.TicksGame, text = text, score = score, eventId = eventId });
+            chronicle.Add(new WarChronicleEntry { tick = Find.TickManager.TicksGame, text = text, score = score, eventId = eventId, secrecy = secrecy });
             if (chronicle.Count > MaxChronicle) chronicle.RemoveAt(0);
         }
 

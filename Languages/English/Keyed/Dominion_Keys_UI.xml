@@ -240,7 +240,7 @@
   <Dominion_Mercenaries_Hired>Mercenaries paid {0} silver raided {1}: +{2} war score.</Dominion_Mercenaries_Hired>
   <Dominion_Peace_Title>Peace with {0}</Dominion_Peace_Title>
   <Dominion_Peace_Standing>Where the war stands</Dominion_Peace_Standing>
-  <Dominion_Peace_Facts>{0} of war, {1} battles. Your dead: {2}. Theirs: {3}.</Dominion_Peace_Facts>
+  <Dominion_Peace_Facts>{0} of war, {1} battles. Your dead: {2}. Dead of {4}: {3}.</Dominion_Peace_Facts>
   <Dominion_Peace_Kind>Terms</Dominion_Peace_Kind>
   <Dominion_Peace_Victors>Victor's terms</Dominion_Peace_Victors>
   <Dominion_Peace_Victors_Desc>You are winning: take what you went to war for ({0}), as the war score allows.</Dominion_Peace_Victors_Desc>
@@ -289,6 +289,7 @@
   <Dominion_Council_LobbySilver>A discreet purse: {0} silver ({1} chance, sways them more)</Dominion_Council_LobbySilver>
   <Dominion_Council_LobbyPromise>Promise to back their next motion ({0} chance; break it and they will not forget)</Dominion_Council_LobbyPromise>
   <Dominion_Council_AlreadyWithYou>Already votes your way.</Dominion_Council_AlreadyWithYou>
+  <Dominion_Council_PromiseOwnMotion>They sponsor this motion; a promise would be broken the moment you vote.</Dominion_Council_PromiseOwnMotion>
   <Dominion_Council_AlreadyPromised>You already owe them a promise.</Dominion_Council_AlreadyPromised>
   <Dominion_Council_Wavering>wavering</Dominion_Council_Wavering>
   <Dominion_Council_Leaning_You>Your vote</Dominion_Council_Leaning_You>

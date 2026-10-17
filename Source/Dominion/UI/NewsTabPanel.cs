@@ -252,6 +252,14 @@ namespace Dominion
             return r.xMax;
         }
 
+        /// <summary>Shows a story picked from the list, keeping the search, filters and view as they are.</summary>
+        private void Select(NewsItem n, NewsLog log)
+        {
+            selected = n;
+            storyScroll = Vector2.zero;
+            log.MarkRead(n);
+        }
+
         /// <summary>Shows a story in the article column and marks it read.</summary>
         public void Open(NewsItem n, NewsLog log)
         {
@@ -480,7 +488,7 @@ namespace Dominion
                 TooltipHandler.TipRegion(row, n.headline + "\n\n" + "Dominion_Tip_Clipping".Translate());
 
                 if (Widgets.ButtonInvisible(new Rect(row.x + 22f, row.y, row.width - 22f, row.height)))
-                    Open(n, log);
+                    Select(n, log);
             }
             Widgets.EndScrollView();
         }

@@ -25,6 +25,9 @@ namespace Dominion
         private Dictionary<Motion, bool> results;
         private readonly List<Motion> agenda;
         private readonly List<Faction> attendees;
+        private readonly Dictionary<Faction, float> weights = new Dictionary<Faction, float>();
+
+        private float WeightOf(Faction f) => weights.TryGetValue(f, out float w) ? w : 0f;
         private readonly Dictionary<Motion, (float yes, float no, float quorum)> finalTally = new Dictionary<Motion, (float, float, float)>();
         private Motion selected;
         private float gavelTime = -1f;
@@ -42,6 +45,8 @@ namespace Dominion
             agenda = new List<Motion>(State.agenda);
             // The session state is cleared when the gavel falls; keep who was in the room for the results.
             attendees = new List<Faction>(State.attending);
+            // Weights loop over maps and allies; the room does not change during a session.
+            foreach (Faction f in attendees) weights[f] = CouncilUtility.VoteWeight(f, attendees);
             selected = agenda.Count > 0 ? agenda[0] : null;
         }
 
@@ -55,7 +60,7 @@ namespace Dominion
             float y = DominionPaper.Title(new Rect(rect.x, rect.y, rect.width, 40f), "Dominion_Council_SessionTitle".Translate(c.host?.Name ?? "?"));
             DominionTheme.InkLabel(new Rect(rect.x, y, rect.width, 20f),
                 "Dominion_Council_SessionInfo".Translate(speaker.LabelShortCap, attendees.Count,
-                    CouncilUtility.VoteWeight(Faction.OfPlayer, attendees).ToString("F1"),
+                    WeightOf(Faction.OfPlayer).ToString("F1"),
                     WorldComponent_Dominion.Instance.Player.influence.ToString("F0")), DominionTheme.InkFaded, GameFont.Small, TextAnchor.UpperCenter);
             y += 26f;
 
@@ -194,7 +199,7 @@ namespace Dominion
         {
             Widgets.DrawBoxSolid(row, DominionTheme.PaperShade);
             DominionPaper.DrawSeal(new Rect(row.x + 2f, row.y + 3f, 40f, 40f), f);
-            float weight = CouncilUtility.VoteWeight(f, attendees);
+            float weight = WeightOf(f);
             DominionTheme.InkLabel(new Rect(row.x + 46f, row.y + 2f, row.width - 160f, 20f), f.Name.Truncate(row.width - 160f));
             int leaning;
             bool wavering;
@@ -205,8 +210,9 @@ namespace Dominion
             }
             else
             {
-                leaning = CouncilUtility.AIVote(f, selected);
-                wavering = CouncilUtility.Wavering(f, selected);
+                float u = CouncilUtility.AILeaning(f, selected);
+                leaning = u > 0.1f ? 1 : u < -0.1f ? -1 : 0;
+                wavering = Mathf.Abs(u) < 0.3f;
             }
             string lean = f.IsPlayer ? "Dominion_Council_Leaning_You".Translate().ToString() : Dialog_CouncilSessionText.Leaning(leaning, wavering);
             Color c = leaning > 0 ? DominionTheme.InkGreen : leaning < 0 ? DominionTheme.InkRed : DominionTheme.InkAmber;
@@ -250,7 +256,8 @@ namespace Dominion
                         Lobby(f, key, direction, silverChance, 1.3f);
                     }),
                 Option("Dominion_Council_LobbyPromise".Translate(promiseChance.ToStringPercent()),
-                    promised ? "Dominion_Council_AlreadyPromised".Translate().ToString() : null,
+                    promised ? "Dominion_Council_AlreadyPromised".Translate().ToString()
+                    : f == selected.sponsor ? "Dominion_Council_PromiseOwnMotion".Translate().ToString() : null,
                     () =>
                     {
                         player.councilPromises.Add(f.loadID);

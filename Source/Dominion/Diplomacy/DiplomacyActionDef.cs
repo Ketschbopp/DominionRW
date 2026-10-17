@@ -122,6 +122,7 @@ namespace Dominion
         {
             Messages.Message(text, good ? MessageTypeDefOf.PositiveEvent : MessageTypeDefOf.NegativeEvent, historical: true);
             if (reportFaction != null) Comp?.Player.Log(reportFaction, text, good ? 1 : -1);
+            reportFaction = null;
         }
 
         protected static float Clamp(float chance) => Mathf.Clamp(chance, 0.02f, 0.95f);

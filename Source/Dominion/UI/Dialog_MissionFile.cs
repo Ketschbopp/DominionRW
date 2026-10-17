@@ -23,6 +23,7 @@ namespace Dominion
         private readonly HashSet<Pawn> agents = new HashSet<Pawn>();
         private Vector2 scroll;
         private float sealedAt = -1f;
+        private float viewHeight = 900f;
 
         public override Vector2 InitialSize => new Vector2(720f, 720f);
 
@@ -57,7 +58,7 @@ namespace Dominion
             float y = DominionPaper.Title(new Rect(rect.x, rect.y, rect.width, 40f), "Dominion_Mission_Title".Translate());
             DominionTheme.DrawStamp(new Rect(rect.xMax - 150f, rect.y - 6f, 150f, 52f), DominionPaper.StampTopSecret, DominionTheme.InkRed, 7f);
 
-            Rect view = new Rect(0f, 0f, rect.width - 16f, 900f);
+            Rect view = new Rect(0f, 0f, rect.width - 16f, viewHeight);
             Rect outRect = new Rect(rect.x, y, rect.width, rect.yMax - y - 44f);
             Widgets.BeginScrollView(outRect, ref scroll, view);
             float vy = 0f, w = view.width;
@@ -156,6 +157,7 @@ namespace Dominion
                     (op.exposureOnFail * IntelOpsSystem.RiskExposure(risk)).ToStringPercent(),
                     (op.exposureOnSuccess * IntelOpsSystem.RiskExposure(risk)).ToStringPercent()), DominionTheme.InkRed, GameFont.Tiny) + 4f;
             }
+            viewHeight = vy + 10f;
             Widgets.EndScrollView();
 
             // Dispatch

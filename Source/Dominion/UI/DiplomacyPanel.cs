@@ -403,6 +403,8 @@ namespace Dominion
             if (player == null || ev.primary == null || ev.primary.IsPlayer || ev.secondary != player) return;
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (comp == null || !DominionScheduler.IsSimulated(ev.primary)) return;
+            // Secret moves against you stay secret until your intelligence uncovers them.
+            if (IntelUtility.IntelOn(ev.primary) < IntelUtility.RequiredIntel(ev.secrecy)) return;
             int outcome = ev.def.category == EventCategory.War || ev.def.category == EventCategory.Espionage ? -1 : 0;
             comp.Player.Log(ev.primary, ev.Headline, outcome, byThem: true);
         }

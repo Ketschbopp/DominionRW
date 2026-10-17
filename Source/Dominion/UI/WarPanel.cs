@@ -241,9 +241,12 @@ namespace Dominion
             int now = Find.TickManager.TicksGame;
             NewsLog news = WorldComponent_Dominion.Instance.News;
             int shown = 0;
-            for (int i = w.chronicle.Count - 1; i >= 0 && shown < ChronicleShown; i--, shown++)
+            float intel = w.InvolvesPlayer ? float.MaxValue : IntelUtility.IntelOn(w.attacker, w.defender);
+            for (int i = w.chronicle.Count - 1; i >= 0 && shown < ChronicleShown; i--)
             {
                 WarChronicleEntry e = w.chronicle[i];
+                if (intel < IntelUtility.RequiredIntel(e.secrecy)) continue;
+                shown++;
                 Rect r = l.GetRect(20f);
                 Widgets.DrawHighlightIfMouseover(r);
                 Text.Font = GameFont.Tiny;

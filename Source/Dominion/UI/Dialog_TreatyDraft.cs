@@ -64,7 +64,11 @@ namespace Dominion
         {
             base.PreClose();
             // Closing during the reading would lose the answer; settle it now.
-            if (ceremony.stage == SealCeremony.Stage.Signing || ceremony.stage == SealCeremony.Stage.Reading) draft.Decide();
+            if (ceremony.stage == SealCeremony.Stage.Signing || ceremony.stage == SealCeremony.Stage.Reading)
+            {
+                // No one is left to answer a counter-offer: it counts as refused.
+                if (draft.Decide() == SealCeremony.Stage.Countered) draft.DeclineCounter();
+            }
             else if (ceremony.stage == SealCeremony.Stage.Countered) draft.DeclineCounter();
         }
 
@@ -218,6 +222,7 @@ namespace Dominion
     {
         private readonly Treaty treaty;
         private Vector2 scroll;
+        private float docHeight = 600f;
 
         public override Vector2 InitialSize => new Vector2(700f, 640f);
 
@@ -239,7 +244,7 @@ namespace Dominion
 
             const float SignHeight = 150f;
             Rect body = new Rect(rect.x, y, rect.width, rect.yMax - y - SignHeight);
-            Rect view = new Rect(0f, 0f, body.width - 16f, 600f);
+            Rect view = new Rect(0f, 0f, body.width - 16f, docHeight);
             Widgets.BeginScrollView(body, ref scroll, view);
             float vy = 0f, w = view.width;
             DominionPaper.Caption(new Rect(0f, vy, w, 16f), "Dominion_Paper_Article1".Translate());
@@ -278,6 +283,7 @@ namespace Dominion
                     ConfirmTearUp(t, () => Close());
                 vy += 40f;
             }
+            docHeight = vy + 10f;
             Widgets.EndScrollView();
 
             Rect sign = new Rect(rect.x, rect.yMax - SignHeight, rect.width, SignHeight);

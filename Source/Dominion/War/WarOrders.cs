@@ -261,7 +261,7 @@ namespace Dominion
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             War w = comp?.Wars.Find(ev.primary, ev.secondary);
             if (w == null) return;
-            w.Chronicle(ev.Headline, ev.id);
+            w.Chronicle(ev.Headline, ev.id, ev.secrecy);
         }
     }
 }
