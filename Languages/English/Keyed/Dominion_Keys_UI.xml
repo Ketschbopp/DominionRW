@@ -106,12 +106,6 @@
   <Dominion_UI_Jump_Map_Desc>Find {0}'s capital on the world map.</Dominion_UI_Jump_Map_Desc>
 
   <!-- ============ treaties ============ -->
-  <Dominion_Treaties_Mode_Cabinet>Your treaties</Dominion_Treaties_Mode_Cabinet>
-  <Dominion_Treaties_Mode_Cabinet_Desc>Every treaty you are party to, as a sealed card. Click one to read it, renew it or tear it up.</Dominion_Treaties_Mode_Cabinet_Desc>
-  <Dominion_Treaties_Mode_World>The world's treaties</Dominion_Treaties_Mode_World>
-  <Dominion_Treaties_Mode_World_Desc>Treaties between other factions that your intelligence knows about.</Dominion_Treaties_Mode_World_Desc>
-  <Dominion_Treaties_Mode_Web>Treaty web</Dominion_Treaties_Mode_Web>
-  <Dominion_Treaties_Mode_Web_Desc>Who is bound to whom, at a glance.</Dominion_Treaties_Mode_Web_Desc>
   <Dominion_Treaties_Draft>Draft a treaty...</Dominion_Treaties_Draft>
   <Dominion_Treaties_Draft_Desc>Open the signing desk: pick a partner and a treaty, set its terms and sign.</Dominion_Treaties_Draft_Desc>
   <Dominion_Treaties_NoneYours>You are party to no treaties. The desk is empty and the ink is fresh.</Dominion_Treaties_NoneYours>
@@ -537,5 +531,21 @@
   <Dominion_Telegraph_YourOpinion_Desc>What your people think of {0}.</Dominion_Telegraph_YourOpinion_Desc>
   <Dominion_Telegraph_Head>TELEGRAM  ·  TO {0}</Dominion_Telegraph_Head>
   <Dominion_Telegraph_Keys>Telegraph keys</Dominion_Telegraph_Keys>
+
+
+  <!-- State archive (Treaties) -->
+  <Dominion_Archive_Mode_Shelves>Your shelves</Dominion_Archive_Mode_Shelves>
+  <Dominion_Archive_Mode_Shelves_Desc>Every treaty you are party to, as a scroll on the shelves. The ribbon's colour is the kind of treaty; a frayed ribbon means it lapses within 15 days. Pull a scroll out to unroll it on the desk.</Dominion_Archive_Mode_Shelves_Desc>
+  <Dominion_Archive_Mode_Records>Foreign records</Dominion_Archive_Mode_Records>
+  <Dominion_Archive_Mode_Records_Desc>Index cards for treaties between other factions that your intelligence knows of.</Dominion_Archive_Mode_Records_Desc>
+  <Dominion_Archive_Mode_Corkboard>Corkboard</Dominion_Archive_Mode_Corkboard>
+  <Dominion_Archive_Mode_Corkboard_Desc>Every faction you know pinned to cork, with a string for each treaty between them.</Dominion_Archive_Mode_Corkboard_Desc>
+  <Dominion_Archive_PullOut>Click to pull it out and unroll it on the desk; click again to put it back.</Dominion_Archive_PullOut>
+  <Dominion_Archive_DeskEmpty>Pull a scroll from the shelves to read it here.</Dominion_Archive_DeskEmpty>
+  <Dominion_Archive_Between>Between {0} and {1}</Dominion_Archive_Between>
+  <Dominion_Archive_Signed>Signed {0}</Dominion_Archive_Signed>
+  <Dominion_Archive_ReadFull>Read in full</Dominion_Archive_ReadFull>
+  <Dominion_Archive_CannotRenew>This treaty does not lapse, or was imposed on the losing side, so there is nothing to renew.</Dominion_Archive_CannotRenew>
+  <Dominion_Archive_OpenParty>Open the line to {0}</Dominion_Archive_OpenParty>
 
 </LanguageData>
