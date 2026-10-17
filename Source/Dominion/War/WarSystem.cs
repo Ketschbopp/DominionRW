@@ -119,9 +119,9 @@ namespace Dominion
             else if (winner != null)
                 EventBus.Raise(DominionEventDefOf.Dominion_PeaceTerms, winner, w.Other(winner), detail: outcome);
             if (w.InvolvesPlayer)
-                Find.LetterStack.ReceiveLetter("Dominion_War_EndedLabel".Translate(w.Other(Faction.OfPlayer).Name), text,
+                DominionLetters.Send("Dominion_War_EndedLabel".Translate(w.Other(Faction.OfPlayer).Name), text,
                     winner == null ? LetterDefOf.NeutralEvent : winner.IsPlayer ? LetterDefOf.PositiveEvent : LetterDefOf.NegativeEvent,
-                    null, w.Other(Faction.OfPlayer));
+                    null, w.Other(Faction.OfPlayer), important: true);
 
             // Wars joined on either side's behalf wind down too.
             foreach (War other in reg.wars)
@@ -498,7 +498,7 @@ namespace Dominion
                     if (DiplomacyHelpers.AvailableSilverFresh() < amount)
                     {
                         comp.Treaties.Break(t, Faction.OfPlayer);
-                        Find.LetterStack.ReceiveLetter("Dominion_Tribute_DefaultLabel".Translate(), "Dominion_Tribute_DefaultText".Translate(t.b.Name, amount),
+                        DominionLetters.Send("Dominion_Tribute_DefaultLabel".Translate(), "Dominion_Tribute_DefaultText".Translate(t.b.Name, amount),
                             LetterDefOf.NegativeEvent, null, t.b);
                         continue;
                     }
@@ -558,8 +558,8 @@ namespace Dominion
             if (enemies.Count == 0) return;
             Map map = CaravanIncidentUtility.SetupCaravanAttackMap(b.caravan, enemies, true);
             LordMaker.MakeNewLord(f, new LordJob_AssaultColony(f, true, true, false, false, true, false, true), map, enemies);
-            Find.LetterStack.ReceiveLetter("Dominion_Blockade_SortieLabel".Translate(), "Dominion_Blockade_SortieText".Translate(b.settlement.Label, f.Name),
-                LetterDefOf.ThreatBig, new LookTargets(enemies), f);
+            DominionLetters.Send("Dominion_Blockade_SortieLabel".Translate(), "Dominion_Blockade_SortieText".Translate(b.settlement.Label, f.Name),
+                LetterDefOf.ThreatBig, new LookTargets(enemies), f, important: true);
         }
     }
 

@@ -54,6 +54,7 @@ namespace Dominion
             b.Note(produceGoods != null ? "production hook: ProduceGoodsCategorized" : "production hook not found (climate will not reach E&D production)");
             BindGoods(stockpile, b);
             BindLinks(manager, stockpile, b);
+            BindSettlements(manager, b);
         }
 
         protected internal override void OnWorldLoaded() => ResetLinks();
@@ -62,6 +63,7 @@ namespace Dominion
         protected internal override void OnActivated()
         {
             PatchLinks();
+            PatchSettlements();
             if (produceGoods == null || productionPatched) return;
             try
             {

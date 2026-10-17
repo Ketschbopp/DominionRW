@@ -122,6 +122,20 @@ namespace Dominion
 
         private static void DrawNews(Listing_Standard l, DominionSettings s)
         {
+            Rect letters = l.GetRect(28f);
+            Widgets.Label(letters.LeftPart(0.5f), "Dominion_Setting_Letters".Translate());
+            TooltipHandler.TipRegion(letters, "Dominion_Setting_Letters_Desc".Translate());
+            if (Widgets.ButtonText(letters.RightPart(0.45f), ("Dominion_LetterMode_" + s.letterMode).Translate()))
+            {
+                var options = new List<FloatMenuOption>();
+                foreach (LetterMode m in Enum.GetValues(typeof(LetterMode)))
+                {
+                    LetterMode cm = m;
+                    options.Add(new FloatMenuOption(("Dominion_LetterMode_" + m).Translate(), () => s.letterMode = cm));
+                }
+                Find.WindowStack.Add(new FloatMenu(options));
+            }
+            l.Gap(6f);
             l.Label("Dominion_Setting_NewsLogCap".Translate(s.newsLogCap));
             s.newsLogCap = (int)l.Slider(s.newsLogCap, 50, 2000);
             l.CheckboxLabeled("Dominion_Setting_FalseRumors".Translate(), ref s.falseRumors, "Dominion_Setting_FalseRumors_Desc".Translate());

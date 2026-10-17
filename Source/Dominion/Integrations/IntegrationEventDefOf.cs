@@ -17,6 +17,9 @@ namespace Dominion
         // Economics & Demography
         public static DominionEventDef Dominion_Starvation;
         public static DominionEventDef Dominion_PirateTheft;
+        public static DominionEventDef Dominion_SettlementExpanded;
+        public static DominionEventDef Dominion_FactionResettled;
+        public static DominionEventDef Dominion_SettlementAbandoned;
 
         static IntegrationEventDefOf()
         {

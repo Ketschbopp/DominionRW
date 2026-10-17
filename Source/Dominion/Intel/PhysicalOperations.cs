@@ -207,7 +207,7 @@ namespace Dominion
             LookTargets look = op.objective != null ? new LookTargets(op.objective) : new LookTargets(op.agents);
             string text = ("Dominion_Ops_PhysicalBrief_" + def.objective).Translate(f.Name, s.Label, op.objective?.LabelShort ?? "?");
             text += "\n\n" + (op.alerted ? "Dominion_Ops_PhysicalHostile" : "Dominion_Ops_PhysicalStealth").Translate(f.Name);
-            Find.LetterStack.ReceiveLetter("Dominion_Ops_PhysicalBriefLabel".Translate(def.LabelCap), text, LetterDefOf.NeutralEvent, look, f);
+            DominionLetters.Send("Dominion_Ops_PhysicalBriefLabel".Translate(def.LabelCap), text, LetterDefOf.NeutralEvent, look, f, important: true);
         }
 
         /// <summary>Picks (or brings in) what the agents are after.</summary>
@@ -366,8 +366,8 @@ namespace Dominion
             op.alerted = true;
             Faction f = op.target;
             DiplomacyUtility.SetRelationKind(f, Faction.OfPlayer, FactionRelationKind.Hostile, f, "Dominion_Reason_CovertDiscovered".Translate());
-            Find.LetterStack.ReceiveLetter("Dominion_Ops_AlarmLabel".Translate(), "Dominion_Ops_AlarmText".Translate(f.Name, op.settlement?.Label ?? "?"),
-                LetterDefOf.ThreatBig, op.agents.FirstOrDefault(p => p.Spawned), f);
+            DominionLetters.Send("Dominion_Ops_AlarmLabel".Translate(), "Dominion_Ops_AlarmText".Translate(f.Name, op.settlement?.Label ?? "?"),
+                LetterDefOf.ThreatBig, op.agents.FirstOrDefault(p => p.Spawned), f, important: true);
         }
 
         private static void Resolve(Operation op)

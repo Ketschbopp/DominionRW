@@ -51,6 +51,7 @@ namespace Dominion
         public bool visitorShuttles = true;
         public bool colonistNewsThoughts = true;
         public bool letterForMajorNews = true;
+        public LetterMode letterMode = LetterMode.Important;
         public Dictionary<EventCategory, NewsNotifyMode> notifyModes = new Dictionary<EventCategory, NewsNotifyMode>();
 
         // Rim Council
@@ -125,6 +126,7 @@ namespace Dominion
             Scribe_Values.Look(ref visitorShuttles, "visitorShuttles", true);
             Scribe_Values.Look(ref colonistNewsThoughts, "colonistNewsThoughts", true);
             Scribe_Values.Look(ref letterForMajorNews, "letterForMajorNews", true);
+            Scribe_Values.Look(ref letterMode, "letterMode", LetterMode.Important);
             Scribe_Collections.Look(ref notifyModes, "notifyModes", LookMode.Value, LookMode.Value);
             Scribe_Values.Look(ref councilEnabled, "councilEnabled", true);
             Scribe_Values.Look(ref councilIntervalDays, "councilIntervalDays", 60);
@@ -177,6 +179,7 @@ namespace Dominion
             visitorShuttles = true;
             colonistNewsThoughts = true;
             letterForMajorNews = true;
+            letterMode = LetterMode.Important;
             notifyModes.Clear();
             councilEnabled = true;
             councilIntervalDays = 60;

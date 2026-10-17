@@ -137,9 +137,9 @@ namespace Dominion
             if (!warnedPlayer && mission == WarbandMission.RaidPlayer && target != null && target.IsPlayer && TicksToArrival < GenDate.TicksPerDay && VisibleToPlayer)
             {
                 warnedPlayer = true;
-                Find.LetterStack.ReceiveLetter("Dominion_Warband_ApproachingLabel".Translate(),
+                DominionLetters.Send("Dominion_Warband_ApproachingLabel".Translate(),
                     "Dominion_Warband_ApproachingText".Translate(Faction.Name, TicksToArrival.ToStringTicksToPeriod(allowSeconds: false)),
-                    LetterDefOf.ThreatSmall, this, Faction);
+                    LetterDefOf.ThreatSmall, this, Faction, important: true);
             }
             if (!warnedCaravan && VisibleToPlayer)
             {
@@ -641,8 +641,8 @@ namespace Dominion
             Map map = CaravanIncidentUtility.SetupCaravanAttackMap(caravan, enemies, true);
             WarUtility.Registry.fights.Add(new WarbandFight { faction = f, enemies = new List<Pawn>(enemies), tile = map.Tile.tileId, points = points });
             LordMaker.MakeNewLord(f, new LordJob_AssaultColony(f, true, true, false, false, true, false, true), map, enemies);
-            Find.LetterStack.ReceiveLetter("Dominion_Warband_InterceptedLabel".Translate(), "Dominion_Warband_InterceptedText".Translate(f.Name),
-                LetterDefOf.ThreatBig, new LookTargets(enemies), f);
+            DominionLetters.Send("Dominion_Warband_InterceptedLabel".Translate(), "Dominion_Warband_InterceptedText".Translate(f.Name),
+                LetterDefOf.ThreatBig, new LookTargets(enemies), f, important: true);
         }
     }
 }

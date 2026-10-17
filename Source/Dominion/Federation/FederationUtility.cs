@@ -216,7 +216,7 @@ namespace Dominion
         {
             FederationUtility.State.charterTick = Find.TickManager.TicksGame;
             EventBus.Raise(DominionEventDefOf.Dominion_FederationCharter, Faction.OfPlayer);
-            Find.LetterStack.ReceiveLetter("Dominion_Federation_CharterLabel".Translate(), "Dominion_Federation_CharterText".Translate(),
+            DominionLetters.Send("Dominion_Federation_CharterLabel".Translate(), "Dominion_Federation_CharterText".Translate(),
                 LetterDefOf.PositiveEvent);
         }
     }

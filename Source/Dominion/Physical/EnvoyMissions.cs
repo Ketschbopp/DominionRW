@@ -352,8 +352,8 @@ namespace Dominion
                 return;
             }
             EventBus.Raise(DominionEventDefOf.Dominion_EnvoyCaptured, f, Faction.OfPlayer, detail: envoy.LabelShort);
-            Find.LetterStack.ReceiveLetter("Dominion_EnvoyCaptured_Label".Translate(), "Dominion_EnvoyCaptured_Text".Translate(envoy.LabelShortCap, f.Name),
-                LetterDefOf.NegativeEvent, caravan, f);
+            DominionLetters.Send("Dominion_EnvoyCaptured_Label".Translate(), "Dominion_EnvoyCaptured_Text".Translate(envoy.LabelShortCap, f.Name),
+                LetterDefOf.NegativeEvent, caravan, f, important: true);
         }
     }
 }

@@ -98,8 +98,8 @@ namespace Dominion
             s.visitor = party[0];
             s.status = SummitStatus.LeaderPresent;
             s.expiresTick = Find.TickManager.TicksGame + VisitDurationTicks;
-            Find.LetterStack.ReceiveLetter("Dominion_Summit_ArrivedLabel".Translate(), "Dominion_Summit_ArrivedText".Translate(s.visitor.LabelShortCap, f.Name, s.AgendaLabel),
-                LetterDefOf.PositiveEvent, s.visitor, f);
+            DominionLetters.Send("Dominion_Summit_ArrivedLabel".Translate(), "Dominion_Summit_ArrivedText".Translate(s.visitor.LabelShortCap, f.Name, s.AgendaLabel),
+                LetterDefOf.PositiveEvent, s.visitor, f, important: true);
         }
 
         public override void Hourly()
@@ -258,8 +258,8 @@ namespace Dominion
             // The treaty's share is only paid when the summit actually goes ahead.
             if (arranged && extra > 0f) WorldComponent_Dominion.Instance.Player.AddInfluence(-extra);
             if (arranged)
-                Find.LetterStack.ReceiveLetter("Dominion_Summit_ArrangedLabel".Translate(), ("Dominion_Summit_Arranged_" + venue).Translate(f.Name,
-                    SummitSystem.AbroadWindowDays), LetterDefOf.NeutralEvent, null, f);
+                DominionLetters.Send("Dominion_Summit_ArrangedLabel".Translate(), ("Dominion_Summit_Arranged_" + venue).Translate(f.Name,
+                    SummitSystem.AbroadWindowDays), LetterDefOf.NeutralEvent, null, f, important: true);
             else if (!reason.NullOrEmpty())
                 Report(reason, false);
         }

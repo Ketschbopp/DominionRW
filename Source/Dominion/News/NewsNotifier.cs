@@ -17,6 +17,9 @@ namespace Dominion
             if (mode == NewsNotifyMode.Silent) return;
             if (mode == NewsNotifyMode.Message && settings.letterForMajorNews && n.def.newsworthiness >= MajorNewsworthiness)
                 mode = NewsNotifyMode.Letter;
+            // The Letters setting has the last word: only news of a war on the colony or an ally stays a letter in "important only".
+            if (mode == NewsNotifyMode.Letter && !DominionLetters.Allowed(LetterFor(n) == LetterDefOf.NegativeEvent))
+                mode = NewsNotifyMode.Message;
 
             if (mode == NewsNotifyMode.Letter)
             {

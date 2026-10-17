@@ -203,7 +203,7 @@ namespace Dominion
             }
         }
 
-        private static Faction FactionByLoadId(int loadId)
+        internal static Faction FactionByLoadId(int loadId)
         {
             if (loadId < 0) return null;
             Faction f = WorldComponent_Dominion.Instance?.Cache.FactionById(loadId);

@@ -80,7 +80,7 @@ namespace Dominion
         protected static void Duty(string text, Faction look = null)
         {
             if (CouncilUtility.IsMember(Faction.OfPlayer))
-                Find.LetterStack.ReceiveLetter("Dominion_Decree_DutyLabel".Translate(), text, LetterDefOf.NeutralEvent, null, look != null && !look.IsPlayer ? look : null);
+                DominionLetters.Send("Dominion_Decree_DutyLabel".Translate(), text, LetterDefOf.NeutralEvent, null, look != null && !look.IsPlayer ? look : null, important: true);
         }
 
         /// <summary>Pairs of factions at war that the council can name, attacker first.</summary>
@@ -558,7 +558,7 @@ namespace Dominion
         {
             Faction x = d.targets[0];
             if (x.IsPlayer)
-                Find.LetterStack.ReceiveLetter("Dominion_Decree_ExpelledLabel".Translate(), "Dominion_Decree_Expelled_You".Translate(d.expiresTick >= 0 ? (d.expiresTick - d.passedTick) / GenDate.TicksPerDay : d.def.durationDays), LetterDefOf.NegativeEvent);
+                DominionLetters.Send("Dominion_Decree_ExpelledLabel".Translate(), "Dominion_Decree_Expelled_You".Translate(d.expiresTick >= 0 ? (d.expiresTick - d.passedTick) / GenDate.TicksPerDay : d.def.durationDays), LetterDefOf.NegativeEvent, important: true);
             else S(x).legitimacy = Mathf.Max(0f, S(x).legitimacy - 10f);
         }
     }

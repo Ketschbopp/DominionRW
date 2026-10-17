@@ -326,7 +326,7 @@ namespace Dominion
                 if (level == 2 && r.opinion < -30f && Rand.Chance(0.2f))
                 {
                     comp.Treaties.Cancel(t, f);
-                    Find.LetterStack.ReceiveLetter("Dominion_Dues_LeftLabel".Translate(f.Name), "Dominion_Dues_LeftText".Translate(f.Name), LetterDefOf.NegativeEvent, null, f);
+                    DominionLetters.Send("Dominion_Dues_LeftLabel".Translate(f.Name), "Dominion_Dues_LeftText".Translate(f.Name), LetterDefOf.NegativeEvent, null, f);
                 }
             }
         }

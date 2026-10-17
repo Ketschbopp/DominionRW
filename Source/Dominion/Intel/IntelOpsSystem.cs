@@ -209,7 +209,7 @@ namespace Dominion
                 }
             }
             Svc.Record(op, exposed ? OpOutcome.Compromised : success ? OpOutcome.Success : OpOutcome.Failed);
-            Find.LetterStack.ReceiveLetter("Dominion_Ops_ReportLabel".Translate(op.def.LabelCap), text,
+            DominionLetters.Send("Dominion_Ops_ReportLabel".Translate(op.def.LabelCap), text,
                 success && !exposed ? LetterDefOf.PositiveEvent : exposed ? LetterDefOf.NegativeEvent : LetterDefOf.NeutralEvent, null, op.target);
         }
 
@@ -419,7 +419,7 @@ namespace Dominion
                 foreach (Faction other in comp.Cache.Simulated)
                     if (other != f) comp.GetRelation(other, f).favour -= 3f;
                 EventBus.Raise(DominionEventDefOf.Dominion_ForeignAgentsCaught, Faction.OfPlayer, f);
-                Find.LetterStack.ReceiveLetter("Dominion_Ops_CaughtLabel".Translate(), "Dominion_Ops_CaughtText".Translate(f.Name),
+                DominionLetters.Send("Dominion_Ops_CaughtLabel".Translate(), "Dominion_Ops_CaughtText".Translate(f.Name),
                     LetterDefOf.NeutralEvent, null, f);
                 return;
             }
@@ -453,8 +453,8 @@ namespace Dominion
             if (candidates.Count == 0) return false;
             Building target = candidates.RandomElement();
             target.TryGetComp<CompBreakdownable>().DoBreakdown();
-            Find.LetterStack.ReceiveLetter("Dominion_Ops_SabotageLabel".Translate(), "Dominion_Ops_SabotageText".Translate(target.LabelShort),
-                LetterDefOf.NegativeEvent, target);
+            DominionLetters.Send("Dominion_Ops_SabotageLabel".Translate(), "Dominion_Ops_SabotageText".Translate(target.LabelShort),
+                LetterDefOf.NegativeEvent, target, important: true);
             EventBus.Raise(DominionEventDefOf.Dominion_Sabotage, Faction.OfPlayer, null);
             return true;
         }

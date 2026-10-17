@@ -181,7 +181,13 @@
   <Dominion_Setting_NewsThoughts>Colonists react to news</Dominion_Setting_NewsThoughts>
   <Dominion_Setting_NewsThoughts_Desc>Wars and unrest near the colony, peace, and attacks on allies affect your colonists' mood.</Dominion_Setting_NewsThoughts_Desc>
   <Dominion_Setting_LetterForMajor>Letters for major news</Dominion_Setting_LetterForMajor>
-  <Dominion_Setting_LetterForMajor_Desc>Major news (wars, coups, revolutions, lost capitals, broken treaties, Federation news and other major events) arrives as a letter even in categories set to Message.</Dominion_Setting_LetterForMajor_Desc>
+  <Dominion_Setting_LetterForMajor_Desc>Major news (wars, coups, revolutions, lost capitals, broken treaties, Federation news and other major events) arrives as a letter even in categories set to Message, if the Letters setting allows it.</Dominion_Setting_LetterForMajor_Desc>
+  <Dominion_Setting_Letters>Letters from Dominion</Dominion_Setting_Letters>
+  <Dominion_Setting_Letters_Desc>Which of Dominion's notices arrive as letters in the stack on the right of the screen. Everything else is shown as a message at the top left, and stays in the message history and the paper.\n\nAll: every notice and every news category set to Letter.\nOnly important: threats to the colony (wars declared on you, warbands, ambushes), and things you must act on soon (council summons, duties with a deadline, visitors waiting, treaties about to lapse).\nNone: no letters at all.</Dominion_Setting_Letters_Desc>
+  <Dominion_LetterMode_All>All</Dominion_LetterMode_All>
+  <Dominion_LetterMode_Important>Only important</Dominion_LetterMode_Important>
+  <Dominion_LetterMode_None>None</Dominion_LetterMode_None>
+  <Dominion_Letter_AsMessage>Dominion: {0}</Dominion_Letter_AsMessage>
   <Dominion_Setting_NotifyHeader>How each kind of news reaches you:</Dominion_Setting_NotifyHeader>
 
   <!-- M3: diplomacy -->
