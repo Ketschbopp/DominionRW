@@ -48,6 +48,7 @@ namespace Dominion
         public int newsLogCap = 300;
         public bool falseRumors = true;
         public bool instantNews;
+        public bool visitorShuttles = true;
         public bool colonistNewsThoughts = true;
         public bool letterForMajorNews = true;
         public Dictionary<EventCategory, NewsNotifyMode> notifyModes = new Dictionary<EventCategory, NewsNotifyMode>();
@@ -121,6 +122,7 @@ namespace Dominion
             Scribe_Values.Look(ref newsLogCap, "newsLogCap", 300);
             Scribe_Values.Look(ref falseRumors, "falseRumors", true);
             Scribe_Values.Look(ref instantNews, "instantNews", false);
+            Scribe_Values.Look(ref visitorShuttles, "visitorShuttles", true);
             Scribe_Values.Look(ref colonistNewsThoughts, "colonistNewsThoughts", true);
             Scribe_Values.Look(ref letterForMajorNews, "letterForMajorNews", true);
             Scribe_Collections.Look(ref notifyModes, "notifyModes", LookMode.Value, LookMode.Value);
@@ -172,6 +174,7 @@ namespace Dominion
             newsLogCap = 300;
             falseRumors = true;
             instantNews = false;
+            visitorShuttles = true;
             colonistNewsThoughts = true;
             letterForMajorNews = true;
             notifyModes.Clear();

@@ -32,13 +32,27 @@ namespace Dominion
             delivered.Add(item);
             if (!item.read) UnreadCount++;
             int cap = DominionMod.Settings?.newsLogCap ?? 300;
-            int overflow = delivered.Count - cap;
-            if (overflow > 0)
+            // The oldest stories go first; bookmarked and clipped ones are kept (they do not count toward the cap).
+            int overflow = delivered.Count - cap - KeptCount();
+            for (int i = 0; overflow > 0 && i < delivered.Count;)
             {
-                for (int i = 0; i < overflow; i++)
-                    if (!delivered[i].read) UnreadCount--;
-                delivered.RemoveRange(0, overflow);
+                if (delivered[i].Kept)
+                {
+                    i++;
+                    continue;
+                }
+                if (!delivered[i].read) UnreadCount--;
+                delivered.RemoveAt(i);
+                overflow--;
             }
+        }
+
+        private int KeptCount()
+        {
+            int n = 0;
+            foreach (NewsItem item in delivered)
+                if (item.Kept) n++;
+            return n;
         }
 
         public void MarkRead(NewsItem item)

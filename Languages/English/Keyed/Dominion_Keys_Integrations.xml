@@ -23,4 +23,7 @@
   <!-- Large radio antenna -->
   <Dominion_Radio_AntennaLinked>Linked to {0}: global coverage.</Dominion_Radio_AntennaLinked>
   <Dominion_Radio_NoAntenna>No large radio antenna next to it (build one touching the receiver for global coverage).</Dominion_Radio_NoAntenna>
+
+  <Dominion_Setting_VisitorShuttles>Visitors arrive by shuttle</Dominion_Setting_VisitorShuttles>
+  <Dominion_Setting_VisitorShuttles_Desc>Summit leaders, envoys and council delegates from factions with spacer tech or better land near your colony in a shuttle instead of walking in from the map edge. They still leave on foot when their visit ends.</Dominion_Setting_VisitorShuttles_Desc>
 </LanguageData>

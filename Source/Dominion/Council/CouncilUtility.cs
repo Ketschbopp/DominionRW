@@ -70,6 +70,13 @@ namespace Dominion
         /// <summary>An AI member's vote on a motion: +1 yes, −1 no, 0 abstain.</summary>
         public static int AIVote(Faction voter, Motion m)
         {
+            float u = AILeaning(voter, m);
+            return u > 0.1f ? 1 : u < -0.1f ? -1 : 0;
+        }
+
+        /// <summary>How strongly an AI member leans on a motion: above 0.1 yes, below −0.1 no, close to 0 wavering.</summary>
+        public static float AILeaning(Faction voter, Motion m)
+        {
             float u = m.def.Worker.Utility(voter, m) + m.LobbyFor(voter);
             if (m.sponsor != null && m.sponsor != voter)
             {
@@ -79,8 +86,11 @@ namespace Dominion
                 if (voter.HostileTo(m.sponsor)) u -= 0.4f;
             }
             if (m.sponsor == voter) u += 1f;
-            return u > 0.1f ? 1 : u < -0.1f ? -1 : 0;
+            return u;
         }
+
+        /// <summary>A member close enough to the line that lobbying could tip them.</summary>
+        public static bool Wavering(Faction voter, Motion m) => Mathf.Abs(AILeaning(voter, m)) < 0.3f;
 
         /// <summary>A decree asks the player to act; refusing is a violation.</summary>
         public static void AskPlayer(Decree d, string text, string acceptLabel, Action onAccept)

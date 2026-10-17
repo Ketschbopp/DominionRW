@@ -34,9 +34,58 @@ namespace Dominion
         }
     }
 
+    /// <summary>How an envoy's letter is worded. Warm letters win friends, threatening ones win concessions from the weak.</summary>
+    public enum LetterTone { Warm, Formal, Threatening }
+
     public abstract class DiplomacyActionWorker
     {
         public DiplomacyActionDef def;
+
+        /// <summary>The tone of the letter carrying this action; set by the envoy letter while it executes.</summary>
+        public LetterTone tone = LetterTone.Formal;
+
+        /// <summary>Sent as an envoy's letter (with a tone) rather than straight from the button.</summary>
+        public virtual bool ViaLetter => false;
+
+        /// <summary>Asks for something rather than offering it: a threatening tone helps when you are the stronger.</summary>
+        public virtual bool IsDemand => false;
+
+        /// <summary>The reasons behind <see cref="AcceptanceChance"/>, one per line, or null.</summary>
+        public virtual string ChanceBreakdown(Faction f) => null;
+
+        /// <summary>The chance with a given tone, without changing the worker's tone.</summary>
+        public float? ChanceWith(Faction f, LetterTone t)
+        {
+            LetterTone old = tone;
+            tone = t;
+            try { return AcceptanceChance(f); }
+            finally { tone = old; }
+        }
+
+        /// <summary>What the tone adds to the chance they agree.</summary>
+        protected float ToneChance(Faction f)
+        {
+            switch (tone)
+            {
+                case LetterTone.Warm:
+                    return TheirView(f).opinion >= -20f ? 0.08f : -0.04f;
+                case LetterTone.Threatening:
+                    if (!IsDemand) return -0.12f;
+                    float ratio = DiplomacyHelpers.PlayerStrength() / Mathf.Max(1f, Comp.GetState(f).militaryStrength);
+                    return Mathf.Clamp((ratio - 1f) * 0.15f, -0.1f, 0.15f);
+                default:
+                    return 0f;
+            }
+        }
+
+        /// <summary>How much goodwill a friendly gesture earns in this tone.</summary>
+        protected float ToneFavour => tone == LetterTone.Warm ? 1.25f : tone == LetterTone.Threatening ? 0.5f : 1f;
+
+        /// <summary>How much a hostile gesture stings in this tone.</summary>
+        protected float ToneSting => tone == LetterTone.Warm ? 0.6f : tone == LetterTone.Threatening ? 1.5f : 1f;
+
+        protected void ToneTerm(System.Text.StringBuilder sb, Faction f) =>
+            DominionPaper.Term(sb, ToneChance(f), "Dominion_Odds_Tone".Translate(("Dominion_Tone_" + tone).Translate()));
 
         /// <summary>Whether the button appears at all for this faction.</summary>
         public virtual bool Visible(Faction f) => true;
@@ -53,6 +102,7 @@ namespace Dominion
         /// <summary>Spends influence and starts the cooldown. Call when the action actually happens.</summary>
         protected void Commit(Faction f, float extraInfluence = 0f)
         {
+            reportFaction = f;
             PlayerState player = WorldComponent_Dominion.Instance.Player;
             player.AddInfluence(-(def.influenceCost + extraInfluence));
             if (def.cooldownDays > 0)
@@ -65,8 +115,15 @@ namespace Dominion
 
         protected static RelationState OurPolicy(Faction f) => Comp.GetRelation(Faction.OfPlayer, f);
 
-        protected static void Report(string text, bool good) =>
+        /// <summary>The faction of the action being carried out, so its report goes into that faction's record.</summary>
+        private static Faction reportFaction;
+
+        protected static void Report(string text, bool good)
+        {
             Messages.Message(text, good ? MessageTypeDefOf.PositiveEvent : MessageTypeDefOf.NegativeEvent, historical: true);
+            if (reportFaction != null) Comp?.Player.Log(reportFaction, text, good ? 1 : -1);
+            reportFaction = null;
+        }
 
         protected static float Clamp(float chance) => Mathf.Clamp(chance, 0.02f, 0.95f);
     }

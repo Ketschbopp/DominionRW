@@ -171,17 +171,28 @@ namespace Dominion
             && Find.WorldPawns.Contains(leader)
             && Find.WorldPawns.GetSituation(leader) is WorldPawnSituation.Free or WorldPawnSituation.FactionLeader;
 
+        /// <summary>
+        /// Brings a visiting party in: by shuttle for factions with spacer tech or better (see <see cref="ShuttleVisits"/>),
+        /// otherwise on foot from the map edge. They stay for <paramref name="durationTicks"/>, then leave.
+        /// </summary>
         public static bool SpawnVisitors(Faction f, Map map, List<Pawn> pawns, int durationTicks)
         {
             if (map == null || pawns.Count == 0) return false;
+            if (ShuttleVisits.TryArrive(f, map, pawns, durationTicks)) return true;
             if (!TryFindEntry(map, out IntVec3 edge))
                 return false;
             foreach (Pawn p in pawns)
                 GenSpawn.Spawn(p, CellFinder.RandomClosewalkCellNear(edge, map, 5, null), map);
-            if (!RCellFinder.TryFindRandomSpotJustOutsideColony(edge, map, out IntVec3 chill))
-                chill = edge;
-            LordMaker.MakeNewLord(f, new LordJob_VisitColony(f, chill, durationTicks), map, pawns);
+            MakeVisitLord(f, map, pawns, durationTicks, edge);
             return true;
+        }
+
+        /// <summary>The visiting duty: wait near the colony for the given time, then leave.</summary>
+        public static void MakeVisitLord(Faction f, Map map, List<Pawn> pawns, int durationTicks, IntVec3 from)
+        {
+            if (!RCellFinder.TryFindRandomSpotJustOutsideColony(from, map, out IntVec3 chill))
+                chill = from;
+            LordMaker.MakeNewLord(f, new LordJob_VisitColony(f, chill, durationTicks), map, pawns);
         }
 
         /// <summary>An envoy with a couple of guards.</summary>

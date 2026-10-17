@@ -87,6 +87,28 @@ namespace Dominion
         /// <summary>Tracks leader changes so legitimacy resets for a new leader.</summary>
         public Pawn lastKnownLeader;
 
+        /// <summary>Daily snapshots of stability, economy and military strength, oldest first (a week), for trend arrows.</summary>
+        public List<float> histStability = new List<float>();
+        public List<float> histEconomy = new List<float>();
+        public List<float> histMilitary = new List<float>();
+        public const int HistoryDays = 7;
+
+        public void RecordHistory()
+        {
+            Push(histStability, stability);
+            Push(histEconomy, economyIndex);
+            Push(histMilitary, militaryStrength);
+        }
+
+        private static void Push(List<float> list, float v)
+        {
+            list.Add(v);
+            while (list.Count > HistoryDays) list.RemoveAt(0);
+        }
+
+        /// <summary>Change since the oldest snapshot (up to a week ago), or 0 with no history.</summary>
+        public static float Trend(List<float> hist, float now) => hist == null || hist.Count == 0 ? 0f : now - hist[0];
+
         // Recomputed daily, not saved.
         [Unsaved] public int activeWars;
         [Unsaved] public float effectiveAggression;
@@ -190,6 +212,9 @@ namespace Dominion
             Scribe_References.Look(ref lastKnownLeader, "lastKnownLeader");
             Scribe_Values.Look(ref lastRaidOnPlayerTick, "lastRaidOnPlayerTick", -999999);
             Scribe_Values.Look(ref sabotagedUntilTick, "sabotagedUntilTick", -1);
+            Scribe_Collections.Look(ref histStability, "histStability", LookMode.Value);
+            Scribe_Collections.Look(ref histEconomy, "histEconomy", LookMode.Value);
+            Scribe_Collections.Look(ref histMilitary, "histMilitary", LookMode.Value);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
@@ -200,6 +225,9 @@ namespace Dominion
                 }
                 if (blocs == null || blocs.Length != BlocCount) blocs = new float[BlocCount];
                 timedShocks ??= new List<TimedShock>();
+                histStability ??= new List<float>();
+                histEconomy ??= new List<float>();
+                histMilitary ??= new List<float>();
                 // The effective personality is not saved; rebuild it now so it is right before this faction's slot runs.
                 if (faction != null)
                 {

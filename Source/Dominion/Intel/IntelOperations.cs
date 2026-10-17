@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -88,10 +89,58 @@ namespace Dominion
         public abstract void Succeed(Operation op);
     }
 
+    /// <summary>How much risk an operation takes: faster and likelier to work when bold, but likelier to be caught.</summary>
+    public enum OpRisk { Cautious, Normal, Bold }
+
+    public enum OpOutcome { Success, Failed, Compromised, Recalled }
+
+    /// <summary>An operation in the archive. Saved.</summary>
+    public class OpRecord : IExposable
+    {
+        public OperationDef def;
+        public Faction target;
+        public string targetName;
+        public int tick;
+        public OpOutcome outcome;
+        public string agents;
+
+        public void ExposeData()
+        {
+            Scribe_Defs.Look(ref def, "def");
+            Scribe_References.Look(ref target, "target");
+            Scribe_Values.Look(ref targetName, "targetName");
+            Scribe_Values.Look(ref tick, "tick");
+            Scribe_Values.Look(ref outcome, "outcome");
+            Scribe_Values.Look(ref agents, "agents");
+        }
+    }
+
+    /// <summary>Signs that a foreign service is working against the colony: traced to a faction, with some confidence. Saved.</summary>
+    public class Suspicion : IExposable
+    {
+        public Faction faction;
+        public int tick;
+        public float confidence;
+        public string kind;
+
+        public void ExposeData()
+        {
+            Scribe_References.Look(ref faction, "faction");
+            Scribe_Values.Look(ref tick, "tick");
+            Scribe_Values.Look(ref confidence, "confidence");
+            Scribe_Values.Look(ref kind, "kind");
+        }
+    }
+
     /// <summary>Agents abroad on an operation. They are away from the colony until it ends. Saved.</summary>
     public class Operation : IExposable
     {
         public int id = -1;
+
+        public OpRisk risk = OpRisk.Normal;
+
+        /// <summary>A colonist who runs the operation from home: adds their skill, does not travel.</summary>
+        public Pawn handler;
         public OperationDef def;
         public Faction target;
         public List<Pawn> agents = new List<Pawn>();
@@ -136,6 +185,9 @@ namespace Dominion
             Scribe_Values.Look(ref targetIsLeader, "targetIsLeader");
             Scribe_Values.Look(ref alerted, "alerted");
             Scribe_Values.Look(ref achieved, "achieved");
+            Scribe_Values.Look(ref risk, "risk", OpRisk.Normal);
+            if (Scribe.mode == LoadSaveMode.Saving && handler != null && handler.Discarded) handler = null;
+            Scribe_References.Look(ref handler, "handler");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 agents ??= new List<Pawn>();
@@ -154,6 +206,22 @@ namespace Dominion
         private Dictionary<int, float> networks = new Dictionary<int, float>();
         public int counterIntelUntil = -1;
         private int nextId;
+
+        /// <summary>Finished operations, newest last (capped).</summary>
+        public List<OpRecord> history = new List<OpRecord>();
+
+        /// <summary>Suspected foreign operations against the colony, newest last (capped).</summary>
+        public List<Suspicion> suspicions = new List<Suspicion>();
+
+        public void Record(Operation op, OpOutcome outcome)
+        {
+            history.Add(new OpRecord
+            {
+                def = op.def, target = op.target, targetName = op.target?.Name, tick = Find.TickManager.TicksGame, outcome = outcome,
+                agents = string.Join(", ", op.agents.Where(p => p != null).Select(p => p.LabelShortCap)),
+            });
+            if (history.Count > 60) history.RemoveAt(0);
+        }
 
         public int NewId() => nextId++;
 
@@ -189,8 +257,14 @@ namespace Dominion
             Scribe_Values.Look(ref counterIntelUntil, "counterIntelUntil", -1);
             Scribe_Values.Look(ref nextId, "nextId");
             Scribe_Collections.Look(ref returning, "returning", LookMode.Reference);
+            Scribe_Collections.Look(ref history, "history", LookMode.Deep);
+            Scribe_Collections.Look(ref suspicions, "suspicions", LookMode.Deep);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
+                history ??= new List<OpRecord>();
+                history.RemoveAll(h => h?.def == null);
+                suspicions ??= new List<Suspicion>();
+                suspicions.RemoveAll(x => x?.faction == null);
                 operations ??= new List<Operation>();
                 networks ??= new Dictionary<int, float>();
                 returning ??= new List<Pawn>();

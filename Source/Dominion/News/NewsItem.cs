@@ -48,6 +48,14 @@ namespace Dominion
         public bool delivered;
         public bool read;
 
+        /// <summary>Bookmarked by the player: listed first and kept when old news is thrown out.</summary>
+        public bool bookmarked;
+
+        /// <summary>Clipped into the scrapbook: kept when old news is thrown out.</summary>
+        public bool clipped;
+
+        public bool Kept => bookmarked || clipped;
+
         public string detail;
 
         public string headline;
@@ -98,6 +106,8 @@ namespace Dominion
             Scribe_Values.Look(ref investigated, "investigated");
             Scribe_Values.Look(ref delivered, "delivered");
             Scribe_Values.Look(ref read, "read");
+            Scribe_Values.Look(ref bookmarked, "bookmarked");
+            Scribe_Values.Look(ref clipped, "clipped");
             Scribe_Values.Look(ref detail, "detail");
             Scribe_Values.Look(ref headline, "headline");
             Scribe_Values.Look(ref story, "story");

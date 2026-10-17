@@ -111,8 +111,9 @@ namespace Dominion
             reg.wars.Remove(w);
             WarbandUtility.Recall(a, b);
             Faction loser = w.capitulating;
-            string text = PeaceTerms.Apply(w, loser, out string outcome);
-            Faction winner = loser != null ? w.Other(loser) : w.Leader();
+            string outcome;
+            string text = w.deal != null && loser == null ? w.deal.Apply(w, out outcome) : PeaceTerms.Apply(w, loser, out outcome);
+            Faction winner = loser != null ? w.Other(loser) : w.deal != null ? null : w.Leader();
             if (loser != null)
                 EventBus.Raise(DominionEventDefOf.Dominion_Capitulation, loser, winner, detail: outcome);
             else if (winner != null)

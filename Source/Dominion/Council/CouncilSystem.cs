@@ -247,14 +247,17 @@ namespace Dominion
             }
         }
 
-        /// <summary>Counts the votes, passes decrees, reports, and closes the session.</summary>
-        public static void Resolve(Dictionary<Motion, int> playerVotes)
+        /// <summary>Counts the votes, passes decrees, reports, and closes the session. Returns which motions carried.</summary>
+        public static Dictionary<Motion, bool> Resolve(Dictionary<Motion, int> playerVotes)
         {
             CouncilState c = State;
             var report = new StringBuilder();
+            var results = new Dictionary<Motion, bool>();
             weightCache.Invalidate();
+            KeepPromises(playerVotes);
             foreach (Motion m in c.agenda)
             {
+                results[m] = false;
                 if (m.def.Worker.InvalidReason(m.targets) != null)
                 {
                     report.AppendLine("Dominion_Council_Rejected".Translate().ToString() + " " + m.Summary + "  " + "Dominion_Council_MotionVoid".Translate().ToString());
@@ -266,11 +269,47 @@ namespace Dominion
                 string vetoNote = m.vetoed ? " " + "Dominion_Council_Vetoed".Translate().ToString() : "";
                 report.AppendLine((passed ? "Dominion_Council_Passed" : "Dominion_Council_Rejected").Translate().ToString() + " " + m.Summary + "  "
                                   + "Dominion_Council_VoteResult".Translate(yes.ToString("F1"), no.ToString("F1")).ToString() + vetoNote);
+                results[m] = passed;
                 if (passed) Pass(m);
                 else EventBus.Raise(DominionEventDefOf.Dominion_MotionRejected, m.sponsor, m.targets.FirstOrDefault(), detail: m.Summary);
             }
             Close(report.ToString());
+            return results;
         }
+
+        /// <summary>
+        /// Promises made while lobbying: members the player promised to back expect an AYE on their own motions.
+        /// A kept promise wins favour, a broken one a grievance. Promises last until that member next sponsors a motion.
+        /// </summary>
+        private static void KeepPromises(Dictionary<Motion, int> playerVotes)
+        {
+            CouncilState c = State;
+            PlayerState player = WorldComponent_Dominion.Instance.Player;
+            if (player.councilPromises.Count == 0 || !c.attending.Contains(Faction.OfPlayer)) return;
+            foreach (Motion m in c.agenda)
+            {
+                if (m.sponsor == null || !player.councilPromises.Contains(m.sponsor.loadID)) continue;
+                player.councilPromises.Remove(m.sponsor.loadID);
+                RelationState r = WorldComponent_Dominion.Instance.GetRelation(m.sponsor, Faction.OfPlayer);
+                bool kept = playerVotes.TryGetValue(m, out int v) && v > 0;
+                if (kept) r.favour += 6f;
+                else r.grievance += 12f;
+                string text = (kept ? "Dominion_Council_PromiseKept" : "Dominion_Council_PromiseBroken").Translate(m.sponsor.Name, m.Summary);
+                player.Log(m.sponsor, text, kept ? 1 : -1);
+                Messages.Message(text, kept ? MessageTypeDefOf.PositiveEvent : MessageTypeDefOf.NegativeEvent, historical: true);
+            }
+        }
+
+        /// <summary>Whether a motion would pass with these votes, as the gavel would count it.</summary>
+        public static bool WouldPass(Motion m, Dictionary<Motion, int> playerVotes)
+        {
+            if (m.vetoed || m.def.Worker.InvalidReason(m.targets) != null) return false;
+            Tally(m, playerVotes, out float yes, out float no);
+            return yes > no && yes >= 0.34f * TotalWeight();
+        }
+
+        /// <summary>The weight needed for a motion to carry: a third of the room.</summary>
+        public static float Quorum => 0.34f * TotalWeight();
 
         // The session window tallies every frame; weights barely move during a session.
         private static readonly UICache<Faction, float> weightCache = new UICache<Faction, float>(f => CouncilUtility.VoteWeight(f, State.attending), 2f);

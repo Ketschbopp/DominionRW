@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Statecraft desk: treaties, letters, peace table, ballot, intelligence terminal, Federation, news QOL. -->
+  <!-- ============ shared: paper, odds, jumps ============ -->
+  <Dominion_Paper_Odds>Odds they agree</Dominion_Paper_Odds>
+  <Dominion_Paper_OddsShort>{0} chance</Dominion_Paper_OddsShort>
+  <Dominion_Paper_Locked>The ink is dry: it has been sent.</Dominion_Paper_Locked>
+  <Dominion_Paper_Reading>Their envoy reads it over</Dominion_Paper_Reading>
+  <Dominion_Paper_FileAway>File it away</Dominion_Paper_FileAway>
+  <Dominion_Paper_HeadOfStateOf>Head of State, {0}</Dominion_Paper_HeadOfStateOf>
+  <Dominion_Paper_ForThePeopleOf>For the people of {0}</Dominion_Paper_ForThePeopleOf>
+  <Dominion_Paper_ForTheGovernmentOf>For the government of {0}</Dominion_Paper_ForTheGovernmentOf>
+  <Dominion_Paper_Between>between {0} and {1}</Dominion_Paper_Between>
+  <Dominion_Paper_RenewTitle>{0}, renewed</Dominion_Paper_RenewTitle>
+  <Dominion_Paper_Preamble>The undersigned, speaking for {0} and for {1}, being of sound mind and mostly sober, and wishing that fewer of their people be shot by the other's, do agree as follows.</Dominion_Paper_Preamble>
+  <Dominion_Paper_Article1>Article I. Provisions</Dominion_Paper_Article1>
+  <Dominion_Paper_Article2>Article II. Term</Dominion_Paper_Article2>
+  <Dominion_Paper_Article3>Article III. Considerations</Dominion_Paper_Article3>
+  <Dominion_Paper_OpenEnded>This treaty holds until either party ends it.</Dominion_Paper_OpenEnded>
+  <Dominion_Paper_Sweetener>Silver offered</Dominion_Paper_Sweetener>
+  <Dominion_Paper_Sweetener_Desc>Silver handed over if, and only if, they sign. Greedy governments are swayed more by it.</Dominion_Paper_Sweetener_Desc>
+  <Dominion_Paper_Press>Press the case</Dominion_Paper_Press>
+  <Dominion_Paper_Press_Desc>Spend extra influence leaning on their officials: a little better odds, spent whatever they answer.</Dominion_Paper_Press_Desc>
+  <Dominion_Paper_Silver>{0} silver</Dominion_Paper_Silver>
+  <Dominion_Paper_Influence>+{0} influence</Dominion_Paper_Influence>
+  <Dominion_Paper_Bill>Sending it costs {0} influence, whatever the answer. Silver ({1}) changes hands only if they sign.</Dominion_Paper_Bill>
+  <Dominion_Paper_SignAndSend>Sign and send</Dominion_Paper_SignAndSend>
+  <Dominion_Paper_SignAndSend_Desc>Put your name to it and send it to {0}. They will seal it, refuse it, or name a price.</Dominion_Paper_SignAndSend_Desc>
+  <Dominion_Paper_CounterText>{0} will sign, they say, for another {1} silver ({2} in all). Their envoy is smiling in a way you do not like.</Dominion_Paper_CounterText>
+  <Dominion_Paper_AcceptCounter>Pay {0} silver</Dominion_Paper_AcceptCounter>
+  <Dominion_Paper_DeclineCounter>Refuse</Dominion_Paper_DeclineCounter>
+  <Dominion_Paper_SignedOn>Signed on {0}.</Dominion_Paper_SignedOn>
+  <Dominion_Paper_ExpiresOn>Lapses on {0} (in {1}).</Dominion_Paper_ExpiresOn>
+  <Dominion_Paper_Renewals>Renewed {0} times.</Dominion_Paper_Renewals>
+
+  <Dominion_Odds_Title>Why {0} might agree:</Dominion_Odds_Title>
+  <Dominion_Odds_Total>Overall: {0}</Dominion_Odds_Total>
+  <Dominion_Odds_Base>the usual odds</Dominion_Odds_Base>
+  <Dominion_Odds_Opinion>their opinion of you ({0})</Dominion_Odds_Opinion>
+  <Dominion_Odds_OpinionTooLow>They will not even read it: their opinion of you ({0}) is below {1}.</Dominion_Odds_OpinionTooLow>
+  <Dominion_Odds_TooFar>Too far away: they only sign this with neighbours within {0} tiles.</Dominion_Odds_TooFar>
+  <Dominion_Odds_Personality>their government's temperament</Dominion_Odds_Personality>
+  <Dominion_Odds_Leader>your head of state's standing</Dominion_Odds_Leader>
+  <Dominion_Odds_Federation>the pull of the Federation</Dominion_Odds_Federation>
+  <Dominion_Odds_ShortTerm>a short term asks less of them</Dominion_Odds_ShortTerm>
+  <Dominion_Odds_LongTerm>a long term asks more of them</Dominion_Odds_LongTerm>
+  <Dominion_Odds_Silver>{0} silver on the table</Dominion_Odds_Silver>
+  <Dominion_Odds_Press>{0} influence spent pressing the case</Dominion_Odds_Press>
+  <Dominion_Odds_Renewal>renewing what already works</Dominion_Odds_Renewal>
+  <Dominion_Odds_Tone>the tone of the letter ({0})</Dominion_Odds_Tone>
+  <Dominion_Odds_WarScore>how the war is going for them</Dominion_Odds_WarScore>
+  <Dominion_Odds_Weariness>their war weariness</Dominion_Odds_Weariness>
+  <Dominion_Odds_Doves>the doves in their government</Dominion_Odds_Doves>
+  <Dominion_Odds_Strength>your strength against theirs</Dominion_Odds_Strength>
+  <Dominion_Odds_StrengthRatio>Your strength is {0} times theirs.</Dominion_Odds_StrengthRatio>
+  <Dominion_Odds_KeepSettlements>settlements you keep</Dominion_Odds_KeepSettlements>
+  <Dominion_Odds_TheirSettlements>settlements they hold</Dominion_Odds_TheirSettlements>
+  <Dominion_Odds_Reparations>{0} silver demanded of them</Dominion_Odds_Reparations>
+  <Dominion_Odds_Prisoners>prisoners released</Dominion_Odds_Prisoners>
+  <Dominion_Odds_VictorsTerms>victor's terms sting</Dominion_Odds_VictorsTerms>
+
+  <Dominion_UI_Search>Search...</Dominion_UI_Search>
+  <Dominion_UI_Search_Desc>Type part of a faction's name to find it.</Dominion_UI_Search_Desc>
+  <Dominion_UI_SortLabel>Sort: {0}</Dominion_UI_SortLabel>
+  <Dominion_UI_Sort_Desc>Order the list. Pinned factions always come first.</Dominion_UI_Sort_Desc>
+  <Dominion_UI_Sort_Name>name</Dominion_UI_Sort_Name>
+  <Dominion_UI_Sort_Goodwill>goodwill</Dominion_UI_Sort_Goodwill>
+  <Dominion_UI_Sort_Strength>strength</Dominion_UI_Sort_Strength>
+  <Dominion_UI_Sort_Distance>distance</Dominion_UI_Sort_Distance>
+  <Dominion_UI_Sort_Treaties>treaties with you</Dominion_UI_Sort_Treaties>
+  <Dominion_UI_Filter_Desc>Show only some factions.</Dominion_UI_Filter_Desc>
+  <Dominion_UI_Filter_All>All factions</Dominion_UI_Filter_All>
+  <Dominion_UI_Filter_Pinned>Pinned</Dominion_UI_Filter_Pinned>
+  <Dominion_UI_Filter_Allies>Allies</Dominion_UI_Filter_Allies>
+  <Dominion_UI_Filter_Neutral>Neutral</Dominion_UI_Filter_Neutral>
+  <Dominion_UI_Filter_Hostile>Hostile</Dominion_UI_Filter_Hostile>
+  <Dominion_UI_Filter_Partners>Treaty partners</Dominion_UI_Filter_Partners>
+  <Dominion_UI_NoMatch>No faction matches.</Dominion_UI_NoMatch>
+  <Dominion_UI_Pin>Pin to the top of the list</Dominion_UI_Pin>
+  <Dominion_UI_Unpin>Unpin</Dominion_UI_Unpin>
+  <Dominion_UI_Distance>Nearest settlements {0} tiles apart.</Dominion_UI_Distance>
+  <Dominion_UI_SortBy>Click to sort by {0}; click again to reverse.</Dominion_UI_SortBy>
+  <Dominion_UI_Trend>{0} over the last {1} days.</Dominion_UI_Trend>
+  <Dominion_UI_MapLegend>Large dots: {0}. White: you. Red lines: wars. Arrows: warbands. Click a dot to find it on the world map.</Dominion_UI_MapLegend>
+  <Dominion_UI_NoSettlement>{0} has no settlement to show.</Dominion_UI_NoSettlement>
+  <Dominion_UI_Jump_Dossier>Dossier</Dominion_UI_Jump_Dossier>
+  <Dominion_UI_Jump_Dossier_Desc>Open {0}'s dossier in the Overview tab.</Dominion_UI_Jump_Dossier_Desc>
+  <Dominion_UI_Jump_Diplomacy>Diplomacy</Dominion_UI_Jump_Diplomacy>
+  <Dominion_UI_Jump_Diplomacy_Desc>Open diplomacy with {0}.</Dominion_UI_Jump_Diplomacy_Desc>
+  <Dominion_UI_Jump_War>Wars</Dominion_UI_Jump_War>
+  <Dominion_UI_Jump_War_Desc>Show the War tab with {0}'s wars first.</Dominion_UI_Jump_War_Desc>
+  <Dominion_UI_Jump_Intel>Intel</Dominion_UI_Jump_Intel>
+  <Dominion_UI_Jump_Intel_Desc>Open the intelligence service's file on {0}.</Dominion_UI_Jump_Intel_Desc>
+  <Dominion_UI_Jump_Map>Capital</Dominion_UI_Jump_Map>
+  <Dominion_UI_Jump_Map_Desc>Find {0}'s capital on the world map.</Dominion_UI_Jump_Map_Desc>
+
+  <!-- ============ treaties ============ -->
+  <Dominion_Treaties_Mode_Cabinet>Your treaties</Dominion_Treaties_Mode_Cabinet>
+  <Dominion_Treaties_Mode_Cabinet_Desc>Every treaty you are party to, as a sealed card. Click one to read it, renew it or tear it up.</Dominion_Treaties_Mode_Cabinet_Desc>
+  <Dominion_Treaties_Mode_World>The world's treaties</Dominion_Treaties_Mode_World>
+  <Dominion_Treaties_Mode_World_Desc>Treaties between other factions that your intelligence knows about.</Dominion_Treaties_Mode_World_Desc>
+  <Dominion_Treaties_Mode_Web>Treaty web</Dominion_Treaties_Mode_Web>
+  <Dominion_Treaties_Mode_Web_Desc>Who is bound to whom, at a glance.</Dominion_Treaties_Mode_Web_Desc>
+  <Dominion_Treaties_Draft>Draft a treaty...</Dominion_Treaties_Draft>
+  <Dominion_Treaties_Draft_Desc>Open the signing desk: pick a partner and a treaty, set its terms and sign.</Dominion_Treaties_Draft_Desc>
+  <Dominion_Treaties_NoneYours>You are party to no treaties. The desk is empty and the ink is fresh.</Dominion_Treaties_NoneYours>
+  <Dominion_Treaties_DaysLeft>{0} days left</Dominion_Treaties_DaysLeft>
+  <Dominion_Treaties_ClickToRead>Click to read the treaty.</Dominion_Treaties_ClickToRead>
+  <Dominion_Treaties_Legend>Kinds of treaty</Dominion_Treaties_Legend>
+  <Dominion_Treaties_WebHelp>Hover a faction to light up its treaties; click it to keep it lit. Only treaties your intelligence knows of are shown.</Dominion_Treaties_WebHelp>
+  <Dominion_Treaty_ChooseKind>Which treaty with {0}?</Dominion_Treaty_ChooseKind>
+  <Dominion_Treaty_ChoosePartner>A treaty with whom?</Dominion_Treaty_ChoosePartner>
+  <Dominion_Treaty_Renew>Renew</Dominion_Treaty_Renew>
+  <Dominion_Treaty_Amend>Amend</Dominion_Treaty_Amend>
+  <Dominion_Treaty_Renew_Desc>Back to the signing desk: renew it, or change its term, with {0}. It then runs from today. Renewing a treaty that works is easier than signing a new one.</Dominion_Treaty_Renew_Desc>
+  <Dominion_Treaty_TearUp>Tear it up</Dominion_Treaty_TearUp>
+  <Dominion_Treaty_TearUp_Desc>End the treaty now.</Dominion_Treaty_TearUp_Desc>
+  <Dominion_Treaty_TornUp>You tore up the {0}.</Dominion_Treaty_TornUp>
+  <Dominion_Treaty_NoLongerInForce>That treaty is no longer in force.</Dominion_Treaty_NoLongerInForce>
+  <Dominion_Treaty_Renewed>{0} renewed the {1} for {2} days.</Dominion_Treaty_Renewed>
+  <Dominion_Treaty_RenewRefused>{0} would not renew the {1}.</Dominion_Treaty_RenewRefused>
+  <Dominion_Treaty_SilverPaid>{0} silver changed hands.</Dominion_Treaty_SilverPaid>
+  <Dominion_Term_0>Short ({0} days)</Dominion_Term_0>
+  <Dominion_Term_1>Usual ({0} days)</Dominion_Term_1>
+  <Dominion_Term_2>Long ({0} days)</Dominion_Term_2>
+  <Dominion_Term_0_Desc>Half the usual term. Easier to agree to.</Dominion_Term_0_Desc>
+  <Dominion_Term_1_Desc>The usual term for this treaty.</Dominion_Term_1_Desc>
+  <Dominion_Term_2_Desc>Twice the usual term. Harder to agree to, but you will not be back at the desk for a while.</Dominion_Term_2_Desc>
+  <Dominion_TreatyExpiring_Label>{0} lapsing</Dominion_TreatyExpiring_Label>
+  <Dominion_TreatyExpiring_Text>The {0} with {1} lapses in {2} days. Renew it at the signing desk, or let it go.</Dominion_TreatyExpiring_Text>
+  <Dominion_Provision_Alliance>The parties are allies, in war and in peace.</Dominion_Provision_Alliance>
+  <Dominion_Provision_NonAggression>Neither party shall take up arms against the other.</Dominion_Provision_NonAggression>
+  <Dominion_Provision_Defensive>Each party comes to the other's defence if it is attacked.</Dominion_Provision_Defensive>
+  <Dominion_Provision_Trade>Trade between the parties is cheaper both ways ({0}).</Dominion_Provision_Trade>
+  <Dominion_Provision_Intel>The parties share what they know (+{0} intel on the partner).</Dominion_Provision_Intel>
+  <Dominion_Provision_Opinion>Goodwill between the parties ({0} opinion).</Dominion_Provision_Opinion>
+  <Dominion_Provision_Economy>Prosperity for both ({0} economy).</Dominion_Provision_Economy>
+  <Dominion_Provision_Tribute>{0} pays tribute to {1}.</Dominion_Provision_Tribute>
+  <Dominion_Provision_Puppet>{0} is a protectorate of {1}, and follows it to war.</Dominion_Provision_Puppet>
+  <Dominion_Provision_Federation>Membership of the Federation, with its rights and its dues.</Dominion_Provision_Federation>
+  <Dominion_TearUp_Grievance>{0} will hold a grievance for it.</Dominion_TearUp_Grievance>
+  <Dominion_TearUp_Violation>This is a violation, not a notice: {0} and everyone watching will think less of you.</Dominion_TearUp_Violation>
+  <Dominion_TearUp_Alliance>You and {0} stop being allies.</Dominion_TearUp_Alliance>
+  <Dominion_TearUp_Federation>{0} leaves the Federation.</Dominion_TearUp_Federation>
+  <Dominion_TearUp_ForgiveTribute>{0} stops paying you tribute.</Dominion_TearUp_ForgiveTribute>
+
+  <!-- ============ diplomacy ============ -->
+  <Dominion_Dip_Desk_Desc>Your best leadership desk. Advanced diplomacy needs one, and a head of state.</Dominion_Dip_Desk_Desc>
+  <Dominion_Dip_Comms_Desc>A powered comms console lets you send basic diplomacy without a desk.</Dominion_Dip_Comms_Desc>
+  <Dominion_Dip_History>What passed between you</Dominion_Dip_History>
+  <Dominion_Dip_History_Desc>Everything you did toward this faction, what came of it, and what they did to you.</Dominion_Dip_History_Desc>
+  <Dominion_Dip_HistoryAll>Show all {0}</Dominion_Dip_HistoryAll>
+  <Dominion_Dip_HistoryLess>Show fewer</Dominion_Dip_HistoryLess>
+  <Dominion_Dip_HistoryNone>Nothing yet.</Dominion_Dip_HistoryNone>
+  <Dominion_Dip_HistoryYou>You:</Dominion_Dip_HistoryYou>
+  <Dominion_Dip_HistoryThem>They:</Dominion_Dip_HistoryThem>
+  <Dominion_Letter_Tip>Sent as an envoy's letter: choose its tone before you seal it.</Dominion_Letter_Tip>
+  <Dominion_Letter_Salutation>To {0}, {1}:</Dominion_Letter_Salutation>
+  <Dominion_Letter_Tone>Tone</Dominion_Letter_Tone>
+  <Dominion_Letter_Enclosed>Enclosed</Dominion_Letter_Enclosed>
+  <Dominion_Letter_Reply>Their answer</Dominion_Letter_Reply>
+  <Dominion_Letter_SealAndSend>Seal and send</Dominion_Letter_SealAndSend>
+  <Dominion_Letter_SealAndSend_Desc>Sign it, press your seal into the wax and send it to {0}.</Dominion_Letter_SealAndSend_Desc>
+  <Dominion_Letter_Delivered>The letter was delivered to {0}. Whether it was read is another matter.</Dominion_Letter_Delivered>
+  <Dominion_Letter_LogLine>{0} ({1} letter)</Dominion_Letter_LogLine>
+  <Dominion_Tone_Warm>Warm</Dominion_Tone_Warm>
+  <Dominion_Tone_Formal>Formal</Dominion_Tone_Formal>
+  <Dominion_Tone_Threatening>Threatening</Dominion_Tone_Threatening>
+  <Dominion_Tone_Warm_Desc>Friendly words. Gestures of goodwill count for more, if they do not already loathe you; insults lose their bite.</Dominion_Tone_Warm_Desc>
+  <Dominion_Tone_Formal_Desc>Correct, cold and safe. No bonus, no risk.</Dominion_Tone_Formal_Desc>
+  <Dominion_Tone_Threatening_Desc>A veiled threat. Demands work better when you are the stronger; friendly gestures are spoiled, insults cut deeper, and they will resent it.</Dominion_Tone_Threatening_Desc>
+  <Dominion_Tone_Warm_Effect>Warm: goodwill earned ×1.25; better odds unless they already despise you; hostile words sting less (×0.6).</Dominion_Tone_Warm_Effect>
+  <Dominion_Tone_Formal_Effect>Formal: no changes.</Dominion_Tone_Formal_Effect>
+  <Dominion_Tone_Threatening_Effect>Threatening: demands gain from your strength; goodwill earned ×0.5; hostile words sting more (×1.5); they gain a small grievance.</Dominion_Tone_Threatening_Effect>
+  <Dominion_Letter_Closing_Warm>With every good wish for your health and harvest,</Dominion_Letter_Closing_Warm>
+  <Dominion_Letter_Closing_Formal>Respectfully,</Dominion_Letter_Closing_Formal>
+  <Dominion_Letter_Closing_Threatening>We trust you will not make us write again,</Dominion_Letter_Closing_Threatening>
+  <Dominion_Letter_Dominion_Gift_Warm>Friends! Please accept these {2} silver from the people of {3}, with our warmest thoughts. Spend it on something nice. Or on walls. We do not judge.</Dominion_Letter_Dominion_Gift_Warm>
+  <Dominion_Letter_Dominion_Gift_Formal>The government of {3} presents {2} silver to the government of {0}, as a token of regard.</Dominion_Letter_Dominion_Gift_Formal>
+  <Dominion_Letter_Dominion_Gift_Threatening>Here are {2} silver. Consider what else we could afford to send, and in which direction.</Dominion_Letter_Dominion_Gift_Threatening>
+  <Dominion_Letter_Dominion_Compliment_Warm>We have long admired the people of {0}: your craftsmanship, your courage, and the remarkable state of your roads. It is an honour to be your neighbours.</Dominion_Letter_Dominion_Compliment_Warm>
+  <Dominion_Letter_Dominion_Compliment_Formal>The government of {3} notes with approval the good order of {0} and the wise leadership of {1}.</Dominion_Letter_Dominion_Compliment_Formal>
+  <Dominion_Letter_Dominion_Compliment_Threatening>Your settlements are very well built. It would be a shame if anything happened to them. We say this as an admirer.</Dominion_Letter_Dominion_Compliment_Threatening>
+  <Dominion_Letter_Dominion_Insult_Warm>With the greatest affection, we must observe that your soup is thin, your banners are faded and your leader's hat is a matter of public concern.</Dominion_Letter_Dominion_Insult_Warm>
+  <Dominion_Letter_Dominion_Insult_Formal>The government of {3} regards the conduct of {0} as beneath the standards of civilised peoples, and of most uncivilised ones.</Dominion_Letter_Dominion_Insult_Formal>
+  <Dominion_Letter_Dominion_Insult_Threatening>{1}, your people are cowards, your walls are sand and your mother was a muffalo. Come and dispute it, if you dare.</Dominion_Letter_Dominion_Insult_Threatening>
+  <Dominion_Letter_Dominion_Denounce_Warm>It pains us, as friends of all peoples, to say publicly that the conduct of {0} has been unworthy of them. We hope they will do better.</Dominion_Letter_Dominion_Denounce_Warm>
+  <Dominion_Letter_Dominion_Denounce_Formal>Let it be known to every government on the planet that {3} formally denounces {0} and its actions.</Dominion_Letter_Dominion_Denounce_Formal>
+  <Dominion_Letter_Dominion_Denounce_Threatening>We denounce {0} before the whole world, and we are keeping a list. You are at the top of it.</Dominion_Letter_Dominion_Denounce_Threatening>
+  <Dominion_Letter_Dominion_DemandTribute_Warm>As good neighbours who keep the roads safe for you, we would be grateful for a modest contribution toward the cost. Whatever you think fair.</Dominion_Letter_Dominion_DemandTribute_Warm>
+  <Dominion_Letter_Dominion_DemandTribute_Formal>The government of {3} requests that {0} pay a tribute in recognition of the present balance of power.</Dominion_Letter_Dominion_DemandTribute_Formal>
+  <Dominion_Letter_Dominion_DemandTribute_Threatening>Pay. Our soldiers are bored, and bored soldiers wander. They might wander as far as your granaries.</Dominion_Letter_Dominion_DemandTribute_Threatening>
+  <Dominion_Outcome_Dominion_Gift>If received: goodwill and favour, more for bigger gifts. The silver goes into their treasury.</Dominion_Outcome_Dominion_Gift>
+  <Dominion_Outcome_Dominion_Compliment>If it lands: a little goodwill and favour. If it falls flat: slightly less favour.</Dominion_Outcome_Dominion_Compliment>
+  <Dominion_Outcome_Dominion_Insult>Always lands: goodwill and favour lost, and a grievance gained.</Dominion_Outcome_Dominion_Insult>
+  <Dominion_Outcome_Dominion_ProposePeace>Opens the peace table, where you draft the terms.</Dominion_Outcome_Dominion_ProposePeace>
+  <Dominion_Outcome_Dominion_DeclareWar>War, with the goal you choose. Every treaty with them is broken.</Dominion_Outcome_Dominion_DeclareWar>
+  <Dominion_Outcome_Dominion_ProposeTreaty>Opens the signing desk, where you set the terms.</Dominion_Outcome_Dominion_ProposeTreaty>
+  <Dominion_Outcome_Dominion_Borders>Changes who may cross your land, and what it costs them.</Dominion_Outcome_Dominion_Borders>
+  <Dominion_Outcome_Dominion_Embargo>Stops (or restarts) trade with them; it hurts their economy and yours.</Dominion_Outcome_Dominion_Embargo>
+  <Dominion_Outcome_Dominion_Denounce>Everyone hears of it: their reputation suffers and so do your relations.</Dominion_Outcome_Dominion_Denounce>
+  <Dominion_Outcome_Dominion_DemandTribute>If they fold: silver now and a lasting grievance. If not: lost favour and a grievance anyway.</Dominion_Outcome_Dominion_DemandTribute>
+  <Dominion_Outcome_Dominion_HostageExchange>Trust on both sides, held by the people you trade.</Dominion_Outcome_Dominion_HostageExchange>
+  <Dominion_Outcome_Dominion_ProposeSummit>Their leader visits your capital for talks with your head of state.</Dominion_Outcome_Dominion_ProposeSummit>
+  <Dominion_Outcome_Dominion_CallToArms>Asks them to join your war.</Dominion_Outcome_Dominion_CallToArms>
+  <Dominion_Outcome_Dominion_ColdWar>Open hostility short of war, or an end to it.</Dominion_Outcome_Dominion_ColdWar>
+  <Dominion_Outcome_Dominion_ProxyWar>Silver to their enemies, so others do your fighting.</Dominion_Outcome_Dominion_ProxyWar>
+
+  <!-- ============ war ============ -->
+  <Dominion_WarTab_Weariness>{0} weariness</Dominion_WarTab_Weariness>
+  <Dominion_WarTab_Weariness_Desc>How sick of the war {0} is. Weary governments make peace more readily.</Dominion_WarTab_Weariness_Desc>
+  <Dominion_WarTab_Casualties>Dead: {0} / {1}</Dominion_WarTab_Casualties>
+  <Dominion_WarTab_Casualties_Desc>People killed on each side (yours first, theirs second) since the war began {0} ago. {1} battles fought.</Dominion_WarTab_Casualties_Desc>
+  <Dominion_WarTab_Stance>Stance:</Dominion_WarTab_Stance>
+  <Dominion_WarTab_PeaceTable>Peace table</Dominion_WarTab_PeaceTable>
+  <Dominion_WarTab_PeaceTable_Desc>Draft a peace: victor's terms, or a deal over settlements, silver and prisoners.</Dominion_WarTab_PeaceTable_Desc>
+  <Dominion_WarTab_Mercenaries>Hire mercenaries</Dominion_WarTab_Mercenaries>
+  <Dominion_WarTab_Mercenaries_Desc>Pay a free company to raid the enemy: war score now, their army worn down and their nerve shaken. Once every {0} days.</Dominion_WarTab_Mercenaries_Desc>
+  <Dominion_WarTab_Chronicle>Chronicle ({0})</Dominion_WarTab_Chronicle>
+  <Dominion_WarTab_HideChronicle>Hide ({0})</Dominion_WarTab_HideChronicle>
+  <Dominion_WarTab_Chronicle_Desc>The war's history: battles, captures, orders and how the score stood after each.</Dominion_WarTab_Chronicle_Desc>
+  <Dominion_WarTab_ChronicleEmpty>Nothing has happened yet. Wars are mostly waiting.</Dominion_WarTab_ChronicleEmpty>
+  <Dominion_WarTab_ReadStory>Click to read the newspaper's story.</Dominion_WarTab_ReadStory>
+  <Dominion_WarTab_NoStory>No story about this has reached your paper.</Dominion_WarTab_NoStory>
+  <Dominion_Warband_BlockadingShort>blockading</Dominion_Warband_BlockadingShort>
+  <Dominion_Stance_Balanced>Balanced</Dominion_Stance_Balanced>
+  <Dominion_Stance_Balanced_Desc>Fight the war as it comes. No bonus, no cost.</Dominion_Stance_Balanced_Desc>
+  <Dominion_Stance_Aggressive>Aggressive</Dominion_Stance_Aggressive>
+  <Dominion_Stance_Aggressive_Desc>Press every advantage: your successes count 30% more toward the war score, but your setbacks count 15% more too.</Dominion_Stance_Aggressive_Desc>
+  <Dominion_Stance_Defensive>Defensive</Dominion_Stance_Defensive>
+  <Dominion_Stance_Defensive_Desc>Dig in: your setbacks count 30% less, your successes 15% less.</Dominion_Stance_Defensive_Desc>
+  <Dominion_Stance_RaidSupply>Raid supplies</Dominion_Stance_RaidSupply>
+  <Dominion_Stance_RaidSupply_Desc>Go after their supply lines: every day their economy and nerve suffer a little. Your own successes count 10% less.</Dominion_Stance_RaidSupply_Desc>
+  <Dominion_Stance_Cost>Changing stance costs {0} influence.</Dominion_Stance_Cost>
+  <Dominion_Stance_Current>This is your stance now.</Dominion_Stance_Current>
+  <Dominion_Stance_Changed>New orders: {0}.</Dominion_Stance_Changed>
+  <Dominion_Mercenaries_Title>Hire mercenaries</Dominion_Mercenaries_Title>
+  <Dominion_Mercenaries_Option>{0} silver (about +{1} war score)</Dominion_Mercenaries_Option>
+  <Dominion_Mercenaries_Hired>Mercenaries paid {0} silver raided {1}: +{2} war score.</Dominion_Mercenaries_Hired>
+  <Dominion_Peace_Title>Peace with {0}</Dominion_Peace_Title>
+  <Dominion_Peace_Standing>Where the war stands</Dominion_Peace_Standing>
+  <Dominion_Peace_Facts>{0} of war, {1} battles. Your dead: {2}. Dead of {4}: {3}.</Dominion_Peace_Facts>
+  <Dominion_Peace_Kind>Terms</Dominion_Peace_Kind>
+  <Dominion_Peace_Victors>Victor's terms</Dominion_Peace_Victors>
+  <Dominion_Peace_Victors_Desc>You are winning: take what you went to war for ({0}), as the war score allows.</Dominion_Peace_Victors_Desc>
+  <Dominion_Peace_Negotiated>Negotiated peace</Dominion_Peace_Negotiated>
+  <Dominion_Peace_Negotiated_Desc>Set the terms yourself: who keeps which settlement, silver either way, prisoners freed. The odds follow what you ask.</Dominion_Peace_Negotiated_Desc>
+  <Dominion_Peace_NotWinning>You need a lead of {0} war score to dictate terms.</Dominion_Peace_NotWinning>
+  <Dominion_Peace_Bill>Proposing it costs {0} influence, whatever they answer. Silver is paid when the peace is made.</Dominion_Peace_Bill>
+  <Dominion_Peace_Sign>Sign the peace</Dominion_Peace_Sign>
+  <Dominion_Peace_Sign_Desc>Sign these terms and send them to {0}.</Dominion_Peace_Sign_Desc>
+  <Dominion_Peace_WarOver>That war is already over.</Dominion_Peace_WarOver>
+  <Dominion_Peace_ChronicleRefused>{0} refused your terms of peace.</Dominion_Peace_ChronicleRefused>
+  <Dominion_Deal_Keep>Keep {0}</Dominion_Deal_Keep>
+  <Dominion_Deal_Keep_Desc>You hold it now. Keeping it makes peace harder; giving it back makes it easier.</Dominion_Deal_Keep_Desc>
+  <Dominion_Deal_DemandBack>Demand {0} back</Dominion_Deal_DemandBack>
+  <Dominion_Deal_DemandBack_Desc>They hold it now. Demanding it makes peace harder; letting them keep it makes it easier.</Dominion_Deal_DemandBack_Desc>
+  <Dominion_Deal_NoOccupied>Neither side holds the other's settlements.</Dominion_Deal_NoOccupied>
+  <Dominion_Deal_Offer>You pay them</Dominion_Deal_Offer>
+  <Dominion_Deal_Demand>They pay you</Dominion_Deal_Demand>
+  <Dominion_Deal_ReleasePrisoners>Release your {0} prisoners from {1}</Dominion_Deal_ReleasePrisoners>
+  <Dominion_Deal_ReleasePrisoners_Desc>Prisoners of theirs held at your colony walk free when the peace is made. They will remember it kindly.</Dominion_Deal_ReleasePrisoners_Desc>
+  <Dominion_Deal_NoPrisoners>You hold none of their people.</Dominion_Deal_NoPrisoners>
+  <Dominion_Deal_Summary>As drafted</Dominion_Deal_Summary>
+  <Dominion_Deal_YouPay>You pay {0} silver to {1}.</Dominion_Deal_YouPay>
+  <Dominion_Deal_TheyPay>{0} pays you {1} silver.</Dominion_Deal_TheyPay>
+  <Dominion_Deal_Prisoners>{0} prisoners from {1} are released.</Dominion_Deal_Prisoners>
+  <Dominion_Deal_Negotiated>A negotiated peace with {0}:</Dominion_Deal_Negotiated>
+  <Dominion_Deal_Released>{0} prisoners released to {1}.</Dominion_Deal_Released>
+  <Dominion_Deal_Outcome>a negotiated peace</Dominion_Deal_Outcome>
+
+  <!-- ============ council ============ -->
+  <Dominion_Council_Floor>The floor</Dominion_Council_Floor>
+  <Dominion_Council_ClickForFloor>Click to see how every member leans on it.</Dominion_Council_ClickForFloor>
+  <Dominion_Council_Tally_Desc>Votes for (green) and against (red), weighted. A motion carries with more for than against and at least {0} for: a third of the room.</Dominion_Council_Tally_Desc>
+  <Dominion_Council_Stamp_1>AYE: vote for it.</Dominion_Council_Stamp_1>
+  <Dominion_Council_Stamp_0>ABSTAIN: do not vote.</Dominion_Council_Stamp_0>
+  <Dominion_Council_Stamp_-1>NAY: vote against it.</Dominion_Council_Stamp_-1>
+  <Dominion_Council_Gavel>Strike the gavel</Dominion_Council_Gavel>
+  <Dominion_Council_Gavel_Desc>Close the debate and count the votes. There is no going back.</Dominion_Council_Gavel_Desc>
+  <Dominion_Council_Adjourn>Adjourn</Dominion_Council_Adjourn>
+  <Dominion_Council_Adjourn_Desc>The session is over. Decrees passed are now in force.</Dominion_Council_Adjourn_Desc>
+  <Dominion_Council_LobbyHint>Lobby members who waver, or who lean the other way. Each member can be lobbied once per motion.</Dominion_Council_LobbyHint>
+  <Dominion_Council_LobbyShort>Lobby</Dominion_Council_LobbyShort>
+  <Dominion_Council_Lobby_Desc>Work on {0}'s delegate: with influence, silver or a promise.</Dominion_Council_Lobby_Desc>
+  <Dominion_Council_LobbyTitle>Lobby {0}</Dominion_Council_LobbyTitle>
+  <Dominion_Council_LobbyInfluence>Call in favours: {0} influence ({1} chance)</Dominion_Council_LobbyInfluence>
+  <Dominion_Council_LobbySilver>A discreet purse: {0} silver ({1} chance, sways them more)</Dominion_Council_LobbySilver>
+  <Dominion_Council_LobbyPromise>Promise to back their next motion ({0} chance; break it and they will not forget)</Dominion_Council_LobbyPromise>
+  <Dominion_Council_AlreadyWithYou>Already votes your way.</Dominion_Council_AlreadyWithYou>
+  <Dominion_Council_PromiseOwnMotion>They sponsor this motion; a promise would be broken the moment you vote.</Dominion_Council_PromiseOwnMotion>
+  <Dominion_Council_AlreadyPromised>You already owe them a promise.</Dominion_Council_AlreadyPromised>
+  <Dominion_Council_Wavering>wavering</Dominion_Council_Wavering>
+  <Dominion_Council_Leaning_You>Your vote</Dominion_Council_Leaning_You>
+  <Dominion_Council_YouPromised>You promised {0} your support.</Dominion_Council_YouPromised>
+  <Dominion_Council_PromiseKept>You kept your promise to {0} on "{1}".</Dominion_Council_PromiseKept>
+  <Dominion_Council_PromiseBroken>You broke your promise to {0} on "{1}". They will remember.</Dominion_Council_PromiseBroken>
+  <Dominion_Council_Forecast>Forecast: {0} ({1} for, {2} against)</Dominion_Council_Forecast>
+  <Dominion_Council_ForecastPass>passes</Dominion_Council_ForecastPass>
+  <Dominion_Council_ForecastFail>fails</Dominion_Council_ForecastFail>
+  <Dominion_Council_Forecast_Desc>How it would go today without your vote. Delegates still on the road are not counted.</Dominion_Council_Forecast_Desc>
+  <Dominion_Council_InGrace>members still have time to comply</Dominion_Council_InGrace>
+  <Dominion_Council_Weight_Desc>Voting weight: bigger, richer and stronger members weigh more, and allies in the room add a little.</Dominion_Council_Weight_Desc>
+
+  <!-- ============ intelligence terminal ============ -->
+  <Dominion_Term_Header>{0} SIGNALS AND INTELLIGENCE SERVICE / TERMINAL 7</Dominion_Term_Header>
+  <Dominion_Term_Status>OPS RUNNING: {0}   INFLUENCE: {1}   COUNTER-INTEL: {2}</Dominion_Term_Status>
+  <Dominion_Term_CIOn>ACTIVE</Dominion_Term_CIOn>
+  <Dominion_Term_CIOff>OFF</Dominion_Term_CIOff>
+  <Dominion_Term_Screen_Operations>Operations</Dominion_Term_Screen_Operations>
+  <Dominion_Term_Screen_Operations_Desc>Missions under way. Click one to open its file.</Dominion_Term_Screen_Operations_Desc>
+  <Dominion_Term_Screen_Board>Network board</Dominion_Term_Screen_Board>
+  <Dominion_Term_Screen_Board_Desc>What the service knows about each faction, and what is still redacted.</Dominion_Term_Screen_Board_Desc>
+  <Dominion_Term_Screen_Counter>Counter-intel</Dominion_Term_Screen_Counter>
+  <Dominion_Term_Screen_Counter_Desc>Foreign services working against you, and sweeps to catch them.</Dominion_Term_Screen_Counter_Desc>
+  <Dominion_Term_Screen_Archive>Archive</Dominion_Term_Screen_Archive>
+  <Dominion_Term_Screen_Archive_Desc>Finished missions and how they ended.</Dominion_Term_Screen_Archive_Desc>
+  <Dominion_Term_NewMission>New mission</Dominion_Term_NewMission>
+  <Dominion_Term_AccessDenied>ACCESS DENIED. Research {0} first.</Dominion_Term_AccessDenied>
+  <Dominion_Term_NoOps>NO OPERATIONS RUNNING. THE AGENTS ARE PLAYING CARDS.</Dominion_Term_NoOps>
+  <Dominion_Term_ClickForFile>Click to open the file.</Dominion_Term_ClickForFile>
+  <Dominion_Term_FileTitle>FILE #{0}</Dominion_Term_FileTitle>
+  <Dominion_Term_F_Operation>Operation</Dominion_Term_F_Operation>
+  <Dominion_Term_F_Target>Target</Dominion_Term_F_Target>
+  <Dominion_Term_F_Mode>Mode</Dominion_Term_F_Mode>
+  <Dominion_Term_F_Agents>Agents</Dominion_Term_F_Agents>
+  <Dominion_Term_F_Handler>Handler</Dominion_Term_F_Handler>
+  <Dominion_Term_F_Risk>Risk</Dominion_Term_F_Risk>
+  <Dominion_Term_F_Started>Started</Dominion_Term_F_Started>
+  <Dominion_Term_F_Ends>Ends in</Dominion_Term_F_Ends>
+  <Dominion_Term_F_Odds>Odds now</Dominion_Term_F_Odds>
+  <Dominion_Term_F_Exposure>Caught if it fails</Dominion_Term_F_Exposure>
+  <Dominion_Term_F_Status>Status</Dominion_Term_F_Status>
+  <Dominion_Term_F_Blame>Blame on</Dominion_Term_F_Blame>
+  <Dominion_Term_Physical>in person, on their map</Dominion_Term_Physical>
+  <Dominion_Term_Abstract>abroad, out of sight</Dominion_Term_Abstract>
+  <Dominion_Term_Recall>Recall</Dominion_Term_Recall>
+  <Dominion_Term_Recall_Desc>Call the agents home now. Nothing comes of the mission and nothing is refunded.</Dominion_Term_Recall_Desc>
+  <Dominion_Term_RecallConfirm>Recall the agents on "{0}" against {1}? The mission is abandoned and what it cost is lost.</Dominion_Term_RecallConfirm>
+  <Dominion_Term_Locate>Locate</Dominion_Term_Locate>
+  <Dominion_Term_NothingToLocate>Nothing of it is on a map you can see.</Dominion_Term_NothingToLocate>
+  <Dominion_Term_DossierTitle>DOSSIER: {0}</Dominion_Term_DossierTitle>
+  <Dominion_Term_D_Network>Network</Dominion_Term_D_Network>
+  <Dominion_Term_D_Intel>Intel level</Dominion_Term_D_Intel>
+  <Dominion_Term_D_Leader>Leader</Dominion_Term_D_Leader>
+  <Dominion_Term_D_Government>Government</Dominion_Term_D_Government>
+  <Dominion_Term_D_Stability>Stability</Dominion_Term_D_Stability>
+  <Dominion_Term_D_Economy>Economy</Dominion_Term_D_Economy>
+  <Dominion_Term_D_Army>Army</Dominion_Term_D_Army>
+  <Dominion_Term_D_Warbands>{0} warbands in the field</Dominion_Term_D_Warbands>
+  <Dominion_Term_D_Treaties>Treaties</Dominion_Term_D_Treaties>
+  <Dominion_Term_D_Mood>Mood at court</Dominion_Term_D_Mood>
+  <Dominion_Term_D_Weariness>war weariness {0}</Dominion_Term_D_Weariness>
+  <Dominion_Term_D_OnYou>Their file on you</Dominion_Term_D_OnYou>
+  <Dominion_Term_D_TheirFile>{0}% complete</Dominion_Term_D_TheirFile>
+  <Dominion_Term_D_Opinion>Real opinion of you</Dominion_Term_D_Opinion>
+  <Dominion_Term_Clearance>[CLEARANCE {0} REQUIRED]</Dominion_Term_Clearance>
+  <Dominion_Term_MissionAgainst>Plan a mission</Dominion_Term_MissionAgainst>
+  <Dominion_Term_OpenDossier>Full dossier</Dominion_Term_OpenDossier>
+  <Dominion_Term_Suspicions>Suspected foreign operations</Dominion_Term_Suspicions>
+  <Dominion_Term_NoSuspicions>NOTHING SUSPICIOUS. WHICH IS ITSELF SUSPICIOUS.</Dominion_Term_NoSuspicions>
+  <Dominion_Term_Sweep>Sweep ({0})</Dominion_Term_Sweep>
+  <Dominion_Term_Sweep_Desc>Spend {0} influence turning the colony over for {1}'s agents. Caught: their file on you shrinks and everyone hears of it. Missed: the trail cools.</Dominion_Term_Sweep_Desc>
+  <Dominion_Term_TheirFiles>Their files on you</Dominion_Term_TheirFiles>
+  <Dominion_Term_TheirFiles_Desc>How much each foreign service knows about your colony. You can only see this with intel of {0} or more on them.</Dominion_Term_TheirFiles_Desc>
+  <Dominion_Term_ArchiveEmpty>THE ARCHIVE IS EMPTY.</Dominion_Term_ArchiveEmpty>
+  <Dominion_OpOutcome_Success>Success</Dominion_OpOutcome_Success>
+  <Dominion_OpOutcome_Failed>Failed</Dominion_OpOutcome_Failed>
+  <Dominion_OpOutcome_Compromised>Compromised</Dominion_OpOutcome_Compromised>
+  <Dominion_OpOutcome_Recalled>Recalled</Dominion_OpOutcome_Recalled>
+  <Dominion_Ops_CannotRecallPhysical>Agents on the ground must finish or flee on their own.</Dominion_Ops_CannotRecallPhysical>
+  <Dominion_Ops_Recalled>The agents on "{0}" against {1} have been recalled.</Dominion_Ops_Recalled>
+  <Dominion_Ops_SweepCaught>The sweep caught {0}'s agents red-handed.</Dominion_Ops_SweepCaught>
+  <Dominion_Ops_SweepMissed>The sweep found nothing of {0}'s agents. The trail has gone cold.</Dominion_Ops_SweepMissed>
+  <Dominion_Suspicion_Propaganda>pamphlets and whispers</Dominion_Suspicion_Propaganda>
+  <Dominion_Suspicion_Snooping>strangers asking questions</Dominion_Suspicion_Snooping>
+  <Dominion_Mission_Title>Mission file</Dominion_Mission_Title>
+  <Dominion_Mission_Operation>Operation</Dominion_Mission_Operation>
+  <Dominion_Mission_Target>Target</Dominion_Mission_Target>
+  <Dominion_Mission_Network>network {0}</Dominion_Mission_Network>
+  <Dominion_Mission_Risk>Risk</Dominion_Mission_Risk>
+  <Dominion_Mission_Handler>Handler at home</Dominion_Mission_Handler>
+  <Dominion_Mission_Handler_Desc>A colonist who runs the mission from home: adds a little of their skill and does not leave the colony.</Dominion_Mission_Handler_Desc>
+  <Dominion_Mission_IsHandler>Is the handler.</Dominion_Mission_IsHandler>
+  <Dominion_Mission_Success>Odds of success</Dominion_Mission_Success>
+  <Dominion_Mission_OddsTitle>The odds:</Dominion_Mission_OddsTitle>
+  <Dominion_Mission_OddsBase>agents, network and target</Dominion_Mission_OddsBase>
+  <Dominion_Mission_OddsRisk>risk taken</Dominion_Mission_OddsRisk>
+  <Dominion_Mission_OddsHandler>the handler</Dominion_Mission_OddsHandler>
+  <Dominion_Mission_Exposure>Chance of being caught: {0} if it fails, {1} even if it works.</Dominion_Mission_Exposure>
+  <Dominion_Mission_Seal>Seal and dispatch</Dominion_Mission_Seal>
+  <Dominion_Risk_Cautious>Cautious</Dominion_Risk_Cautious>
+  <Dominion_Risk_Cautious_Desc>Slow and careful: 10% worse odds and a quarter longer, but half as likely to be caught.</Dominion_Risk_Cautious_Desc>
+  <Dominion_Risk_Normal>Normal</Dominion_Risk_Normal>
+  <Dominion_Risk_Normal_Desc>As the manual says.</Dominion_Risk_Normal_Desc>
+  <Dominion_Risk_Bold>Bold</Dominion_Risk_Bold>
+  <Dominion_Risk_Bold_Desc>Fast and loud: 10% better odds and a quarter shorter, but 60% more likely to be caught.</Dominion_Risk_Bold_Desc>
+
+  <!-- ============ federation ============ -->
+  <Dominion_Road_Research>Research</Dominion_Road_Research>
+  <Dominion_Road_Charter>The charter</Dominion_Road_Charter>
+  <Dominion_Road_Members>Members</Dominion_Road_Members>
+  <Dominion_Road_Proclaim>Proclamation</Dominion_Road_Proclaim>
+  <Dominion_Road_Done>done</Dominion_Road_Done>
+  <Dominion_Road_Ready>ready</Dominion_Road_Ready>
+  <Dominion_Road_CharterTodo>pass it at the council</Dominion_Road_CharterTodo>
+  <Dominion_Road_NotYet>{0} of {1} factions unified so far.</Dominion_Road_NotYet>
+  <Dominion_Road_ToResearch>Research tab</Dominion_Road_ToResearch>
+  <Dominion_Road_ToCouncil>Council</Dominion_Road_ToCouncil>
+  <Dominion_Road_ToDiplomacy>Diplomacy</Dominion_Road_ToDiplomacy>
+  <Dominion_Road_Step0_Desc>Open the research tab to study Planetary Federation.</Dominion_Road_Step0_Desc>
+  <Dominion_Road_Step1_Desc>Propose the Federation Charter at the Rim Council and see it passed.</Dominion_Road_Step1_Desc>
+  <Dominion_Road_Step2_Desc>Bring factions in: invite them to join, make them your protectorates, or conquer them.</Dominion_Road_Step2_Desc>
+  <Dominion_Federation_ReadCharter>Read the charter</Dominion_Federation_ReadCharter>
+  <Dominion_Federation_ReadCharter_Desc>The Federation's founding charter, with the seal of every member.</Dominion_Federation_ReadCharter_Desc>
+  <Dominion_Federation_Invite>Invite a faction...</Dominion_Federation_Invite>
+  <Dominion_Federation_Invite_Desc>Offer a faction membership of the Federation, at the signing desk.</Dominion_Federation_Invite_Desc>
+  <Dominion_Federation_Members>Members ({0})</Dominion_Federation_Members>
+  <Dominion_Federation_NoMembers>No one has joined yet.</Dominion_Federation_NoMembers>
+  <Dominion_Federation_MemberLine>member for {0}; dues paid: {1} silver</Dominion_Federation_MemberLine>
+  <Dominion_Federation_Loyalty>loyalty {0}</Dominion_Federation_Loyalty>
+  <Dominion_Federation_Loyalty_Desc>Their opinion of you. Members who come to resent you may walk out, more so under heavy dues.</Dominion_Federation_Loyalty_Desc>
+  <Dominion_Federation_Expel>Expel</Dominion_Federation_Expel>
+  <Dominion_Federation_Expel_Desc>Throw {0} out of the Federation.</Dominion_Federation_Expel_Desc>
+  <Dominion_Federation_Standing>Everyone else</Dominion_Federation_Standing>
+  <Dominion_Federation_JoinOdds>would join: {0}</Dominion_Federation_JoinOdds>
+  <Dominion_Dues_0>No dues</Dominion_Dues_0>
+  <Dominion_Dues_1>Light dues</Dominion_Dues_1>
+  <Dominion_Dues_2>Heavy dues</Dominion_Dues_2>
+  <Dominion_Dues_0_Desc>they pay nothing</Dominion_Dues_0_Desc>
+  <Dominion_Dues_1_Desc>{0} silver a time; they grumble a little</Dominion_Dues_1_Desc>
+  <Dominion_Dues_2_Desc>{0} silver a time; they resent it, and a resentful member may leave</Dominion_Dues_2_Desc>
+  <Dominion_Dues_Desc>What this member pays toward the Federation every {0} days, delivered to your capital.</Dominion_Dues_Desc>
+  <Dominion_Dues_Paid>{0} paid {1} silver in Federation dues.</Dominion_Dues_Paid>
+  <Dominion_Dues_LeftLabel>{0} leaves the Federation</Dominion_Dues_LeftLabel>
+  <Dominion_Dues_LeftText>{0} has had enough of your dues and your manner, and has left the Federation.</Dominion_Dues_LeftText>
+  <Dominion_Charter_Title>Charter of the Planetary Federation</Dominion_Charter_Title>
+  <Dominion_Charter_Preamble>We, the peoples of this world, having fought over every hill and well and sometimes over nothing at all, and having noticed that the raiders keep coming regardless, join together under the leadership of {0} to make something larger than ourselves.</Dominion_Charter_Preamble>
+  <Dominion_Charter_Article1_Title>Article I. Union</Dominion_Charter_Article1_Title>
+  <Dominion_Charter_Article1>The members are one Federation. An attack on one is an attack on all, and so is an insult, within reason.</Dominion_Charter_Article1>
+  <Dominion_Charter_Article2_Title>Article II. Peace among members</Dominion_Charter_Article2_Title>
+  <Dominion_Charter_Article2>No member shall make war on another. Disputes go to the council, and to the council's very patient secretary.</Dominion_Charter_Article2>
+  <Dominion_Charter_Article3_Title>Article III. Trade</Dominion_Charter_Article3_Title>
+  <Dominion_Charter_Article3>Caravans of members travel freely and trade fairly. Muffalo are counted once, at the border.</Dominion_Charter_Article3>
+  <Dominion_Charter_Article4_Title>Article IV. Dues</Dominion_Charter_Article4_Title>
+  <Dominion_Charter_Article4>Members contribute to the common purse as the founding member sets, and complain about it as is their right.</Dominion_Charter_Article4>
+  <Dominion_Charter_Article5_Title>Article V. Withdrawal</Dominion_Charter_Article5_Title>
+  <Dominion_Charter_Article5>Any member may leave. It will be remembered.</Dominion_Charter_Article5>
+  <Dominion_Charter_NotInForce>The charter is drafted but not yet in force: it needs the research and the council's vote.</Dominion_Charter_NotInForce>
+  <Dominion_Charter_Signatories>Signed and sealed</Dominion_Charter_Signatories>
+  <Dominion_Charter_Founder>founding member</Dominion_Charter_Founder>
+  <Dominion_Charter_Awaiting>awaiting signature</Dominion_Charter_Awaiting>
+
+  <!-- ============ news ============ -->
+  <Dominion_News_Search_Desc>Find stories by any word in the headline or text, or by a faction's name.</Dominion_News_Search_Desc>
+  <Dominion_News_View_Desc>Which stories to show: the latest, your bookmarks, a past day's paper, or your scrapbook.</Dominion_News_View_Desc>
+  <Dominion_News_View_Latest>Latest</Dominion_News_View_Latest>
+  <Dominion_News_View_Latest_Desc>everything, newest first, bookmarks on top</Dominion_News_View_Latest_Desc>
+  <Dominion_News_View_Bookmarks>Bookmarks</Dominion_News_View_Bookmarks>
+  <Dominion_News_View_Bookmarks_Desc>stories you starred</Dominion_News_View_Bookmarks_Desc>
+  <Dominion_News_View_Archive>Archive</Dominion_News_View_Archive>
+  <Dominion_News_View_Archive_Desc>flip through past days' papers</Dominion_News_View_Archive_Desc>
+  <Dominion_News_View_Scrapbook>Scrapbook</Dominion_News_View_Scrapbook>
+  <Dominion_News_View_Scrapbook_Desc>stories you clipped out and kept</Dominion_News_View_Scrapbook_Desc>
+  <Dominion_News_UnreadCount>{0} unread</Dominion_News_UnreadCount>
+  <Dominion_News_PrevDay>The day before</Dominion_News_PrevDay>
+  <Dominion_News_NextDay>The day after</Dominion_News_NextDay>
+  <Dominion_News_NoEarlier>No older papers were kept.</Dominion_News_NoEarlier>
+  <Dominion_News_NoLater>That is today's paper.</Dominion_News_NoLater>
+  <Dominion_News_EditionOf>Edition {0}, {1}</Dominion_News_EditionOf>
+  <Dominion_News_Pick>Tick to act on several stories at once.</Dominion_News_Pick>
+  <Dominion_News_Picked>{0} ticked</Dominion_News_Picked>
+  <Dominion_News_BatchRespond>Respond...</Dominion_News_BatchRespond>
+  <Dominion_News_BatchRespond_Desc>Give the radio desk one order for every ticked story it applies to. The desk holds {0} orders at a time.</Dominion_News_BatchRespond_Desc>
+  <Dominion_News_BatchTitle>The radio desk has room for {0} more orders</Dominion_News_BatchTitle>
+  <Dominion_News_BatchOption>{0}: {1} of {2} stories</Dominion_News_BatchOption>
+  <Dominion_News_BatchNone>applies to none of them</Dominion_News_BatchNone>
+  <Dominion_News_BatchQueued>{0} orders to {1} queued at the radio desk.</Dominion_News_BatchQueued>
+  <Dominion_News_BatchQueuedFull>{0} orders to {1} queued; {2} more did not fit, as the desk is full.</Dominion_News_BatchQueuedFull>
+  <Dominion_News_BatchRead>Mark read</Dominion_News_BatchRead>
+  <Dominion_News_BatchRead_Desc>Mark the ticked stories as read.</Dominion_News_BatchRead_Desc>
+  <Dominion_News_BatchClear>Untick all</Dominion_News_BatchClear>
+  <Dominion_News_BatchClear_Desc>Clear the ticks.</Dominion_News_BatchClear_Desc>
+  <Dominion_News_Bookmark>Bookmark</Dominion_News_Bookmark>
+  <Dominion_News_Unbookmark>Remove bookmark</Dominion_News_Unbookmark>
+  <Dominion_News_Bookmark_Desc>Star it: bookmarked stories stay at the top and are never thrown out with old news.</Dominion_News_Bookmark_Desc>
+  <Dominion_News_Clip_Desc>Clip it out for your scrapbook. Clipped stories are kept forever.</Dominion_News_Clip_Desc>
+  <Dominion_News_Unclip>Take it out of the scrapbook</Dominion_News_Unclip>
+  <Dominion_News_ScrapbookEmpty>Your scrapbook is empty. Clip stories out with the scissors at the top of an article.</Dominion_News_ScrapbookEmpty>
+  <Dominion_News_ClickToRead>Click to read it.</Dominion_News_ClickToRead>
+  <Dominion_News_FactionLink>Click for {0}'s dossier, diplomacy or capital.</Dominion_News_FactionLink>
+  <Dominion_News_OnlyThisFaction>Only stories about them</Dominion_News_OnlyThisFaction>
+  <Dominion_News_JumpPlace>Click to find {0} on the world map.</Dominion_News_JumpPlace>
+  <Dominion_News_FollowUps>The story so far</Dominion_News_FollowUps>
+
+</LanguageData>

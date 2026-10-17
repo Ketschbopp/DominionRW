@@ -26,6 +26,9 @@ namespace Dominion
         private static readonly List<Obligation> obligations = new List<Obligation>();
         private static readonly List<Treaty> buffer = new List<Treaty>();
 
+        /// <summary>The player is reminded this many days before a treaty of theirs lapses.</summary>
+        private const int ReminderDays = 3;
+
         public override void DailyGlobal()
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
@@ -43,6 +46,12 @@ namespace Dominion
                 {
                     comp.Treaties.Remove(t);
                     EventBus.Raise(DominionEventDefOf.Dominion_TreatyExpired, t.a, t.b, detail: t.def.label, secrecy: t.def.secrecy);
+                }
+                else if (t.expiresTick >= 0 && !t.reminded && t.Involves(Faction.OfPlayer) && !t.def.imposed
+                         && t.expiresTick - now <= ReminderDays * GenDate.TicksPerDay)
+                {
+                    t.reminded = true;
+                    Letter_TreatyExpiring.Send(t);
                 }
             }
             buffer.Clear();
