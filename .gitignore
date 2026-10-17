@@ -4,3 +4,5 @@ Source/**/bin/
 .vs/
 .idea/
 __pycache__/
+
+.claude/worktrees/
