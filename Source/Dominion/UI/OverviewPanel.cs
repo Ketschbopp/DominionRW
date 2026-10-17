@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -8,7 +9,7 @@ namespace Dominion
 {
     /// <summary>
     /// The Overview tab: every faction in a sortable table (click a column to sort, click again to reverse) with trend
-    /// arrows for the past week, a small world map of the selected faction, jump buttons to its other pages, and its dossier.
+    /// arrows for the past week, a world map of spheres of influence (scroll to zoom, drag to pan), jump buttons to its other pages, and its dossier.
     /// </summary>
     public class OverviewPanel
     {
@@ -23,6 +24,8 @@ namespace Dominion
         private static bool descending;
 
         private Vector2 scroll;
+        private readonly WorldMapView map = new WorldMapView();
+        private Faction mapFocus;
         private Vector2 dossierScroll;
         private readonly List<Faction> sorted = new List<Faction>();
 
@@ -31,24 +34,28 @@ namespace Dominion
             List<Faction> shown = comp.Cache.Simulated;
             Faction selected = DominionUIState.SelectedIn(shown);
 
-            Rect top = rect.TopPart(0.4f);
-            float mapW = Mathf.Min(top.width * 0.34f, top.height * 2f);
+            Rect top = rect.TopPart(0.46f);
+            float mapW = Mathf.Min(top.width * 0.46f, top.height * 2.2f);
             Rect tableRect = new Rect(top.x, top.y, top.width - mapW - 8f, top.height);
-            Rect mapRect = new Rect(tableRect.xMax + 8f, top.y, mapW, Mathf.Min(top.height, mapW / 2f));
+            Rect mapRect = new Rect(tableRect.xMax + 8f, top.y, mapW, top.height - 18f);
             DrawTable(tableRect, shown, comp, selected);
-            if (selected != null)
+            // The map glides to whichever faction is picked, from the table or the map itself.
+            if (selected != mapFocus)
             {
-                MiniWorldMap.Draw(mapRect, selected);
-                Rect legend = new Rect(mapRect.x, mapRect.yMax + 2f, mapRect.width, top.yMax - mapRect.yMax - 2f);
-                if (legend.height > 16f)
-                {
-                    GUI.color = Color.gray;
-                    Text.Font = GameFont.Tiny;
-                    Widgets.Label(legend, "Dominion_UI_MapLegend".Translate(selected.Name));
-                    Text.Font = GameFont.Small;
-                    GUI.color = Color.white;
-                }
+                mapFocus = selected;
+                if (selected != null) map.FocusOn(comp.Cache.SettlementsOf(selected).Select(x => x.Tile));
             }
+            map.Draw(mapRect, MapStyle.Atlas, selected, null, null, f =>
+            {
+                if (f.IsPlayer) return;
+                DominionUIState.selected = f;
+                dossierScroll = Vector2.zero;
+            });
+            GUI.color = Color.gray;
+            Text.Font = GameFont.Tiny;
+            Widgets.Label(new Rect(mapRect.x, mapRect.yMax + 1f, mapRect.width, 17f), "Dominion_UI_MapLegend".Translate(selected?.Name ?? "-").ToString().Truncate(mapRect.width));
+            Text.Font = GameFont.Small;
+            GUI.color = Color.white;
 
             if (selected == null) return;
             Rect jump = new Rect(rect.x, top.yMax + 6f, rect.width, JumpBarHeight);

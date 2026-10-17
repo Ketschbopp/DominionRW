@@ -4,23 +4,34 @@ using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace Dominion
 {
     /// <summary>
-    /// The War tab. Each of your wars is a card: the score as a tug of war, weariness and casualties, a map of the front
-    /// with the warbands on it, your orders (stance, mercenaries, allies, the peace table) and the war's chronicle. Below:
-    /// the world's wars, cold wars, warbands in the field, occupied settlements and blockades.
+    /// The War tab, as a war room: a bunker lit by a red lamp, the campaign map on the table (spheres of influence,
+    /// fronts in red, warbands marching along their roads), and a rack of dossiers on the wall, one per war. Pick a
+    /// dossier to put that war on the map and open it: the tug of war, weariness and casualties, your stance switches
+    /// and orders, the peace table, and the war's chronicle. The last dossier is the theatre report: cold wars,
+    /// warbands in the field, occupied settlements and blockades.
     /// </summary>
     public class WarPanel
     {
-        private const float Line = 24f;
-        private const float CardHeight = 236f;
-        private const int ChronicleShown = 12;
+        private const float RackWidth = 240f;
+        private const float FolderHeight = 58f;
+        private const float HeaderHeight = 34f;
+        private const int TheatreId = -1;
 
-        private Vector2 scroll;
-        private float height = 800f;
-        private readonly HashSet<int> openChronicles = new HashSet<int>();
+        private static readonly Color Stencil = new Color(0.95f, 0.85f, 0.7f);
+        private static readonly Color Dim = new Color(0.75f, 0.68f, 0.6f);
+        private static readonly Color Red = new Color(0.9f, 0.25f, 0.18f);
+
+        private readonly WorldMapView map = new WorldMapView();
+        private int selectedId = int.MinValue;
+        private int focusedId = int.MinValue;
+        private Vector2 rackScroll;
+        private Vector2 dossierScroll;
+        private float dossierHeight = 400f;
 
         // Terms are worked out from the whole world state; recomputed at most twice a second.
         private readonly Dictionary<int, string> termsCache = new Dictionary<int, string>();
@@ -33,169 +44,369 @@ namespace Dominion
                 termsCache.Clear();
                 termsTime = Time.realtimeSinceStartup + 0.5f;
             }
-            Rect view = new Rect(0f, 0f, rect.width - 16f, height);
-            Widgets.BeginScrollView(rect, ref scroll, view);
-            var l = new Listing_Standard { maxOneColumn = true };
-            l.Begin(view);
 
-            Faction focus = DominionUIState.selected;
-            DominionTheme.Header(l, "Dominion_WarTab_Yours".Translate());
-            List<War> mine = comp.Wars.wars.Where(w => w.InvolvesPlayer).OrderBy(w => w.Involves(focus) ? 0 : 1).ToList();
-            if (mine.Count == 0) None(l);
-            foreach (War w in mine) DrawPlayerWar(l, w, comp);
+            // The room: bare concrete, a red lamp over the table, dark corners.
+            DominionRooms.DrawTiled(rect, DominionRooms.Concrete, 0.6f);
+            DominionRooms.DrawGlow(new Vector2(rect.center.x - RackWidth / 2f, rect.y + rect.height * 0.3f), rect.width * 0.5f, new Color(0.9f, 0.15f, 0.08f, 0.22f));
+            DominionRooms.DrawVignette(rect, 0.8f);
 
-            DominionTheme.Header(l, "Dominion_WarTab_World".Translate());
-            List<War> others = comp.Wars.wars.Where(w => !w.InvolvesPlayer).OrderBy(w => w.Involves(focus) ? 0 : 1).ToList();
-            if (others.Count == 0) None(l);
-            foreach (War w in others) DrawWorldWar(l, w);
+            List<War> mine = comp.Wars.wars.Where(w => w.InvolvesPlayer).ToList();
+            List<War> world = comp.Wars.wars.Where(w => !w.InvolvesPlayer).ToList();
+            War selected = Pick(mine, world);
 
-            DominionTheme.Header(l, "Dominion_WarTab_ColdWars".Translate());
-            DrawColdWars(l, comp);
+            Rect inner = rect.ContractedBy(8f);
+            DrawHeader(new Rect(inner.x, inner.y, inner.width, HeaderHeight), mine, world);
+            Rect body = new Rect(inner.x, inner.y + HeaderHeight + 6f, inner.width, inner.height - HeaderHeight - 6f);
+            Rect rack = new Rect(body.xMax - RackWidth, body.y, RackWidth, body.height);
+            Rect table = new Rect(body.x, body.y, body.width - RackWidth - 10f, body.height);
 
-            DominionTheme.Header(l, "Dominion_WarTab_Warbands".Translate());
-            DrawWarbands(l);
-
-            DominionTheme.Header(l, "Dominion_WarTab_Occupied".Translate());
-            DrawOccupied(l, comp);
-
-            DominionTheme.Header(l, "Dominion_WarTab_Blockades".Translate());
-            List<Blockade> blockades = comp.Wars.blockades.Where(b => b.StillValid).ToList();
-            if (blockades.Count == 0)
+            // The campaign map takes the top of the table; the open dossier lies below it.
+            Rect mapRect = new Rect(table.x, table.y, table.width, Mathf.Max(220f, table.height * 0.52f));
+            if (focusedId != selectedId)
             {
-                GUI.color = Color.gray;
-                l.Label("  " + "Dominion_WarTab_NoBlockades".Translate());
-                GUI.color = Color.white;
+                focusedId = selectedId;
+                if (selected != null) map.FocusOn(WarTiles(selected));
+                else map.Reset();
             }
-            foreach (Blockade b in blockades)
-                l.Label("  " + "Dominion_WarTab_BlockadeLine".Translate(b.caravan.Label, b.settlement.Label,
-                    (Find.TickManager.TicksGame - b.startTick).ToStringTicksToPeriod(allowSeconds: false)));
+            map.Draw(mapRect, MapStyle.WarRoom, selected?.attacker, selected?.defender, selected != null ? new List<War> { selected } : null,
+                f => DominionUIState.selected = f);
+            Rect dossier = new Rect(table.x, mapRect.yMax + 8f, table.width, table.yMax - mapRect.yMax - 8f);
+            if (selected != null) DrawDossier(dossier, selected, comp);
+            else DrawTheatre(dossier, comp);
 
-            height = Mathf.Max(l.CurHeight + 20f, rect.height);
-            l.End();
+            DrawRack(rack, mine, world);
+        }
+
+        /// <summary>The selected war, or the theatre report; keeps the choice valid as wars end.</summary>
+        private War Pick(List<War> mine, List<War> world)
+        {
+            Faction focus = DominionUIState.selected;
+            if (selectedId == int.MinValue)
+            {
+                War first = mine.FirstOrDefault(w => w.Involves(focus)) ?? mine.FirstOrDefault() ?? world.FirstOrDefault(w => w.Involves(focus) && Known(w));
+                selectedId = first?.id ?? TheatreId;
+            }
+            if (selectedId == TheatreId) return null;
+            War found = mine.Concat(world).FirstOrDefault(w => w.id == selectedId);
+            if (found == null) selectedId = TheatreId;
+            return found;
+        }
+
+        private static IEnumerable<PlanetTile> WarTiles(War w)
+        {
+            Settlement a = DominionUIState.Capital(w.attacker), b = DominionUIState.Capital(w.defender);
+            if (a != null) yield return a.Tile;
+            if (b != null) yield return b.Tile;
+            foreach (Warband band in WarbandUtility.All())
+                if (band.VisibleToPlayer && w.Involves(band.Faction) && w.Involves(band.target)) yield return band.Tile;
+        }
+
+        private static bool Known(War w) => w.InvolvesPlayer || IntelUtility.IntelOn(w.attacker, w.defender) >= IntelUtility.RestrictedIntel;
+
+        // ------------------------------------------------------------------ header
+
+        private static void DrawHeader(Rect rect, List<War> mine, List<War> world)
+        {
+            Widgets.DrawBoxSolid(rect, new Color(0f, 0f, 0f, 0.45f));
+            GUI.color = new Color(Red.r, Red.g, Red.b, 0.6f);
+            Widgets.DrawBox(rect);
+            GUI.color = Color.white;
+            // A red lamp that blinks while anyone marches on you.
+            int atUs = WarbandUtility.All().Count(b => b.VisibleToPlayer && b.target != null && b.target.IsPlayer);
+            Rect lamp = new Rect(rect.x + 8f, rect.y + 9f, 16f, 16f);
+            bool on = atUs == 0 || Time.realtimeSinceStartup % 1f < 0.6f;
+            Widgets.DrawBoxSolid(lamp, atUs > 0 ? (on ? Red : new Color(0.3f, 0.08f, 0.05f)) : new Color(0.25f, 0.5f, 0.25f));
+            if (atUs > 0 && on) DominionRooms.DrawGlow(lamp.center, 26f, new Color(1f, 0.2f, 0.1f, 0.5f));
+            TooltipHandler.TipRegion(lamp, atUs > 0 ? "Dominion_WarRoom_Alarm".Translate(atUs) : "Dominion_WarRoom_Quiet".Translate());
+            DominionTheme.InkLabel(new Rect(lamp.xMax + 10f, rect.y, 300f, rect.height), "Dominion_WarRoom_Title".Translate().ToString().ToUpper(), Stencil, GameFont.Medium, TextAnchor.MiddleLeft);
+            string status = "Dominion_WarRoom_Status".Translate(mine.Count, world.Count(Known), atUs);
+            DominionTheme.InkLabel(new Rect(rect.x + 320f, rect.y, rect.width - 330f, rect.height), status, Dim, GameFont.Small, TextAnchor.MiddleRight);
+        }
+
+        // ------------------------------------------------------------------ the rack of dossiers
+
+        private void DrawRack(Rect rect, List<War> mine, List<War> world)
+        {
+            // A board on the wall, with the dossiers clipped to it.
+            Widgets.DrawBoxSolid(rect, new Color(0.12f, 0.1f, 0.09f, 0.85f));
+            DominionRooms.DrawMoulding(rect, new Color(0.5f, 0.4f, 0.3f, 0.4f));
+            Rect inner = rect.ContractedBy(8f);
+            var known = world.Where(Known).OrderBy(w => w.Involves(DominionUIState.selected) ? 0 : 1).ToList();
+            int unknown = world.Count - known.Count;
+            float h = 22f + Mathf.Max(1, mine.Count) * (FolderHeight + 4f) + 26f + Mathf.Max(1, known.Count) * (FolderHeight + 4f) + (unknown > 0 ? 22f : 0f) + 30f + FolderHeight + 10f;
+            Rect view = new Rect(0f, 0f, inner.width - (h > inner.height ? 16f : 0f), h);
+            Widgets.BeginScrollView(inner, ref rackScroll, view);
+            float y = 0f;
+            RackHeading(ref y, view.width, "Dominion_WarTab_Yours".Translate());
+            if (mine.Count == 0) RackNone(ref y, view.width, "Dominion_WarRoom_NoWarsYours".Translate());
+            foreach (War w in mine) Folder(ref y, view.width, w.Label, w, w.id);
+            y += 4f;
+            RackHeading(ref y, view.width, "Dominion_WarTab_World".Translate());
+            if (known.Count == 0) RackNone(ref y, view.width, "Dominion_None".Translate());
+            foreach (War w in known) Folder(ref y, view.width, w.Label, w, w.id);
+            if (unknown > 0)
+            {
+                DominionTheme.InkLabel(new Rect(4f, y, view.width, 20f), "Dominion_WarRoom_Unknown".Translate(unknown), Dim, GameFont.Tiny);
+                y += 22f;
+            }
+            y += 8f;
+            RackHeading(ref y, view.width, "Dominion_WarRoom_Reports".Translate());
+            Folder(ref y, view.width, "Dominion_WarRoom_Theatre".Translate(), null, TheatreId);
             Widgets.EndScrollView();
         }
 
-        private static void None(Listing_Standard l)
+        private static void RackHeading(ref float y, float width, string text)
         {
-            GUI.color = Color.gray;
-            l.Label("  " + "Dominion_None".Translate());
-            GUI.color = Color.white;
+            DominionTheme.InkLabel(new Rect(2f, y, width, 20f), text.ToUpper(), Stencil, GameFont.Tiny);
+            Widgets.DrawBoxSolid(new Rect(2f, y + 18f, width - 4f, 1f), new Color(Stencil.r, Stencil.g, Stencil.b, 0.3f));
+            y += 22f;
         }
 
-        // ------------------------------------------------------------------ your wars
-
-        private void DrawPlayerWar(Listing_Standard l, War w, WorldComponent_Dominion comp)
+        private static void RackNone(ref float y, float width, string text)
         {
-            Faction enemy = w.Other(Faction.OfPlayer);
-            Rect card = l.GetRect(CardHeight);
-            Widgets.DrawMenuSection(card);
-            Rect inner = card.ContractedBy(8f);
-            float mapW = Mathf.Min(inner.width * 0.36f, 300f);
-            Rect map = new Rect(inner.xMax - mapW, inner.y, mapW, mapW / 2f);
-            Rect left = new Rect(inner.x, inner.y, inner.width - mapW - 10f, inner.height);
+            DominionTheme.InkLabel(new Rect(6f, y, width - 6f, FolderHeight), text, Dim, GameFont.Tiny);
+            y += FolderHeight + 4f;
+        }
 
-            // Title
-            FactionUIUtility.DrawFactionIconWithTooltip(new Rect(left.x, left.y + 2f, 24f, 24f), w.attacker);
-            FactionUIUtility.DrawFactionIconWithTooltip(new Rect(left.x + 26f, left.y + 2f, 24f, 24f), w.defender);
-            Text.Font = GameFont.Medium;
-            Rect titleRect = new Rect(left.x + 56f, left.y - 2f, left.width - 56f, 32f);
-            Widgets.Label(titleRect, w.Label.Truncate(titleRect.width));
-            Text.Font = GameFont.Small;
-            string goal = "Dominion_WarTab_Goal".Translate(WarUtility.GoalLabel(w.goal));
-            if (w.alliedTo != null) goal += "  " + "Dominion_WarTab_JoinedFor".Translate(w.alliedTo.Name);
-            GUI.color = Color.gray;
-            Widgets.Label(new Rect(left.x, left.y + 30f, left.width, 22f), goal.Truncate(left.width));
+        /// <summary>A manila dossier clipped to the rack. The open one sticks out; hover lifts it a little.</summary>
+        private void Folder(ref float y, float width, string label, War w, int id)
+        {
+            bool open = selectedId == id;
+            Rect slot = new Rect(0f, y, width, FolderHeight);
+            bool over = Mouse.IsOver(slot);
+            Rect f = new Rect(open ? 0f : 10f, y + (over && !open ? -2f : 0f), width - 10f, FolderHeight);
+            GUI.color = open ? Color.white : over ? new Color(0.95f, 0.93f, 0.88f) : new Color(0.82f, 0.8f, 0.75f);
+            // Only the top of the folder shows: its tab and the start of the front cover.
+            GUI.DrawTextureWithTexCoords(f, DominionRooms.Folder, new Rect(0f, 1f - FolderHeight / 300f * 1.4f, 1f, FolderHeight / 300f * 1.4f));
             GUI.color = Color.white;
-            TooltipHandler.TipRegion(new Rect(left.x, left.y, left.width, 52f), WarUtility.GoalDescription(w.goal));
-
-            // Score and gauges
-            DrawScoreBar(new Rect(left.x, left.y + 54f, left.width, 22f), w);
-            float gy = left.y + 82f;
-            FactionState es = DominionScheduler.IsSimulated(enemy) ? comp.GetState(enemy) : null;
-            if (es != null)
+            // A clip at the top.
+            Widgets.DrawBoxSolid(new Rect(f.xMax - 30f, f.y - 2f, 14f, 8f), new Color(0.6f, 0.6f, 0.62f));
+            Rect text = new Rect(f.x + 8f, f.y + 12f, f.width - 16f, 20f);
+            if (w != null)
             {
-                Rect wr = new Rect(left.x, gy, left.width * 0.5f - 4f, 20f);
-                DominionUI.Bar(wr, "Dominion_WarTab_Weariness".Translate(enemy.Name.Truncate(90f)), es.warWeariness / 100f, es.warWeariness.ToString("F0"));
-                TooltipHandler.TipRegion(wr, "Dominion_WarTab_Weariness_Desc".Translate(enemy.Name));
+                Widgets.DrawBoxSolid(new Rect(f.x + 4f, f.y + 2f, 26f, 6f), w.attacker.Color);
+                Widgets.DrawBoxSolid(new Rect(f.x + 32f, f.y + 2f, 26f, 6f), w.defender.Color);
+                DominionTheme.InkLabel(text, label.Truncate(text.width), DominionTheme.Ink, GameFont.Tiny);
+                Rect bar = new Rect(f.x + 8f, f.y + 32f, f.width - 16f, 14f);
+                if (Known(w)) DrawScoreBar(bar, w);
+                if (w.InvolvesPlayer && WarbandUtility.All().Any(b => b.VisibleToPlayer && b.target != null && b.target.IsPlayer && b.Faction == w.Other(Faction.OfPlayer)))
+                    Widgets.DrawBoxSolid(new Rect(f.xMax - 12f, f.y + 12f, 6f, 6f), Red);
             }
-            Rect cas = new Rect(left.x + left.width * 0.5f + 4f, gy, left.width * 0.5f - 4f, 20f);
-            Widgets.Label(cas, "Dominion_WarTab_Casualties".Translate(w.DeadOf(Faction.OfPlayer), w.DeadOf(enemy)).ToString().Truncate(cas.width));
+            else
+            {
+                DominionTheme.InkLabel(text, label.Truncate(text.width), DominionTheme.Ink, GameFont.Small);
+                DominionTheme.InkLabel(new Rect(text.x, text.y + 18f, text.width, 18f), "Dominion_WarRoom_Theatre_Sub".Translate(), DominionTheme.InkFaded, GameFont.Tiny);
+            }
+            TooltipHandler.TipRegion(slot, w != null ? w.Label + "\n" + WarUtility.GoalDescription(w.goal) + "\n\n" + "Dominion_WarRoom_OpenDossier".Translate()
+                : (string)"Dominion_WarRoom_Theatre_Desc".Translate());
+            if (Widgets.ButtonInvisible(slot))
+            {
+                if (selectedId != id) dossierScroll = Vector2.zero;
+                selectedId = id;
+                SoundDefOf.PageChange.PlayOneShotOnCamera();
+            }
+            y += FolderHeight + 4f;
+        }
+
+        // ------------------------------------------------------------------ the open dossier
+
+        private void DrawDossier(Rect rect, War w, WorldComponent_Dominion comp)
+        {
+            DominionPaper.DrawParchment(rect, border: false);
+            GUI.color = DominionPaper.Edge;
+            Widgets.DrawBox(rect);
+            GUI.color = Color.white;
+            bool known = Known(w);
+            if (w.InvolvesPlayer)
+                DominionTheme.DrawStamp(new Rect(rect.xMax - 136f, rect.y + 6f, 120f, 40f), DominionPaper.StampTopSecret, DominionTheme.InkRed, 6f);
+
+            Rect inner = rect.ContractedBy(12f);
+            Rect view = new Rect(0f, 0f, inner.width - 16f, Mathf.Max(inner.height, dossierHeight));
+            Widgets.BeginScrollView(inner, ref dossierScroll, view);
+            float x = 0f, y = 0f, width = view.width;
+
+            // Title and goal.
+            FactionUIUtility.DrawFactionIconWithTooltip(new Rect(x, y + 2f, 24f, 24f), w.attacker);
+            FactionUIUtility.DrawFactionIconWithTooltip(new Rect(x + 26f, y + 2f, 24f, 24f), w.defender);
+            DominionTheme.InkLabel(new Rect(x + 56f, y, width - 200f, 30f), w.Label.Truncate(width - 200f), DominionTheme.Ink, GameFont.Medium);
+            y += 30f;
+            string goal = "Dominion_WarTab_Goal".Translate(WarUtility.GoalLabel(w.goal)) + "  ·  " + "Dominion_WarRoom_Since".Translate(w.DurationTicks.ToStringTicksToPeriod(allowSeconds: false));
+            if (w.alliedTo != null) goal += "  ·  " + "Dominion_WarTab_JoinedFor".Translate(w.alliedTo.Name);
+            Rect goalRect = new Rect(x, y, width, 20f);
+            DominionTheme.InkLabel(goalRect, goal.Truncate(width), DominionTheme.InkFaded, GameFont.Tiny);
+            TooltipHandler.TipRegion(goalRect, WarUtility.GoalDescription(w.goal));
+            y += 22f;
+
+            if (!known)
+            {
+                DominionTheme.InkLabel(new Rect(x, y, width, 40f), IntelUtility.Unknown(IntelUtility.RestrictedIntel), DominionTheme.InkFaded);
+                dossierHeight = y + 50f;
+                Widgets.EndScrollView();
+                return;
+            }
+
+            // The tug of war.
+            DrawRope(new Rect(x, y, width, 46f), w);
+            y += 52f;
+
+            // Gauges: their weariness, the dead on both sides, battles.
+            Faction them = w.InvolvesPlayer ? w.Other(Faction.OfPlayer) : w.defender;
+            Faction us = w.InvolvesPlayer ? Faction.OfPlayer : w.attacker;
+            float col = width / 3f;
+            FactionState ts = DominionScheduler.IsSimulated(them) ? comp.GetState(them) : null;
+            if (ts != null)
+            {
+                Rect wr = new Rect(x, y, col - 10f, 34f);
+                InkGauge(wr, "Dominion_WarTab_Weariness".Translate(them.Name.Truncate(90f)), ts.warWeariness / 100f, ts.warWeariness.ToString("F0"));
+                TooltipHandler.TipRegion(wr, "Dominion_WarTab_Weariness_Desc".Translate(them.Name));
+            }
+            Rect cas = new Rect(x + col, y, col - 10f, 34f);
+            DominionTheme.InkLabel(new Rect(cas.x, cas.y, cas.width, 16f), "Dominion_WarRoom_Dead".Translate().ToString().ToUpper(), DominionTheme.InkRed, GameFont.Tiny);
+            DominionTheme.InkLabel(new Rect(cas.x, cas.y + 15f, cas.width, 20f), us.Name.Truncate(cas.width * 0.5f) + " " + w.DeadOf(us) + "  ·  " + them.Name.Truncate(cas.width * 0.5f) + " " + w.DeadOf(them), DominionTheme.Ink, GameFont.Tiny);
             TooltipHandler.TipRegion(cas, "Dominion_WarTab_Casualties_Desc".Translate(w.DurationTicks.ToStringTicksToPeriod(allowSeconds: false), w.battles));
-            gy += 24f;
+            Rect bat = new Rect(x + col * 2f, y, col, 34f);
+            DominionTheme.InkLabel(new Rect(bat.x, bat.y, bat.width, 16f), "Dominion_WarRoom_Battles".Translate().ToString().ToUpper(), DominionTheme.InkRed, GameFont.Tiny);
+            DominionTheme.InkLabel(new Rect(bat.x, bat.y + 15f, bat.width, 20f), w.battles + "  ·  " + "Dominion_WarRoom_Occupied".Translate(PeaceTerms.OccupiedBetween(w).Count), DominionTheme.Ink, GameFont.Tiny);
+            y += 40f;
 
-            // Peace now
-            if (!termsCache.TryGetValue(w.id, out string terms))
-                termsCache[w.id] = terms = PeaceTerms.Describe(w);
-            Rect termsRow = new Rect(left.x, gy, left.width, 22f);
-            GUI.color = new Color(0.8f, 0.8f, 0.8f);
-            Widgets.Label(termsRow, ("Dominion_WarTab_PeaceNow".Translate() + "  " + terms.Split('\n').FirstOrDefault()).Truncate(termsRow.width));
-            GUI.color = Color.white;
-            TooltipHandler.TipRegion(termsRow, terms);
-            gy += 26f;
-
-            // Stance
-            Widgets.Label(new Rect(left.x, gy, 90f, 26f), "Dominion_WarTab_Stance".Translate());
-            float sw = (left.width - 92f) / 4f;
-            int i = 0;
-            foreach (WarStance s in System.Enum.GetValues(typeof(WarStance)))
+            if (w.InvolvesPlayer)
             {
-                Rect b = new Rect(left.x + 92f + i * sw, gy, sw - 3f, 26f);
-                string why = WarOrders.CannotChangeStanceReason(w, s);
-                if (w.stance == s) Widgets.DrawHighlightSelected(b);
-                string tip = WarOrders.StanceDesc(s) + (w.stance == s ? "" : "\n\n" + "Dominion_Stance_Cost".Translate(WarOrders.StanceCost.ToString("F0"))
-                             + (why != null ? "\n" + why.Colorize(ColorLibrary.RedReadable) : ""));
-                if (DominionUIState.ButtonWithTip(b, WarOrders.StanceLabel(s), tip, w.stance != s && why == null)) WarOrders.SetStance(w, s);
-                i++;
+                // Peace now, in one line; the full terms on hover.
+                if (!termsCache.TryGetValue(w.id, out string terms))
+                    termsCache[w.id] = terms = PeaceTerms.Describe(w);
+                Rect termsRow = new Rect(x, y, width, 20f);
+                DominionTheme.InkLabel(termsRow, ("Dominion_WarTab_PeaceNow".Translate() + "  " + terms.Split('\n').FirstOrDefault()).Truncate(width), DominionTheme.Ink, GameFont.Tiny);
+                TooltipHandler.TipRegion(termsRow, terms);
+                y += 24f;
+                y = DrawStance(x, y, width, w);
+                y = DrawOrders(x, y, width, w, comp);
             }
-            gy += 30f;
 
-            // Orders
-            float bw = (left.width - 9f) / 4f;
-            Rect peaceB = new Rect(left.x, gy, bw, 28f);
+            // The chronicle, newest first, typed on the sheet.
+            DominionPaper.Caption(new Rect(x, y, width, 16f), "Dominion_WarRoom_Chronicle".Translate());
+            y += 18f;
+            y = DrawChronicle(x, y, width, w);
+            dossierHeight = y + 10f;
+            Widgets.EndScrollView();
+        }
+
+        /// <summary>
+        /// A rope pulled between the two sides: the knot sits where the score is, the flags at the ends are the
+        /// factions, and the marks near each end are where the leader can dictate the peace.
+        /// </summary>
+        private static void DrawRope(Rect rect, War w)
+        {
+            float mid = rect.center.x;
+            float ry = rect.y + 24f;
+            float half = rect.width / 2f - 40f;
+            // Flags at the ends.
+            Rect fa = new Rect(rect.xMax - 32f, ry - 14f, 28f, 28f), fd = new Rect(rect.x + 4f, ry - 14f, 28f, 28f);
+            GUI.color = w.attacker.Color;
+            GUI.DrawTexture(fa, w.attacker.def.FactionIcon);
+            GUI.color = w.defender.Color;
+            GUI.DrawTexture(fd, w.defender.def.FactionIcon);
+            GUI.color = Color.white;
+            TooltipHandler.TipRegion(fa, w.attacker.Name);
+            TooltipHandler.TipRegion(fd, w.defender.Name);
+            // The rope: a thick line with a twist drawn across it.
+            Color rope = new Color(0.55f, 0.42f, 0.25f);
+            Widgets.DrawLine(new Vector2(mid - half, ry), new Vector2(mid + half, ry), rope, 5f);
+            for (float t = mid - half; t < mid + half; t += 6f)
+                Widgets.DrawLine(new Vector2(t, ry - 2f), new Vector2(t + 3f, ry + 2f), new Color(0.35f, 0.26f, 0.15f), 1f);
+            // Centre line and the decisive marks.
+            float d = half * PeaceTerms.DecisiveScore / 100f;
+            GUI.color = DominionTheme.InkFaded;
+            Widgets.DrawLineVertical(mid, ry - 12f, 24f);
+            GUI.color = DominionTheme.InkRed;
+            Widgets.DrawLineVertical(mid - d, ry - 9f, 18f);
+            Widgets.DrawLineVertical(mid + d, ry - 9f, 18f);
+            GUI.color = Color.white;
+            // The knot, eased towards the score so a change is seen to move.
+            float k = mid + half * Mathf.Clamp(w.score, -100f, 100f) / 100f;
+            Faction leader = w.Leader();
+            Rect knot = new Rect(k - 8f, ry - 8f, 16f, 16f);
+            Widgets.DrawBoxSolid(knot.ExpandedBy(1f), DominionTheme.Ink);
+            Widgets.DrawBoxSolid(knot, leader?.Color ?? new Color(0.7f, 0.65f, 0.55f));
+            string label = leader == null ? "Dominion_WarTab_Even".Translate(w.score.ToString("F0")).ToString()
+                : "Dominion_WarTab_Ahead".Translate(leader.Name, Mathf.Abs(w.score).ToString("F0")).ToString();
+            DominionTheme.InkLabel(new Rect(rect.x, rect.y, rect.width, 14f), label, DominionTheme.Ink, GameFont.Tiny, TextAnchor.UpperCenter);
+            TooltipHandler.TipRegion(rect, "Dominion_WarTab_Score_Desc".Translate(w.attacker.Name, w.defender.Name));
+        }
+
+        private static void InkGauge(Rect r, string label, float frac, string value)
+        {
+            DominionTheme.InkLabel(new Rect(r.x, r.y, r.width, 16f), label.ToUpper(), DominionTheme.InkRed, GameFont.Tiny);
+            Rect bar = new Rect(r.x, r.y + 17f, r.width, 12f);
+            Widgets.DrawBoxSolid(bar, new Color(0.3f, 0.24f, 0.17f, 0.15f));
+            Widgets.DrawBoxSolid(new Rect(bar.x, bar.y, bar.width * Mathf.Clamp01(frac), bar.height), new Color(DominionTheme.InkRed.r, DominionTheme.InkRed.g, DominionTheme.InkRed.b, 0.55f));
+            GUI.color = DominionPaper.Edge;
+            Widgets.DrawBox(bar);
+            GUI.color = Color.white;
+            DominionTheme.InkLabel(bar, value, DominionTheme.Ink, GameFont.Tiny, TextAnchor.MiddleCenter);
+        }
+
+        /// <summary>The stance switches: a row of toggles, the one in force lit green.</summary>
+        private static float DrawStance(float x, float y, float width, War w)
+        {
+            DominionPaper.Caption(new Rect(x, y, width, 16f), "Dominion_WarTab_Stance".Translate());
+            y += 16f;
+            var stances = System.Enum.GetValues(typeof(WarStance)).Cast<WarStance>().ToList();
+            float sw = width / stances.Count;
+            for (int i = 0; i < stances.Count; i++)
+            {
+                WarStance s = stances[i];
+                Rect b = new Rect(x + i * sw + 2f, y, sw - 4f, 30f);
+                bool current = w.stance == s;
+                string why = current ? null : WarOrders.CannotChangeStanceReason(w, s);
+                string tip = WarOrders.StanceDesc(s) + (current ? "" : "\n\n" + "Dominion_Stance_Cost".Translate(WarOrders.StanceCost.ToString("F0")));
+                if (DominionRooms.BrassButton(b, "   " + WarOrders.StanceLabel(s), tip, why, current) && !current) WarOrders.SetStance(w, s);
+                // The lamp on the switch.
+                Rect lamp = new Rect(b.x + 8f, b.center.y - 4f, 8f, 8f);
+                Widgets.DrawBoxSolid(lamp, current ? new Color(0.3f, 0.95f, 0.35f) : new Color(0.15f, 0.2f, 0.15f));
+                if (current) DominionRooms.DrawGlow(lamp.center, 12f, new Color(0.3f, 1f, 0.35f, 0.5f));
+            }
+            return y + 36f;
+        }
+
+        private float DrawOrders(float x, float y, float width, War w, WorldComponent_Dominion comp)
+        {
+            DominionPaper.Caption(new Rect(x, y, width, 16f), "Dominion_WarRoom_Orders".Translate());
+            y += 16f;
+            Faction enemy = w.Other(Faction.OfPlayer);
+            float bw = width / 3f;
+            Rect peaceB = new Rect(x + 2f, y, bw - 4f, 30f);
             DiplomacyActionDef peace = DefDatabase<DiplomacyActionDef>.GetNamedSilentFail("Dominion_ProposePeace");
             if (peace != null)
             {
                 string why = DiplomacyActions.CannotUseReason(peace, enemy);
                 float? chance = why == null ? peace.Worker.AcceptanceChance(enemy) : null;
                 string label = "Dominion_WarTab_PeaceTable".Translate() + (chance.HasValue ? " (" + chance.Value.ToStringPercent() + ")" : "");
-                if (DominionUIState.ButtonWithTip(peaceB, label, "Dominion_WarTab_PeaceTable_Desc".Translate() + (why != null ? "\n\n" + why.Colorize(ColorLibrary.RedReadable) : ""), why == null))
+                if (DominionRooms.BrassButton(peaceB, label, "Dominion_WarTab_PeaceTable_Desc".Translate(), why))
                     Find.WindowStack.Add(new Dialog_PeaceTable(w));
             }
-            Rect mercB = new Rect(peaceB.xMax + 3f, gy, bw, 28f);
-            if (DominionUIState.ButtonWithTip(mercB, "Dominion_WarTab_Mercenaries".Translate(), "Dominion_WarTab_Mercenaries_Desc".Translate(WarOrders.MercenaryCooldownDays)))
+            Rect mercB = new Rect(x + bw + 2f, y, bw - 4f, 30f);
+            if (DominionRooms.BrassButton(mercB, "Dominion_WarTab_Mercenaries".Translate(), "Dominion_WarTab_Mercenaries_Desc".Translate(WarOrders.MercenaryCooldownDays)))
                 MercenaryMenu(w);
-            Rect callB = new Rect(mercB.xMax + 3f, gy, bw, 28f);
+            Rect callB = new Rect(x + bw * 2f + 2f, y, bw - 4f, 30f);
             DiplomacyActionDef call = DefDatabase<DiplomacyActionDef>.GetNamedSilentFail("Dominion_CallToArms");
-            if (call != null && DominionUIState.ButtonWithTip(callB, call.LabelCap, call.description)) CallToArmsMenu(call, enemy, comp);
-            Rect chronB = new Rect(callB.xMax + 3f, gy, bw, 28f);
-            bool open = openChronicles.Contains(w.id);
-            if (DominionUIState.ButtonWithTip(chronB, (open ? "Dominion_WarTab_HideChronicle" : "Dominion_WarTab_Chronicle").Translate(w.chronicle.Count), "Dominion_WarTab_Chronicle_Desc".Translate()))
-            {
-                if (open) openChronicles.Remove(w.id);
-                else openChronicles.Add(w.id);
-            }
+            if (call != null && DominionRooms.BrassButton(callB, call.LabelCap, call.description)) CallToArmsMenu(call, enemy, comp);
+            y += 36f;
 
-            // Map of the front, and the warbands in this war.
-            MiniWorldMap.Draw(map, w.attacker, w.defender, new List<War> { w });
-            float wy = map.yMax + 4f;
+            // Their warbands in the field, one line each: click to find it.
             foreach (Warband band in WarbandUtility.All())
             {
                 if (!band.VisibleToPlayer || !w.Involves(band.Faction) || !w.Involves(band.target)) continue;
-                if (wy + 22f > inner.yMax) break;
-                Rect r = new Rect(map.x, wy, map.width, 22f);
-                Widgets.DrawHighlightIfMouseover(r);
-                Text.Font = GameFont.Tiny;
-                string eta = band.Blockading ? "Dominion_Warband_BlockadingShort".Translate().ToString()
-                    : band.TicksToArrival.ToStringTicksToPeriod(allowSeconds: false);
-                Widgets.Label(r, (band.Faction.Name + " → " + (band.targetSettlement?.Label ?? band.target?.Name ?? "?") + "  (" + eta + ")").Truncate(r.width));
-                Text.Font = GameFont.Small;
+                Rect r = new Rect(x, y, width, 20f);
+                if (Mouse.IsOver(r)) Widgets.DrawBoxSolid(r, DominionTheme.PaperShade);
+                string eta = band.Blockading ? "Dominion_Warband_BlockadingShort".Translate().ToString() : band.TicksToArrival.ToStringTicksToPeriod(allowSeconds: false);
+                bool atUs = band.target != null && band.target.IsPlayer;
+                DominionTheme.InkLabel(r, ("▸ " + band.Faction.Name + " → " + (band.targetSettlement?.Label ?? band.target?.Name ?? "?") + "  (" + eta + ")").Truncate(width),
+                    atUs ? DominionTheme.InkRed : DominionTheme.Ink, GameFont.Tiny, TextAnchor.MiddleLeft);
                 TooltipHandler.TipRegion(r, band.MissionText + "\n\n" + "Dominion_Tip_ShowOnMap".Translate());
                 if (Widgets.ButtonInvisible(r)) CameraJumper.TryJumpAndSelect(band);
-                wy += 22f;
+                y += 20f;
             }
-
-            if (open) DrawChronicle(l, w);
-            l.Gap(8f);
+            return y + 6f;
         }
 
         private static void MercenaryMenu(War w)
@@ -229,40 +440,37 @@ namespace Dominion
         }
 
         /// <summary>The war's chronicle, newest first, with the score after each entry. Click a line to read the story.</summary>
-        private static void DrawChronicle(Listing_Standard l, War w)
+        private static float DrawChronicle(float x, float y, float width, War w)
         {
-            if (w.chronicle.Count == 0)
-            {
-                GUI.color = Color.gray;
-                l.Label("    " + "Dominion_WarTab_ChronicleEmpty".Translate());
-                GUI.color = Color.white;
-                return;
-            }
             int now = Find.TickManager.TicksGame;
             NewsLog news = WorldComponent_Dominion.Instance.News;
-            int shown = 0;
             float intel = w.InvolvesPlayer ? float.MaxValue : IntelUtility.IntelOn(w.attacker, w.defender);
-            for (int i = w.chronicle.Count - 1; i >= 0 && shown < ChronicleShown; i--)
+            int shown = 0;
+            for (int i = w.chronicle.Count - 1; i >= 0; i--)
             {
                 WarChronicleEntry e = w.chronicle[i];
                 if (intel < IntelUtility.RequiredIntel(e.secrecy)) continue;
                 shown++;
-                Rect r = l.GetRect(20f);
-                Widgets.DrawHighlightIfMouseover(r);
-                Text.Font = GameFont.Tiny;
-                GUI.color = Color.gray;
-                Widgets.Label(new Rect(r.x + 12f, r.y, 90f, r.height), "Dominion_News_Ago".Translate((now - e.tick).ToStringTicksToPeriod(allowSeconds: false)));
+                Rect r = new Rect(x, y, width, 20f);
+                if (Mouse.IsOver(r)) Widgets.DrawBoxSolid(r, DominionTheme.PaperShade);
+                DominionTheme.InkLabel(new Rect(r.x, r.y, 90f, r.height), "Dominion_News_Ago".Translate((now - e.tick).ToStringTicksToPeriod(allowSeconds: false)), DominionTheme.InkFaded, GameFont.Tiny, TextAnchor.MiddleLeft);
                 Faction ahead = e.score >= 0f ? w.attacker : w.defender;
-                GUI.color = ahead != null && ahead.IsPlayer ? new Color(0.6f, 0.9f, 0.6f) : new Color(1f, 0.65f, 0.55f);
-                Widgets.Label(new Rect(r.xMax - 70f, r.y, 70f, r.height), (Mathf.Abs(e.score) < 1f ? "0" : ahead?.Name.Truncate(40f) + " +" + Mathf.Abs(e.score).ToString("F0")));
-                GUI.color = Color.white;
-                Rect text = new Rect(r.x + 104f, r.y, r.width - 180f, r.height);
-                Widgets.Label(text, e.text.Truncate(text.width));
-                Text.Font = GameFont.Small;
+                string score = Mathf.Abs(e.score) < 1f ? "0" : ahead?.Name.Truncate(60f) + " +" + Mathf.Abs(e.score).ToString("F0");
+                bool good = ahead != null && ahead.IsPlayer;
+                DominionTheme.InkLabel(new Rect(r.xMax - 110f, r.y, 110f, r.height), score, good ? DominionTheme.InkGreen : DominionTheme.InkRed, GameFont.Tiny, TextAnchor.MiddleRight);
+                Rect text = new Rect(r.x + 92f, r.y, r.width - 206f, r.height);
+                DominionTheme.InkLabel(text, e.text.Truncate(text.width), DominionTheme.Ink, GameFont.Tiny, TextAnchor.MiddleLeft);
                 NewsItem story = e.eventId >= 0 ? FindStory(news, e.eventId) : null;
                 TooltipHandler.TipRegion(r, e.text + "\n\n" + (story != null ? "Dominion_WarTab_ReadStory".Translate().ToString() : "Dominion_WarTab_NoStory".Translate().ToString()));
                 if (story != null && Widgets.ButtonInvisible(r)) DominionUIState.ShowNews(story);
+                y += 20f;
             }
+            if (shown == 0)
+            {
+                DominionTheme.InkLabel(new Rect(x, y, width, 20f), "Dominion_WarTab_ChronicleEmpty".Translate(), DominionTheme.InkFaded, GameFont.Tiny);
+                y += 20f;
+            }
+            return y;
         }
 
         private static NewsItem FindStory(NewsLog log, int eventId)
@@ -273,45 +481,116 @@ namespace Dominion
             return null;
         }
 
-        // ------------------------------------------------------------------ the world's wars
+        // ------------------------------------------------------------------ the theatre report
 
-        private void DrawWorldWar(Listing_Standard l, War w)
+        private void DrawTheatre(Rect rect, WorldComponent_Dominion comp)
         {
-            bool known = IntelUtility.IntelOn(w.attacker, w.defender) >= IntelUtility.RestrictedIntel;
-            Rect row = l.GetRect(Line);
-            Widgets.DrawHighlightIfMouseover(row);
-            FactionUIUtility.DrawFactionIconWithTooltip(new Rect(row.x, row.y + 2f, 20f, 20f), w.attacker);
-            FactionUIUtility.DrawFactionIconWithTooltip(new Rect(row.x + 22f, row.y + 2f, 20f, 20f), w.defender);
-            string title = w.Label + "  (" + "Dominion_WarTab_Goal".Translate(WarUtility.GoalLabel(w.goal)) + ")";
-            if (w.alliedTo != null) title += "  " + "Dominion_WarTab_JoinedFor".Translate(w.alliedTo.Name);
-            Rect titleRect = new Rect(row.x + 48f, row.y, row.width * 0.5f - 48f, Line);
-            Widgets.Label(titleRect, title.Truncate(titleRect.width));
-            TooltipHandler.TipRegion(titleRect, title + "\n\n" + WarUtility.GoalDescription(w.goal));
+            DominionPaper.DrawParchment(rect, border: false);
+            GUI.color = DominionPaper.Edge;
+            Widgets.DrawBox(rect);
+            GUI.color = Color.white;
+            Rect inner = rect.ContractedBy(12f);
+            Rect view = new Rect(0f, 0f, inner.width - 16f, Mathf.Max(inner.height, dossierHeight));
+            Widgets.BeginScrollView(inner, ref dossierScroll, view);
+            float y = 0f, width = view.width;
+            DominionTheme.InkLabel(new Rect(0f, y, width, 30f), "Dominion_WarRoom_Theatre".Translate(), DominionTheme.Ink, GameFont.Medium);
+            y += 34f;
 
-            Rect bar = new Rect(row.x + row.width * 0.51f, row.y + 3f, row.width * 0.33f, Line - 6f);
-            if (known) DrawScoreBar(bar, w);
-            else
+            y = Section(y, width, "Dominion_WarTab_Warbands".Translate(), Warbands(), "Dominion_WarTab_NoWarbands".Translate());
+            y = Section(y, width, "Dominion_WarTab_ColdWars".Translate(), ColdWars(comp), "Dominion_None".Translate());
+            y = Section(y, width, "Dominion_WarTab_Occupied".Translate(), Occupied(comp), "Dominion_None".Translate());
+            var blockades = comp.Wars.blockades.Where(b => b.StillValid).Select(b => new Line(
+                "Dominion_WarTab_BlockadeLine".Translate(b.caravan.Label, b.settlement.Label, (Find.TickManager.TicksGame - b.startTick).ToStringTicksToPeriod(allowSeconds: false)),
+                true, () => CameraJumper.TryJumpAndSelect(b.settlement))).ToList();
+            y = Section(y, width, "Dominion_WarTab_Blockades".Translate(), blockades, "Dominion_WarTab_NoBlockades".Translate());
+            dossierHeight = y + 10f;
+            Widgets.EndScrollView();
+        }
+
+        private struct Line
+        {
+            public string text;
+            public bool alarm;
+            public System.Action click;
+
+            public Line(string text, bool alarm, System.Action click)
             {
-                GUI.color = Color.gray;
-                Widgets.Label(bar, IntelUtility.Unknown(IntelUtility.RestrictedIntel));
-                GUI.color = Color.white;
+                this.text = text;
+                this.alarm = alarm;
+                this.click = click;
             }
-            Rect chron = new Rect(row.xMax - row.width * 0.15f, row.y, row.width * 0.15f, Line);
-            bool open = openChronicles.Contains(w.id);
-            if (known && DominionUIState.ButtonWithTip(chron, (open ? "Dominion_WarTab_HideChronicle" : "Dominion_WarTab_Chronicle").Translate(w.chronicle.Count), "Dominion_WarTab_Chronicle_Desc".Translate()))
+        }
+
+        private static float Section(float y, float width, string title, List<Line> lines, string none)
+        {
+            DominionPaper.Caption(new Rect(0f, y, width, 16f), title);
+            y += 18f;
+            if (lines.Count == 0)
             {
-                if (open) openChronicles.Remove(w.id);
-                else openChronicles.Add(w.id);
+                DominionTheme.InkLabel(new Rect(8f, y, width, 20f), none, DominionTheme.InkFaded, GameFont.Tiny);
+                return y + 26f;
             }
-            if (known)
+            foreach (Line l in lines)
             {
-                GUI.color = new Color(0.8f, 0.8f, 0.8f);
-                l.Label("    " + "Dominion_WarTab_Details".Translate(w.DurationTicks.ToStringTicksToPeriod(allowSeconds: false), w.battles,
-                    PeaceTerms.OccupiedBetween(w).Count) + "  " + "Dominion_WarTab_Casualties".Translate(w.deadAttacker, w.deadDefender));
-                GUI.color = Color.white;
-                if (open) DrawChronicle(l, w);
+                Rect r = new Rect(0f, y, width, 20f);
+                if (l.click != null && Mouse.IsOver(r)) Widgets.DrawBoxSolid(r, DominionTheme.PaperShade);
+                DominionTheme.InkLabel(new Rect(8f, y, width - 8f, 20f), ("▸ " + l.text).Truncate(width - 8f), l.alarm ? DominionTheme.InkRed : DominionTheme.Ink, GameFont.Tiny, TextAnchor.MiddleLeft);
+                if (l.click != null)
+                {
+                    TooltipHandler.TipRegion(r, l.text + "\n\n" + "Dominion_Tip_ShowOnMap".Translate());
+                    if (Widgets.ButtonInvisible(r)) l.click();
+                }
+                y += 20f;
             }
-            l.Gap(4f);
+            return y + 8f;
+        }
+
+        private static List<Line> Warbands()
+        {
+            var lines = new List<Line>();
+            foreach (Warband w in WarbandUtility.All())
+            {
+                if (!w.VisibleToPlayer) continue;
+                Warband band = w;
+                string text = w.Label + ": " + w.MissionText + "  " + (w.Blockading ? "" : "Dominion_Warband_Arrives".Translate(w.TicksToArrival.ToStringTicksToPeriod(allowSeconds: false)).ToString());
+                lines.Add(new Line(text, w.target != null && w.target.IsPlayer, () => CameraJumper.TryJumpAndSelect(band)));
+            }
+            return lines;
+        }
+
+        private static List<Line> ColdWars(WorldComponent_Dominion comp)
+        {
+            var lines = new List<Line>();
+            var seen = new HashSet<long>();
+            var factions = new List<Faction>(comp.Cache.Simulated);
+            if (Faction.OfPlayerSilentFail != null) factions.Add(Faction.OfPlayer);
+            foreach (Faction a in factions)
+                foreach (Faction b in factions)
+                {
+                    if (a == b) continue;
+                    RelationState r = comp.TryGetRelation(a, b);
+                    if (r == null || !r.ColdWar) continue;
+                    long key = RelationState.Key(Mathf.Min(a.loadID, b.loadID), Mathf.Max(a.loadID, b.loadID));
+                    if (!seen.Add(key)) continue;
+                    lines.Add(new Line("Dominion_WarTab_ColdWarLine".Translate(a.Name, b.Name, (Find.TickManager.TicksGame - r.coldWarSince).ToStringTicksToPeriod(allowSeconds: false)),
+                        a.IsPlayer || b.IsPlayer, null));
+                }
+            return lines;
+        }
+
+        private static List<Line> Occupied(WorldComponent_Dominion comp)
+        {
+            var lines = new List<Line>();
+            if (comp.Wars.originalOwner.Count == 0) return lines;
+            foreach (Settlement s in Find.WorldObjects.Settlements)
+            {
+                int orig = comp.Wars.OriginalOwnerOf(s);
+                if (orig < 0 || s.Faction == null || s.Faction.loadID == orig) continue;
+                Faction o = comp.Cache.FactionById(orig);
+                Settlement captured = s;
+                lines.Add(new Line("Dominion_WarTab_OccupiedLine".Translate(s.Label, s.Faction.Name, o?.Name ?? "?"), o != null && o.IsPlayer, () => CameraJumper.TryJumpAndSelect(captured)));
+            }
+            return lines;
         }
 
         /// <summary>A tug of war: red to the left (defender winning), the attacker's side to the right.</summary>
@@ -339,72 +618,6 @@ namespace Dominion
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.UpperLeft;
             TooltipHandler.TipRegion(bar, "Dominion_WarTab_Score_Desc".Translate(w.attacker.Name, w.defender.Name));
-        }
-
-        // ------------------------------------------------------------------ the rest
-
-        private static void DrawColdWars(Listing_Standard l, WorldComponent_Dominion comp)
-        {
-            var seen = new HashSet<long>();
-            var factions = new List<Faction>(comp.Cache.Simulated);
-            if (Faction.OfPlayerSilentFail != null) factions.Add(Faction.OfPlayer);
-            int n = 0;
-            foreach (Faction a in factions)
-                foreach (Faction b in factions)
-                {
-                    if (a == b) continue;
-                    RelationState r = comp.TryGetRelation(a, b);
-                    if (r == null || !r.ColdWar) continue;
-                    long key = RelationState.Key(Mathf.Min(a.loadID, b.loadID), Mathf.Max(a.loadID, b.loadID));
-                    if (!seen.Add(key)) continue;
-                    n++;
-                    l.Label("  " + "Dominion_WarTab_ColdWarLine".Translate(a.Name, b.Name,
-                        (Find.TickManager.TicksGame - r.coldWarSince).ToStringTicksToPeriod(allowSeconds: false)));
-                }
-            if (n == 0) None(l);
-        }
-
-        private static void DrawWarbands(Listing_Standard l)
-        {
-            int n = 0;
-            foreach (Warband w in WarbandUtility.All())
-            {
-                if (!w.VisibleToPlayer) continue;
-                n++;
-                Rect row = l.GetRect(Line);
-                string text = "  " + w.Label + ": " + w.MissionText + "  " + (w.Blockading ? "" : "Dominion_Warband_Arrives".Translate(
-                    w.TicksToArrival.ToStringTicksToPeriod(allowSeconds: false)).ToString());
-                if (w.target != null && w.target.IsPlayer) GUI.color = new Color(1f, 0.7f, 0.6f);
-                Widgets.Label(row.LeftPart(0.84f), text.Truncate(row.width * 0.84f));
-                GUI.color = Color.white;
-                if (DominionUIState.ButtonWithTip(row.RightPart(0.14f), "Dominion_WarTab_Show".Translate(), "Dominion_Tip_ShowOnMap".Translate()))
-                    CameraJumper.TryJumpAndSelect(w);
-            }
-            if (n == 0)
-            {
-                GUI.color = Color.gray;
-                l.Label("  " + "Dominion_WarTab_NoWarbands".Translate());
-                GUI.color = Color.white;
-            }
-        }
-
-        private static void DrawOccupied(Listing_Standard l, WorldComponent_Dominion comp)
-        {
-            int n = 0;
-            if (comp.Wars.originalOwner.Count > 0)
-                foreach (Settlement s in Find.WorldObjects.Settlements)
-                {
-                    int orig = comp.Wars.OriginalOwnerOf(s);
-                    if (orig < 0 || s.Faction == null || s.Faction.loadID == orig) continue;
-                    Faction o = comp.Cache.FactionById(orig);
-                    n++;
-                    Rect row = l.GetRect(Line);
-                    Widgets.DrawHighlightIfMouseover(row);
-                    Widgets.Label(row, "  " + "Dominion_WarTab_OccupiedLine".Translate(s.Label, s.Faction.Name, o?.Name ?? "?"));
-                    TooltipHandler.TipRegion(row, "Dominion_Tip_ShowOnMap".Translate());
-                    if (Widgets.ButtonInvisible(row)) CameraJumper.TryJumpAndSelect(s);
-                }
-            if (n == 0) None(l);
         }
     }
 }

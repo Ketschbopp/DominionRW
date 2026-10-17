@@ -384,6 +384,272 @@ def statecraft():
         stamp(text, name, 400 + i)
 
 
+# ---------------------------------------------------------------------------------------------------- rooms
+# Backgrounds and fittings for the themed tabs: the telegraph office (Diplomacy), the state archive (Treaties),
+# the war room (War) and the council chamber (Council). Tileable sheets are drawn with wrap-around noise.
+
+def wrap_noise(w, h, cells, seed):
+    """Smooth value noise in 0..1 that tiles seamlessly: a random grid repeated 3x3, upscaled, centre cut out."""
+    import numpy as np
+    rnd = np.random.default_rng(seed)
+    cx, cy = cells if isinstance(cells, tuple) else (cells, cells)
+    g = rnd.random((cy, cx))
+    big = Image.fromarray((np.tile(g, (3, 3)) * 255).astype("uint8"), "L").resize((w * 3, h * 3), Image.BICUBIC)
+    return np.asarray(big.crop((w, h, 2 * w, 2 * h)), dtype="float32") / 255.0
+
+
+def save_rgb(arr, name):
+    import numpy as np
+    Image.fromarray(np.clip(arr, 0, 255).astype("uint8"), "RGB").save(OUT / f"{name}.png", optimize=True)
+
+
+def wood():
+    """Dark walnut panelling: long grain with knots of darker figure, seams between planks. Tiles both ways."""
+    import numpy as np
+    w = h = 512
+    y = np.arange(h, dtype="float32")[:, None]
+    x = np.arange(w, dtype="float32")[None, :]
+    warp = wrap_noise(w, h, (4, 16), 51) * 26 + wrap_noise(w, h, (16, 64), 52) * 5
+    grain = np.sin((y + warp) * 2 * np.pi / 512 * 38) * 0.5 + 0.5
+    fine = wrap_noise(w, h, (512, 128), 53)
+    tone = 0.62 + grain * 0.22 + fine * 0.12 + wrap_noise(w, h, (3, 6), 54) * 0.12
+    seams = (np.mod(y, 128) < 2).astype("float32") * np.ones_like(x)
+    tone = tone * (1 - seams * 0.45)
+    base = np.array([92, 56, 32], dtype="float32")
+    save_rgb(tone[..., None] * base, "Wood")
+
+
+def stone():
+    """The archive's walls: dark ashlar blocks, mortar lines, a little grit. Tiles both ways."""
+    import numpy as np
+    w = h = 512
+    y = np.arange(h)[:, None] * np.ones((1, w))
+    x = np.ones((h, 1)) * np.arange(w)[None, :]
+    row = (y // 64).astype(int)
+    xs = x + (row % 2) * 64
+    mortar = ((np.mod(y, 64) < 3) | (np.mod(xs, 128) < 3)).astype("float32")
+    block = ((row * 7 + (xs // 128).astype(int) * 3) % 5) / 5.0
+    tone = 0.75 + block * 0.12 + wrap_noise(w, h, 64, 61) * 0.18 + wrap_noise(w, h, 8, 62) * 0.1
+    tone = tone * (1 - mortar * 0.55)
+    save_rgb(tone[..., None] * np.array([62, 60, 58], dtype="float32"), "Stone")
+
+
+def concrete():
+    """The war room's bunker walls: cold grey concrete with stains and formwork lines. Tiles both ways."""
+    import numpy as np
+    w = h = 512
+    tone = 0.7 + wrap_noise(w, h, 128, 71) * 0.12 + wrap_noise(w, h, 6, 72) * 0.2
+    y = np.arange(h)[:, None] * np.ones((1, w))
+    tone = tone * (1 - (np.mod(y, 256) < 2) * 0.3)
+    save_rgb(tone[..., None] * np.array([46, 48, 50], dtype="float32"), "Concrete")
+
+
+def cork():
+    """The archive's corkboard: warm brown with dark and light granules. Tiles both ways."""
+    import numpy as np
+    w = h = 512
+    rnd = np.random.default_rng(81)
+    speck = rnd.random((h, w))
+    tone = 0.8 + wrap_noise(w, h, 128, 82) * 0.2 + (speck > 0.93) * 0.18 - (speck < 0.07) * 0.3 + wrap_noise(w, h, 5, 83) * 0.1
+    img = Image.fromarray(np.clip(tone[..., None] * np.array([168, 120, 76], dtype="float32"), 0, 255).astype("uint8"), "RGB")
+    img.filter(ImageFilter.GaussianBlur(0.6)).save(OUT / "Cork.png", optimize=True)
+
+
+def brass():
+    """A brushed brass plate with a bevelled edge, for nameplates and switches. Stretched horizontally."""
+    import numpy as np
+    w, h = 256, 64
+    rnd = np.random.default_rng(91)
+    streaks = np.repeat(rnd.random((h, 1)), w, axis=1) * 0.5 + rnd.random((h, w)) * 0.08
+    y = np.arange(h)[:, None] / h
+    light = 1.05 - 0.35 * y + streaks * 0.12
+    arr = light[..., None] * np.array([196, 152, 72], dtype="float32")
+    arr[:2, :] = [240, 210, 140]
+    arr[-2:, :] = [96, 70, 30]
+    arr[:, :2] = [220, 180, 110]
+    arr[:, -2:] = [110, 80, 36]
+    save_rgb(arr, "Brass")
+
+
+def knob():
+    """A round brass key cap with a highlight, for telegraph keys."""
+    s = 128
+    img = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.ellipse([4, 8, s - 4, s - 2], fill=(60, 40, 18, 200))  # shadow
+    d.ellipse([4, 4, s - 6, s - 6], fill=(150, 112, 48, 255))
+    for i in range(18):
+        k = i / 18
+        c = (int(150 + 80 * k), int(112 + 72 * k), int(48 + 60 * k), 255)
+        r = (s - 10) / 2 * (1 - k * 0.55)
+        cx, cy = s / 2 - 1 - k * 8, s / 2 - 1 - k * 10
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=c)
+    img.filter(ImageFilter.GaussianBlur(0.8)).save(OUT / "Knob.png")
+
+
+def dial():
+    """A goodwill gauge: a cream face with a brass bezel and a scale from -100 (red) through 0 to +100 (green) over the
+    upper half. The needle is drawn in code."""
+    s = 256
+    img = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    c = s / 2
+    d.ellipse([2, 2, s - 2, s - 2], fill=(150, 110, 50, 255))
+    d.ellipse([12, 12, s - 12, s - 12], fill=(236, 226, 200, 255))
+    zones = [(180, 225, (170, 50, 40)), (225, 260, (200, 140, 60)), (260, 280, (150, 150, 140)), (280, 315, (120, 160, 80)), (315, 360, (60, 130, 60))]
+    for a0, a1, col in zones:
+        d.arc([30, 30, s - 30, s - 30], a0, a1, fill=col + (255,), width=12)
+    f = font(SERIF_BOLD, 18)
+    for i in range(21):
+        a = math.radians(180 + i * 9)
+        r0, r1 = (c - 44, c - 26) if i % 5 == 0 else (c - 38, c - 28)
+        d.line([(c + r0 * math.cos(a), c + r0 * math.sin(a)), (c + r1 * math.cos(a), c + r1 * math.sin(a))], fill=(40, 32, 24, 255), width=3 if i % 5 == 0 else 1)
+    for v, i in (("-100", 0), ("0", 10), ("+100", 20)):
+        a = math.radians(180 + i * 9)
+        d.text((c + (c - 64) * math.cos(a), c + (c - 64) * math.sin(a)), v, font=f, fill=(40, 32, 24, 255), anchor="mm")
+    d.ellipse([c - 10, c - 10, c + 10, c + 10], fill=(90, 66, 30, 255))
+    img.filter(ImageFilter.GaussianBlur(0.4)).save(OUT / "Dial.png")
+
+
+def ticker_tape():
+    """Telegraph tape: an off-white paper strip with a row of feed holes. Tiles horizontally."""
+    import numpy as np
+    w, h = 256, 36
+    rnd = np.random.default_rng(101)
+    tone = 0.92 + rnd.random((h, w)) * 0.06
+    arr = tone[..., None] * np.array([240, 232, 210], dtype="float32")
+    img = Image.fromarray(arr.astype("uint8"), "RGB").convert("RGBA")
+    d = ImageDraw.Draw(img)
+    for x in range(8, w, 16):
+        d.ellipse([x - 2, 3, x + 2, 7], fill=(60, 44, 28, 255))
+    d.line([(0, 0), (w, 0)], fill=(170, 160, 140, 255))
+    d.line([(0, h - 1), (w, h - 1)], fill=(150, 140, 120, 255))
+    img.save(OUT / "TickerTape.png")
+
+
+def shelf():
+    """An archive shelf seen from the front: a plank's lip with a highlight and the shadow under it. Tiles horizontally."""
+    import numpy as np
+    w, h = 256, 40
+    y = np.arange(h)[:, None] * np.ones((1, w))
+    grain = wrap_noise(w, h, (32, 4), 111)
+    tone = 0.75 + grain * 0.2
+    tone = np.where(y < 3, 1.25, tone)
+    tone = np.where(y > h - 12, 0.5 - (y - (h - 12)) / 12 * 0.35, tone)
+    save_rgb(tone[..., None] * np.array([110, 70, 40], dtype="float32"), "Shelf")
+
+
+def scroll_roll():
+    """A rolled parchment scroll lying on its side: a lit cylinder with spiral ends. Ribbon drawn separately."""
+    import numpy as np
+    w, h = 256, 64
+    y = (np.arange(h)[:, None] / (h - 1)) * np.ones((1, w))
+    light = 0.55 + 0.6 * np.sin(np.clip(y, 0, 1) * np.pi) ** 0.6 - (y > 0.6) * (y - 0.6) * 0.6
+    noise = wrap_noise(w, h, (64, 8), 121) * 0.08
+    arr = (light + noise)[..., None] * np.array([214, 192, 148], dtype="float32")
+    alpha = np.full((h, w), 255, dtype="uint8")
+    img = Image.fromarray(np.dstack([np.clip(arr, 0, 255).astype("uint8"), alpha]), "RGBA")
+    d = ImageDraw.Draw(img)
+    for x0 in (0, w - 16):  # spiral ends
+        d.ellipse([x0, 0, x0 + 16, h - 1], fill=(198, 172, 124, 255), outline=(120, 92, 56, 255), width=2)
+        for r in (5, 10):
+            d.arc([x0 + 8 - r * 0.4, h / 2 - r * 1.4, x0 + 8 + r * 0.4, h / 2 + r * 1.4], 0, 300, fill=(120, 92, 56, 255), width=1)
+    img.save(OUT / "Scroll.png")
+
+
+def ribbon(frayed):
+    """A ribbon tied round a scroll with two tails. White; tinted with the treaty's colour in code."""
+    w, h = 48, 96
+    rnd = random.Random(131 if frayed else 130)
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rectangle([14, 0, 34, 40], fill=WHITE)
+    d.ellipse([8, 28, 40, 48], fill=(225, 225, 225, 255))  # the knot
+    d.polygon([(18, 42), (24, 44), (14, 92), (4, 86)], fill=WHITE)
+    d.polygon([(30, 42), (24, 44), (34, 92), (44, 86)], fill=WHITE)
+    if frayed:
+        for _ in range(40):
+            x, y = rnd.randrange(w), rnd.randrange(50, h)
+            d.line([(x, y), (x + rnd.randint(-3, 3), y + rnd.randint(3, 8))], fill=(0, 0, 0, 0), width=2)
+        for _ in range(6):
+            y = rnd.randrange(4, 38)
+            d.line([(14, y), (14 + rnd.randint(3, 8), y + 2)], fill=(0, 0, 0, 0), width=2)
+    img.save(OUT / ("RibbonFrayed.png" if frayed else "Ribbon.png"))
+
+
+def folder():
+    """A manila war dossier with a tab on top. In its own colour; a faction strip is drawn on it in code."""
+    import numpy as np
+    w, h = 256, 300
+    tone = 0.9 + wrap_noise(w, h, 64, 141) * 0.08
+    arr = tone[..., None] * np.array([214, 184, 124], dtype="float32")
+    img = Image.fromarray(np.dstack([np.clip(arr, 0, 255).astype("uint8"), np.zeros((h, w), dtype="uint8")]), "RGBA")
+    mask = Image.new("L", (w, h), 0)
+    md = ImageDraw.Draw(mask)
+    md.rounded_rectangle([0, 22, w - 1, h - 1], 6, fill=255)
+    md.rounded_rectangle([12, 0, 110, 40], 6, fill=255)
+    img.putalpha(mask)
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 22, w - 1, h - 1], 6, outline=(140, 110, 60, 255), width=2)
+    d.line([(14, 22), (108, 22)], fill=(214, 184, 124, 255), width=3)
+    img.save(OUT / "Folder.png")
+
+
+def glow():
+    """A soft round glow, white, for lamp light. Tinted in code."""
+    s = 256
+    img = Image.new("RGBA", (s, s), (255, 255, 255, 0))
+    px = img.load()
+    for y in range(s):
+        for x in range(s):
+            r = math.hypot(x - s / 2, y - s / 2) / (s / 2)
+            px[x, y] = (255, 255, 255, int(255 * max(0.0, 1 - r) ** 2))
+    img.save(OUT / "Glow.png")
+
+
+def seat():
+    """A council chair seen from above: a round seat with a curved back. White; tinted by the member's lean in code."""
+    s = 64
+    img = Image.new("RGBA", (s, s), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.ellipse([10, 16, 54, 58], fill=WHITE)
+    d.arc([4, 6, 60, 62], 200, 340, fill=(200, 200, 200, 255), width=9)
+    d.ellipse([18, 26, 46, 50], fill=(235, 235, 235, 255))
+    img.filter(ImageFilter.GaussianBlur(0.5)).save(OUT / "Seat.png")
+
+
+def banner():
+    """A hanging motion banner with a swallowtail and fold shading. White; tinted in code. The pole is drawn in code."""
+    w, h = 128, 256
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.polygon([(8, 0), (w - 8, 0), (w - 8, h - 4), (w / 2, h - 48), (8, h - 4)], fill=WHITE)
+    for x in (36, 64, 92):  # folds
+        d.line([(x, 4), (x, h - 60)], fill=(225, 225, 225, 255), width=6)
+    d.line([(14, 10), (w - 14, 10)], fill=(200, 200, 200, 255), width=2)
+    d.polygon([(8, 0), (w - 8, 0), (w - 8, h - 4), (w / 2, h - 48), (8, h - 4)], outline=(190, 190, 190, 255), width=2)
+    img.filter(ImageFilter.GaussianBlur(0.4)).save(OUT / "Banner.png")
+
+
+def rooms():
+    wood()
+    stone()
+    concrete()
+    cork()
+    brass()
+    knob()
+    dial()
+    ticker_tape()
+    shelf()
+    scroll_roll()
+    ribbon(False)
+    ribbon(True)
+    folder()
+    glow()
+    seat()
+    banner()
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     paper_sheet()
@@ -413,4 +679,5 @@ if __name__ == "__main__":
     pin()
     icons()
     statecraft()
+    rooms()
     print("wrote UI art to", OUT)

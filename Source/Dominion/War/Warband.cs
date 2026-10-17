@@ -103,6 +103,16 @@ namespace Dominion
 
         public PlanetTile DestinationTile => path.Count > 0 ? new PlanetTile(path[path.Count - 1]) : Tile;
 
+        /// <summary>The tiles still ahead, from the current one to the destination, every <paramref name="step"/>th one (the last always).</summary>
+        public IEnumerable<PlanetTile> RouteAhead(int step = 1)
+        {
+            if (Blockading || path.Count == 0) yield break;
+            int last = path.Count - 1;
+            for (int i = Mathf.Min(index, last); i < last; i += Mathf.Max(1, step))
+                yield return new PlanetTile(path[i]);
+            yield return new PlanetTile(path[last]);
+        }
+
         protected override void TickInterval(int delta)
         {
             base.TickInterval(delta);

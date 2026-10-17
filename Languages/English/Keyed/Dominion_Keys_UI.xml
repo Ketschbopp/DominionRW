@@ -82,7 +82,17 @@
   <Dominion_UI_Distance>Nearest settlements {0} tiles apart.</Dominion_UI_Distance>
   <Dominion_UI_SortBy>Click to sort by {0}; click again to reverse.</Dominion_UI_SortBy>
   <Dominion_UI_Trend>{0} over the last {1} days.</Dominion_UI_Trend>
-  <Dominion_UI_MapLegend>Large dots: {0}. White: you. Red lines: wars. Arrows: warbands. Click a dot to find it on the world map.</Dominion_UI_MapLegend>
+  <Dominion_UI_MapLegend>Large dots: {0}. Tint: spheres of influence; red borders: fronts. Scroll to zoom, drag to pan, click a town to pick its faction, right-click for more.</Dominion_UI_MapLegend>
+  <Dominion_Map_Capital>capital</Dominion_Map_Capital>
+  <Dominion_Map_ClickPick>Click: pick this faction.</Dominion_Map_ClickPick>
+  <Dominion_Map_RightClick>Right-click: show it on the world map, or open its pages.</Dominion_Map_RightClick>
+  <Dominion_Map_TerritoryOf>Sphere of {0}</Dominion_Map_TerritoryOf>
+  <Dominion_Map_Unclaimed>Unclaimed land</Dominion_Map_Unclaimed>
+  <Dominion_Map_Sea>Open sea</Dominion_Map_Sea>
+  <Dominion_Map_ZoomIn>Zoom in (or scroll the mouse wheel over the map).</Dominion_Map_ZoomIn>
+  <Dominion_Map_ZoomOut>Zoom out.</Dominion_Map_ZoomOut>
+  <Dominion_Map_Reset>Show the whole world.</Dominion_Map_Reset>
+  <Dominion_Map_Help>Scroll to zoom, drag to pan. The map wraps round east to west. Each faction's sphere of influence is tinted in its colour; borders between factions at war are drawn in red as fronts.</Dominion_Map_Help>
   <Dominion_UI_NoSettlement>{0} has no settlement to show.</Dominion_UI_NoSettlement>
   <Dominion_UI_Jump_Dossier>Dossier</Dominion_UI_Jump_Dossier>
   <Dominion_UI_Jump_Dossier_Desc>Open {0}'s dossier in the Overview tab.</Dominion_UI_Jump_Dossier_Desc>
@@ -493,5 +503,25 @@
   <Dominion_News_OnlyThisFaction>Only stories about them</Dominion_News_OnlyThisFaction>
   <Dominion_News_JumpPlace>Click to find {0} on the world map.</Dominion_News_JumpPlace>
   <Dominion_News_FollowUps>The story so far</Dominion_News_FollowUps>
+
+
+  <!-- War room -->
+  <Dominion_WarRoom_Title>War room</Dominion_WarRoom_Title>
+  <Dominion_WarRoom_Status>Your wars: {0}  ·  wars abroad you know of: {1}  ·  warbands marching on you: {2}</Dominion_WarRoom_Status>
+  <Dominion_WarRoom_Alarm>{0} warband(s) are marching on your settlements. Open the theatre report or watch the map.</Dominion_WarRoom_Alarm>
+  <Dominion_WarRoom_Quiet>No warband is marching on you.</Dominion_WarRoom_Quiet>
+  <Dominion_WarRoom_NoWarsYours>You are at peace.</Dominion_WarRoom_NoWarsYours>
+  <Dominion_WarRoom_Unknown>{0} more war(s) your intelligence knows nothing about.</Dominion_WarRoom_Unknown>
+  <Dominion_WarRoom_Reports>Reports</Dominion_WarRoom_Reports>
+  <Dominion_WarRoom_Theatre>Theatre report</Dominion_WarRoom_Theatre>
+  <Dominion_WarRoom_Theatre_Sub>Warbands, cold wars, occupations, blockades</Dominion_WarRoom_Theatre_Sub>
+  <Dominion_WarRoom_Theatre_Desc>Everything moving in the world: warbands in the field, cold wars, occupied settlements and blockades. The map shows every war you know of.</Dominion_WarRoom_Theatre_Desc>
+  <Dominion_WarRoom_OpenDossier>Click to open this war's dossier and put it on the map.</Dominion_WarRoom_OpenDossier>
+  <Dominion_WarRoom_Since>for {0}</Dominion_WarRoom_Since>
+  <Dominion_WarRoom_Dead>Dead</Dominion_WarRoom_Dead>
+  <Dominion_WarRoom_Battles>Battles</Dominion_WarRoom_Battles>
+  <Dominion_WarRoom_Occupied>{0} settlement(s) occupied</Dominion_WarRoom_Occupied>
+  <Dominion_WarRoom_Orders>Orders</Dominion_WarRoom_Orders>
+  <Dominion_WarRoom_Chronicle>Chronicle</Dominion_WarRoom_Chronicle>
 
 </LanguageData>
