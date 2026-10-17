@@ -8,7 +8,7 @@ namespace Dominion
     public enum Voice { Plain, Courtly, Divine, Zealous, Eerie, Martial, Honourable, Stern, Aloof, Mercantile, Festive, Gentle, Collegial, Tribal }
 
     /// <summary>The moments a faction says something to you.</summary>
-    public enum VoiceLine { Greeting, Accept, Refuse, Thanks, Insulted, Threat, Farewell }
+    public enum VoiceLine { Greeting, Accept, Refuse, Thanks, Insulted, Threat, Farewell, SmallTalk, Praised, Apology, Rebuff, Confide, Warned, Bargain }
 
     /// <summary>
     /// A faction's voice, from its ideology's memes (vanilla and Vanilla Memes Expanded), its government and its temper.

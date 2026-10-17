@@ -52,7 +52,8 @@ namespace Dominion
             if (options.Count > 0) Find.WindowStack.Add(new FloatMenu(options));
         }
 
-        private void Ask(Faction f, Faction enemy)
+        /// <summary>Asks them to join your war against <paramref name="enemy"/> (also used from audiences).</summary>
+        public void Ask(Faction f, Faction enemy)
         {
             Commit(f);
             if (Rand.Chance(Acceptance(f, enemy)))

@@ -342,6 +342,9 @@ namespace Dominion
             {
                 options.Add(new FloatMenuOption("Dominion_UI_Jump_Dossier".Translate() + ": " + f.Name, () => DominionUIState.Show(DominionTab.Overview, f)));
                 options.Add(new FloatMenuOption("Dominion_UI_Jump_Diplomacy".Translate() + ": " + f.Name, () => DominionUIState.Show(DominionTab.Diplomacy, f)));
+                string why = Dialog_Audience.CannotHoldReason(f);
+                options.Add(new FloatMenuOption("Dominion_Audience_Button".Translate() + ": " + f.Name + (why != null ? " (" + why + ")" : ""),
+                    why == null ? (System.Action)(() => Dialog_Audience.Request(f)) : null));
                 options.Add(new FloatMenuOption("Dominion_UI_Jump_War".Translate() + ": " + f.Name, () => DominionUIState.Show(DominionTab.War, f)));
                 options.Add(new FloatMenuOption("Dominion_UI_Jump_Intel".Translate() + ": " + f.Name, () => DominionUIState.Show(DominionTab.Intelligence, f)));
             }
