@@ -298,8 +298,14 @@ namespace Dominion
             if (selected != null && !shown.Contains(selected)) selected = null;
         }
 
-        private static bool Matches(NewsItem n, string text) =>
-            Contains(n.headline, text) || Contains(n.story, text) || Contains(n.primary?.Name, text) || Contains(n.secondary?.Name, text);
+        /// <summary>Every word of the search must appear somewhere in the story; spaces alone match everything.</summary>
+        private static bool Matches(NewsItem n, string text)
+        {
+            foreach (string word in text.Split((char[])null, System.StringSplitOptions.RemoveEmptyEntries))
+                if (!Contains(n.headline, word) && !Contains(n.story, word) && !Contains(n.primary?.Name, word) && !Contains(n.secondary?.Name, word))
+                    return false;
+            return true;
+        }
 
         private static bool Contains(string s, string text) => s != null && s.IndexOf(text, System.StringComparison.OrdinalIgnoreCase) >= 0;
 
@@ -690,7 +696,6 @@ namespace Dominion
         /// </summary>
         private static float DrawInvestigation(NewsItem n, float y, float w)
         {
-            if (!RadioOrderUtility.AnyResponse(n)) return y;
             RadioOrder order = WorldComponent_Dominion.Instance.RadioOrders.For(n);
             Rect stamp = new Rect(4f, y, 128f, 46f);
             string note;
@@ -707,7 +712,7 @@ namespace Dominion
                     Find.WindowStack.Add(new FloatMenu(RadioOrderUtility.StoryMenu(n)));
                 string options = string.Join(", ", RadioOrderSpec.StoryResponses
                     .Where(k => RadioOrderUtility.CannotRespondReason(k, n) == null).Select(k => RadioOrderSpec.Of(k).Label.ToLower()));
-                note = "Dominion_Radio_RespondNote".Translate(options);
+                note = options.NullOrEmpty() ? "Dominion_Radio_RespondNoneNote".Translate().ToString() : "Dominion_Radio_RespondNote".Translate(options).ToString();
             }
             DominionTheme.InkLabel(new Rect(stamp.xMax + 10f, y + 4f, w - stamp.xMax - 12f, 40f), note, DominionTheme.InkFaded, GameFont.Tiny);
             return y + 54f;

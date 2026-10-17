@@ -82,7 +82,17 @@
   <Dominion_UI_Distance>Nearest settlements {0} tiles apart.</Dominion_UI_Distance>
   <Dominion_UI_SortBy>Click to sort by {0}; click again to reverse.</Dominion_UI_SortBy>
   <Dominion_UI_Trend>{0} over the last {1} days.</Dominion_UI_Trend>
-  <Dominion_UI_MapLegend>Large dots: {0}. White: you. Red lines: wars. Arrows: warbands. Click a dot to find it on the world map.</Dominion_UI_MapLegend>
+  <Dominion_UI_MapLegend>Large dots: {0}. Tint: spheres of influence; red borders: fronts. Scroll to zoom, drag to pan, click a town to pick its faction, right-click for more.</Dominion_UI_MapLegend>
+  <Dominion_Map_Capital>capital</Dominion_Map_Capital>
+  <Dominion_Map_ClickPick>Click: pick this faction.</Dominion_Map_ClickPick>
+  <Dominion_Map_RightClick>Right-click: show it on the world map, or open its pages.</Dominion_Map_RightClick>
+  <Dominion_Map_TerritoryOf>Sphere of {0}</Dominion_Map_TerritoryOf>
+  <Dominion_Map_Unclaimed>Unclaimed land</Dominion_Map_Unclaimed>
+  <Dominion_Map_Sea>Open sea</Dominion_Map_Sea>
+  <Dominion_Map_ZoomIn>Zoom in (or scroll the mouse wheel over the map).</Dominion_Map_ZoomIn>
+  <Dominion_Map_ZoomOut>Zoom out.</Dominion_Map_ZoomOut>
+  <Dominion_Map_Reset>Show the whole world.</Dominion_Map_Reset>
+  <Dominion_Map_Help>Scroll to zoom, drag to pan. The map wraps round east to west. Each faction's sphere of influence is tinted in its colour; borders between factions at war are drawn in red as fronts.</Dominion_Map_Help>
   <Dominion_UI_NoSettlement>{0} has no settlement to show.</Dominion_UI_NoSettlement>
   <Dominion_UI_Jump_Dossier>Dossier</Dominion_UI_Jump_Dossier>
   <Dominion_UI_Jump_Dossier_Desc>Open {0}'s dossier in the Overview tab.</Dominion_UI_Jump_Dossier_Desc>
@@ -96,12 +106,6 @@
   <Dominion_UI_Jump_Map_Desc>Find {0}'s capital on the world map.</Dominion_UI_Jump_Map_Desc>
 
   <!-- ============ treaties ============ -->
-  <Dominion_Treaties_Mode_Cabinet>Your treaties</Dominion_Treaties_Mode_Cabinet>
-  <Dominion_Treaties_Mode_Cabinet_Desc>Every treaty you are party to, as a sealed card. Click one to read it, renew it or tear it up.</Dominion_Treaties_Mode_Cabinet_Desc>
-  <Dominion_Treaties_Mode_World>The world's treaties</Dominion_Treaties_Mode_World>
-  <Dominion_Treaties_Mode_World_Desc>Treaties between other factions that your intelligence knows about.</Dominion_Treaties_Mode_World_Desc>
-  <Dominion_Treaties_Mode_Web>Treaty web</Dominion_Treaties_Mode_Web>
-  <Dominion_Treaties_Mode_Web_Desc>Who is bound to whom, at a glance.</Dominion_Treaties_Mode_Web_Desc>
   <Dominion_Treaties_Draft>Draft a treaty...</Dominion_Treaties_Draft>
   <Dominion_Treaties_Draft_Desc>Open the signing desk: pick a partner and a treaty, set its terms and sign.</Dominion_Treaties_Draft_Desc>
   <Dominion_Treaties_NoneYours>You are party to no treaties. The desk is empty and the ink is fresh.</Dominion_Treaties_NoneYours>
@@ -493,5 +497,81 @@
   <Dominion_News_OnlyThisFaction>Only stories about them</Dominion_News_OnlyThisFaction>
   <Dominion_News_JumpPlace>Click to find {0} on the world map.</Dominion_News_JumpPlace>
   <Dominion_News_FollowUps>The story so far</Dominion_News_FollowUps>
+
+
+  <!-- War room -->
+  <Dominion_WarRoom_Title>War room</Dominion_WarRoom_Title>
+  <Dominion_WarRoom_Status>Your wars: {0}  ·  wars abroad you know of: {1}  ·  warbands marching on you: {2}</Dominion_WarRoom_Status>
+  <Dominion_WarRoom_Alarm>{0} warband(s) are marching on your settlements. Open the theatre report or watch the map.</Dominion_WarRoom_Alarm>
+  <Dominion_WarRoom_Quiet>No warband is marching on you.</Dominion_WarRoom_Quiet>
+  <Dominion_WarRoom_NoWarsYours>You are at peace.</Dominion_WarRoom_NoWarsYours>
+  <Dominion_WarRoom_Unknown>{0} more war(s) your intelligence knows nothing about.</Dominion_WarRoom_Unknown>
+  <Dominion_WarRoom_Reports>Reports</Dominion_WarRoom_Reports>
+  <Dominion_WarRoom_Theatre>Theatre report</Dominion_WarRoom_Theatre>
+  <Dominion_WarRoom_Theatre_Sub>Warbands, cold wars, occupations, blockades</Dominion_WarRoom_Theatre_Sub>
+  <Dominion_WarRoom_Theatre_Desc>Everything moving in the world: warbands in the field, cold wars, occupied settlements and blockades. The map shows every war you know of.</Dominion_WarRoom_Theatre_Desc>
+  <Dominion_WarRoom_OpenDossier>Click to open this war's dossier and put it on the map.</Dominion_WarRoom_OpenDossier>
+  <Dominion_WarRoom_Since>for {0}</Dominion_WarRoom_Since>
+  <Dominion_WarRoom_Dead>Dead</Dominion_WarRoom_Dead>
+  <Dominion_WarRoom_Battles>Battles</Dominion_WarRoom_Battles>
+  <Dominion_WarRoom_Occupied>{0} settlement(s) occupied</Dominion_WarRoom_Occupied>
+  <Dominion_WarRoom_Orders>Orders</Dominion_WarRoom_Orders>
+  <Dominion_WarRoom_Chronicle>Chronicle</Dominion_WarRoom_Chronicle>
+
+
+  <!-- Telegraph office (Diplomacy) -->
+  <Dominion_Telegraph_TapeEmpty>The wire is quiet. Your messages to other factions, and theirs to you, will print here.</Dominion_Telegraph_TapeEmpty>
+  <Dominion_Telegraph_TapeTip>A wire to or from {0}. Click to open their line. The tape stops while you read it.</Dominion_Telegraph_TapeTip>
+  <Dominion_Telegraph_Goodwill>Goodwill {0}</Dominion_Telegraph_Goodwill>
+  <Dominion_Telegraph_Goodwill_Desc>{0}'s goodwill toward you, as the game counts it: it decides whether they are hostile, neutral or allied.</Dominion_Telegraph_Goodwill_Desc>
+  <Dominion_Telegraph_TheirOpinion>Their view {0}</Dominion_Telegraph_TheirOpinion>
+  <Dominion_Telegraph_TheirOpinion_Desc>What {0} actually thinks of you, from everything that has passed between you. The faint blue needle is your view of them.</Dominion_Telegraph_TheirOpinion_Desc>
+  <Dominion_Telegraph_TheirOpinionUnknown>Their view ?</Dominion_Telegraph_TheirOpinionUnknown>
+  <Dominion_Telegraph_YourOpinion>Your view {0}</Dominion_Telegraph_YourOpinion>
+  <Dominion_Telegraph_YourOpinion_Desc>What your people think of {0}.</Dominion_Telegraph_YourOpinion_Desc>
+  <Dominion_Telegraph_Head>TELEGRAM  ·  TO {0}</Dominion_Telegraph_Head>
+  <Dominion_Telegraph_Keys>Telegraph keys</Dominion_Telegraph_Keys>
+
+
+  <!-- State archive (Treaties) -->
+  <Dominion_Archive_Mode_Shelves>Your shelves</Dominion_Archive_Mode_Shelves>
+  <Dominion_Archive_Mode_Shelves_Desc>Every treaty you are party to, as a scroll on the shelves. The ribbon's colour is the kind of treaty; a frayed ribbon means it lapses within 15 days. Pull a scroll out to unroll it on the desk.</Dominion_Archive_Mode_Shelves_Desc>
+  <Dominion_Archive_Mode_Records>Foreign records</Dominion_Archive_Mode_Records>
+  <Dominion_Archive_Mode_Records_Desc>Index cards for treaties between other factions that your intelligence knows of.</Dominion_Archive_Mode_Records_Desc>
+  <Dominion_Archive_Mode_Corkboard>Corkboard</Dominion_Archive_Mode_Corkboard>
+  <Dominion_Archive_Mode_Corkboard_Desc>Every faction you know pinned to cork, with a string for each treaty between them.</Dominion_Archive_Mode_Corkboard_Desc>
+  <Dominion_Archive_PullOut>Click to pull it out and unroll it on the desk; click again to put it back.</Dominion_Archive_PullOut>
+  <Dominion_Archive_DeskEmpty>Pull a scroll from the shelves to read it here.</Dominion_Archive_DeskEmpty>
+  <Dominion_Archive_Between>Between {0} and {1}</Dominion_Archive_Between>
+  <Dominion_Archive_Signed>Signed {0}</Dominion_Archive_Signed>
+  <Dominion_Archive_ReadFull>Read in full</Dominion_Archive_ReadFull>
+  <Dominion_Archive_CannotRenew>This treaty does not lapse, or was imposed on the losing side, so there is nothing to renew.</Dominion_Archive_CannotRenew>
+  <Dominion_Archive_OpenParty>Open the line to {0}</Dominion_Archive_OpenParty>
+
+
+  <!-- Council chamber -->
+  <Dominion_Chamber_NoSession>Motions can only be put on the agenda once a session has been announced.</Dominion_Chamber_NoSession>
+  <Dominion_Chamber_NoMotions>The session is announced, but nothing is on the agenda yet.</Dominion_Chamber_NoMotions>
+  <Dominion_Chamber_NoAgenda>The council is in recess. When a session is announced, its motions will hang here.</Dominion_Chamber_NoAgenda>
+  <Dominion_Chamber_Carries>Carries {0} – {1}</Dominion_Chamber_Carries>
+  <Dominion_Chamber_Fails>Fails {0} – {1}</Dominion_Chamber_Fails>
+  <Dominion_Chamber_ClickBanner>Click to colour the seats by how each member leans on this motion.</Dominion_Chamber_ClickBanner>
+  <Dominion_Chamber_Empty>The council has no members yet.</Dominion_Chamber_Empty>
+  <Dominion_Chamber_YourVote>You cast your own vote when the session opens.</Dominion_Chamber_YourVote>
+  <Dominion_Chamber_LeansAye>Leans aye on {0}</Dominion_Chamber_LeansAye>
+  <Dominion_Chamber_LeansNay>Leans nay on {0}</Dominion_Chamber_LeansNay>
+  <Dominion_Chamber_Wavering>Undecided on {0}</Dominion_Chamber_Wavering>
+  <Dominion_Chamber_Lobbyable>(could be lobbied)</Dominion_Chamber_Lobbyable>
+  <Dominion_Chamber_LobbyHint>You can lobby undecided members on the ballot once the session opens.</Dominion_Chamber_LobbyHint>
+  <Dominion_Chamber_ClickSeat>Click to see this member beside the chamber.</Dominion_Chamber_ClickSeat>
+  <Dominion_Chamber_Tally>Ayes {0}  ·  nays {1}  ·  needs {2}</Dominion_Chamber_Tally>
+  <Dominion_Chamber_InSessionSoon>A session is called, hosted by {0}. Hang a motion on the rail or study the room.</Dominion_Chamber_InSessionSoon>
+  <Dominion_Chamber_Recess>The council is in recess.</Dominion_Chamber_Recess>
+  <Dominion_Chamber_LegendFactions>Seats in members' colours, in proportion to vote weight. Pick a banner to see how they lean.</Dominion_Chamber_LegendFactions>
+  <Dominion_Chamber_Aye>Aye</Dominion_Chamber_Aye>
+  <Dominion_Chamber_Nay>Nay</Dominion_Chamber_Nay>
+  <Dominion_Chamber_Waver>Undecided</Dominion_Chamber_Waver>
+  <Dominion_Chamber_PickSeat>Click a seat in the chamber to see that member: their weight, attendance and how they lean on each motion.</Dominion_Chamber_PickSeat>
+  <Dominion_Chamber_Host>Hosts this session</Dominion_Chamber_Host>
 
 </LanguageData>

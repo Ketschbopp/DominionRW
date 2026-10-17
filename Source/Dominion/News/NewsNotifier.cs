@@ -27,7 +27,9 @@ namespace Dominion
                               + (n.advice.NullOrEmpty() ? "" : "Dominion_News_AdviceTitle".Translate(NewsFlavor.ColonyName()).ToString().ToUpper().Colorize(ColoredText.SubtleGrayColor) + "\n" + n.advice + "\n\n")
                               + "Dominion_News_LetterFooter".Translate(
                     NewsText.SourceLabel(n.source), ConfidenceLabel(n.confidence)) + "\n" + "Dominion_News_LetterSignature".Translate(DominionTheme.Edition).Colorize(ColoredText.SubtleGrayColor);
-                Find.LetterStack.ReceiveLetter(n.headline.Truncate(260f), text, LetterFor(n), null, n.primary, null, null, null, 0, true);
+                // The letter window shows goodwill with its faction, which throws for the player's own faction.
+                Faction related = n.primary != null && !n.primary.IsPlayer ? n.primary : n.secondary != null && !n.secondary.IsPlayer ? n.secondary : null;
+                Find.LetterStack.ReceiveLetter(n.headline.Truncate(260f), text, LetterFor(n), null, related, null, null, null, 0, true);
             }
             else
             {

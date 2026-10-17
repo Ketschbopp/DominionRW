@@ -166,7 +166,7 @@ namespace Dominion
             if (vote != 0 || votes.ContainsKey(m))
                 DominionTheme.DrawStamp(new Rect(stamps.x + 30f, stamps.y + 40f, 130f, 40f), vote > 0 ? DominionPaper.StampAye : vote < 0 ? DominionPaper.StampNay : DominionPaper.StampAbstain,
                     vote > 0 ? DominionTheme.InkGreen : vote < 0 ? DominionTheme.InkRed : DominionTheme.InkAmber, -4f);
-            if (Prefs.DevMode && DominionPaper.InkButton(new Rect(stamps.xMax - 60f, stamps.yMax - 20f, 60f, 20f), m.vetoed ? "Dominion_Council_Vetoed".Translate().ToString() : "Dominion_Council_DevVeto".Translate().ToString()))
+            if (DebugSettings.godMode && DominionPaper.InkButton(new Rect(stamps.xMax - 60f, stamps.yMax - 20f, 60f, 20f), m.vetoed ? "Dominion_Council_Vetoed".Translate().ToString() : "Dominion_Council_DevVeto".Translate().ToString()))
                 CouncilSystem.DevVeto(m);
         }
 

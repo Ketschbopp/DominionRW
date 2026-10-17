@@ -394,6 +394,7 @@ Success is likelier with high Intellectual and good radio coverage. An inconclus
   <Dominion_Radio_Status_CalmInForce>keep-calm advisory: {0} left</Dominion_Radio_Status_CalmInForce>
   <Dominion_Radio_Status_CounterInForce>counter-propaganda: {0} left</Dominion_Radio_Status_CounterInForce>
   <Dominion_Radio_OrderNote>Radio desk: {0}, {1} done. Press the stamp to cancel.</Dominion_Radio_OrderNote>
+  <Dominion_Radio_RespondNoneNote>Nothing the radio desk can do fits this story: only rumours can be investigated or debunked, only good news spread, and only news that upset your colonists kept off the air. Open the stamp to see each option.</Dominion_Radio_RespondNoneNote>
   <Dominion_Radio_RespondNote>The radio desk can respond to this story: {0}.</Dominion_Radio_RespondNote>
   <Dominion_Radio_Respond>Respond to a story</Dominion_Radio_Respond>
   <Dominion_Radio_NoStories>No recent story the radio desk can act on</Dominion_Radio_NoStories>

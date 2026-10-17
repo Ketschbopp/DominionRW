@@ -70,8 +70,8 @@ namespace Dominion
                 newsPanel.Open(DominionUIState.pendingNews, comp.News);
                 DominionUIState.pendingNews = null;
             }
-            // The raw event log shows everything, including events the player has no intel on, so it is dev-only.
-            if (Current == DominionTab.Events && !Prefs.DevMode) Current = DominionTab.News;
+            // The raw event log shows everything, including events the player has no intel on, so it is for god mode only.
+            if (Current == DominionTab.Events && !DebugSettings.godMode) Current = DominionTab.News;
             int unread = comp?.News.UnreadCount ?? 0;
             string newsLabel = "Dominion_Tab_News".Translate() + (unread > 0 ? " (" + unread + ")" : "");
             var tabs = new List<TabRecord>
@@ -85,7 +85,7 @@ namespace Dominion
                 Record("Dominion_Tab_Intelligence".Translate(), DominionTab.Intelligence),
                 Record("Dominion_Tab_Federation".Translate(), DominionTab.Federation),
             };
-            if (Prefs.DevMode) tabs.Add(Record("Dominion_Tab_Events".Translate(), DominionTab.Events));
+            if (DebugSettings.godMode) tabs.Add(Record("Dominion_Tab_Events".Translate(), DominionTab.Events));
             tabs.Add(Record("Dominion_Tab_Integrations".Translate(), DominionTab.Integrations));
 
             DominionHeader.Draw(new Rect(inRect.x, inRect.y, inRect.width, DominionHeader.Height), comp, n =>

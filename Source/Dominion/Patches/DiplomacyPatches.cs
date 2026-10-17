@@ -139,3 +139,19 @@ namespace Dominion
         }
     }
 }
+
+namespace Dominion
+{
+    /// <summary>
+    /// A letter whose related faction is the player's own opens a window that asks for goodwill with itself, which throws
+    /// ("Called GetSituations() for faction PlayerColony"). Drop the faction from such letters, whoever sent them.
+    /// </summary>
+    [HarmonyPatch(typeof(LetterStack), nameof(LetterStack.ReceiveLetter), new[] { typeof(Letter), typeof(string), typeof(int), typeof(bool) })]
+    public static class Patch_LetterStack_ReceiveLetter_NoPlayerFaction
+    {
+        public static void Prefix(Letter let)
+        {
+            if (let?.relatedFaction != null && let.relatedFaction.IsPlayer) let.relatedFaction = null;
+        }
+    }
+}
