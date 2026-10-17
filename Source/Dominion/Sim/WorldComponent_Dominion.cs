@@ -21,6 +21,7 @@ namespace Dominion
         private UnificationState unification = new UnificationState();
         private WarRegistry wars = new WarRegistry();
         private RadioOrders radioOrders = new RadioOrders();
+        private List<ShuttleVisit> shuttleVisits = new List<ShuttleVisit>();
 
         /// <summary>0..100. How well the player's radio receivers cover the airwaves; raised by monitoring, decays daily.</summary>
         public float radioCoverage;
@@ -45,6 +46,7 @@ namespace Dominion
         public UnificationState Unification => unification;
         public WarRegistry Wars => wars;
         public RadioOrders RadioOrders => radioOrders;
+        public List<ShuttleVisit> ShuttleVisits => shuttleVisits;
         public DominionScheduler Scheduler => scheduler;
 
         /// <summary>Lookups refreshed at most once a day. Always call through here.</summary>
@@ -82,7 +84,9 @@ namespace Dominion
 
         public override void WorldComponentTick()
         {
-            scheduler.Tick(Find.TickManager.TicksGame);
+            int now = Find.TickManager.TicksGame;
+            scheduler.Tick(now);
+            if (shuttleVisits.Count > 0 && now % 60 == 0) Dominion.ShuttleVisits.Tick(shuttleVisits);
         }
 
         /// <summary>The state for a faction, created on first use. Null for null.</summary>
@@ -160,6 +164,7 @@ namespace Dominion
             Scribe_Deep.Look(ref wars, "wars");
             Scribe_Values.Look(ref radioCoverage, "radioCoverage");
             Scribe_Deep.Look(ref radioOrders, "radioOrders");
+            Scribe_Collections.Look(ref shuttleVisits, "shuttleVisits", LookMode.Deep);
 
             if (Scribe.mode == LoadSaveMode.Saving)
             {
@@ -182,6 +187,8 @@ namespace Dominion
                 unification ??= new UnificationState();
                 wars ??= new WarRegistry();
                 radioOrders ??= new RadioOrders();
+                shuttleVisits ??= new List<ShuttleVisit>();
+                shuttleVisits.RemoveAll(v => v == null || v.faction == null);
                 factionStates = new Dictionary<int, FactionState>();
                 if (statesList != null)
                     foreach (FactionState s in statesList)

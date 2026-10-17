@@ -118,6 +118,7 @@ namespace Dominion
                 if (s.status == SummitStatus.InSession) continue;
                 if (s.status == SummitStatus.LeaderPresent)
                 {
+                    if (ShuttleVisits.InTransit(s.visitor)) continue; // still landing
                     if (s.visitor == null || s.visitor.Dead || !s.visitor.Spawned)
                     {
                         Cancel(s.id, "Dominion_Summit_CancelledVisitorGone".Translate());
