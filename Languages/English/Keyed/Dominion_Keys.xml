@@ -187,6 +187,7 @@
   <Dominion_LetterMode_All>All</Dominion_LetterMode_All>
   <Dominion_LetterMode_Important>Only important</Dominion_LetterMode_Important>
   <Dominion_LetterMode_None>None</Dominion_LetterMode_None>
+  <Dominion_News_NuclearWar_Powers>Strategic weapons were launched by {0}.</Dominion_News_NuclearWar_Powers>
   <Dominion_Letter_AsMessage>Dominion: {0}</Dominion_Letter_AsMessage>
   <Dominion_Setting_NotifyHeader>How each kind of news reaches you:</Dominion_Setting_NotifyHeader>
 

@@ -392,7 +392,11 @@ namespace Dominion
                 // IRBM can make every faction hate the player when the war starts; Dominion's opinions follow suit.
                 if (Setting("reduceGoodwillInNuclearWar", true)) comp.GetRelation(f, Faction.OfPlayer).favour -= 30f;
             }
-            EventBus.Raise(DominionEventDefOf.Dominion_NuclearWar, null, null, source: "kazepsi.irbm");
+            var powers = new List<string>();
+            foreach (Faction f in comp.Cache.Simulated)
+                if (Capability(f) == 2) powers.Add(f.Name);
+            string launched = powers.Count > 0 ? "Dominion_News_NuclearWar_Powers".Translate(powers.ToCommaList(useAnd: true)).ToString() : "";
+            EventBus.Raise(DominionEventDefOf.Dominion_NuclearWar, null, null, source: "kazepsi.irbm", detail: launched);
             DisbandCouncil();
         }
 

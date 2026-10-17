@@ -305,7 +305,8 @@
     <category>War</category>
     <secrecy>Public</secrecy>
     <newsworthiness>1</newsworthiness>
-    <headline>GLOBAL NUCLEAR WAR</headline>
+    <newsRules>Dominion_News_NuclearWar</newsRules>
+    <headline>The end of the world</headline>
   </Dominion.DominionEventDef>
 
   <Dominion.DominionEventDef>

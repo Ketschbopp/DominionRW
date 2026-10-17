@@ -44,7 +44,8 @@ namespace Dominion
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             NewsItem item = comp.News.Add(NewsItem.FromEvent(ev));
 
-            if (IntelUtility.InvolvesPlayer(ev.primary, ev.secondary))
+            // Everyone sees the end of the world at once: no intel needed, no delay, no doubt.
+            if (IntelUtility.InvolvesPlayer(ev.primary, ev.secondary) || ev.def == DominionEventDefOf.Dominion_NuclearWar)
             {
                 item.confidence = NewsConfidence.Confirmed;
                 item.source = NewsSource.DiplomaticDispatch;

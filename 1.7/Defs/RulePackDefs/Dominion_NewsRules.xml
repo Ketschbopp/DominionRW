@@ -578,4 +578,24 @@
       </rulesStrings>
     </rulePack>
   </RulePackDef>
+
+  <RulePackDef>
+    <defName>Dominion_News_NuclearWar</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>headline-&gt;The end of the world</li>
+        <li>story-&gt;The doomsday clock has struck midnight. [nw_launch] [DETAIL] [nw_sight] [nw_council] [nw_after]</li>
+        <li>nw_launch-&gt;In the space of a single afternoon, every power that held strategic weapons has used them.</li>
+        <li>nw_launch-&gt;The missiles have flown. No one can now say who fired first, and it no longer matters.</li>
+        <li>nw_launch-&gt;What every treaty and every council session was meant to prevent has happened: the bombs have fallen.</li>
+        <li>nw_sight-&gt;Travellers report pillars of fire on the horizon and a sky the colour of rust.</li>
+        <li>nw_sight-&gt;Cities that stood for generations are gone. The radio carries only static and the names of the missing.</li>
+        <li>nw_sight-&gt;Ash is already falling on towns hundreds of miles from the nearest blast.</li>
+        <li>nw_council-&gt;The Rim Council, which could not stop it, has been dissolved, and no one expects it to sit again.</li>
+        <li>nw_council-&gt;The Rim Council is no more. Its chamber is empty and its decrees mean nothing now.</li>
+        <li>nw_after-&gt;Markets have collapsed, governments are reeling, and the survivors are already asking how long the winter will last.</li>
+        <li>nw_after-&gt;Whatever comes next will be built on the ruins of what came before. This may be the last edition for some time.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 </Defs>
