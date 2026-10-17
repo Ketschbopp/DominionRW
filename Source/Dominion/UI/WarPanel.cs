@@ -130,8 +130,41 @@ namespace Dominion
             if (atUs > 0 && on) DominionRooms.DrawGlow(lamp.center, 26f, new Color(1f, 0.2f, 0.1f, 0.5f));
             TooltipHandler.TipRegion(lamp, atUs > 0 ? "Dominion_WarRoom_Alarm".Translate(atUs) : "Dominion_WarRoom_Quiet".Translate());
             DominionTheme.InkLabel(new Rect(lamp.xMax + 10f, rect.y, 300f, rect.height), "Dominion_WarRoom_Title".Translate().ToString().ToUpper(), Stencil, GameFont.Medium, TextAnchor.MiddleLeft);
+            float right = rect.xMax - 10f;
+            if (Integration_IRBM.Instance != null) right = DrawDoomsdayClock(new Rect(rect.xMax - 250f, rect.y + 2f, 240f, rect.height - 4f)) - 10f;
             string status = "Dominion_WarRoom_Status".Translate(mine.Count, world.Count(Known), atUs);
-            DominionTheme.InkLabel(new Rect(rect.x + 320f, rect.y, rect.width - 330f, rect.height), status, Dim, GameFont.Small, TextAnchor.MiddleRight);
+            DominionTheme.InkLabel(new Rect(rect.x + 320f, rect.y, right - rect.x - 320f, rect.height), status.Truncate(right - rect.x - 320f), Dim, GameFont.Small, TextAnchor.MiddleRight);
+        }
+
+        /// <summary>
+        /// InterRim Ballistic Missile's doomsday clock: a small dial whose minute hand creeps toward midnight with every
+        /// strategic strike, and the phase beside it. Returns its left edge.
+        /// </summary>
+        private static float DrawDoomsdayClock(Rect rect)
+        {
+            NuclearPhase phase = Integration_IRBM.Phase;
+            float size = rect.height;
+            Rect face = new Rect(rect.x, rect.y, size, size);
+            Vector2 c = face.center;
+            float r = size / 2f - 2f;
+            Color rim = phase >= NuclearPhase.War ? Red : phase == NuclearPhase.Clock ? new Color(1f, 0.7f, 0.3f) : Dim;
+            Widgets.DrawBoxSolid(face.ContractedBy(2f), new Color(0f, 0f, 0f, 0.6f));
+            for (int i = 0; i < 12; i++)
+            {
+                float a = i * Mathf.PI / 6f;
+                Vector2 d = new Vector2(Mathf.Sin(a), -Mathf.Cos(a));
+                Widgets.DrawLine(c + d * (r - 3f), c + d * r, i == 0 ? Red : rim, i == 0 ? 2f : 1f);
+            }
+            // The last quarter hour before midnight, where the hand lives once the clock runs.
+            float frac = phase >= NuclearPhase.War ? 1f : Integration_IRBM.ClockFraction;
+            float hand = Mathf.Lerp(-Mathf.PI / 2f, 0f, frac);
+            Widgets.DrawLine(c, c + new Vector2(Mathf.Sin(hand), -Mathf.Cos(hand)) * (r - 2f), rim, 2f);
+            Widgets.DrawLine(c, c + new Vector2(0f, -1f) * (r * 0.55f), rim, 2f);
+            if (phase == NuclearPhase.War && Time.realtimeSinceStartup % 1f < 0.5f) DominionRooms.DrawGlow(c, size, new Color(1f, 0.15f, 0.1f, 0.5f));
+            string label = phase == NuclearPhase.Clock ? "Dominion_IRBM_Phase_Clock".Translate(Integration_IRBM.ClockText()).ToString() : ("Dominion_IRBM_Phase_" + phase).Translate().ToString();
+            DominionTheme.InkLabel(new Rect(face.xMax + 6f, rect.y, rect.width - size - 6f, rect.height), label, phase == NuclearPhase.Calm ? Dim : rim, GameFont.Tiny, TextAnchor.MiddleLeft);
+            TooltipHandler.TipRegion(rect, "Dominion_IRBM_Phase_Desc".Translate());
+            return rect.x;
         }
 
         // ------------------------------------------------------------------ the rack of dossiers
