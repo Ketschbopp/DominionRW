@@ -348,6 +348,13 @@ Success is likelier with high Intellectual and good radio coverage. An inconclus
   <Dominion_Advice_WarAlly>An ally is involved and may call on us for help. The War tab shows how it is going.</Dominion_Advice_WarAlly>
   <Dominion_Advice_WarNear>The fighting is close. Expect more raiders, refugees and nervous traders around us.</Dominion_Advice_WarNear>
   <Dominion_Advice_WarFar>Far enough away not to worry about, for now.</Dominion_Advice_WarFar>
+  <Dominion_Advice_MissileOnUs>The missile was aimed at us. Treat the wounded, put out the fires, and expect the attacker's war to come to our door. A strategic strike also brings the doomsday clock closer to midnight.</Dominion_Advice_MissileOnUs>
+  <Dominion_Advice_MissileByUs>The victim will want revenge. If it was a strategic weapon, the whole world will remember that we fired it: expect goodwill to fall everywhere, and the doomsday clock to move closer to midnight.</Dominion_Advice_MissileByUs>
+  <Dominion_Advice_Missile>No missile is truly far away. Strategic strikes bring the doomsday clock closer to midnight, and at midnight global nuclear war breaks out: every economy is shaken, every government loses its footing, and the Rim Council is dissolved for good. Calming the powers now matters more than ever.</Dominion_Advice_Missile>
+  <Dominion_Advice_Doomsday>Every faction is on edge, and governments everywhere grow less stable as midnight nears. Stock up on food, medicine and fuel while traders still have them, and think about shelter.</Dominion_Advice_Doomsday>
+  <Dominion_Advice_NuclearWar>This reaches everyone. Every economy has lost about a quarter of its output, every government has been shaken, and the Rim Council is gone for good. A nuclear winter will follow: stock food, fuel and warm clothes now, and plan to grow food indoors.</Dominion_Advice_NuclearWar>
+  <Dominion_Advice_NuclearWinter>Expect cold and failing harvests for about {0} years. Grow food indoors under lamps, keep the heaters fuelled, and buy food while anyone still has it to sell.</Dominion_Advice_NuclearWinter>
+  <Dominion_Advice_NuclearWinterEnds>Crops can grow outdoors again. As economies recover, traders will slowly have more to sell.</Dominion_Advice_NuclearWinterEnds>
   <Dominion_Advice_EconomyDown>{0}'s economy is running at {1} of normal: their traders will have less to sell and want more for it.</Dominion_Advice_EconomyDown>
   <Dominion_Advice_EconomyOk>{0}'s economy is holding up for now.</Dominion_Advice_EconomyOk>
   <Dominion_Advice_Crisis>{0} is in crisis for about another {1}.</Dominion_Advice_Crisis>

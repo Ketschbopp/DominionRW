@@ -201,7 +201,9 @@ namespace Dominion
             bool near = Near(n.primary, comp, player) || Near(n.secondary, comp, player);
             bool allyInvolved = IsAlly(n.primary, player) || IsAlly(n.secondary, player);
 
-            switch (n.Category)
+            string nuclear = NuclearAdvice(n, player);
+            if (nuclear != null) lines.Add(nuclear);
+            else switch (n.Category)
             {
                 case EventCategory.War:
                 case EventCategory.Military:
@@ -237,6 +239,23 @@ namespace Dominion
             foreach (string l in lines)
                 sb.AppendLine("• " + l);
             return sb.ToString().TrimEnd();
+        }
+
+        /// <summary>Strategic weapons reach everyone however far away they fall: what each stage of IRBM's war means for us.</summary>
+        private static string NuclearAdvice(NewsItem n, Faction player)
+        {
+            switch (n.def.defName)
+            {
+                case "Dominion_MissileStrike":
+                    if (n.secondary == player) return "Dominion_Advice_MissileOnUs".Translate();
+                    if (n.primary == player) return "Dominion_Advice_MissileByUs".Translate();
+                    return "Dominion_Advice_Missile".Translate();
+                case "Dominion_DoomsdayClock": return "Dominion_Advice_Doomsday".Translate();
+                case "Dominion_NuclearWar": return "Dominion_Advice_NuclearWar".Translate();
+                case "Dominion_NuclearWinter": return "Dominion_Advice_NuclearWinter".Translate(n.detail ?? "?");
+                case "Dominion_NuclearWinterEnds": return "Dominion_Advice_NuclearWinterEnds".Translate();
+                default: return null;
+            }
         }
 
         private static string Standing(Faction f, Faction player, WorldComponent_Dominion comp)
