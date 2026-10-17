@@ -121,7 +121,7 @@ namespace Dominion
                 DiplomacyUtility.SetRelationKind(player, f, FactionRelationKind.Hostile, player, "Dominion_Reason_Intercepted".Translate());
 
             FactionState s = WorldComponent_Dominion.Instance.GetState(f);
-            List<Pawn> enemies = InterceptUtility.GenerateFighters(f, Mathf.Clamp(200f + s.militaryStrength * 0.5f, 200f, 1200f), caravan.Tile);
+            List<Pawn> enemies = InterceptUtility.GenerateFighters(f, WarbandUtility.ForPlayerBattle(Mathf.Clamp(200f + s.militaryStrength * 0.5f, 200f, 1200f)), caravan.Tile);
 
             // The envoy, or the leader in person if travelling to a summit.
             Pawn leader = f.leader;
