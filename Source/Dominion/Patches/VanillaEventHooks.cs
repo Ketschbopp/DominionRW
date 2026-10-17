@@ -95,6 +95,11 @@ namespace Dominion
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             War w = comp?.Wars.Find(killer, __instance);
             if (w == null) return;
+            if (member.RaceProps.Humanlike)
+            {
+                if (__instance == w.attacker) w.deadAttacker++;
+                else w.deadDefender++;
+            }
             int day = GenDate.DaysPassed;
             if (w.killDay != day)
             {

@@ -22,12 +22,27 @@ namespace Dominion
         private Vector2 storyScroll;
         private NewsItem selected;
 
+        private const float BatchBarHeight = 32f;
+        private const float DayBarHeight = 26f;
+        private const float ClippingW = 250f;
+        private const float ClippingH = 150f;
+        private const int FollowUpDays = 30;
+
+        private enum View { Latest, Bookmarks, Archive, Scrapbook }
+
         private EventCategory? categoryFilter;
         private Faction factionFilter;
         private bool showRumors = true;
         private bool unreadOnly;
+        private View view = View.Latest;
+        private string search = "";
+        private int archiveDay = -1;
 
         private readonly List<NewsItem> shown = new List<NewsItem>();
+
+        /// <summary>Stories ticked in the list, for stamping several at once.</summary>
+        private readonly HashSet<NewsItem> picked = new HashSet<NewsItem>();
+        private Vector2 scrapScroll;
 
         public void Draw(Rect rect, WorldComponent_Dominion comp)
         {
@@ -41,11 +56,27 @@ namespace Dominion
             y += FilterHeight + 8f;
 
             Rect body = new Rect(inner.x, y, inner.width, inner.yMax - y);
+            Filter(log);
+            if (view == View.Scrapbook)
+            {
+                DrawScrapbook(body, log);
+                return;
+            }
             Rect listRect = body.LeftPart(0.42f);
             Rect storyRect = body.RightPart(0.58f);
             storyRect.xMin += 10f;
 
-            Filter(log);
+            if (view == View.Archive)
+            {
+                DrawDayBar(new Rect(listRect.x, listRect.y, listRect.width, DayBarHeight), log);
+                listRect.yMin += DayBarHeight + 4f;
+            }
+            picked.RemoveWhere(n => !log.Delivered.Contains(n));
+            if (picked.Count > 0)
+            {
+                DrawBatchBar(new Rect(listRect.x, listRect.yMax - BatchBarHeight, listRect.width, BatchBarHeight), log);
+                listRect.yMax -= BatchBarHeight + 4f;
+            }
             DrawList(listRect, log);
             // A column rule between clippings and the article.
             GUI.color = new Color(0.2f, 0.16f, 0.12f, 0.5f);
@@ -117,26 +148,37 @@ namespace Dominion
 
         private void DrawFilters(Rect rect, NewsLog log)
         {
+            // Widths shrink together when the window is narrow.
+            float[] widths = { 130f, 150f, 150f, 130f, 120f, 110f, 110f };
+            float need = 0f;
+            foreach (float w in widths) need += w + 6f;
+            float k = Mathf.Min(1f, rect.width / need);
             float x = rect.x;
-            Rect r = new Rect(x, rect.y, 160f, rect.height);
-            string catLabel = categoryFilter.HasValue ? ("Dominion_EventCategory_" + categoryFilter.Value).Translate() : "Dominion_News_AllCategories".Translate();
-            TooltipHandler.TipRegion(r, "Dominion_Tip_NewsCategory".Translate());
-            if (Widgets.ButtonText(r, catLabel))
+            Rect Next(int i)
             {
-                var options = new List<FloatMenuOption> { new FloatMenuOption("Dominion_News_AllCategories".Translate(), () => categoryFilter = null) };
+                Rect r = new Rect(x, rect.y, widths[i] * k, rect.height);
+                x = r.xMax + 6f * k;
+                return r;
+            }
+
+            Rect cat = Next(0);
+            string catLabel = categoryFilter.HasValue ? ("Dominion_EventCategory_" + categoryFilter.Value).Translate() : "Dominion_News_AllCategories".Translate();
+            TooltipHandler.TipRegion(cat, "Dominion_Tip_NewsCategory".Translate());
+            if (Widgets.ButtonText(cat, catLabel.Truncate(cat.width - 6f)))
+            {
+                var options = new List<FloatMenuOption> { new FloatMenuOption("Dominion_News_AllCategories".Translate() + Unread(log, null), () => categoryFilter = null) };
                 foreach (EventCategory c in System.Enum.GetValues(typeof(EventCategory)))
                 {
                     EventCategory captured = c;
-                    options.Add(new FloatMenuOption(("Dominion_EventCategory_" + c).Translate(), () => categoryFilter = captured,
+                    options.Add(new FloatMenuOption(("Dominion_EventCategory_" + c).Translate() + Unread(log, c), () => categoryFilter = captured,
                         DominionTheme.CategoryIcon(c), new Color(0.9f, 0.85f, 0.7f)));
                 }
                 Find.WindowStack.Add(new FloatMenu(options));
             }
-            x = r.xMax + 6f;
 
-            r = new Rect(x, rect.y, 190f, rect.height);
-            TooltipHandler.TipRegion(r, "Dominion_Tip_NewsFaction".Translate());
-            if (Widgets.ButtonText(r, factionFilter?.Name.Truncate(180f) ?? "Dominion_News_AllFactions".Translate()))
+            Rect fac = Next(1);
+            TooltipHandler.TipRegion(fac, "Dominion_Tip_NewsFaction".Translate());
+            if (Widgets.ButtonText(fac, (factionFilter?.Name ?? "Dominion_News_AllFactions".Translate().ToString()).Truncate(fac.width - 6f)))
             {
                 var options = new List<FloatMenuOption> { new FloatMenuOption("Dominion_News_AllFactions".Translate(), () => factionFilter = null) };
                 foreach (Faction f in Find.FactionManager.AllFactionsVisibleInViewOrder)
@@ -146,18 +188,60 @@ namespace Dominion
                 }
                 Find.WindowStack.Add(new FloatMenu(options));
             }
-            x = r.xMax + 12f;
 
-            // Checkboxes: ink labels on paper.
-            TooltipHandler.TipRegion(new Rect(x, rect.y + 2f, 140f, 24f), "Dominion_Tip_ShowRumors".Translate());
-            x = InkCheckbox(new Rect(x, rect.y + 2f, 140f, 24f), "Dominion_News_ShowRumors".Translate(), ref showRumors) + 10f;
-            TooltipHandler.TipRegion(new Rect(x, rect.y + 2f, 130f, 24f), "Dominion_Tip_UnreadOnly".Translate());
-            InkCheckbox(new Rect(x, rect.y + 2f, 130f, 24f), "Dominion_News_UnreadOnly".Translate(), ref unreadOnly);
+            Rect find = Next(2);
+            search = Widgets.TextField(find, search ?? "");
+            if (search.NullOrEmpty())
+                DominionTheme.InkLabel(new Rect(find.x + 6f, find.y, find.width, find.height), "Dominion_UI_Search".Translate(), DominionTheme.InkFaded, GameFont.Small, TextAnchor.MiddleLeft);
+            TooltipHandler.TipRegion(find, "Dominion_News_Search_Desc".Translate());
 
-            r = new Rect(rect.xMax - 140f, rect.y, 140f, rect.height);
-            TooltipHandler.TipRegion(r, "Dominion_Tip_MarkAllRead".Translate());
-            if (Widgets.ButtonText(r, "Dominion_News_MarkAllRead".Translate()))
+            Rect mode = Next(3);
+            TooltipHandler.TipRegion(mode, "Dominion_News_View_Desc".Translate());
+            if (Widgets.ButtonText(mode, ViewLabel(view, log).Truncate(mode.width - 6f)))
+            {
+                var options = new List<FloatMenuOption>();
+                foreach (View v in System.Enum.GetValues(typeof(View)))
+                {
+                    View captured = v;
+                    options.Add(new FloatMenuOption(ViewLabel(v, log) + ": " + ("Dominion_News_View_" + v + "_Desc").Translate(), () => SetView(captured, log)));
+                }
+                Find.WindowStack.Add(new FloatMenu(options));
+            }
+
+            Rect rum = Next(4);
+            TooltipHandler.TipRegion(rum, "Dominion_Tip_ShowRumors".Translate());
+            InkCheckbox(new Rect(rum.x, rum.y + 2f, rum.width, 24f), "Dominion_News_ShowRumors".Translate(), ref showRumors);
+            Rect unr = Next(5);
+            TooltipHandler.TipRegion(unr, "Dominion_Tip_UnreadOnly".Translate());
+            InkCheckbox(new Rect(unr.x, unr.y + 2f, unr.width, 24f), "Dominion_News_UnreadOnly".Translate(), ref unreadOnly);
+
+            Rect all = new Rect(rect.xMax - widths[6] * k, rect.y, widths[6] * k, rect.height);
+            TooltipHandler.TipRegion(all, "Dominion_Tip_MarkAllRead".Translate());
+            if (Widgets.ButtonText(all, "Dominion_News_MarkAllRead".Translate().Truncate(all.width - 6f)))
                 log.MarkAllRead();
+        }
+
+        private static string Unread(NewsLog log, EventCategory? c)
+        {
+            int n = 0;
+            foreach (NewsItem item in log.Delivered)
+                if (!item.read && (!c.HasValue || item.Category == c.Value)) n++;
+            return n > 0 ? "  (" + "Dominion_News_UnreadCount".Translate(n) + ")" : "";
+        }
+
+        private static string ViewLabel(View v, NewsLog log)
+        {
+            int n = 0;
+            if (v == View.Bookmarks) foreach (NewsItem i in log.Delivered) if (i.bookmarked) n++;
+            if (v == View.Scrapbook) foreach (NewsItem i in log.Delivered) if (i.clipped) n++;
+            return ("Dominion_News_View_" + v).Translate() + (n > 0 ? " (" + n + ")" : "");
+        }
+
+        private void SetView(View v, NewsLog log)
+        {
+            view = v;
+            listScroll = Vector2.zero;
+            if (v == View.Archive && archiveDay < 0) archiveDay = GenDate.DaysPassed;
         }
 
         private static float InkCheckbox(Rect r, string label, ref bool value)
@@ -179,6 +263,8 @@ namespace Dominion
             categoryFilter = null;
             factionFilter = null;
             unreadOnly = false;
+            search = "";
+            if (view != View.Latest && !(view == View.Bookmarks && n.bookmarked)) view = View.Latest;
             if (n.confidence == NewsConfidence.Rumor) showRumors = true;
         }
 
@@ -193,9 +279,143 @@ namespace Dominion
                 if (factionFilter != null && n.primary != factionFilter && n.secondary != factionFilter) continue;
                 if (!showRumors && n.confidence == NewsConfidence.Rumor) continue;
                 if (unreadOnly && n.read && n != selected) continue;
+                if (view == View.Bookmarks && !n.bookmarked) continue;
+                if (view == View.Scrapbook && !n.clipped) continue;
+                if (view == View.Archive && n.arrivesTick / GenDate.TicksPerDay != archiveDay) continue;
+                if (!search.NullOrEmpty() && !Matches(n, search)) continue;
                 shown.Add(n);
             }
+            // Bookmarked stories stay at the top of the latest news.
+            if (view == View.Latest) shown.SortStable((a, b) => (b.bookmarked ? 1 : 0).CompareTo(a.bookmarked ? 1 : 0));
             if (selected != null && !shown.Contains(selected)) selected = null;
+        }
+
+        private static bool Matches(NewsItem n, string text) =>
+            Contains(n.headline, text) || Contains(n.story, text) || Contains(n.primary?.Name, text) || Contains(n.secondary?.Name, text);
+
+        private static bool Contains(string s, string text) => s != null && s.IndexOf(text, System.StringComparison.OrdinalIgnoreCase) >= 0;
+
+        // ------------------------------------------------------------------ archive, batch stamping, scrapbook
+
+        /// <summary>The archive's day: flip back and forth through past editions.</summary>
+        private void DrawDayBar(Rect rect, NewsLog log)
+        {
+            int first = log.Delivered.Count > 0 ? log.Delivered[0].arrivesTick / GenDate.TicksPerDay : GenDate.DaysPassed;
+            int last = GenDate.DaysPassed;
+            archiveDay = Mathf.Clamp(archiveDay, first, last);
+            Rect prev = new Rect(rect.x, rect.y, 32f, rect.height), next = new Rect(rect.xMax - 32f, rect.y, 32f, rect.height);
+            if (DominionPaper.InkButton(prev, "◀", "Dominion_News_PrevDay".Translate(), archiveDay <= first ? "Dominion_News_NoEarlier".Translate().ToString() : null))
+                archiveDay--;
+            if (DominionPaper.InkButton(next, "▶", "Dominion_News_NextDay".Translate(), archiveDay >= last ? "Dominion_News_NoLater".Translate().ToString() : null))
+                archiveDay++;
+            string label = "Dominion_News_EditionOf".Translate(archiveDay + 1, DominionPaper.Date(archiveDay * GenDate.TicksPerDay + GenDate.TicksPerHour * 12));
+            DominionTheme.InkLabel(new Rect(prev.xMax, rect.y, next.x - prev.xMax, rect.height), label, DominionTheme.Ink, GameFont.Small, TextAnchor.MiddleCenter);
+        }
+
+        /// <summary>The bar under the list when stories are ticked: stamp them all at once, or mark, bookmark or clip them.</summary>
+        private void DrawBatchBar(Rect rect, NewsLog log)
+        {
+            Widgets.DrawBoxSolid(rect, DominionTheme.PaperShade);
+            GUI.color = DominionPaper.Edge;
+            Widgets.DrawBox(rect);
+            GUI.color = Color.white;
+            Rect inner = rect.ContractedBy(3f);
+            float w = (inner.width - 90f) / 4f;
+            DominionTheme.InkLabel(new Rect(inner.x, inner.y, 88f, inner.height), "Dominion_News_Picked".Translate(picked.Count), DominionTheme.InkRed, GameFont.Tiny, TextAnchor.MiddleLeft);
+            float x = inner.x + 90f;
+            if (DominionPaper.InkButton(new Rect(x, inner.y, w - 3f, inner.height), "Dominion_News_BatchRespond".Translate(), "Dominion_News_BatchRespond_Desc".Translate(RadioOrders.Capacity),
+                    RadioOrderUtility.CannotOrderReason(), false, DominionTheme.InkRed))
+                BatchMenu();
+            x += w;
+            if (DominionPaper.InkButton(new Rect(x, inner.y, w - 3f, inner.height), "Dominion_News_BatchRead".Translate(), "Dominion_News_BatchRead_Desc".Translate()))
+                foreach (NewsItem n in picked) log.MarkRead(n);
+            x += w;
+            bool allMarked = picked.All(n => n.bookmarked);
+            if (DominionPaper.InkButton(new Rect(x, inner.y, w - 3f, inner.height), allMarked ? "Dominion_News_Unbookmark".Translate() : "Dominion_News_Bookmark".Translate(),
+                    "Dominion_News_Bookmark_Desc".Translate()))
+                foreach (NewsItem n in picked) n.bookmarked = !allMarked;
+            x += w;
+            if (DominionPaper.InkButton(new Rect(x, inner.y, w - 3f, inner.height), "Dominion_News_BatchClear".Translate(), "Dominion_News_BatchClear_Desc".Translate()))
+                picked.Clear();
+        }
+
+        private void BatchMenu()
+        {
+            RadioOrders orders = WorldComponent_Dominion.Instance.RadioOrders;
+            var options = new List<FloatMenuOption>();
+            foreach (RadioOrderKind kind in RadioOrderSpec.StoryResponses)
+            {
+                List<NewsItem> eligible = picked.Where(n => RadioOrderUtility.CannotRespondReason(kind, n) == null).ToList();
+                RadioOrderSpec spec = RadioOrderSpec.Of(kind);
+                string label = "Dominion_News_BatchOption".Translate(spec.Label, eligible.Count, picked.Count);
+                if (eligible.Count == 0)
+                {
+                    options.Add(new FloatMenuOption(label + " (" + "Dominion_News_BatchNone".Translate() + ")", null, spec.icon, Color.white));
+                    continue;
+                }
+                RadioOrderKind captured = kind;
+                options.Add(new FloatMenuOption(label, () =>
+                {
+                    int room = orders.Free, queued = 0;
+                    foreach (NewsItem n in eligible)
+                    {
+                        if (queued >= room) break;
+                        orders.Queue(captured, n.id);
+                        queued++;
+                    }
+                    int left = eligible.Count - queued;
+                    Messages.Message(left > 0 ? "Dominion_News_BatchQueuedFull".Translate(queued, spec.Label, left) : "Dominion_News_BatchQueued".Translate(queued, spec.Label),
+                        left > 0 ? MessageTypeDefOf.CautionInput : MessageTypeDefOf.TaskCompletion, false);
+                    picked.Clear();
+                }, spec.icon, Color.white) { tooltip = spec.Desc });
+            }
+            Find.WindowStack.Add(new FloatMenu(options, "Dominion_News_BatchTitle".Translate(orders.Free)));
+        }
+
+        /// <summary>The scrapbook: clipped stories pasted in at slight angles. Click one to read it in full.</summary>
+        private void DrawScrapbook(Rect rect, NewsLog log)
+        {
+            if (shown.Count == 0)
+            {
+                DominionTheme.InkLabel(new Rect(rect.x, rect.y + 40f, rect.width, 60f), "Dominion_News_ScrapbookEmpty".Translate(), DominionTheme.InkFaded, GameFont.Small, TextAnchor.UpperCenter);
+                return;
+            }
+            int perRow = Mathf.Max(1, (int)((rect.width - 16f) / (ClippingW + 16f)));
+            Rect viewRect = new Rect(0f, 0f, rect.width - 16f, Mathf.CeilToInt(shown.Count / (float)perRow) * (ClippingH + 20f) + 10f);
+            Widgets.BeginScrollView(rect, ref scrapScroll, viewRect);
+            for (int i = 0; i < shown.Count; i++)
+            {
+                NewsItem n = shown[i];
+                Rect card = new Rect(10f + i % perRow * (ClippingW + 16f), 10f + i / perRow * (ClippingH + 20f), ClippingW, ClippingH);
+                float angle = (n.id * 37 % 7) - 3f;
+                Matrix4x4 m = GUI.matrix;
+                UI.RotateAroundPivot(angle, card.center);
+                Widgets.DrawBoxSolid(new Rect(card.x + 3f, card.y + 3f, card.width, card.height), new Color(0f, 0f, 0f, 0.18f));
+                DominionTheme.DrawPaper(card);
+                Rect inner = card.ContractedBy(8f);
+                Text.Font = GameFont.Small;
+                float hh = Mathf.Min(44f, Text.CalcHeight(n.headline, inner.width));
+                DominionTheme.InkLabel(new Rect(inner.x, inner.y, inner.width, hh), n.headline);
+                string snippet = (n.story ?? "").Length > 220 ? n.story.Substring(0, 220) + "…" : n.story ?? "";
+                DominionTheme.InkLabel(new Rect(inner.x, inner.y + hh + 2f, inner.width, inner.height - hh - 20f), snippet, DominionTheme.InkFaded, GameFont.Tiny);
+                DominionTheme.InkLabel(new Rect(inner.x, inner.yMax - 16f, inner.width, 16f), DominionPaper.Date(n.arrivesTick), DominionTheme.InkRed, GameFont.Tiny);
+                GUI.matrix = m;
+                Rect unclip = new Rect(card.xMax - 24f, card.y + 2f, 20f, 20f);
+                DominionTheme.DrawInk(unclip, DominionPaper.Scissors, Mouse.IsOver(unclip) ? DominionTheme.InkRed : DominionTheme.InkFaded);
+                TooltipHandler.TipRegion(unclip, "Dominion_News_Unclip".Translate());
+                if (Widgets.ButtonInvisible(unclip))
+                {
+                    n.clipped = false;
+                    continue;
+                }
+                TooltipHandler.TipRegion(card, n.headline + "\n\n" + "Dominion_News_ClickToRead".Translate());
+                if (Widgets.ButtonInvisible(card))
+                {
+                    view = View.Latest;
+                    Open(n, log);
+                }
+            }
+            Widgets.EndScrollView();
         }
 
         // ------------------------------------------------------------------ clippings
@@ -218,10 +438,29 @@ namespace Dominion
                 Widgets.DrawLineHorizontal(row.x + 4f, row.yMax + 1f, row.width - 8f);
                 GUI.color = Color.white;
 
-                Rect icon = new Rect(row.x + 4f, row.y + 8f, 26f, 26f);
+                // A tick box for stamping several stories at once.
+                Rect tick = new Rect(row.x + 3f, row.y + 16f, 16f, 16f);
+                bool on = picked.Contains(n);
+                GUI.color = DominionTheme.InkFaded;
+                Widgets.DrawBox(tick, 1);
+                GUI.color = Color.white;
+                if (on) Widgets.DrawBoxSolid(tick.ContractedBy(3f), DominionTheme.InkRed);
+                TooltipHandler.TipRegion(tick, "Dominion_News_Pick".Translate());
+                if (Widgets.ButtonInvisible(tick.ExpandedBy(3f)))
+                {
+                    if (on) picked.Remove(n);
+                    else picked.Add(n);
+                }
+
+                Rect icon = new Rect(row.x + 24f, row.y + 8f, 26f, 26f);
                 DominionTheme.DrawInk(icon, DominionTheme.CategoryIcon(n.Category), n.read ? DominionTheme.InkFaded : DominionTheme.Ink);
 
                 float right = row.xMax - 4f;
+                if (n.bookmarked)
+                {
+                    DominionTheme.DrawInk(new Rect(right - 18f, row.y + 5f, 18f, 18f), DominionPaper.Star, DominionTheme.InkAmber);
+                    right -= 20f;
+                }
                 if (!n.read)
                 {
                     GUI.DrawTexture(new Rect(right - 20f, row.y + 4f, 20f, 20f), DominionTheme.Pin);
@@ -240,7 +479,7 @@ namespace Dominion
                     DominionTheme.InkFaded, GameFont.Tiny);
                 TooltipHandler.TipRegion(row, n.headline + "\n\n" + "Dominion_Tip_Clipping".Translate());
 
-                if (Widgets.ButtonInvisible(row))
+                if (Widgets.ButtonInvisible(new Rect(row.x + 22f, row.y, row.width - 22f, row.height)))
                     Open(n, log);
             }
             Widgets.EndScrollView();
@@ -263,7 +502,14 @@ namespace Dominion
 
             // Kicker: which desk filed it.
             DominionTheme.DrawInk(new Rect(0f, y, 18f, 18f), DominionTheme.CategoryIcon(n.Category), DominionTheme.InkRed);
-            DominionTheme.InkLabel(new Rect(22f, y, w - 150f, 18f), Desk(n.Category).ToUpper(), DominionTheme.InkRed, GameFont.Tiny);
+            DominionTheme.InkLabel(new Rect(22f, y, w - 200f, 18f), Desk(n.Category).ToUpper(), DominionTheme.InkRed, GameFont.Tiny);
+            Rect star = new Rect(w - 176f, y, 18f, 18f), clip = new Rect(w - 154f, y, 18f, 18f);
+            DominionTheme.DrawInk(star, n.bookmarked ? DominionPaper.Star : DominionPaper.StarOutline, n.bookmarked ? DominionTheme.InkAmber : DominionTheme.InkFaded);
+            TooltipHandler.TipRegion(star, n.bookmarked ? "Dominion_News_Unbookmark".Translate() : "Dominion_News_Bookmark_Desc".Translate());
+            if (Widgets.ButtonInvisible(star)) n.bookmarked = !n.bookmarked;
+            DominionTheme.DrawInk(clip, DominionPaper.Scissors, n.clipped ? DominionTheme.InkRed : DominionTheme.InkFaded);
+            TooltipHandler.TipRegion(clip, n.clipped ? "Dominion_News_Unclip".Translate() : "Dominion_News_Clip_Desc".Translate());
+            if (Widgets.ButtonInvisible(clip)) n.clipped = !n.clipped;
             y += 20f;
 
             // The stamp sits in the top-right corner, a little crooked.
@@ -283,7 +529,14 @@ namespace Dominion
             DominionTheme.InkLabel(new Rect(0f, y, w, 18f), ("Dominion_News_Byline_" + n.source).Translate(reporter), DominionTheme.InkFaded, GameFont.Tiny);
             y += 18f;
             string when = GenDate.DateFullStringAt(GenDate.TickGameToAbs(n.arrivesTick), Find.WorldGrid.LongLatOf(Find.CurrentMap?.Tile ?? 0));
-            DominionTheme.InkLabel(new Rect(0f, y, w, 18f), "Dominion_News_Dateline".Translate(Place(n), when), DominionTheme.InkFaded, GameFont.Tiny);
+            Rect dateline = new Rect(0f, y, w, 18f);
+            DominionTheme.InkLabel(dateline, "Dominion_News_Dateline".Translate(Place(n), when), DominionTheme.InkFaded, GameFont.Tiny);
+            RimWorld.Planet.Settlement place = PlaceSettlement(n);
+            if (place != null)
+            {
+                TooltipHandler.TipRegion(dateline, "Dominion_News_JumpPlace".Translate(place.Label));
+                if (Widgets.ButtonInvisible(dateline)) CameraJumper.TryJumpAndSelect(place);
+            }
             y += 22f;
 
             // Who it is about.
@@ -296,7 +549,26 @@ namespace Dominion
                 if (room < 40f) break;
                 Text.Font = GameFont.Small;
                 float nameW = Mathf.Min(Text.CalcSize(f.Name).x, room - 4f);
-                DominionTheme.InkLabel(new Rect(x + 26f, y + 1f, nameW + 4f, 22f), f.Name.Truncate(nameW + 4f));
+                Rect nameRect = new Rect(x + 26f, y + 1f, nameW + 4f, 22f);
+                bool over = Mouse.IsOver(nameRect);
+                DominionTheme.InkLabel(nameRect, f.Name.Truncate(nameW + 4f), over ? DominionTheme.InkRed : DominionTheme.Ink);
+                if (over) Widgets.DrawLineHorizontal(nameRect.x, nameRect.yMax - 3f, nameW, DominionTheme.InkRed);
+                if (!f.IsPlayer)
+                {
+                    TooltipHandler.TipRegion(nameRect, "Dominion_News_FactionLink".Translate(f.Name));
+                    if (Widgets.ButtonInvisible(nameRect))
+                    {
+                        Faction captured = f;
+                        Find.WindowStack.Add(new FloatMenu(new List<FloatMenuOption>
+                        {
+                            new FloatMenuOption("Dominion_UI_Jump_Dossier".Translate(), () => DominionUIState.Show(DominionTab.Overview, captured)),
+                            new FloatMenuOption("Dominion_UI_Jump_Diplomacy".Translate(), () => DominionUIState.Show(DominionTab.Diplomacy, captured)),
+                            new FloatMenuOption("Dominion_UI_Jump_Intel".Translate(), () => DominionUIState.Show(DominionTab.Intelligence, captured)),
+                            new FloatMenuOption("Dominion_UI_Jump_Map".Translate(), () => DominionUIState.JumpToCapital(captured)),
+                            new FloatMenuOption("Dominion_News_OnlyThisFaction".Translate(), () => factionFilter = captured),
+                        }));
+                    }
+                }
                 x += 26f + nameW + 18f;
             }
             if (x > 0f) y += 26f;
@@ -333,6 +605,7 @@ namespace Dominion
                 DominionTheme.InkFaded, GameFont.Tiny);
             y += 26f;
             y = DrawInvestigation(n, y, w);
+            y = DrawFollowUps(n, log, y, w);
 
             // Filler: every paper has a classified ad at the bottom of the page.
             y = Mathf.Max(y, rect.height - 78f);
@@ -350,6 +623,41 @@ namespace Dominion
         }
 
         private float storyHeight;
+
+        /// <summary>Other stories about the same factions from around the same time: the thread of the story.</summary>
+        private float DrawFollowUps(NewsItem n, NewsLog log, float y, float w)
+        {
+            if (n.primary == null) return y;
+            var related = new List<NewsItem>();
+            IReadOnlyList<NewsItem> all = log.Delivered;
+            int window = FollowUpDays * GenDate.TicksPerDay;
+            for (int i = all.Count - 1; i >= 0 && related.Count < 5; i--)
+            {
+                NewsItem o = all[i];
+                if (o == n || Mathf.Abs(o.occurredTick - n.occurredTick) > window) continue;
+                bool samePair = n.secondary != null
+                    ? (o.primary == n.primary && o.secondary == n.secondary) || (o.primary == n.secondary && o.secondary == n.primary)
+                    : o.primary == n.primary && o.secondary == null;
+                if (samePair) related.Add(o);
+            }
+            if (related.Count == 0) return y;
+            DominionPaper.Caption(new Rect(0f, y, w, 16f), "Dominion_News_FollowUps".Translate());
+            y += 16f;
+            int now = Find.TickManager.TicksGame;
+            foreach (NewsItem o in related)
+            {
+                Rect r = new Rect(8f, y, w - 8f, 20f);
+                bool over = Mouse.IsOver(r);
+                if (over) Widgets.DrawBoxSolid(r, DominionTheme.PaperShade);
+                DominionTheme.InkLabel(r, ("› " + o.headline).Truncate(w - 110f), over ? DominionTheme.InkRed : DominionTheme.Ink, GameFont.Tiny);
+                DominionTheme.InkLabel(new Rect(r.xMax - 100f, r.y, 100f, r.height), "Dominion_News_Ago".Translate((now - o.arrivesTick).ToStringTicksToPeriod(allowSeconds: false)),
+                    DominionTheme.InkFaded, GameFont.Tiny, TextAnchor.UpperRight);
+                TooltipHandler.TipRegion(r, o.headline + "\n\n" + "Dominion_News_ClickToRead".Translate());
+                if (Widgets.ButtonInvisible(r)) Open(o, log);
+                y += 20f;
+            }
+            return y + 8f;
+        }
 
         /// <summary>A boxed "what it means for us" panel, like a sidebar in a real paper.</summary>
         private static float DrawAdvice(NewsItem n, float y, float w)
@@ -426,6 +734,16 @@ namespace Dominion
             }
             color = DominionTheme.InkAmber;
             return DominionTheme.StampRumor;
+        }
+
+        private static RimWorld.Planet.Settlement PlaceSettlement(NewsItem n)
+        {
+            if (n.tile >= 0)
+            {
+                RimWorld.Planet.Settlement s = Find.WorldObjects.SettlementAt(new RimWorld.Planet.PlanetTile(n.tile));
+                if (s != null) return s;
+            }
+            return n.primary != null ? DominionUIState.Capital(n.primary) : null;
         }
 
         /// <summary>Where the story is datelined: the settlement it happened at, else the main faction's capital.</summary>

@@ -22,7 +22,23 @@ namespace Dominion
 
         // ---------------------------------------------------------------- player operations
 
-        public static float SuccessChance(OperationDef def, Faction target, List<Pawn> agents)
+        public static float SuccessChance(OperationDef def, Faction target, List<Pawn> agents) => SuccessChance(def, target, agents, OpRisk.Normal, null);
+
+        public static float RiskChance(OpRisk risk) => risk == OpRisk.Cautious ? -0.1f : risk == OpRisk.Bold ? 0.1f : 0f;
+
+        public static float RiskExposure(OpRisk risk) => risk == OpRisk.Cautious ? 0.5f : risk == OpRisk.Bold ? 1.6f : 1f;
+
+        public static float RiskDuration(OpRisk risk) => risk == OpRisk.Cautious ? 1.25f : risk == OpRisk.Bold ? 0.75f : 1f;
+
+        /// <summary>A handler at home adds a little of their skill, if they are still around to do it.</summary>
+        public static float HandlerBonus(OperationDef def, Pawn handler)
+        {
+            if (handler == null || handler.Dead || !handler.Spawned) return 0f;
+            SkillDef skill = def.skill ?? SkillDefOf.Intellectual;
+            return (handler.skills?.GetSkill(skill)?.Level ?? 0) * 0.008f;
+        }
+
+        public static float SuccessChance(OperationDef def, Faction target, List<Pawn> agents, OpRisk risk, Pawn handler)
         {
             if (agents.Count == 0) return 0f;
             float skill = 5f;
@@ -33,6 +49,7 @@ namespace Dominion
                            - s.personality.paranoia * 0.15f;
             if (DominionResearchDefOf.Dominion_IntelligenceAgency.IsFinished) chance += 0.05f;
             if (s.government == GovernmentType.Junta || s.government == GovernmentType.Autocracy) chance -= 0.05f;
+            chance += RiskChance(risk) + HandlerBonus(def, handler);
             return Mathf.Clamp(chance * DominionMod.Settings.operationSuccess, 0.05f, 0.95f);
         }
 
@@ -66,7 +83,7 @@ namespace Dominion
         }
 
         /// <summary>Agents leave the colony for the length of the operation.</summary>
-        public static void Launch(OperationDef def, Faction target, List<Pawn> agents, Faction thirdParty = null)
+        public static void Launch(OperationDef def, Faction target, List<Pawn> agents, Faction thirdParty = null, OpRisk risk = OpRisk.Normal, Pawn handler = null)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (def.silverCost > 0 && DiplomacyHelpers.AvailableSilverFresh() < def.silverCost)
@@ -86,7 +103,9 @@ namespace Dominion
                 agents = new List<Pawn>(agents),
                 thirdParty = def.needsThirdParty ? thirdParty : null,
                 startTick = now,
-                endTick = now + def.durationDays * GenDate.TicksPerDay,
+                endTick = now + Mathf.RoundToInt(def.durationDays * RiskDuration(risk) * GenDate.TicksPerDay),
+                risk = risk,
+                handler = handler != null && !agents.Contains(handler) ? handler : null,
             };
             foreach (Pawn p in agents)
             {
@@ -133,8 +152,8 @@ namespace Dominion
                 return;
             }
             string blocked = op.def.Worker.CannotTargetReason(op.target);
-            bool success = blocked == null && Rand.Chance(SuccessChance(op.def, op.target, agents));
-            float exposure = success ? op.def.exposureOnSuccess : op.def.exposureOnFail;
+            bool success = blocked == null && Rand.Chance(SuccessChance(op.def, op.target, agents, op.risk, op.handler));
+            float exposure = (success ? op.def.exposureOnSuccess : op.def.exposureOnFail) * RiskExposure(op.risk);
             if (svc.Network(op.target) > 50f) exposure -= 0.1f;
             bool exposed = Rand.Chance(Mathf.Max(0f, exposure));
             Conclude(op, success, exposed, agents);
@@ -189,6 +208,7 @@ namespace Dominion
                     text += "\n\n" + "Dominion_Ops_ExposedWar".Translate(op.target.Name);
                 }
             }
+            Svc.Record(op, exposed ? OpOutcome.Compromised : success ? OpOutcome.Success : OpOutcome.Failed);
             Find.LetterStack.ReceiveLetter("Dominion_Ops_ReportLabel".Translate(op.def.LabelCap), text,
                 success && !exposed ? LetterDefOf.PositiveEvent : exposed ? LetterDefOf.NegativeEvent : LetterDefOf.NeutralEvent, null, op.target);
         }
@@ -212,6 +232,73 @@ namespace Dominion
                 if (Find.WorldPawns.Contains(p)) Find.WorldPawns.RemovePawn(p);
                 GenSpawn.Spawn(p, CellFinder.RandomClosewalkCellNear(edge, map, 4, null), map);
             }
+        }
+
+        /// <summary>Why an operation cannot be recalled now, or null. Operations played in person cannot.</summary>
+        public static string CannotRecallReason(Operation op) => op.physical ? "Dominion_Ops_CannotRecallPhysical".Translate() : null;
+
+        /// <summary>Calls the agents home early: nothing comes of it, and nothing is refunded.</summary>
+        public static void Recall(Operation op)
+        {
+            if (CannotRecallReason(op) != null || !Svc.operations.Remove(op)) return;
+            Svc.Record(op, OpOutcome.Recalled);
+            ReturnAgents(op.agents.Where(p => p != null && !p.Dead).ToList());
+            Messages.Message("Dominion_Ops_Recalled".Translate(op.def.label, op.target.Name), MessageTypeDefOf.NeutralEvent, historical: true);
+        }
+
+        public const float SweepCost = 10f;
+
+        public static float SweepChance(Suspicion s) =>
+            Mathf.Clamp(0.25f + s.confidence * 0.5f + (Svc.CounterIntelActive ? 0.15f : 0f)
+                        + (DominionResearchDefOf.Dominion_IntelligenceAgency.IsFinished ? 0.1f : 0f), 0.05f, 0.95f);
+
+        public static string CannotSweepReason()
+        {
+            if (!DominionResearchDefOf.Dominion_IntelligenceNetworks.IsFinished)
+                return "Dominion_Action_NeedsResearch".Translate(DominionResearchDefOf.Dominion_IntelligenceNetworks.label);
+            if (WorldComponent_Dominion.Instance.Player.influence < SweepCost) return "Dominion_Action_NeedsInfluence".Translate(SweepCost.ToString("F0"));
+            return null;
+        }
+
+        /// <summary>Sweeps for the agents behind a suspicion: caught, their service loses its grip on you; missed, the trail cools.</summary>
+        public static void Sweep(Suspicion s)
+        {
+            if (CannotSweepReason() != null) return;
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            comp.Player.AddInfluence(-SweepCost);
+            if (Rand.Chance(SweepChance(s)))
+            {
+                Svc.suspicions.RemoveAll(x => x.faction == s.faction);
+                if (DominionScheduler.IsSimulated(s.faction))
+                {
+                    FactionState fs = comp.GetState(s.faction);
+                    fs.playerIntel = Mathf.Max(0f, fs.playerIntel - 20f);
+                }
+                foreach (Faction other in comp.Cache.Simulated)
+                    if (other != s.faction) comp.GetRelation(other, s.faction).favour -= 2f;
+                EventBus.Raise(DominionEventDefOf.Dominion_ForeignAgentsCaught, Faction.OfPlayer, s.faction);
+                Messages.Message("Dominion_Ops_SweepCaught".Translate(s.faction.Name), MessageTypeDefOf.PositiveEvent, historical: true);
+            }
+            else
+            {
+                s.confidence = Mathf.Max(0.05f, s.confidence - 0.15f);
+                Messages.Message("Dominion_Ops_SweepMissed".Translate(s.faction.Name), MessageTypeDefOf.NeutralEvent, historical: false);
+            }
+        }
+
+        private static void Suspect(Faction f, string kind)
+        {
+            float confidence = Rand.Range(0.15f, 0.55f) + (Svc.CounterIntelActive ? 0.2f : 0f);
+            Suspicion existing = Svc.suspicions.FirstOrDefault(x => x.faction == f);
+            if (existing != null)
+            {
+                existing.confidence = Mathf.Min(0.95f, existing.confidence + confidence * 0.5f);
+                existing.tick = Find.TickManager.TicksGame;
+                existing.kind = kind;
+                return;
+            }
+            Svc.suspicions.Add(new Suspicion { faction = f, tick = Find.TickManager.TicksGame, confidence = Mathf.Min(0.95f, confidence), kind = kind });
+            if (Svc.suspicions.Count > 20) Svc.suspicions.RemoveAt(0);
         }
 
         public static string StartCounterIntel()
@@ -336,6 +423,9 @@ namespace Dominion
                     LetterDefOf.NeutralEvent, null, f);
                 return;
             }
+            // Not caught, but not unnoticed either: often something odd is traced back to them.
+            if (Rand.Chance(0.5f + (Svc.CounterIntelActive ? 0.25f : 0f)))
+                Suspect(f, propaganda ? "Dominion_Suspicion_Propaganda".Translate() : "Dominion_Suspicion_Snooping".Translate());
             if (!propaganda && DominionMod.Settings.aiCovertOps && Rand.Chance(0.4f) && SabotagePlayer(f))
                 return;
             if (propaganda && DominionMod.Settings.colonistNewsThoughts && !comp.Broadcast.CounterProgrammingActive && !comp.RadioOrders.AdvisoryInForce)

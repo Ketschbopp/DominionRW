@@ -6,17 +6,31 @@ using Verse;
 
 namespace Dominion
 {
-    /// <summary>The player's diplomacy: their standing, a faction list, and everything they can do with the selected faction.</summary>
+    /// <summary>
+    /// The player's diplomacy: their standing, a faction list you can search, sort, filter and pin, and for the selected
+    /// faction its treaties, policies, every action with its odds and what it does, and the record of what passed between you.
+    /// </summary>
     public class DiplomacyPanel
     {
         private const float Line = 24f;
         private const float TopBarHeight = 34f;
+        private const float ListToolsHeight = 58f;
+        private const int HistoryShown = 8;
 
-        private Faction selected;
+        private enum SortMode { Name, Goodwill, Strength, Distance, Treaties }
+        private enum FilterMode { All, Pinned, Allies, Neutral, Hostile, Partners }
+
+        private static SortMode sort = SortMode.Name;
+        private static FilterMode filter = FilterMode.All;
+        private static string search = "";
+        private static bool fullHistory;
+
         private Vector2 listScroll;
         private Vector2 detailScroll;
         private float detailHeight = 600f;
+        private Faction lastSelected;
         private readonly List<Treaty> treaties = new List<Treaty>();
+        private readonly List<Faction> shown = new List<Faction>();
 
         private static List<DiplomacyActionDef> actions;
 
@@ -28,10 +42,14 @@ namespace Dominion
             DrawTopBar(new Rect(rect.x, rect.y, rect.width, TopBarHeight), comp);
             Rect body = new Rect(rect.x, rect.y + TopBarHeight + 6f, rect.width, rect.height - TopBarHeight - 6f);
             List<Faction> factions = comp.Cache.Simulated;
-            if (selected != null && !factions.Contains(selected)) selected = null;
-            if (selected == null && factions.Count > 0) selected = factions[0];
+            Faction selected = DominionUIState.SelectedIn(factions);
+            if (selected != lastSelected)
+            {
+                lastSelected = selected;
+                detailScroll = Vector2.zero;
+            }
 
-            DrawFactionList(body.LeftPart(0.28f), factions);
+            DrawFactionList(body.LeftPart(0.28f), factions, comp);
             Rect detail = body.RightPart(0.72f);
             detail.xMin += 8f;
             Widgets.DrawMenuSection(detail);
@@ -61,35 +79,126 @@ namespace Dominion
             Building_LeadershipDesk desk = LeadershipUtility.BestDesk();
             r = new Rect(inner.x + w * 2f, inner.y, w, inner.height);
             Widgets.Label(r, "Dominion_Dip_Desk".Translate(desk != null ? ("Dominion_DeskTier_" + desk.Tier).Translate().ToString() : "Dominion_None".Translate().ToString()).ToString().Truncate(r.width));
+            TooltipHandler.TipRegion(r, "Dominion_Dip_Desk_Desc".Translate());
             r = new Rect(inner.x + w * 3f, inner.y, w, inner.height);
             Widgets.Label(r, "Dominion_Dip_Comms".Translate(LeadershipUtility.HasComms() ? "Dominion_Yes".Translate() : "Dominion_No".Translate()).ToString().Truncate(r.width));
+            TooltipHandler.TipRegion(r, "Dominion_Dip_Comms_Desc".Translate());
         }
 
-        private void DrawFactionList(Rect rect, List<Faction> factions)
+        // ------------------------------------------------------------------ faction list
+
+        private void DrawFactionList(Rect rect, List<Faction> factions, WorldComponent_Dominion comp)
         {
             Widgets.DrawMenuSection(rect);
             Rect inner = rect.ContractedBy(4f);
-            Rect view = new Rect(0f, 0f, inner.width - 16f, factions.Count * Line);
-            Widgets.BeginScrollView(inner, ref listScroll, view);
-            for (int i = 0; i < factions.Count; i++)
+
+            // Search, sort and filter.
+            Rect searchRect = new Rect(inner.x, inner.y, inner.width, 24f);
+            search = Widgets.TextField(searchRect, search ?? "");
+            if (search.NullOrEmpty())
             {
-                Faction f = factions[i];
-                Rect row = new Rect(0f, i * Line, view.width, Line);
-                if (f == selected) Widgets.DrawHighlightSelected(row);
-                Widgets.DrawHighlightIfMouseover(row);
-                FactionUIUtility.DrawFactionIconWithTooltip(new Rect(row.x + 2f, row.y + 2f, 20f, 20f), f);
-                GUI.color = f.RelationKindWith(Faction.OfPlayer).GetColor();
-                Widgets.Label(new Rect(row.x + 26f, row.y, row.width - 26f, Line), f.Name.Truncate(row.width - 26f));
+                GUI.color = Color.gray;
+                Widgets.Label(new Rect(searchRect.x + 6f, searchRect.y + 2f, searchRect.width, 22f), "Dominion_UI_Search".Translate());
                 GUI.color = Color.white;
-                TooltipHandler.TipRegion(row, "Dominion_Tip_SelectFaction".Translate(f.Name));
-                if (Widgets.ButtonInvisible(row))
-                {
-                    selected = f;
-                    detailScroll = Vector2.zero;
-                }
+            }
+            TooltipHandler.TipRegion(searchRect, "Dominion_UI_Search_Desc".Translate());
+            Rect sortRect = new Rect(inner.x, inner.y + 28f, inner.width / 2f - 2f, 26f);
+            if (DominionUIState.ButtonWithTip(sortRect, "Dominion_UI_SortLabel".Translate(("Dominion_UI_Sort_" + sort).Translate()), "Dominion_UI_Sort_Desc".Translate()))
+                Find.WindowStack.Add(new FloatMenu(System.Enum.GetValues(typeof(SortMode)).Cast<SortMode>()
+                    .Select(m => new FloatMenuOption(("Dominion_UI_Sort_" + m).Translate(), () => sort = m)).ToList()));
+            Rect filterRect = new Rect(sortRect.xMax + 4f, sortRect.y, inner.width / 2f - 2f, 26f);
+            if (DominionUIState.ButtonWithTip(filterRect, ("Dominion_UI_Filter_" + filter).Translate(), "Dominion_UI_Filter_Desc".Translate()))
+                Find.WindowStack.Add(new FloatMenu(System.Enum.GetValues(typeof(FilterMode)).Cast<FilterMode>()
+                    .Select(m => new FloatMenuOption(("Dominion_UI_Filter_" + m).Translate(), () => filter = m)).ToList()));
+
+            Collect(factions, comp);
+            Rect listRect = new Rect(inner.x, inner.y + ListToolsHeight + 2f, inner.width, inner.height - ListToolsHeight - 2f);
+            if (shown.Count == 0)
+            {
+                GUI.color = Color.gray;
+                Widgets.Label(listRect, "Dominion_UI_NoMatch".Translate());
+                GUI.color = Color.white;
+                return;
+            }
+            Rect view = new Rect(0f, 0f, listRect.width - 16f, shown.Count * Line);
+            Widgets.BeginScrollView(listRect, ref listScroll, view);
+            for (int i = 0; i < shown.Count; i++)
+            {
+                Faction f = shown[i];
+                Rect row = new Rect(0f, i * Line, view.width, Line);
+                if (f == DominionUIState.selected) Widgets.DrawHighlightSelected(row);
+                Widgets.DrawHighlightIfMouseover(row);
+
+                // The pin star toggles without selecting the row.
+                Rect star = new Rect(row.xMax - 20f, row.y + 3f, 18f, 18f);
+                bool pinned = comp.Player.IsPinned(f);
+                GUI.color = pinned ? new Color(1f, 0.85f, 0.3f) : new Color(1f, 1f, 1f, Mouse.IsOver(star) ? 0.8f : 0.25f);
+                GUI.DrawTexture(star, pinned ? DominionPaper.Star : DominionPaper.StarOutline);
+                GUI.color = Color.white;
+                TooltipHandler.TipRegion(star, pinned ? "Dominion_UI_Unpin".Translate() : "Dominion_UI_Pin".Translate());
+                if (Widgets.ButtonInvisible(star)) comp.Player.TogglePin(f);
+
+                Rect main = new Rect(row.x, row.y, row.width - 22f, row.height);
+                FactionUIUtility.DrawFactionIconWithTooltip(new Rect(main.x + 2f, main.y + 2f, 20f, 20f), f);
+                GUI.color = f.RelationKindWith(Faction.OfPlayer).GetColor();
+                Widgets.Label(new Rect(main.x + 26f, main.y, main.width - 26f, Line), f.Name.Truncate(main.width - 26f));
+                GUI.color = Color.white;
+                TooltipHandler.TipRegion(main, () => ListTip(f, comp), f.loadID ^ 0x51D);
+                if (Widgets.ButtonInvisible(main)) DominionUIState.selected = f;
             }
             Widgets.EndScrollView();
         }
+
+        private static string ListTip(Faction f, WorldComponent_Dominion comp)
+        {
+            string tip = "Dominion_Tip_SelectFaction".Translate(f.Name) + "\n\n" + f.RelationKindWith(Faction.OfPlayer).GetLabelCap() + " (" + f.PlayerGoodwill.ToStringWithSign() + ")";
+            RelationState r = comp.GetRelation(Faction.OfPlayer, f);
+            if (r.distance >= 0f) tip += "\n" + "Dominion_UI_Distance".Translate(r.distance.ToString("F0"));
+            return tip;
+        }
+
+        private void Collect(List<Faction> factions, WorldComponent_Dominion comp)
+        {
+            shown.Clear();
+            Faction player = Faction.OfPlayer;
+            foreach (Faction f in factions)
+            {
+                if (!search.NullOrEmpty() && f.Name.IndexOf(search, System.StringComparison.OrdinalIgnoreCase) < 0) continue;
+                FactionRelationKind kind = f.RelationKindWith(player);
+                switch (filter)
+                {
+                    case FilterMode.Pinned when !comp.Player.IsPinned(f): continue;
+                    case FilterMode.Allies when kind != FactionRelationKind.Ally: continue;
+                    case FilterMode.Neutral when kind != FactionRelationKind.Neutral: continue;
+                    case FilterMode.Hostile when kind != FactionRelationKind.Hostile: continue;
+                    case FilterMode.Partners when !comp.Treaties.All.Any(t => t.Between(player, f)): continue;
+                }
+                shown.Add(f);
+            }
+            System.Func<Faction, float> key;
+            switch (sort)
+            {
+                case SortMode.Goodwill: key = f => -f.PlayerGoodwill; break;
+                case SortMode.Strength:
+                    key = f => IntelUtility.Knows(f, IntelUtility.RestrictedIntel) && comp.TryGetState(f, out FactionState s) ? -s.militaryStrength : 0f;
+                    break;
+                case SortMode.Distance:
+                    key = f =>
+                    {
+                        float d = comp.GetRelation(player, f).distance;
+                        return d < 0f ? float.MaxValue : d;
+                    };
+                    break;
+                case SortMode.Treaties: key = f => -comp.Treaties.All.Count(t => t.Between(player, f)); break;
+                default: key = f => 0f; break;
+            }
+            // Pinned factions first, then the chosen order, then by name.
+            List<Faction> ordered = shown.OrderBy(f => comp.Player.IsPinned(f) ? 0 : 1).ThenBy(key).ThenBy(f => f.Name).ToList();
+            shown.Clear();
+            shown.AddRange(ordered);
+        }
+
+        // ------------------------------------------------------------------ detail
 
         private void DrawDetail(Rect rect, Faction f, WorldComponent_Dominion comp)
         {
@@ -98,9 +207,12 @@ namespace Dominion
             var l = new Listing_Standard { maxOneColumn = true };
             l.Begin(view);
 
+            Rect head = l.GetRect(34f);
             Text.Font = GameFont.Medium;
-            l.Label(f.Name);
+            Widgets.Label(head.LeftPart(0.45f), f.Name.Truncate(head.width * 0.45f));
             Text.Font = GameFont.Small;
+            DominionUIState.JumpButtons(new Rect(head.x + head.width * 0.47f, head.y + 3f, head.width * 0.53f, 26f), f, DominionTab.Diplomacy);
+
             Faction player = Faction.OfPlayer;
             FactionRelationKind kind = f.RelationKindWith(player);
             RelationState view_ = comp.GetRelation(f, player);
@@ -112,7 +224,16 @@ namespace Dominion
 
             // Treaties with the player
             l.GapLine();
-            l.Label("Dominion_Dip_TreatiesWithYou".Translate());
+            Rect treatyHead = l.GetRect(26f);
+            Widgets.Label(treatyHead.LeftPart(0.6f), "Dominion_Dip_TreatiesWithYou".Translate());
+            DiplomacyActionDef propose = DefDatabase<DiplomacyActionDef>.GetNamedSilentFail("Dominion_ProposeTreaty");
+            if (propose != null)
+            {
+                string why = DiplomacyActions.CannotUseReason(propose, f);
+                if (DominionUIState.ButtonWithTip(treatyHead.RightPart(0.38f), "Dominion_Treaties_Draft".Translate(),
+                        propose.description + (why != null ? "\n\n" + why.Colorize(ColorLibrary.RedReadable) : ""), why == null))
+                    Dialog_TreatyDraft.ProposeMenu(f);
+            }
             comp.Treaties.Between(player, f, treaties);
             if (treaties.Count == 0)
             {
@@ -123,19 +244,20 @@ namespace Dominion
             foreach (Treaty t in treaties)
             {
                 Rect row = l.GetRect(Line);
+                Widgets.DrawHighlightIfMouseover(row);
                 string expires = t.expiresTick >= 0
                     ? "Dominion_Dip_Expires".Translate((t.expiresTick - Find.TickManager.TicksGame).ToStringTicksToPeriod(allowSeconds: false)).ToString()
                     : "Dominion_Dip_NoExpiry".Translate().ToString();
-                Rect labelRect = row.LeftPart(0.75f);
+                Rect labelRect = row.LeftPart(0.56f);
                 Widgets.Label(labelRect, ("  " + t.Label + "  (" + expires + ")").Truncate(labelRect.width));
-                TooltipHandler.TipRegion(row, t.def.description);
-                TooltipHandler.TipRegion(row.RightPart(0.22f), "Dominion_Tip_CancelTreaty".Translate());
-                if (Widgets.ButtonText(row.RightPart(0.22f), "Dominion_Dip_Cancel".Translate()))
-                {
-                    Treaty captured = t;
-                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("Dominion_Dip_CancelConfirm".Translate(t.Label, f.Name),
-                        () => comp.Treaties.Cancel(captured, player)));
-                }
+                TooltipHandler.TipRegion(labelRect, t.def.description + "\n\n" + "Dominion_Treaties_ClickToRead".Translate());
+                if (Widgets.ButtonInvisible(labelRect)) Find.WindowStack.Add(new Dialog_TreatyDocument(t));
+                Rect renew = new Rect(row.x + row.width * 0.57f, row.y, row.width * 0.2f, row.height);
+                if (t.def.Expires && !t.def.imposed
+                    && DominionUIState.ButtonWithTip(renew, t.DaysLeft <= 15 ? "Dominion_Treaty_Renew".Translate() : "Dominion_Treaty_Amend".Translate(), "Dominion_Treaty_Renew_Desc".Translate(f.Name)))
+                    Find.WindowStack.Add(new Dialog_TreatyDraft(t.def, f, t));
+                if (DominionUIState.ButtonWithTip(row.RightPart(0.21f), "Dominion_Treaty_TearUp".Translate(), "Dominion_Tip_CancelTreaty".Translate() + "\n\n" + TreatyDraft.TearUpCost(t, player)))
+                    Dialog_TreatyDocument.ConfirmTearUp(t);
             }
 
             // Borders, embargoes, prices
@@ -162,20 +284,29 @@ namespace Dominion
                     l.Label(("Dominion_ActionTier_" + def.tier).Translate());
                     GUI.color = Color.white;
                 }
-                DrawAction(l, def, worker, f);
+                DrawAction(l, def, worker, f, comp);
             }
+
+            // The record
+            l.GapLine();
+            DrawHistory(l, f, comp);
 
             detailHeight = Mathf.Max(l.CurHeight + 10f, rect.height);
             l.End();
             Widgets.EndScrollView();
         }
 
-        private static void DrawAction(Listing_Standard l, DiplomacyActionDef def, DiplomacyActionWorker worker, Faction f)
+        private static void DrawAction(Listing_Standard l, DiplomacyActionDef def, DiplomacyActionWorker worker, Faction f, WorldComponent_Dominion comp)
         {
             Rect row = l.GetRect(30f);
             string reason = DiplomacyActions.CannotUseReason(def, f);
-            string label = def.LabelCap.ToString() + (def.influenceCost > 0f ? "  (" + "Dominion_Dip_Cost".Translate(def.influenceCost.ToString("F0")).ToString() + ")" : "");
-            Rect button = row.LeftPart(0.62f);
+            string label = def.LabelCap.ToString() + (def.influenceCost > 0f ? "  (" + "Dominion_Dip_Cost".Translate(def.influenceCost.ToString("F0")).ToString() + ")" : "")
+                           + (worker.ViaLetter ? "  ✉" : "");
+            Rect button = row.LeftPart(0.55f);
+            string outcomeKey = "Dominion_Outcome_" + def.defName;
+            string tip = def.description + (outcomeKey.CanTranslate() ? "\n\n" + outcomeKey.Translate() : "")
+                         + (worker.ViaLetter ? "\n\n" + "Dominion_Letter_Tip".Translate() : "") + (reason != null ? "\n\n" + reason.Colorize(ColorLibrary.RedReadable) : "");
+            TooltipHandler.TipRegion(button, tip);
             if (reason != null)
             {
                 GUI.color = Color.gray;
@@ -183,83 +314,97 @@ namespace Dominion
                 GUI.color = Color.white;
             }
             else if (Widgets.ButtonText(button, label))
-                worker.Execute(f);
+            {
+                if (worker.ViaLetter) Find.WindowStack.Add(new Dialog_EnvoyLetter(def, f));
+                else worker.Execute(f);
+            }
+
+            // A cooldown shows as a bar draining under the button.
+            int until = comp.Player.CooldownUntil(def.defName, f.loadID);
+            int now = Find.TickManager.TicksGame;
+            if (until > now && def.cooldownDays > 0)
+            {
+                float frac = Mathf.Clamp01((until - now) / (float)(def.cooldownDays * GenDate.TicksPerDay));
+                Widgets.DrawBoxSolid(new Rect(button.x + 2f, button.yMax - 4f, (button.width - 4f) * frac, 3f), new Color(1f, 0.6f, 0.3f, 0.8f));
+            }
 
             float? chance = reason == null ? worker.AcceptanceChance(f) : null;
-            Rect info = row.RightPart(0.36f);
+            Rect info = row.RightPart(0.43f);
             Text.Anchor = TextAnchor.MiddleLeft;
             if (reason != null)
             {
                 GUI.color = new Color(1f, 0.6f, 0.4f);
                 Widgets.Label(info, reason.Truncate(info.width));
                 GUI.color = Color.white;
+                TooltipHandler.TipRegion(info, reason);
             }
             else if (chance.HasValue)
-                Widgets.Label(info, "Dominion_Dip_Chance".Translate(chance.Value.ToStringPercent()));
+            {
+                Rect bar = new Rect(info.x, info.y + 6f, Mathf.Min(info.width, 160f), info.height - 12f);
+                Widgets.FillableBar(bar, chance.Value, DominionPaper.OddsFill(chance.Value));
+                Text.Anchor = TextAnchor.MiddleCenter;
+                Text.Font = GameFont.Tiny;
+                Widgets.Label(bar, "Dominion_Dip_Chance".Translate(chance.Value.ToStringPercent()));
+                Text.Font = GameFont.Small;
+                string breakdown = worker.ChanceBreakdown(f);
+                TooltipHandler.TipRegion(bar, "Dominion_Odds_Title".Translate(f.Name) + "\n" + (breakdown.NullOrEmpty() ? "" : breakdown + "\n")
+                                              + "Dominion_Odds_Total".Translate(chance.Value.ToStringPercent()));
+            }
             Text.Anchor = TextAnchor.UpperLeft;
-            TooltipHandler.TipRegion(row, def.description + (reason != null ? "\n\n" + reason : ""));
+        }
+
+        private static void DrawHistory(Listing_Standard l, Faction f, WorldComponent_Dominion comp)
+        {
+            Rect head = l.GetRect(26f);
+            Widgets.Label(head.LeftPart(0.6f), "Dominion_Dip_History".Translate());
+            List<DiplomacyLogEntry> log = comp.Player.diplomacyLog;
+            var entries = new List<DiplomacyLogEntry>();
+            for (int i = log.Count - 1; i >= 0; i--)
+                if (log[i].factionId == f.loadID) entries.Add(log[i]);
+            if (entries.Count > HistoryShown
+                && DominionUIState.ButtonWithTip(head.RightPart(0.3f), fullHistory ? "Dominion_Dip_HistoryLess".Translate() : "Dominion_Dip_HistoryAll".Translate(entries.Count),
+                    "Dominion_Dip_History_Desc".Translate()))
+                fullHistory = !fullHistory;
+            if (entries.Count == 0)
+            {
+                GUI.color = Color.gray;
+                l.Label("  " + "Dominion_Dip_HistoryNone".Translate());
+                GUI.color = Color.white;
+                return;
+            }
+            int now = Find.TickManager.TicksGame;
+            int n = fullHistory ? entries.Count : Mathf.Min(HistoryShown, entries.Count);
+            for (int i = 0; i < n; i++)
+            {
+                DiplomacyLogEntry e = entries[i];
+                string who = e.byThem ? "Dominion_Dip_HistoryThem".Translate() : "Dominion_Dip_HistoryYou".Translate();
+                string when = (now - e.tick).ToStringTicksToPeriod(allowSeconds: false);
+                string line = "  " + who + "  " + e.text;
+                Text.Font = GameFont.Tiny;
+                Rect r = l.GetRect(Mathf.Max(18f, Text.CalcHeight(line, l.ColumnWidth - 90f)));
+                GUI.color = e.outcome > 0 ? new Color(0.6f, 0.9f, 0.6f) : e.outcome < 0 ? new Color(1f, 0.6f, 0.5f) : new Color(0.85f, 0.85f, 0.85f);
+                Widgets.Label(new Rect(r.x, r.y, r.width - 90f, r.height), line);
+                GUI.color = Color.gray;
+                Widgets.Label(new Rect(r.xMax - 88f, r.y, 88f, r.height), "Dominion_News_Ago".Translate(when));
+                GUI.color = Color.white;
+                Text.Font = GameFont.Small;
+            }
         }
     }
 
-    /// <summary>Every treaty the player knows about.</summary>
-    public class TreatiesPanel
+    /// <summary>Writes what other factions do to the player into the diplomatic record.</summary>
+    public class DiplomacyLogSystem : SimSystem
     {
-        private const float Line = 26f;
-        private Vector2 scroll;
-        private readonly List<Treaty> known = new List<Treaty>();
+        public override int Order => 96;
 
-        public void Draw(Rect rect, WorldComponent_Dominion comp)
+        public override void OnEvent(DominionEvent ev)
         {
-            known.Clear();
-            foreach (Treaty t in comp.Treaties.All)
-                if (IsKnown(t)) known.Add(t);
-
-            float[] widths = { 0.24f, 0.28f, 0.28f, 0.2f };
-            string[] headers = { "Dominion_Col_Treaty".Translate(), "Dominion_Col_Party".Translate(), "Dominion_Col_Party".Translate(), "Dominion_Col_Expires".Translate() };
-            GUI.color = Color.gray;
-            float x = rect.x;
-            for (int c = 0; c < headers.Length; c++)
-            {
-                Widgets.Label(new Rect(x, rect.y, (rect.width - 16f) * widths[c], Line), headers[c]);
-                x += (rect.width - 16f) * widths[c];
-            }
-            GUI.color = Color.white;
-
-            Rect outRect = new Rect(rect.x, rect.y + Line, rect.width, rect.height - Line);
-            if (known.Count == 0)
-            {
-                Widgets.Label(outRect, "Dominion_Treaties_None".Translate());
-                return;
-            }
-            Rect view = new Rect(0f, 0f, outRect.width - 16f, known.Count * Line);
-            Widgets.BeginScrollView(outRect, ref scroll, view);
-            int now = Find.TickManager.TicksGame;
-            for (int i = 0; i < known.Count; i++)
-            {
-                Treaty t = known[i];
-                Rect row = new Rect(0f, i * Line, view.width, Line);
-                if (i % 2 == 1) Widgets.DrawLightHighlight(row);
-                x = row.x;
-                Widgets.Label(new Rect(x, row.y, row.width * widths[0], Line), t.Label);
-                x += row.width * widths[0];
-                Party(new Rect(x, row.y, row.width * widths[1], Line), t.a);
-                x += row.width * widths[1];
-                Party(new Rect(x, row.y, row.width * widths[2], Line), t.b);
-                x += row.width * widths[2];
-                Widgets.Label(new Rect(x, row.y, row.width * widths[3], Line),
-                    t.expiresTick >= 0 ? (t.expiresTick - now).ToStringTicksToPeriod(allowSeconds: false) : "Dominion_Dip_NoExpiry".Translate().ToString());
-                TooltipHandler.TipRegion(row, t.def.description);
-            }
-            Widgets.EndScrollView();
+            Faction player = Faction.OfPlayerSilentFail;
+            if (player == null || ev.primary == null || ev.primary.IsPlayer || ev.secondary != player) return;
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (comp == null || !DominionScheduler.IsSimulated(ev.primary)) return;
+            int outcome = ev.def.category == EventCategory.War || ev.def.category == EventCategory.Espionage ? -1 : 0;
+            comp.Player.Log(ev.primary, ev.Headline, outcome, byThem: true);
         }
-
-        private static void Party(Rect r, Faction f)
-        {
-            FactionUIUtility.DrawFactionIconWithTooltip(new Rect(r.x, r.y + 2f, 20f, 20f), f);
-            Widgets.Label(new Rect(r.x + 24f, r.y, r.width - 24f, r.height), f.Name.Truncate(r.width - 24f));
-        }
-
-        private static bool IsKnown(Treaty t) =>
-            t.Involves(Faction.OfPlayer) || IntelUtility.IntelOn(t.a, t.b) >= IntelUtility.RequiredIntel(t.def.secrecy);
     }
 }

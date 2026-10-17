@@ -126,6 +126,7 @@ namespace Dominion
             if (winner == null || loser == null || amount == 0f) return;
             War w = Registry.Find(winner, loser);
             if (w == null) return;
+            amount *= WarOrders.StanceFactor(w, winner);
             w.AddScore(winner, amount);
             if (w.alliedTo != null && w.alliedTo != loser)
                 Registry.Find(w.alliedTo, loser)?.AddScore(w.alliedTo, amount * 0.5f);

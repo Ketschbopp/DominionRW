@@ -22,6 +22,13 @@ namespace Dominion
             return null;
         }
 
+        public Treaty FindById(int id)
+        {
+            for (int i = 0; i < treaties.Count; i++)
+                if (treaties[i].id == id) return treaties[i];
+            return null;
+        }
+
         public bool Has(Faction x, Faction y, TreatyDef def) => Find(x, y, def) != null;
 
         /// <summary>True if any treaty between the pair forbids them fighting.</summary>
@@ -59,11 +66,13 @@ namespace Dominion
             return null;
         }
 
-        public Treaty Sign(TreatyDef def, Faction x, Faction y, Faction proposer)
+        /// <param name="durationDays">The agreed term; below 0 means the treaty's usual length.</param>
+        public Treaty Sign(TreatyDef def, Faction x, Faction y, Faction proposer, int durationDays = -1)
         {
             Treaty existing = Find(x, y, def);
             if (existing != null) return existing;
             int now = Verse.Find.TickManager.TicksGame;
+            int days = !def.Expires ? 0 : durationDays > 0 ? durationDays : def.durationDays;
             var t = new Treaty
             {
                 id = nextId++,
@@ -71,7 +80,8 @@ namespace Dominion
                 a = x,
                 b = y,
                 signedTick = now,
-                expiresTick = def.Expires ? now + def.durationDays * GenDate.TicksPerDay : -1,
+                expiresTick = def.Expires ? now + days * GenDate.TicksPerDay : -1,
+                termDays = days,
             };
             treaties.Add(t);
             if (def.alliance)
@@ -86,6 +96,17 @@ namespace Dominion
             else
                 EventBus.Raise(DominionEventDefOf.Dominion_TreatySigned, proposer, proposer == x ? y : x, detail: def.label, secrecy: def.secrecy);
             return t;
+        }
+
+        /// <summary>Renews or amends a treaty: it runs for <paramref name="days"/> from today.</summary>
+        public void Renew(Treaty t, int days)
+        {
+            if (!t.def.Expires || days <= 0) return;
+            t.expiresTick = Verse.Find.TickManager.TicksGame + days * GenDate.TicksPerDay;
+            t.termDays = days;
+            t.renewals++;
+            t.reminded = false;
+            EventBus.Raise(DominionEventDefOf.Dominion_TreatySigned, t.a.IsPlayer ? t.a : t.b, t.a.IsPlayer ? t.b : t.a, detail: t.def.label, secrecy: t.def.secrecy);
         }
 
         /// <summary>Ends a treaty by agreement or notice. Not a violation, but the other side is displeased.</summary>

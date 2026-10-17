@@ -260,6 +260,130 @@ def icons():
         icon(name, fn)
 
 
+# ---------------------------------------------------------------- statecraft desk (treaties, ballots, dossiers)
+
+def parchment_sheet():
+    """Treaty parchment: warmer and darker than newsprint, with a burnt vignette at the edges."""
+    w, h = 1024, 1024
+    img = paper(w, h, seed=33).convert("RGBA")
+    px = img.load()
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            dx, dy = (x - w / 2) / (w / 2), (y - h / 2) / (h / 2)
+            v = min(1.0, (dx * dx + dy * dy) ** 1.6)
+            k = 1.0 - 0.38 * v
+            px[x, y] = (int(r * k * 1.02), int(g * k * 0.97), int(b * k * 0.84), 255)
+    d = ImageDraw.Draw(img)
+    rnd = random.Random(8)
+    for _ in range(40):  # foxing: small brown age spots
+        x, y, r = rnd.randrange(w), rnd.randrange(h), rnd.uniform(2, 6)
+        d.ellipse([x - r, y - r, x + r, y + r], fill=(120, 80, 40, rnd.randint(4, 10)))
+    img = img.filter(ImageFilter.GaussianBlur(0.9))
+    img.convert("RGB").save(OUT / "Parchment.png", optimize=True)
+
+
+def wax_seal():
+    """A blob of sealing wax with a ridged edge and a pressed ring. White; tinted with the faction's colour in code."""
+    w = 128
+    rnd = random.Random(41)
+    img = Image.new("RGBA", (w, w), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    pts = []
+    for i in range(48):
+        a = i / 48 * 2 * math.pi
+        r = 56 + rnd.uniform(-4, 5) + (3 if i % 2 else 0)
+        pts.append((64 + r * math.cos(a), 64 + r * math.sin(a)))
+    d.polygon(pts, fill=(235, 235, 235, 255))
+    d.ellipse([20, 20, 108, 108], fill=(255, 255, 255, 255))
+    d.ellipse([24, 24, 104, 104], outline=(190, 190, 190, 255), width=4)
+    d.arc([30, 30, 98, 98], 200, 300, fill=(255, 255, 255, 255), width=3)  # highlight
+    img.filter(ImageFilter.GaussianBlur(0.7)).save(OUT / "WaxSeal.png")
+
+
+def signature(n, seed):
+    """A flourished, illegible cursive signature in white ink: looping strokes (a trochoid) with varying letter heights."""
+    w, h = 512, 110
+    rnd = random.Random(seed)
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    pts = []
+    t, x0 = 0.0, 24.0
+    heights = [rnd.uniform(10, 18) if rnd.random() < 0.7 else rnd.uniform(26, 40) for _ in range(40)]
+    while True:
+        letter = int(t / (2 * math.pi))
+        if letter >= len(heights):
+            break
+        r = heights[letter]
+        x = x0 + t * 4.2 - math.sin(t) * 9
+        y = 74 - (1 - math.cos(t)) * r * 0.5
+        if x > w - 60:
+            break
+        pts.append((x + (74 - y) * 0.45, y))  # slanted, as handwriting is
+        t += 0.12
+        if rnd.random() < 0.004:  # a pen lift between names
+            x0 += 18
+    for i in range(len(pts) - 1):
+        if abs(pts[i + 1][0] - pts[i][0]) < 12:
+            d.line([pts[i], pts[i + 1]], fill=WHITE, width=3)
+    end_x = pts[-1][0] if pts else w / 2
+    d.line([(26, 90), (end_x * 0.6, 95), (end_x + 30, 84)], fill=WHITE, width=3, joint="curve")
+    img.filter(ImageFilter.GaussianBlur(0.5)).save(OUT / f"Signature_{n}.png")
+
+
+def quill():
+    img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.polygon([(54, 4), (60, 10), (22, 46), (14, 50), (18, 42)], fill=WHITE)
+    d.line([(18, 46), (6, 58)], fill=WHITE, width=3)
+    for i in range(6):
+        d.line([(50 - i * 6, 10 + i * 6), (58 - i * 6, 4 + i * 6 + 8)], fill=(0, 0, 0, 0), width=1)
+    img.save(OUT / "Quill.png")
+
+
+def bookmark(filled):
+    img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    pts = []
+    for i in range(10):
+        r = 28 if i % 2 == 0 else 12
+        a = -math.pi / 2 + i * math.pi / 5
+        pts.append((32 + r * math.cos(a), 34 + r * math.sin(a)))
+    if filled:
+        d.polygon(pts, fill=WHITE)
+    else:
+        d.polygon(pts, outline=WHITE, width=4)
+    img.save(OUT / ("Star.png" if filled else "StarOutline.png"))
+
+
+def scissors():
+    img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.ellipse([6, 38, 24, 56], outline=WHITE, width=4)
+    d.ellipse([40, 38, 58, 56], outline=WHITE, width=4)
+    d.line([(20, 40), (46, 6)], fill=WHITE, width=5)
+    d.line([(44, 40), (18, 6)], fill=WHITE, width=5)
+    img.save(OUT / "Scissors.png")
+
+
+def statecraft():
+    parchment_sheet()
+    wax_seal()
+    for i in range(3):
+        signature(i, 300 + i)
+    quill()
+    bookmark(True)
+    bookmark(False)
+    scissors()
+    for i, (text, name) in enumerate([("SIGNED", "Signed"), ("REJECTED", "Rejected"), ("COUNTER-OFFER", "Counter"),
+                                       ("RATIFIED", "Ratified"), ("VOID", "Void"), ("AYE", "Aye"), ("NAY", "Nay"),
+                                       ("ABSTAIN", "Abstain"), ("CARRIED", "Carried"), ("DEFEATED", "Defeated"),
+                                       ("TOP SECRET", "TopSecret"), ("SUCCESS", "Success"), ("FAILED", "Failed"),
+                                       ("COMPROMISED", "Compromised"), ("RECALLED", "Recalled"), ("RENEWED", "Renewed"),
+                                       ("PAID", "Paid"), ("CLIPPED", "Clipped"), ("DELIVERED", "Delivered")]):
+        stamp(text, name, 400 + i)
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     paper_sheet()
@@ -288,4 +412,5 @@ if __name__ == "__main__":
     seal_small()
     pin()
     icons()
+    statecraft()
     print("wrote UI art to", OUT)

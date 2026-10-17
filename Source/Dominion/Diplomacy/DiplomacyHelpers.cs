@@ -91,17 +91,36 @@ namespace Dominion
         }
 
         /// <summary>Chance faction <paramref name="f"/> accepts treaty <paramref name="def"/> proposed by the player.</summary>
-        public static float TreatyAcceptance(TreatyDef def, Faction f)
+        public static float TreatyAcceptance(TreatyDef def, Faction f) => TreatyAcceptance(def, f, null);
+
+        /// <summary>The same, writing each term of the sum into <paramref name="explain"/> when given.</summary>
+        public static float TreatyAcceptance(TreatyDef def, Faction f, System.Text.StringBuilder explain)
         {
             WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             RelationState view = comp.GetRelation(f, Faction.OfPlayer);
-            if (view.opinion < def.minOpinion) return 0f;
-            if (def.maxDistance > 0f && (view.distance < 0f || view.distance > def.maxDistance)) return 0f;
+            if (view.opinion < def.minOpinion)
+            {
+                explain?.AppendLine("Dominion_Odds_OpinionTooLow".Translate(view.opinion.ToString("F0"), def.minOpinion.ToString("F0")).Colorize(ColorLibrary.RedReadable));
+                return 0f;
+            }
+            if (def.maxDistance > 0f && (view.distance < 0f || view.distance > def.maxDistance))
+            {
+                explain?.AppendLine("Dominion_Odds_TooFar".Translate(def.maxDistance.ToString("F0")).Colorize(ColorLibrary.RedReadable));
+                return 0f;
+            }
             AIPersonality p = comp.GetState(f).personality;
-            float chance = def.aiAcceptBase + view.opinion / 200f
-                           + p.greed * def.greedWeight + p.honour * def.honourWeight + p.paranoia * def.paranoiaWeight
-                           + LeadershipUtility.AcceptanceBonus()
-                           + (def.federation ? FederationUtility.JoinBonus(f) : 0f);
+            float personality = p.greed * def.greedWeight + p.honour * def.honourWeight + p.paranoia * def.paranoiaWeight;
+            float leader = LeadershipUtility.AcceptanceBonus();
+            float federation = def.federation ? FederationUtility.JoinBonus(f) : 0f;
+            if (explain != null)
+            {
+                DominionPaper.Term(explain, def.aiAcceptBase, "Dominion_Odds_Base".Translate());
+                DominionPaper.Term(explain, view.opinion / 200f, "Dominion_Odds_Opinion".Translate(view.opinion.ToString("F0")));
+                DominionPaper.Term(explain, personality, "Dominion_Odds_Personality".Translate());
+                DominionPaper.Term(explain, leader, "Dominion_Odds_Leader".Translate());
+                DominionPaper.Term(explain, federation, "Dominion_Odds_Federation".Translate());
+            }
+            float chance = def.aiAcceptBase + view.opinion / 200f + personality + leader + federation;
             return Mathf.Clamp(chance, 0.02f, 0.95f);
         }
     }

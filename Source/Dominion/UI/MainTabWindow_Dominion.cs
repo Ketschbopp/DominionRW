@@ -1,3 +1,4 @@
+using HarmonyLib;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -11,12 +12,12 @@ namespace Dominion
     /// </summary>
     public class MainTabWindow_Dominion : MainTabWindow
     {
-        private enum Tab { News, Overview, Diplomacy, Treaties, War, Council, Intelligence, Federation, Events, Integrations }
-
         private const float RowHeight = 26f;
+        private static readonly AccessTools.FieldRef<Window, WindowResizer> ResizerRef = AccessTools.FieldRefAccess<Window, WindowResizer>("resizer");
+        private static readonly Vector2 MinSize = new Vector2(900f, 620f);
 
-        private Tab current = Tab.News;
         private readonly NewsTabPanel newsPanel = new NewsTabPanel();
+        private readonly OverviewPanel overviewPanel = new OverviewPanel();
         private readonly DiplomacyPanel diplomacyPanel = new DiplomacyPanel();
         private readonly TreatiesPanel treatiesPanel = new TreatiesPanel();
         private readonly CouncilPanel councilPanel = new CouncilPanel();
@@ -24,150 +25,102 @@ namespace Dominion
         private readonly FederationPanel federationPanel = new FederationPanel();
         private readonly WarPanel warPanel = new WarPanel();
         private Vector2 scroll;
-        private Vector2 dossierScroll;
-        private Faction selected;
+
+        private static DominionTab Current
+        {
+            get => DominionUIState.tab;
+            set => DominionUIState.tab = value;
+        }
 
         public override Vector2 RequestedTabSize => new Vector2(1000f, 720f + DominionHeader.Height + 6f);
 
+        public MainTabWindow_Dominion()
+        {
+            resizeable = true;
+        }
+
+        protected override void SetInitialSizeAndPosition()
+        {
+            base.SetInitialSizeAndPosition();
+            // Window.resizer is private; the window makes one lazily, so give it ours with a sensible minimum size.
+            ref WindowResizer resizer = ref ResizerRef(this);
+            resizer ??= new WindowResizer();
+            resizer.minWindowSize = MinSize;
+            if (DominionUIState.windowSize is Vector2 size)
+            {
+                // Keep the bottom edge where the main tabs put it; grow upwards and rightwards.
+                float w = Mathf.Clamp(size.x, MinSize.x, UI.screenWidth);
+                float h = Mathf.Clamp(size.y, MinSize.y, UI.screenHeight - 35f);
+                windowRect = new Rect(Mathf.Min(windowRect.x, UI.screenWidth - w), windowRect.yMax - h, w, h);
+            }
+        }
+
         public override void DoWindowContents(Rect inRect)
         {
+            // Remember the size once the player has resized the window.
+            if (DominionUIState.windowSize.HasValue || (windowRect.size - InitialSize).sqrMagnitude > 4f) DominionUIState.windowSize = windowRect.size;
+            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
+            if (DominionUIState.pendingTab is DominionTab wanted)
+            {
+                DominionUIState.pendingTab = null;
+                Select(wanted);
+            }
+            if (DominionUIState.pendingNews != null && comp != null)
+            {
+                newsPanel.Open(DominionUIState.pendingNews, comp.News);
+                DominionUIState.pendingNews = null;
+            }
             // The raw event log shows everything, including events the player has no intel on, so it is dev-only.
-            if (current == Tab.Events && !Prefs.DevMode) current = Tab.News;
-            int unread = WorldComponent_Dominion.Instance?.News.UnreadCount ?? 0;
+            if (Current == DominionTab.Events && !Prefs.DevMode) Current = DominionTab.News;
+            int unread = comp?.News.UnreadCount ?? 0;
             string newsLabel = "Dominion_Tab_News".Translate() + (unread > 0 ? " (" + unread + ")" : "");
             var tabs = new List<TabRecord>
             {
-                new TabRecord(newsLabel, () => Select(Tab.News), current == Tab.News),
-                new TabRecord("Dominion_Tab_Overview".Translate(), () => Select(Tab.Overview), current == Tab.Overview),
-                new TabRecord("Dominion_Tab_Diplomacy".Translate(), () => Select(Tab.Diplomacy), current == Tab.Diplomacy),
-                new TabRecord("Dominion_Tab_Treaties".Translate(), () => Select(Tab.Treaties), current == Tab.Treaties),
-                new TabRecord("Dominion_Tab_War".Translate(), () => Select(Tab.War), current == Tab.War),
-                new TabRecord("Dominion_Tab_Council".Translate(), () => Select(Tab.Council), current == Tab.Council),
-                new TabRecord("Dominion_Tab_Intelligence".Translate(), () => Select(Tab.Intelligence), current == Tab.Intelligence),
-                new TabRecord("Dominion_Tab_Federation".Translate(), () => Select(Tab.Federation), current == Tab.Federation),
+                Record(newsLabel, DominionTab.News),
+                Record("Dominion_Tab_Overview".Translate(), DominionTab.Overview),
+                Record("Dominion_Tab_Diplomacy".Translate(), DominionTab.Diplomacy),
+                Record("Dominion_Tab_Treaties".Translate(), DominionTab.Treaties),
+                Record("Dominion_Tab_War".Translate(), DominionTab.War),
+                Record("Dominion_Tab_Council".Translate(), DominionTab.Council),
+                Record("Dominion_Tab_Intelligence".Translate(), DominionTab.Intelligence),
+                Record("Dominion_Tab_Federation".Translate(), DominionTab.Federation),
             };
-            if (Prefs.DevMode)
-                tabs.Add(new TabRecord("Dominion_Tab_Events".Translate(), () => Select(Tab.Events), current == Tab.Events));
-            tabs.Add(new TabRecord("Dominion_Tab_Integrations".Translate(), () => Select(Tab.Integrations), current == Tab.Integrations));
+            if (Prefs.DevMode) tabs.Add(Record("Dominion_Tab_Events".Translate(), DominionTab.Events));
+            tabs.Add(Record("Dominion_Tab_Integrations".Translate(), DominionTab.Integrations));
 
-            DominionHeader.Draw(new Rect(inRect.x, inRect.y, inRect.width, DominionHeader.Height), WorldComponent_Dominion.Instance, n =>
+            DominionHeader.Draw(new Rect(inRect.x, inRect.y, inRect.width, DominionHeader.Height), comp, n =>
             {
-                Select(Tab.News);
-                newsPanel.Open(n, WorldComponent_Dominion.Instance.News);
+                Select(DominionTab.News);
+                newsPanel.Open(n, comp.News);
             });
             Rect body = inRect;
             body.yMin += DominionHeader.Height + 6f + TabDrawer.TabHeight;
             Widgets.DrawMenuSection(body);
             TabDrawer.DrawTabs(body, tabs);
             body = body.ContractedBy(10f);
-
-            switch (current)
-            {
-                case Tab.News:
-                    if (WorldComponent_Dominion.Instance != null) newsPanel.Draw(body, WorldComponent_Dominion.Instance);
-                    break;
-                case Tab.Overview: DrawOverview(body); break;
-                case Tab.Diplomacy:
-                    if (WorldComponent_Dominion.Instance != null) diplomacyPanel.Draw(body, WorldComponent_Dominion.Instance);
-                    break;
-                case Tab.Intelligence:
-                    if (WorldComponent_Dominion.Instance != null) intelligencePanel.Draw(body, WorldComponent_Dominion.Instance);
-                    break;
-                case Tab.Council:
-                    if (WorldComponent_Dominion.Instance != null) councilPanel.Draw(body, WorldComponent_Dominion.Instance);
-                    break;
-                case Tab.Treaties:
-                    if (WorldComponent_Dominion.Instance != null) treatiesPanel.Draw(body, WorldComponent_Dominion.Instance);
-                    break;
-                case Tab.War:
-                    if (WorldComponent_Dominion.Instance != null) warPanel.Draw(body, WorldComponent_Dominion.Instance);
-                    break;
-                case Tab.Federation:
-                    if (WorldComponent_Dominion.Instance != null) federationPanel.Draw(body, WorldComponent_Dominion.Instance);
-                    break;
-                case Tab.Events: DrawEvents(body); break;
-                case Tab.Integrations: DrawIntegrations(body); break;
-            }
-        }
-
-        private void Select(Tab tab)
-        {
-            current = tab;
-            scroll = Vector2.zero;
-        }
-
-        private void DrawOverview(Rect rect)
-        {
-            WorldComponent_Dominion comp = WorldComponent_Dominion.Instance;
             if (comp == null) return;
-            List<Faction> shown = comp.Cache.Simulated;
-            if (selected != null && !shown.Contains(selected)) selected = null;
-            if (selected == null && shown.Count > 0) selected = shown[0];
 
-            Rect tableRect = rect.TopPart(0.38f);
-            Rect dossierRect = rect.BottomPart(0.62f);
-            dossierRect.yMin += 6f;
-
-            // Columns: faction, government, stability, economy, military, relation to player
-            float[] widths = { 0.30f, 0.14f, 0.12f, 0.12f, 0.12f, 0.20f };
-            Text.Font = GameFont.Small;
-            Rect header = new Rect(tableRect.x, tableRect.y, tableRect.width - 16f, RowHeight);
-            GUI.color = Color.gray;
-            string[] headers =
+            switch (Current)
             {
-                "Dominion_Col_Faction".Translate(), "Dominion_Col_Government".Translate(), "Dominion_Col_Stability".Translate(),
-                "Dominion_Col_Economy".Translate(), "Dominion_Col_Military".Translate(), "Dominion_Col_Relation".Translate(),
-            };
-            float x = header.x;
-            for (int c = 0; c < headers.Length; c++)
-            {
-                Widgets.Label(new Rect(x, header.y, header.width * widths[c], RowHeight), headers[c]);
-                x += header.width * widths[c];
+                case DominionTab.News: newsPanel.Draw(body, comp); break;
+                case DominionTab.Overview: overviewPanel.Draw(body, comp); break;
+                case DominionTab.Diplomacy: diplomacyPanel.Draw(body, comp); break;
+                case DominionTab.Intelligence: intelligencePanel.Draw(body, comp); break;
+                case DominionTab.Council: councilPanel.Draw(body, comp); break;
+                case DominionTab.Treaties: treatiesPanel.Draw(body, comp); break;
+                case DominionTab.War: warPanel.Draw(body, comp); break;
+                case DominionTab.Federation: federationPanel.Draw(body, comp); break;
+                case DominionTab.Events: DrawEvents(body); break;
+                case DominionTab.Integrations: DrawIntegrations(body); break;
             }
-            GUI.color = Color.white;
+        }
 
-            Rect outRect = new Rect(tableRect.x, tableRect.y + RowHeight, tableRect.width, tableRect.height - RowHeight);
-            Rect view = new Rect(0f, 0f, outRect.width - 16f, shown.Count * RowHeight);
-            Widgets.BeginScrollView(outRect, ref scroll, view);
-            for (int i = 0; i < shown.Count; i++)
-            {
-                Faction f = shown[i];
-                comp.TryGetState(f, out FactionState s);
-                bool known = IntelUtility.Knows(f, IntelUtility.RestrictedIntel);
-                Rect row = new Rect(0f, i * RowHeight, view.width, RowHeight);
-                if (f == selected) Widgets.DrawHighlightSelected(row);
-                else if (i % 2 == 1) Widgets.DrawLightHighlight(row);
-                Widgets.DrawHighlightIfMouseover(row);
-                TooltipHandler.TipRegion(row, "Dominion_Tip_SelectFaction".Translate(f.Name));
-                if (Widgets.ButtonInvisible(row))
-                {
-                    selected = f;
-                    dossierScroll = Vector2.zero;
-                }
+        private TabRecord Record(string label, DominionTab tab) => new TabRecord(label, () => Select(tab), Current == tab);
 
-                x = row.x;
-                Rect cell = new Rect(x, row.y, row.width * widths[0], RowHeight);
-                FactionUIUtility.DrawFactionIconWithTooltip(new Rect(cell.x, cell.y + 1f, 24f, 24f), f);
-                cell.xMin += 30f;
-                Widgets.Label(cell, f.Name.Truncate(cell.width));
-                x += row.width * widths[0];
-                Widgets.Label(new Rect(x, row.y, row.width * widths[1], RowHeight), s != null && s.governmentInitialized ? DominionUI.GovernmentLabel(s.government) : "-");
-                x += row.width * widths[1];
-                Widgets.Label(new Rect(x, row.y, row.width * widths[2], RowHeight), s == null ? "-" : known ? DominionUI.Colored(s.stability.ToString("F0"), DominionUI.StabilityColor(s.stability)) : "?");
-                x += row.width * widths[2];
-                Widgets.Label(new Rect(x, row.y, row.width * widths[3], RowHeight), s == null ? "-" : known ? s.economyIndex.ToString("F0") : "?");
-                x += row.width * widths[3];
-                Widgets.Label(new Rect(x, row.y, row.width * widths[4], RowHeight), s == null ? "-" : known ? s.militaryStrength.ToString("F0") : "?");
-                x += row.width * widths[4];
-                FactionRelationKind kind = f.RelationKindWith(Faction.OfPlayer);
-                GUI.color = kind.GetColor();
-                Widgets.Label(new Rect(x, row.y, row.width * widths[5], RowHeight), kind.GetLabelCap() + " (" + f.PlayerGoodwill.ToStringWithSign() + ")");
-                GUI.color = Color.white;
-            }
-            Widgets.EndScrollView();
-
-            if (selected != null)
-                FactionDossierPanel.Draw(dossierRect, selected, comp, ref dossierScroll);
+        private void Select(DominionTab tab)
+        {
+            if (Current != tab) scroll = Vector2.zero;
+            Current = tab;
         }
 
         private void DrawEvents(Rect rect)

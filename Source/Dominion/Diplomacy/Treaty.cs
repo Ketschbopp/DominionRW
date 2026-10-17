@@ -18,6 +18,17 @@ namespace Dominion
         /// <summary>Last tribute payment, for tribute treaties with the player.</summary>
         public int lastPaymentTick = -1;
 
+        /// <summary>The term agreed when it was signed or last renewed, in days (0 = open-ended).</summary>
+        public int termDays;
+
+        /// <summary>Times it has been renewed or amended.</summary>
+        public int renewals;
+
+        /// <summary>The player was reminded it is about to expire.</summary>
+        public bool reminded;
+
+        public int DaysLeft => expiresTick < 0 ? -1 : UnityEngine.Mathf.Max(0, (expiresTick - Find.TickManager.TicksGame) / GenDate.TicksPerDay);
+
         public bool Involves(Faction f) => f != null && (a == f || b == f);
 
         public bool Between(Faction x, Faction y) => (a == x && b == y) || (a == y && b == x);
@@ -35,6 +46,9 @@ namespace Dominion
             Scribe_Values.Look(ref signedTick, "signedTick");
             Scribe_Values.Look(ref expiresTick, "expiresTick", -1);
             Scribe_Values.Look(ref lastPaymentTick, "lastPaymentTick", -1);
+            Scribe_Values.Look(ref termDays, "termDays");
+            Scribe_Values.Look(ref renewals, "renewals");
+            Scribe_Values.Look(ref reminded, "reminded");
         }
     }
 }

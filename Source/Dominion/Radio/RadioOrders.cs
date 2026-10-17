@@ -87,6 +87,11 @@ namespace Dominion
 
         public IReadOnlyList<RadioOrder> Orders => orders;
 
+        /// <summary>The radio desk handles this many orders in its queue at once; batch orders stop there.</summary>
+        public const int Capacity = 10;
+
+        public int Free => System.Math.Max(0, Capacity - orders.Count);
+
         public bool AdvisoryInForce => Find.TickManager.TicksGame < advisoryUntilTick;
 
         public bool AdvisoryQueued => Queued(RadioOrderKind.Advisory);

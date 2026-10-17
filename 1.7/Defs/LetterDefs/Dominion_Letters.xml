@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- A treaty with the player is about to lapse; the letter offers to renew it at the signing desk. -->
+  <LetterDef>
+    <defName>Dominion_TreatyExpiring</defName>
+    <letterClass>Dominion.Letter_TreatyExpiring</letterClass>
+    <color>(203, 192, 160)</color>
+    <flashColor>(203, 192, 160)</flashColor>
+    <flashInterval>90</flashInterval>
+    <arriveSound>LetterArrive</arriveSound>
+  </LetterDef>
+</Defs>

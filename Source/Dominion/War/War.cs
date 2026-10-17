@@ -9,6 +9,28 @@ namespace Dominion
     /// <summary>What the side that declared a war wants out of it. Decides the terms when the war ends in its favour.</summary>
     public enum WarGoal { Punitive, Conquest, Vassalisation, Tribute, RegimeChange, Liberation }
 
+    /// <summary>How the player fights a war: set from the War tab.</summary>
+    public enum WarStance { Balanced, Aggressive, Defensive, RaidSupply }
+
+    /// <summary>One line in a war's chronicle: what happened and where the score stood after. Saved.</summary>
+    public class WarChronicleEntry : IExposable
+    {
+        public int tick;
+        public string text;
+        public float score;
+
+        /// <summary>The event behind it, to find the newspaper story; -1 for orders the player gave.</summary>
+        public int eventId = -1;
+
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref tick, "tick");
+            Scribe_Values.Look(ref text, "text");
+            Scribe_Values.Look(ref score, "score");
+            Scribe_Values.Look(ref eventId, "eventId", -1);
+        }
+    }
+
     /// <summary>
     /// One war between two factions, from the declaration to the peace. Score runs from -100 (the defender has won)
     /// to 100 (the attacker has won). A faction that joins someone else's war gets its own war record, marked with the
@@ -39,6 +61,31 @@ namespace Dominion
 
         /// <summary>Last tick a capitulation was offered to or demanded of the player.</summary>
         public int lastOfferTick = -999999;
+
+        /// <summary>People killed on each side (humanlike), counted from the day it was declared.</summary>
+        public int deadAttacker;
+        public int deadDefender;
+
+        /// <summary>The player's stance in this war (only meaningful when the player fights in it).</summary>
+        public WarStance stance = WarStance.Balanced;
+
+        /// <summary>Last tick the player hired mercenaries for this war.</summary>
+        public int lastMercenaryTick = -999999;
+
+        /// <summary>What happened in this war, oldest first (capped).</summary>
+        public List<WarChronicleEntry> chronicle = new List<WarChronicleEntry>();
+        public const int MaxChronicle = 80;
+
+        /// <summary>Terms drafted at the peace table, applied instead of the default terms when this peace is made.</summary>
+        [Unsaved] public PeaceDeal deal;
+
+        public void Chronicle(string text, int eventId = -1)
+        {
+            chronicle.Add(new WarChronicleEntry { tick = Find.TickManager.TicksGame, text = text, score = score, eventId = eventId });
+            if (chronicle.Count > MaxChronicle) chronicle.RemoveAt(0);
+        }
+
+        public int DeadOf(Faction f) => f == attacker ? deadAttacker : f == defender ? deadDefender : 0;
 
         /// <summary>Set just before a forced peace so the terms are applied as a capitulation.</summary>
         [Unsaved] public Faction capitulating;
@@ -91,7 +138,17 @@ namespace Dominion
             Scribe_References.Look(ref alliedTo, "alliedTo");
             Scribe_Collections.Look(ref asked, "asked", LookMode.Value);
             Scribe_Values.Look(ref lastOfferTick, "lastOfferTick", -999999);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit) asked ??= new List<int>();
+            Scribe_Values.Look(ref deadAttacker, "deadAttacker");
+            Scribe_Values.Look(ref deadDefender, "deadDefender");
+            Scribe_Values.Look(ref stance, "stance");
+            Scribe_Values.Look(ref lastMercenaryTick, "lastMercenaryTick", -999999);
+            Scribe_Collections.Look(ref chronicle, "chronicle", LookMode.Deep);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                asked ??= new List<int>();
+                chronicle ??= new List<WarChronicleEntry>();
+                chronicle.RemoveAll(c => c == null);
+            }
         }
     }
 

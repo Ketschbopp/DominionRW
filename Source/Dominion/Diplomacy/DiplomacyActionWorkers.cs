@@ -8,7 +8,9 @@ namespace Dominion
 {
     public class DiplomacyAction_Gift : DiplomacyActionWorker
     {
-        private static readonly int[] Amounts = { 100, 250, 500, 1000 };
+        public static readonly int[] Amounts = { 100, 250, 500, 1000 };
+
+        public override bool ViaLetter => true;
 
         public override string DisabledReason(Faction f)
         {
@@ -30,15 +32,15 @@ namespace Dominion
             Find.WindowStack.Add(new FloatMenu(options));
         }
 
-        private void Give(Faction f, int amount)
+        public void Give(Faction f, int amount)
         {
             int taken = DiplomacyHelpers.TakeSilver(amount);
             if (taken <= 0) return;
             EconomyEffects.Receive(f, taken);
             Commit(f);
-            int goodwill = Mathf.Min(15, Mathf.RoundToInt(taken / 40f));
+            int goodwill = Mathf.Min(15, Mathf.RoundToInt(taken / 40f * ToneFavour));
             f.TryAffectGoodwillWith(Faction.OfPlayer, goodwill, canSendMessage: false, canSendHostilityLetter: false);
-            TheirView(f).favour += Mathf.Min(20f, taken / 40f);
+            TheirView(f).favour += Mathf.Min(20f, taken / 40f) * ToneFavour;
             Report("Dominion_Gift_Sent".Translate(taken, f.Name, goodwill), true);
         }
     }
@@ -48,14 +50,25 @@ namespace Dominion
         public override string DisabledReason(Faction f) =>
             f.HostileTo(Faction.OfPlayer) ? "Dominion_Action_NotWhileHostile".Translate() : null;
 
-        public override float? AcceptanceChance(Faction f) => Clamp(0.6f + LeadershipUtility.AcceptanceBonus());
+        public override bool ViaLetter => true;
+
+        public override float? AcceptanceChance(Faction f) => Clamp(0.6f + LeadershipUtility.AcceptanceBonus() + ToneChance(f));
+
+        public override string ChanceBreakdown(Faction f)
+        {
+            var sb = new System.Text.StringBuilder();
+            DominionPaper.Term(sb, 0.6f, "Dominion_Odds_Base".Translate());
+            DominionPaper.Term(sb, LeadershipUtility.AcceptanceBonus(), "Dominion_Odds_Leader".Translate());
+            ToneTerm(sb, f);
+            return sb.ToString();
+        }
 
         public override void Execute(Faction f)
         {
             Commit(f);
             if (Rand.Chance(AcceptanceChance(f).Value))
             {
-                TheirView(f).favour += 6f;
+                TheirView(f).favour += 6f * ToneFavour;
                 f.TryAffectGoodwillWith(Faction.OfPlayer, 3, canSendMessage: false, canSendHostilityLetter: false);
                 Report("Dominion_Compliment_Success".Translate(f.Name), true);
             }
@@ -69,13 +82,15 @@ namespace Dominion
 
     public class DiplomacyAction_Insult : DiplomacyActionWorker
     {
+        public override bool ViaLetter => true;
+
         public override void Execute(Faction f)
         {
             Commit(f);
             RelationState view = TheirView(f);
-            view.favour -= 15f;
-            view.grievance += 5f;
-            f.TryAffectGoodwillWith(Faction.OfPlayer, -10, canSendMessage: false, canSendHostilityLetter: true);
+            view.favour -= 15f * ToneSting;
+            view.grievance += 5f * ToneSting;
+            f.TryAffectGoodwillWith(Faction.OfPlayer, -Mathf.RoundToInt(10 * ToneSting), canSendMessage: false, canSendHostilityLetter: true);
             Report("Dominion_Insult_Done".Translate(f.Name), false);
         }
     }
@@ -87,18 +102,51 @@ namespace Dominion
         public override string DisabledReason(Faction f) =>
             f.def.permanentEnemy ? "Dominion_Action_PermanentEnemy".Translate() : null;
 
-        public override float? AcceptanceChance(Faction f)
+        public override float? AcceptanceChance(Faction f) => Clamp(Terms(f, null));
+
+        public override string ChanceBreakdown(Faction f)
+        {
+            var sb = new System.Text.StringBuilder();
+            Terms(f, sb);
+            return sb.ToString();
+        }
+
+        private float Terms(Faction f, System.Text.StringBuilder sb)
         {
             FactionState s = Comp.GetState(f);
             float ratio = DiplomacyHelpers.PlayerStrength() / Mathf.Max(1f, s.militaryStrength);
             // How the war is going counts most: a beaten enemy wants out, a winning one wants more.
             War war = Comp.Wars.Find(f, Faction.OfPlayer);
             float score = war != null ? Mathf.Clamp(-war.ScoreFor(f) / 100f, -0.3f, 0.4f) : 0f;
-            return Clamp(0.1f + s.warWeariness / 150f + s.Bloc(Bloc.Doves) * 0.4f + (TheirView(f).opinion + 100f) / 500f
-                         + Mathf.Clamp(ratio - 1f, -0.3f, 0.3f) * 0.3f + score + LeadershipUtility.AcceptanceBonus());
+            float weariness = s.warWeariness / 150f, doves = s.Bloc(Bloc.Doves) * 0.4f, opinion = (TheirView(f).opinion + 100f) / 500f;
+            float strength = Mathf.Clamp(ratio - 1f, -0.3f, 0.3f) * 0.3f, leader = LeadershipUtility.AcceptanceBonus();
+            if (sb != null)
+            {
+                DominionPaper.Term(sb, 0.1f, "Dominion_Odds_Base".Translate());
+                DominionPaper.Term(sb, score, "Dominion_Odds_WarScore".Translate());
+                DominionPaper.Term(sb, weariness, "Dominion_Odds_Weariness".Translate());
+                DominionPaper.Term(sb, doves, "Dominion_Odds_Doves".Translate());
+                DominionPaper.Term(sb, opinion, "Dominion_Odds_Opinion".Translate(TheirView(f).opinion.ToString("F0")));
+                DominionPaper.Term(sb, strength, "Dominion_Odds_Strength".Translate());
+                DominionPaper.Term(sb, leader, "Dominion_Odds_Leader".Translate());
+            }
+            return 0.1f + weariness + doves + opinion + strength + score + leader;
         }
 
+        /// <summary>Opens the peace table, where the terms are drafted.</summary>
         public override void Execute(Faction f)
+        {
+            War w = Comp.Wars.Find(f, Faction.OfPlayer);
+            if (w != null)
+            {
+                Find.WindowStack.Add(new Dialog_PeaceTable(w));
+                return;
+            }
+            ProposeNow(f);
+        }
+
+        /// <summary>A peace offer with the default terms, decided now.</summary>
+        public void ProposeNow(Faction f)
         {
             Commit(f);
             if (Rand.Chance(AcceptanceChance(f).Value))
@@ -149,48 +197,13 @@ namespace Dominion
         }
     }
 
+    /// <summary>Opens the signing desk: pick a treaty, set its terms, sign, and see whether they seal it.</summary>
     public class DiplomacyAction_ProposeTreaty : DiplomacyActionWorker
     {
         public override string DisabledReason(Faction f) =>
             f.HostileTo(Faction.OfPlayer) ? "Dominion_Action_NotWhileHostile".Translate() : null;
 
-        public override void Execute(Faction f)
-        {
-            var options = new List<FloatMenuOption>();
-            float influence = Comp.Player.influence;
-            foreach (TreatyDef t in DefDatabase<TreatyDef>.AllDefsListForReading)
-            {
-                if (t.imposed) continue;
-                TreatyDef treaty = t;
-                string reason = Comp.Treaties.CannotSignReason(t, Faction.OfPlayer, f);
-                if (reason == null && t.requiredResearch != null && !t.requiredResearch.IsFinished)
-                    reason = "Dominion_Action_NeedsResearch".Translate(t.requiredResearch.label);
-                float cost = def.influenceCost + t.influenceCost;
-                if (reason == null && influence < cost)
-                    reason = "Dominion_Action_NeedsInfluence".Translate(cost.ToString("F0"));
-                float chance = DiplomacyHelpers.TreatyAcceptance(t, f);
-                string label = "Dominion_Treaty_Option".Translate(t.LabelCap, cost.ToString("F0"), chance.ToStringPercent());
-                options.Add(reason != null
-                    ? new FloatMenuOption(label + " (" + reason + ")", null)
-                    : new FloatMenuOption(label, () => Propose(f, treaty, chance)));
-            }
-            Find.WindowStack.Add(new FloatMenu(options));
-        }
-
-        private void Propose(Faction f, TreatyDef treaty, float chance)
-        {
-            Commit(f, treaty.influenceCost);
-            if (Rand.Chance(chance))
-            {
-                Comp.Treaties.Sign(treaty, Faction.OfPlayer, f, Faction.OfPlayer);
-                Report("Dominion_Treaty_Accepted".Translate(f.Name, treaty.label), true);
-            }
-            else
-            {
-                TheirView(f).favour -= 2f;
-                Report("Dominion_Treaty_Refused".Translate(f.Name, treaty.label), false);
-            }
-        }
+        public override void Execute(Faction f) => Dialog_TreatyDraft.ProposeMenu(f);
     }
 
     public class DiplomacyAction_Embargo : DiplomacyActionWorker
@@ -234,9 +247,12 @@ namespace Dominion
 
     public class DiplomacyAction_Denounce : DiplomacyActionWorker
     {
+        public override bool ViaLetter => true;
+
         public override void Execute(Faction f)
         {
             Commit(f);
+            TheirView(f).grievance += 3f * (ToneSting - 1f);
             EventBus.Raise(DominionEventDefOf.Dominion_Denounced, Faction.OfPlayer, f);
         }
     }
@@ -245,11 +261,26 @@ namespace Dominion
     {
         public override bool Visible(Faction f) => !f.HostileTo(Faction.OfPlayer);
 
+        public override bool ViaLetter => true;
+
+        public override bool IsDemand => true;
+
         public override float? AcceptanceChance(Faction f)
         {
             FactionState s = Comp.GetState(f);
             float ratio = DiplomacyHelpers.PlayerStrength() / Mathf.Max(1f, s.militaryStrength);
-            return Mathf.Clamp((ratio - 1f) * 0.4f * (1f - s.personality.aggression * 0.5f), 0f, 0.85f);
+            return Mathf.Clamp((ratio - 1f) * 0.4f * (1f - s.personality.aggression * 0.5f) + ToneChance(f), 0f, 0.85f);
+        }
+
+        public override string ChanceBreakdown(Faction f)
+        {
+            FactionState s = Comp.GetState(f);
+            float ratio = DiplomacyHelpers.PlayerStrength() / Mathf.Max(1f, s.militaryStrength);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Dominion_Odds_StrengthRatio".Translate(ratio.ToString("F2")));
+            DominionPaper.Term(sb, (ratio - 1f) * 0.4f * (1f - s.personality.aggression * 0.5f), "Dominion_Odds_Strength".Translate());
+            ToneTerm(sb, f);
+            return sb.ToString();
         }
 
         public override void Execute(Faction f)
