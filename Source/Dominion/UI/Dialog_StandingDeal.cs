@@ -227,11 +227,17 @@ namespace Dominion
                     TradeAction action = t.ActionToDo;
                     int n = Mathf.Abs(t.CountToTransfer);
                     bool buy = action == TradeAction.PlayerBuys;
-                    pay += (buy ? 1f : -1f) * t.GetPriceFor(action) * n;
-                    ThingDef def = t.AnyThing.GetInnerIfMinified().def;
-                    DealLine same = lines.Find(l => l.def == def && l.stuff == t.StuffDef && l.weBuy == buy);
-                    if (same != null) same.count += n;
-                    else lines.Add(new DealLine { def = def, stuff = t.StuffDef, count = n, weBuy = buy });
+                    float price = t.GetPriceFor(action);
+                    pay += (buy ? 1f : -1f) * price * n;
+                    Thing inner = t.AnyThing.GetInnerIfMinified();
+                    ThingDef def = inner.def, stuff = inner.Stuff;
+                    DealLine same = lines.Find(l => l.def == def && l.stuff == stuff && l.weBuy == buy);
+                    if (same != null)
+                    {
+                        same.price = (same.price * same.count + price * n) / (same.count + n);
+                        same.count += n;
+                    }
+                    else lines.Add(new DealLine { def = def, stuff = stuff, count = n, weBuy = buy, price = price });
                 }
                 if (lines.Count > 0) __state = (office.Faction, lines, Mathf.RoundToInt(pay));
             }

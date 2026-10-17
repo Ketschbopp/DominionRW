@@ -110,7 +110,8 @@ namespace Dominion
             Rect left = new Rect(inner.x, inner.y, 230f, inner.height);
             Rect right = new Rect(left.xMax + 14f, inner.y, inner.width - left.width - 14f, inner.height);
             DrawLeader(left);
-            Rect choices = new Rect(right.x, right.yMax - 150f, right.width, 150f);
+            // Five rows of two: the root menu has nine choices.
+            Rect choices = new Rect(right.x, right.yMax - 180f, right.width, 180f);
             DrawTranscript(new Rect(right.x, right.y, right.width, choices.y - right.y - 10f));
             DrawChoices(choices);
         }
@@ -425,10 +426,11 @@ namespace Dominion
                 {
                     used.Add("help");
                     Say(true, "Dominion_Audience_Said_Help".Translate(enemy.Name), 0);
-                    int before = Comp.Player.diplomacyLog.Count;
+                    List<DiplomacyLogEntry> log = Comp.Player.diplomacyLog;
+                    DiplomacyLogEntry before = log.Count > 0 ? log[log.Count - 1] : null;
                     ((DiplomacyAction_CallToArms)call.Worker).Ask(faction, enemy);
-                    // Their answer went into the record; read it back in their voice.
-                    DiplomacyLogEntry e = Comp.Player.diplomacyLog.Count > before ? Comp.Player.diplomacyLog[Comp.Player.diplomacyLog.Count - 1] : null;
+                    // Their answer went into the record; read it back in their voice. (The log is capped, so compare entries, not counts.)
+                    DiplomacyLogEntry e = log.Count > 0 && log[log.Count - 1] != before ? log[log.Count - 1] : null;
                     if (e != null) Say(false, FactionVoice.Answer(faction, e.outcome, false, transcript.Count) + "  (" + e.text + ")", e.outcome);
                     Spend();
                 }));

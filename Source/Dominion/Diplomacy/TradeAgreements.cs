@@ -17,6 +17,9 @@ namespace Dominion
         public int count;
         public bool weBuy;
 
+        /// <summary>Silver per unit agreed in the trade window (0 in older saves: market value is used).</summary>
+        public float price;
+
         public string Label => GenLabel.ThingLabel(def, stuff, count);
 
         public void ExposeData()
@@ -25,6 +28,7 @@ namespace Dominion
             Scribe_Defs.Look(ref stuff, "stuff");
             Scribe_Values.Look(ref count, "count");
             Scribe_Values.Look(ref weBuy, "weBuy");
+            Scribe_Values.Look(ref price, "price");
         }
     }
 
@@ -339,19 +343,18 @@ namespace Dominion
 
             // Their side: what they can send from their stores.
             var arriving = new List<(DealLine line, int count)>();
-            float wanted = 0f, short_ = 0f;
+            float short_ = 0f;
             foreach (DealLine l in d.lines)
             {
                 if (!l.weBuy) continue;
                 int have = ED?.RemoveGoods(f, l.def, l.count) ?? -1;
                 int n = have < 0 ? l.count : have;
-                float unit = l.def.GetStatValueAbstract(StatDefOf.MarketValue, l.stuff);
-                wanted += unit * l.count;
+                float unit = l.price > 0f ? l.price : l.def.GetStatValueAbstract(StatDefOf.MarketValue, l.stuff);
                 short_ += unit * (l.count - n);
                 if (n > 0) arriving.Add((l, n));
             }
-            int silver = d.silver;
-            if (short_ > 0f && silver > 0) silver = Mathf.RoundToInt(silver * (1f - short_ / Mathf.Max(1f, wanted)));
+            // What they could not send comes off the price; if that is more than you owe, they pay you the difference.
+            int silver = d.silver - Mathf.RoundToInt(short_);
 
             // Our side: goods out of the colony into their stockpile, then the silver.
             var toThem = new List<ThingDefCount>();
@@ -438,8 +441,14 @@ namespace Dominion
             foreach (Map map in Find.Maps)
             {
                 if (!map.IsPlayerHome) continue;
-                foreach (Thing t in map.listerThings.ThingsOfDef(def))
-                    if (t.Spawned && t.Stuff == stuff && !t.IsForbidden(Faction.OfPlayer) && !t.Position.Fogged(map)) yield return t;
+                // Furniture and art are sold packed up: count the minified things, never the installed buildings.
+                List<Thing> things = def.Minifiable ? map.listerThings.ThingsInGroup(ThingRequestGroup.MinifiedThing) : map.listerThings.ThingsOfDef(def);
+                foreach (Thing t in things)
+                {
+                    Thing inner = t.GetInnerIfMinified();
+                    if (inner.def != def || inner.Stuff != stuff || (!def.Minifiable && t.def.category != ThingCategory.Item)) continue;
+                    if (t.Spawned && !t.IsForbidden(Faction.OfPlayer) && !t.Position.Fogged(map)) yield return t;
+                }
             }
         }
 

@@ -415,7 +415,8 @@ namespace Dominion
         {
             Faction holder = d.targets[0], former = d.targets[1];
             foreach (Settlement s in Find.WorldObjects.Settlements.ToList())
-                if (s.Faction == holder && Comp.Wars.OriginalOwnerOf(s) == former.loadID) WarUtility.Cede(s, holder);
+                // Already the holder's: Cede would do nothing, so the occupation is simply struck from the register.
+                if (s.Faction == holder && Comp.Wars.OriginalOwnerOf(s) == former.loadID) Comp.Wars.originalOwner.Remove(s.Tile.tileId);
             if (!holder.IsPlayer) S(holder).legitimacy = Mathf.Min(100f, S(holder).legitimacy + 5f);
             if (!former.IsPlayer)
                 foreach (Faction m in CouncilUtility.Members())
@@ -557,7 +558,7 @@ namespace Dominion
         {
             Faction x = d.targets[0];
             if (x.IsPlayer)
-                Find.LetterStack.ReceiveLetter("Dominion_Decree_ExpelledLabel".Translate(), "Dominion_Decree_Expelled_You".Translate(d.def.durationDays), LetterDefOf.NegativeEvent);
+                Find.LetterStack.ReceiveLetter("Dominion_Decree_ExpelledLabel".Translate(), "Dominion_Decree_Expelled_You".Translate(d.expiresTick >= 0 ? (d.expiresTick - d.passedTick) / GenDate.TicksPerDay : d.def.durationDays), LetterDefOf.NegativeEvent);
             else S(x).legitimacy = Mathf.Max(0f, S(x).legitimacy - 10f);
         }
     }
