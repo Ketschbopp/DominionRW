@@ -95,6 +95,8 @@ namespace Dominion
             if (IntelUtility.Knows(f, IntelUtility.RestrictedIntel))
                 TooltipHandler.TipRegion(new Rect(0f, l.CurHeight - Line, l.ColumnWidth, Line), () => ClimateTip(f, s), f.loadID ^ 0x5C1);
             Row(l, "Dominion_Col_Military".Translate(), f, IntelUtility.RestrictedIntel, () => s.militaryStrength.ToString("F0"));
+            if (Integration_IRBM.Instance != null)
+                Row(l, "Dominion_IRBM_Dossier".Translate(), f, IntelUtility.RestrictedIntel, () => Integration_IRBM.CapabilityLabel(f));
             Row(l, "Dominion_Dossier_Territory".Translate(), s.territoryTiles + " / " + s.settlementCount);
             Row(l, "Dominion_Dossier_VassalOutposts".Translate(), s.vassalOutposts.ToString());
             profileHeight = l.CurHeight + 4f;
