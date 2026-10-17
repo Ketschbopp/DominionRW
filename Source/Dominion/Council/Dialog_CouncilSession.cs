@@ -181,7 +181,18 @@ namespace Dominion
             string hint = vote == 0 ? "Dominion_Council_LobbyNeedsVote".Translate() : "Dominion_Council_LobbyHint".Translate();
             DominionTheme.InkLabel(new Rect(rect.x, rect.y + 36f, rect.width, 30f), hint, DominionTheme.InkFaded, GameFont.Tiny);
 
-            Rect outRect = new Rect(rect.x, rect.y + 66f, rect.width, rect.height - 66f);
+            // What carrying or failing it would mean, and what it would ask of you.
+            string cons = selected.def.Worker.Consequences(selected, Faction.OfPlayer);
+            Text.Font = GameFont.Tiny;
+            float consH = Mathf.Min(Text.CalcHeight(cons, rect.width - 8f), rect.height * 0.35f);
+            Text.Font = GameFont.Small;
+            Rect consRect = new Rect(rect.x, rect.y + 66f, rect.width, consH + 8f);
+            Widgets.DrawBoxSolid(consRect, DominionTheme.PaperShade);
+            DominionTheme.InkLabel(consRect.ContractedBy(4f), cons, DominionTheme.Ink, GameFont.Tiny);
+            TooltipHandler.TipRegion(consRect, cons);
+            float top = consRect.yMax + 6f;
+
+            Rect outRect = new Rect(rect.x, top, rect.width, rect.yMax - top);
             List<Faction> members = attendees;
             Rect view = new Rect(0f, 0f, outRect.width - 16f, members.Count * 50f);
             Widgets.BeginScrollView(outRect, ref floorScroll, view);
@@ -237,6 +248,7 @@ namespace Dominion
             float influenceChance = Mathf.Clamp(0.4f + social * 0.03f, 0.1f, 0.95f);
             float silverChance = Mathf.Clamp(0.55f + social * 0.02f + WorldComponent_Dominion.Instance.GetState(f).personality.greed * 0.2f, 0.1f, 0.95f);
             float promiseChance = Mathf.Clamp(0.3f + view.opinion / 200f + social * 0.02f, 0.05f, 0.9f);
+            float askChance = Mathf.Clamp(0.4f + view.opinion / 150f + social * 0.02f, 0.05f, 0.95f);
             bool promised = player.councilPromises.Contains(f.loadID);
             var options = new List<FloatMenuOption>
             {
@@ -255,6 +267,21 @@ namespace Dominion
                         EconomyEffects.Receive(f, paid);
                         Lobby(f, key, direction, silverChance, 1.3f);
                     }),
+                // A favour they owe you swings them for certain; asking one of them leaves you owing.
+                Option("Dominion_Council_LobbyCallIn".Translate(),
+                    CouncilUtility.FavoursOwedToPlayer(f) == 0 ? "Dominion_Council_NoFavourOwed".Translate().ToString() : null,
+                    () =>
+                    {
+                        CouncilUtility.SpendFavour(f, true);
+                        lobbied.Add(key);
+                        selected.lobbying[f.loadID] = selected.LobbyFor(f) + LobbyShift * 2f * direction;
+                        Messages.Message("Dominion_Council_FavourCalledIn".Translate(f.Name), MessageTypeDefOf.PositiveEvent, historical: false);
+                    }),
+                Option("Dominion_Council_LobbyAskFavour".Translate(askChance.ToStringPercent()), null,
+                    () =>
+                    {
+                        if (Lobby(f, key, direction, askChance, 1.2f)) CouncilUtility.AddFavour(f, false, selected.Summary);
+                    }),
                 Option("Dominion_Council_LobbyPromise".Translate(promiseChance.ToStringPercent()),
                     promised ? "Dominion_Council_AlreadyPromised".Translate().ToString()
                     : f == selected.sponsor ? "Dominion_Council_PromiseOwnMotion".Translate().ToString() : null,
@@ -270,19 +297,18 @@ namespace Dominion
         private static FloatMenuOption Option(string label, string disabled, System.Action act) =>
             disabled == null ? new FloatMenuOption(label, act) : new FloatMenuOption(label + " (" + disabled + ")", null);
 
-        private void Lobby(Faction f, string key, int direction, float chance, float strength)
+        private bool Lobby(Faction f, string key, int direction, float chance, float strength)
         {
             lobbied.Add(key);
             if (Rand.Chance(chance))
             {
                 selected.lobbying[f.loadID] = selected.LobbyFor(f) + LobbyShift * strength * direction;
                 Messages.Message("Dominion_Council_LobbySuccess".Translate(f.Name), MessageTypeDefOf.PositiveEvent, historical: false);
+                return true;
             }
-            else
-            {
-                WorldComponent_Dominion.Instance.GetRelation(f, Faction.OfPlayer).favour -= 1f;
-                Messages.Message("Dominion_Council_LobbyFail".Translate(f.Name), MessageTypeDefOf.NegativeEvent, historical: false);
-            }
+            WorldComponent_Dominion.Instance.GetRelation(f, Faction.OfPlayer).favour -= 1f;
+            Messages.Message("Dominion_Council_LobbyFail".Translate(f.Name), MessageTypeDefOf.NegativeEvent, historical: false);
+            return false;
         }
 
         public static string LeaningLabel(int vote) => Dialog_CouncilSessionText.Leaning(vote, false);

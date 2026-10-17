@@ -41,6 +41,7 @@ namespace Dominion
 
         private Motion picked;
         private float sweepStart;
+        private static bool seatsByBloc;
         private Faction member;
         private Vector2 sideScroll;
         private float sideHeight = 400f;
@@ -65,6 +66,11 @@ namespace Dominion
             DominionRooms.DrawGlow(new Vector2(hall.center.x, rect.yMax), hall.width * 0.55f, new Color(0.55f, 0.06f, 0.06f, 0.55f));
             DominionRooms.DrawGlow(new Vector2(hall.center.x, rect.y + rect.height * 0.3f), hall.width * 0.6f, new Color(1f, 0.85f, 0.6f, 0.16f));
             DominionRooms.DrawVignette(rect, 0.75f);
+            if (c.disbanded)
+            {
+                DrawDisbanded(rect.ContractedBy(8f), c);
+                return;
+            }
 
             Rect inner = rect.ContractedBy(8f);
             DrawNotice(new Rect(inner.x, inner.y, inner.width, NoticeHeight), c);
@@ -75,6 +81,54 @@ namespace Dominion
             Rect floor = new Rect(chamber.x, chamber.y + BannerH + 6f, chamber.width, chamber.height - BannerH - 6f);
             DrawHemicycle(floor, c);
             DrawSide(side, c);
+        }
+
+        /// <summary>
+        /// The chamber after the council was dissolved: dust over the floor, toppled seats in grey, the rail bare, and a
+        /// plaque with the date and the reason. The record of past sessions can still be read.
+        /// </summary>
+        private void DrawDisbanded(Rect rect, CouncilState c)
+        {
+            Widgets.DrawBoxSolid(rect, new Color(0.05f, 0.05f, 0.05f, 0.55f));
+            Vector2 centre = new Vector2(rect.center.x, rect.yMax - 40f);
+            float outer = Mathf.Min(rect.width / 2f - 20f, rect.height - 120f);
+            // The empty, toppled seats.
+            for (int r = 0; r < 4; r++)
+            {
+                float radius = outer * (0.45f + r * 0.15f);
+                int n = (int)(Mathf.PI * radius / 26f);
+                for (int i = 0; i < n; i++)
+                {
+                    float a = Mathf.PI - i * Mathf.PI / Mathf.Max(1, n - 1);
+                    Vector2 p = centre + new Vector2(Mathf.Cos(a), -Mathf.Sin(a)) * radius;
+                    int seed = r * 101 + i * 7;
+                    if (seed % 5 == 0) continue; // some are gone altogether
+                    Rect seat = new Rect(p.x - 7f, p.y - 7f, 14f, 14f);
+                    Matrix4x4 m = GUI.matrix;
+                    UI.RotateAroundPivot(seed * 37 % 180 - 90, seat.center);
+                    GUI.color = new Color(0.3f, 0.29f, 0.28f, 0.8f);
+                    GUI.DrawTexture(seat, DominionRooms.Seat);
+                    GUI.matrix = m;
+                }
+            }
+            GUI.color = Color.white;
+            // The bare rail.
+            Widgets.DrawBoxSolid(new Rect(rect.x, rect.y + 60f, rect.width, 4f), new Color(0.35f, 0.28f, 0.16f));
+
+            Rect plaque = new Rect(rect.center.x - 260f, rect.y + 90f, 520f, 120f);
+            GUI.color = new Color(0.7f, 0.68f, 0.62f);
+            GUI.DrawTexture(plaque, DominionRooms.Brass, ScaleMode.StretchToFill);
+            GUI.color = Color.white;
+            DominionRooms.DrawScrews(plaque, 6f);
+            Rect text = plaque.ContractedBy(18f, 10f);
+            DominionTheme.InkLabel(new Rect(text.x, text.y, text.width, 26f),
+                "Dominion_Chamber_Disbanded".Translate(c.disbandedTick >= 0 ? DominionPaper.Date(c.disbandedTick) : "?"), DominionRooms.BrassInk, GameFont.Medium, TextAnchor.UpperCenter);
+            DominionTheme.InkLabel(new Rect(text.x, text.y + 30f, text.width, 36f), "Dominion_Chamber_DisbandedReason".Translate(c.disbandedReason ?? "?"), DominionRooms.BrassInk, GameFont.Small, TextAnchor.UpperCenter);
+            DominionTheme.InkLabel(new Rect(text.x, text.y + 64f, text.width, 36f), "Dominion_Chamber_DisbandedSub".Translate(), new Color(0.3f, 0.24f, 0.14f), GameFont.Tiny, TextAnchor.UpperCenter);
+
+            Rect record = new Rect(rect.center.x - 110f, plaque.yMax + 16f, 220f, 32f);
+            if (DominionRooms.BrassButton(record, "Dominion_Record_Button".Translate(), "Dominion_Record_Button_Desc".Translate()))
+                Find.WindowStack.Add(new Dialog_CouncilRecord());
         }
 
         private void Pick(Motion m)
@@ -92,18 +146,21 @@ namespace Dominion
             bool isMember = CouncilUtility.IsMember(Faction.OfPlayer);
             int now = Find.TickManager.TicksGame;
             string text;
-            if (!DominionMod.Settings.councilEnabled) text = "Dominion_Council_Disabled".Translate();
+            if (!CouncilSystem.Active) text = "Dominion_Council_Disabled".Translate();
             else if (c.phase == CouncilPhase.Announced)
                 text = "Dominion_Council_SessionAnnounced".Translate(c.host?.Name ?? "?", Mathf.Max(0, c.nextSessionTick - now).ToStringTicksToPeriod(allowSeconds: false));
             else if (c.nextSessionTick >= 0)
                 text = "Dominion_Council_NextSession".Translate(Mathf.Max(0, c.nextSessionTick - now).ToStringTicksToPeriod(allowSeconds: false));
             else text = "Dominion_Council_Title".Translate();
-            Rect plate = new Rect(rect.x, rect.y, rect.width - 220f, rect.height);
+            Rect plate = new Rect(rect.x, rect.y, rect.width - 220f - 168f, rect.height);
             DominionRooms.BrassPlate(plate, text, GameFont.Small);
             TooltipHandler.TipRegion(plate, isMember
                 ? "Dominion_Council_YouAreMember".Translate(CouncilUtility.VoteWeight(Faction.OfPlayer, c.attending).ToString("F1")).ToString() + "\n\n" + AttendanceText(c, isMember)
                 : "Dominion_Council_YouAreNotMember".Translate(DominionMod.Settings.councilMinTechLevel.ToStringHuman(), DominionResearchDefOf.Dominion_DiplomaticCorps.label).ToString());
-            Rect propose = new Rect(plate.xMax + 8f, rect.y, 212f, rect.height);
+            Rect record = new Rect(plate.xMax + 8f, rect.y, 160f, rect.height);
+            if (DominionRooms.BrassButton(record, "Dominion_Record_Button".Translate(), "Dominion_Record_Button_Desc".Translate()))
+                Find.WindowStack.Add(new Dialog_CouncilRecord());
+            Rect propose = new Rect(record.xMax + 8f, rect.y, 212f, rect.height);
             string why = !isMember ? "Dominion_Council_YouAreNotMember".Translate(DominionMod.Settings.councilMinTechLevel.ToStringHuman(), DominionResearchDefOf.Dominion_DiplomaticCorps.label).ToString()
                 : c.phase != CouncilPhase.Announced ? "Dominion_Chamber_NoSession".Translate().ToString() : null;
             if (DominionRooms.BrassButton(propose, "Dominion_Council_ProposeMotion".Translate(), "Dominion_Tip_ProposeMotion".Translate(), why))
@@ -161,8 +218,10 @@ namespace Dominion
                 if (sel) Widgets.DrawBoxSolid(new Rect(b.x + 10f, fc.y - 2f, b.width - 20f, 2f), DominionRooms.BrassLight);
 
                 Rect hit = new Rect(b.x, rect.y, b.width, rect.height);
-                TooltipHandler.TipRegion(hit, m.Summary + "\n" + "Dominion_Council_ProposedBy".Translate(m.sponsor?.Name ?? "?") + "\n\n" + m.def.description
-                                              + "\n\n" + "Dominion_Council_Forecast_Desc".Translate() + "\n\n" + "Dominion_Chamber_ClickBanner".Translate());
+                Motion tipMotion = m;
+                TooltipHandler.TipRegion(hit, () => (string)(tipMotion.Summary + "\n" + "Dominion_Council_ProposedBy".Translate(tipMotion.sponsor?.Name ?? "?") + "\n\n" + tipMotion.def.description
+                                              + "\n\n" + tipMotion.def.Worker.Consequences(tipMotion, Faction.OfPlayer)
+                                              + "\n\n" + "Dominion_Council_Forecast_Desc".Translate() + "\n\n" + "Dominion_Chamber_ClickBanner".Translate()), tipMotion.GetHashCode());
                 if (Widgets.ButtonInvisible(hit))
                 {
                     Pick(m);
@@ -219,9 +278,12 @@ namespace Dominion
             if (members.Count > 0)
             {
                 // Seats in proportion to weight, at least one each.
+                List<CouncilUtility.VotingBloc> blocs = CouncilUtility.Blocs;
                 IEnumerable<(Faction f, float w)> order = picked != null
                     ? members.OrderByDescending(x => x.f.IsPlayer ? 0f : Leaning(x.f))
-                    : members.AsEnumerable();
+                    : seatsByBloc
+                        ? members.OrderBy(x => { int i = blocs.FindIndex(b => b.members.Contains(x.f)); return i < 0 ? 999 : i; }).ThenByDescending(x => x.w)
+                        : members.AsEnumerable();
                 var ordered = order.ToList();
                 float total = ordered.Sum(x => x.w);
                 var counts = ordered.Select(x => Mathf.Max(1, Mathf.RoundToInt(x.w / Mathf.Max(0.01f, total) * spots.Count))).ToList();
@@ -295,6 +357,7 @@ namespace Dominion
             bool away = c.phase == CouncilPhase.Announced && !c.attending.Contains(f);
             Color col;
             if (!lit) col = new Color(0.35f, 0.32f, 0.3f);
+            else if (picked == null && seatsByBloc) col = f.IsPlayer ? Color.white : CouncilUtility.BlocOf(f)?.color ?? new Color(0.55f, 0.52f, 0.48f);
             else if (picked == null) col = f.IsPlayer ? Color.white : f.Color;
             else if (f.IsPlayer) col = new Color(0.95f, 0.95f, 1f);
             else
@@ -319,6 +382,11 @@ namespace Dominion
             }
             int v = c.ViolationsBy(f);
             if (v > 0) tip += "\n" + "Dominion_Council_ViolationCount".Translate(v);
+            CouncilUtility.VotingBloc bloc = CouncilUtility.BlocOf(f);
+            if (bloc != null) tip += "\n" + "Dominion_Bloc_Member".Translate(bloc.label);
+            int owes = CouncilUtility.FavoursOwedToPlayer(f), owed = CouncilUtility.FavoursOwedByPlayer(f);
+            if (owes > 0) tip += "\n" + "Dominion_Favour_OwesYou".Translate(owes);
+            if (owed > 0) tip += "\n" + "Dominion_Favour_YouOwe".Translate(owed);
             return tip + "\n\n" + "Dominion_Chamber_ClickSeat".Translate();
         }
 
@@ -363,7 +431,12 @@ namespace Dominion
         {
             if (picked == null)
             {
-                DominionTheme.InkLabel(rect, "Dominion_Chamber_LegendFactions".Translate(), new Color(0.85f, 0.8f, 0.7f), GameFont.Tiny, TextAnchor.MiddleLeft);
+                Rect toggle = new Rect(rect.x, rect.y - 4f, 120f, 22f);
+                if (DominionRooms.BrassButton(toggle, "Dominion_Chamber_SeatMode".Translate((seatsByBloc ? "Dominion_Chamber_SeatMode_Blocs" : "Dominion_Chamber_SeatMode_Factions").Translate()),
+                        "Dominion_Chamber_SeatMode_Desc".Translate()))
+                    seatsByBloc = !seatsByBloc;
+                DominionTheme.InkLabel(new Rect(toggle.xMax + 8f, rect.y, rect.width - toggle.width - 8f, rect.height),
+                    (seatsByBloc ? "Dominion_Chamber_LegendBlocs" : "Dominion_Chamber_LegendFactions").Translate(), new Color(0.85f, 0.8f, 0.7f), GameFont.Tiny, TextAnchor.MiddleLeft);
                 return;
             }
             float x = rect.x;
@@ -398,6 +471,23 @@ namespace Dominion
             }
             else y = DrawMember(y, w, member, c);
 
+            // What the motion picked would bring.
+            if (picked != null)
+            {
+                y += 4f;
+                DominionTheme.InkLabel(new Rect(0f, y, w, 20f), "Dominion_Council_Consequences".Translate().ToString().ToUpper(), DominionRooms.BrassLight, GameFont.Tiny);
+                y += 20f;
+                string cons = picked.def.Worker.Consequences(picked, Faction.OfPlayer);
+                Text.Font = GameFont.Tiny;
+                float ch = Text.CalcHeight(cons, w - 8f);
+                Text.Font = GameFont.Small;
+                DominionTheme.InkLabel(new Rect(4f, y, w - 8f, ch), cons, new Color(0.92f, 0.88f, 0.8f), GameFont.Tiny);
+                y += ch + 8f;
+            }
+
+            // The blocs in the room.
+            y = DrawBlocs(y, w);
+
             // Decrees in force, as brass plaques.
             y += 6f;
             DominionTheme.InkLabel(new Rect(0f, y, w, 20f), "Dominion_Council_Decrees".Translate().ToString().ToUpper(), DominionRooms.BrassLight, GameFont.Tiny);
@@ -421,11 +511,46 @@ namespace Dominion
                 GUI.DrawTexture(plaque, DominionRooms.Brass, ScaleMode.StretchToFill);
                 DominionRooms.DrawScrews(plaque, 5f);
                 DominionTheme.InkLabel(new Rect(12f, y + 6f, w - 24f, h - 8f), line, d.violators.Count > 0 ? DominionTheme.InkRed : DominionRooms.BrassInk, GameFont.Tiny);
-                TooltipHandler.TipRegion(plaque, d.def.description);
+                if (Mouse.IsOver(plaque)) Widgets.DrawBoxSolid(plaque, new Color(1f, 0.95f, 0.8f, 0.12f));
+                TooltipHandler.TipRegion(plaque, d.def.description + (d.penalty ? "\n\n" + "Dominion_Ledger_Penalty".Translate() : "") + "\n\n" + "Dominion_Ledger_Click".Translate());
+                if (Widgets.ButtonInvisible(plaque)) Find.WindowStack.Add(new Dialog_CouncilLedger(d));
                 y += h + 6f;
             }
             sideHeight = y + 6f;
             Widgets.EndScrollView();
+        }
+
+        /// <summary>The voting blocs, each a coloured bar with its members.</summary>
+        private static float DrawBlocs(float y, float w)
+        {
+            List<CouncilUtility.VotingBloc> blocs = CouncilUtility.Blocs;
+            DominionTheme.InkLabel(new Rect(0f, y, w, 20f), "Dominion_Bloc_Title".Translate().ToString().ToUpper(), DominionRooms.BrassLight, GameFont.Tiny);
+            y += 20f;
+            if (blocs.Count == 0)
+            {
+                DominionTheme.InkLabel(new Rect(4f, y, w - 4f, 30f), "Dominion_Bloc_None".Translate(), new Color(0.75f, 0.7f, 0.62f), GameFont.Tiny);
+                return y + 32f;
+            }
+            foreach (CouncilUtility.VotingBloc b in blocs)
+            {
+                Rect r = new Rect(0f, y, w, 20f);
+                Widgets.DrawBoxSolid(new Rect(r.x, r.y + 4f, 6f, 12f), b.color);
+                DominionTheme.InkLabel(new Rect(r.x + 10f, r.y, r.width - 10f, r.height), (b.label + " (" + b.members.Count + ")").Truncate(r.width - 10f), new Color(0.92f, 0.88f, 0.8f), GameFont.Tiny, TextAnchor.MiddleLeft);
+                CouncilUtility.VotingBloc bloc = b;
+                TooltipHandler.TipRegion(r, () => "Dominion_Bloc_Desc".Translate(string.Join(", ", bloc.members.Select(m => m.Name))), bloc.label.GetHashCode());
+                y += 20f;
+            }
+            return y + 6f;
+        }
+
+        private static string FavourTip(Faction f)
+        {
+            int now = Find.TickManager.TicksGame;
+            var lines = new List<string> { "Dominion_Favour_Desc".Translate(Favour.LastsDays) , "" };
+            foreach (Favour x in WorldComponent_Dominion.Instance.Council.favours)
+                if (x.faction == f)
+                    lines.Add((x.owedToPlayer ? "Dominion_Favour_List_Owed" : "Dominion_Favour_List_Owing").Translate(x.reason ?? "?", Mathf.Max(0, (x.ExpiresTick - now) / GenDate.TicksPerDay)));
+            return string.Join("\n", lines);
         }
 
         private float DrawMember(float y, float w, Faction f, CouncilState c)
@@ -439,11 +564,18 @@ namespace Dominion
             if (c.host == f) lines.Add("Dominion_Chamber_Host".Translate());
             int v = c.ViolationsBy(f);
             if (v > 0) lines.Add("Dominion_Council_ViolationCount".Translate(v));
+            CouncilUtility.VotingBloc bloc = CouncilUtility.BlocOf(f);
+            if (bloc != null) lines.Add("Dominion_Bloc_Member".Translate(bloc.label));
+            int owes = CouncilUtility.FavoursOwedToPlayer(f), owed = CouncilUtility.FavoursOwedByPlayer(f);
+            if (owes > 0) lines.Add("Dominion_Favour_OwesYou".Translate(owes));
+            if (owed > 0) lines.Add("Dominion_Favour_YouOwe".Translate(owed));
+            float linesTop = y;
             foreach (string l in lines)
             {
                 DominionTheme.InkLabel(new Rect(4f, y, w - 4f, 18f), l, new Color(0.9f, 0.85f, 0.75f), GameFont.Tiny);
                 y += 18f;
             }
+            if (owes + owed > 0) TooltipHandler.TipRegion(new Rect(0f, linesTop, w, y - linesTop), () => FavourTip(f), f.loadID ^ 0xFA5);
             if (c.phase == CouncilPhase.Announced && !f.IsPlayer)
             {
                 y += 4f;
@@ -482,11 +614,14 @@ namespace Dominion
         {
             var options = new List<FloatMenuOption>();
             float influence = WorldComponent_Dominion.Instance.Player.influence;
-            foreach (CouncilMotionDef def in DefDatabase<CouncilMotionDef>.AllDefsListForReading)
+            string[] packs = { "security", "territory", "economy", "society" };
+            foreach (CouncilMotionDef def in DefDatabase<CouncilMotionDef>.AllDefsListForReading
+                         .OrderBy(x => { int i = System.Array.IndexOf(packs, x.pack); return i < 0 ? 99 : i; }).ThenBy(x => x.label))
             {
                 CouncilMotionDef d = def;
                 List<List<Faction>> targetSets = def.Worker.PlayerTargetOptions().ToList();
-                string label = def.LabelCap + " (" + "Dominion_Dip_Cost".Translate(def.proposeCost.ToString("F0")) + ")";
+                string pack = def.pack.NullOrEmpty() ? "" : "[" + ("Dominion_Council_Pack_" + def.pack).Translate() + "] ";
+                string label = pack + def.LabelCap + " (" + "Dominion_Dip_Cost".Translate(def.proposeCost.ToString("F0")) + ")";
                 if (influence < def.proposeCost || targetSets.Count == 0)
                 {
                     options.Add(new FloatMenuOption(label + (targetSets.Count == 0 ? " " + "Dominion_Council_NoTargets".Translate() : ""), null));
